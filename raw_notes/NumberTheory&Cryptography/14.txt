@@ -1,0 +1,334 @@
+# Module 14: Computer Arithmetic with Large Integers
+
+Number Theory-III · Rosen, Number Theory and Cryptography, Section 4.4
+
+This module explains how an integer can be represented by its remainders modulo several smaller numbers, how arithmetic can be performed on those remainders, and how the original result can be reconstructed using the Chinese Remainder Theorem (CRT).
+
+The central idea is:
+
+Instead of working directly with a large integer, work with several smaller remainders.
+
+This is mathematical number theory, not programming.
+
+## 14.1 Representing an integer by its remainders
+
+Choose pairwise relatively prime moduli \\(m_1,m_2,\ldots,m_n\\), and let
+
+\\[ M=m_1m_2\cdots m_n. \\]
+
+Every integer \\(a\\) in the range \\(0\le a\<M\\) can be represented by the tuple
+
+\\[ \boxed{(a\bmod m_1,\ a\bmod m_2,\ldots,a\bmod m_n)}. \\]
+
+Each component is simply the remainder obtained by dividing \\(a\\) by the corresponding modulus.
+
+Rosen explains that the CRT guarantees this representation is unique for integers in that range.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+### Example: Represent integers using moduli 3 and 4
+
+Let
+
+\\[ m_1=3,\qquad m_2=4,\qquad M=12. \\]
+
+Because \\(\gcd(3,4)=1\\), the standard CRT applies.
+
+Represent \\(a=7\\):
+
+\\[ 7\bmod3=1,\qquad 7\bmod4=3. \\]
+
+Therefore,
+
+\\[ \boxed{7\longleftrightarrow(1,3)}. \\]
+
+Similarly,
+
+\\[ \begin{aligned} 0&\longleftrightarrow(0,0),\\\ 1&\longleftrightarrow(1,1),\\\ 2&\longleftrightarrow(2,2),\\\ 3&\longleftrightarrow(0,3),\\\ 4&\longleftrightarrow(1,0). \end{aligned} \\]
+
+Every integer from \\(0\\) to \\(11\\) has a different pair of remainders.
+
+For instance, no other integer in this range has the pair \\((1,3)\\). This uniqueness is essential: the tuple identifies the original integer.
+
+## 14.2 Why are there exactly \\(M\\) possible representations?
+
+For each modulus \\(m_i\\), the corresponding remainder has \\(m_i\\) possible values:
+
+\\[ 0,1,\ldots,m_i-1. \\]
+
+Thus, the number of possible tuples is
+
+\\[ m_1m_2\cdots m_n=M. \\]
+
+There are also exactly \\(M\\) integers in the range
+
+\\[ 0,1,\ldots,M-1. \\]
+
+The CRT ensures that every integer in this range corresponds to a unique tuple, and every valid tuple corresponds to exactly one such integer.
+
+Exam tip: The condition that the moduli are pairwise relatively prime matters. Without it, the tuple representation need not uniquely identify every integer modulo their product.
+
+## 14.3 Performing addition using remainder tuples
+
+Suppose two integers \\(a\\) and \\(b\\) have representations
+
+\\[ a\longleftrightarrow(a_1,a_2,\ldots,a_n), \\]
+
+\\[ b\longleftrightarrow(b_1,b_2,\ldots,b_n), \\]
+
+where \\(a_i=a\bmod m_i\\) and \\(b_i=b\bmod m_i\\).
+
+Their sum is represented by
+
+\\[ \boxed{ a+b\longleftrightarrow \big((a_1+b_1)\bmod m_1,\ldots, (a_n+b_n)\bmod m_n\big). } \\]
+
+In simple terms, add corresponding components and reduce each result using its own modulus.
+
+### Worked example
+
+Use the pairwise relatively prime moduli \\(5,7,11\\). Their product is
+
+\\[ M=5\cdot7\cdot11=385. \\]
+
+Represent \\(a=12\\) and \\(b=13\\).
+
+For \\(12\\):
+
+\\[ 12\bmod5=2,\quad12\bmod7=5,\quad12\bmod11=1. \\]
+
+Thus,
+
+\\[ 12\longleftrightarrow(2,5,1). \\]
+
+For \\(13\\):
+
+\\[ 13\bmod5=3,\quad13\bmod7=6,\quad13\bmod11=2. \\]
+
+Thus,
+
+\\[ 13\longleftrightarrow(3,6,2). \\]
+
+Add componentwise:
+
+\\[ \begin{aligned} (2,5,1)+(3,6,2) &=(5,11,3)\\\ &=(0,4,3), \end{aligned} \\]
+
+where the reductions are modulo \\(5,7,11\\), respectively.
+
+So the sum is represented by \\((0,4,3)\\). To reconstruct it, solve
+
+\\[ x\equiv0\pmod5,\quad x\equiv4\pmod7,\quad x\equiv3\pmod{11}. \\]
+
+The original sum is \\(12+13=25\\), and indeed
+
+\\[ 25\bmod5=0,\quad25\bmod7=4,\quad25\bmod11=3. \\]
+
+Therefore, the reconstructed answer is
+
+\\[ \boxed{25}. \\]
+
+## 14.4 Performing multiplication using remainder tuples
+
+The same principle applies to multiplication:
+
+\\[ \boxed{ ab\longleftrightarrow \big((a_1b_1)\bmod m_1,\ldots, (a_nb_n)\bmod m_n\big). } \\]
+
+### Continue the same example
+
+We have
+
+\\[ 12\longleftrightarrow(2,5,1), \qquad 13\longleftrightarrow(3,6,2). \\]
+
+Multiply componentwise:
+
+\\[ \begin{aligned} (2,5,1)(3,6,2) &=(6,30,2)\\\ &=(1,2,2), \end{aligned} \\]
+
+after reducing modulo \\(5,7,11\\).
+
+Therefore, the product must satisfy
+
+\\[ x\equiv1\pmod5,\quad x\equiv2\pmod7,\quad x\equiv2\pmod{11}. \\]
+
+Since \\(12\cdot13=156\\), check:
+
+\\[ 156\bmod5=1,\quad 156\bmod7=2,\quad 156\bmod11=2. \\]
+
+The reconstructed result is
+
+\\[ \boxed{156}. \\]
+
+The calculation used only small remainders until reconstruction.
+
+## 14.5 The crucial condition: Choose a large enough product
+
+There is a subtle but important limitation.
+
+For the tuple to determine the exact arithmetic result, the product of the moduli must be large enough to distinguish the possible results.
+
+If the desired result is a nonnegative integer \\(R\\), a sufficient condition is
+
+\\[ \boxed{0\le R\<M}. \\]
+
+Why? The CRT identifies the result modulo \\(M\\). If \\(R\ge M\\), the tuple alone may represent \\(R\bmod M\\) rather than the exact value \\(R\\).
+
+For example, with moduli \\(3\\) and \\(4\\), we have \\(M=12\\). The integers \\(5\\) and \\(17\\) have the same remainder tuple:
+
+\\[ 5\longleftrightarrow(2,1), \qquad 17\longleftrightarrow(2,1). \\]
+
+That is because \\(17\equiv5\pmod{12}\\). The tuple cannot distinguish them.
+
+So, for exact addition of nonnegative \\(a,b\\), choose \\(M>a+b\\). For exact multiplication, choose \\(M>ab\\). More generally, choose the product of the moduli to exceed the largest possible result you need to recover. This is the condition emphasized in Rosen's discussion of computer arithmetic.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+## 14.6 Why is this useful?
+
+Rosen identifies two main advantages of this method.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+1. Handling large integers: Arithmetic can be performed on numbers much larger than the values handled efficiently by an individual processor operation.
+2. Parallel computation: Calculations under different moduli can be performed independently and in parallel.
+
+There is one trade-off: after performing the componentwise arithmetic, we may need to solve a system of congruences using CRT to recover the ordinary integer result.
+
+The method therefore has three stages:
+
+1\. Represent
+
+Convert each integer into a tuple of remainders.
+
+2\. Calculate
+
+Perform addition or multiplication componentwise.
+
+3\. Reconstruct
+
+Use CRT to recover the result as an ordinary integer.
+
+## 14.7 Exam-level MCQ test
+
+Select your answers, then submit to check the score and explanations.
+
+1\. If the moduli are 5, 7 and 11, what is their product?
+
+A. 77
+
+B. 165
+
+C. 385
+
+D. 3850
+
+2\. Using moduli 5 and 7, what is the remainder tuple for 23?
+
+A. (2, 2)
+
+B. (3, 2)
+
+C. (3, 4)
+
+D. (4, 3)
+
+3\. If a ≡ 2 (mod 5) and b ≡ 4 (mod 5), what is ab mod 5?
+
+A. 1
+
+B. 2
+
+C. 3
+
+D. 4
+
+4\. Which operation gives the tuple representation of a+b?
+
+A. Multiply corresponding remainders
+
+B. Add corresponding remainders and reduce by each modulus
+
+C. Add all remainders together once
+
+D. Multiply the moduli
+
+5\. Why must M exceed the nonnegative result R when we want to reconstruct R exactly?
+
+A. Because CRT only works for primes
+
+B. Because every remainder must be zero
+
+C. Because values differing by M have the same tuple
+
+D. Because multiplication cannot use remainders
+
+6\. For moduli 3 and 4, which tuple represents 7?
+
+A. (1, 3)
+
+B. (3, 1)
+
+C. (2, 3)
+
+D. (1, 2)
+
+7\. Which is a principal advantage of remainder-based arithmetic?
+
+A. It always eliminates reconstruction
+
+B. It allows independent calculations under different moduli
+
+C. It works only for prime moduli
+
+D. It makes every integer smaller than 10
+
+8\. Using moduli 5, 7 and 11, what is the tuple for 12 × 13?
+
+A. (0, 1, 2)
+
+B. (1, 2, 2)
+
+C. (1, 3, 2)
+
+D. (2, 2, 1)
+
+9\. What is the exact sum of 12 and 13 in the example using moduli 5, 7 and 11?
+
+A. 15
+
+B. 23
+
+C. 25
+
+D. 35
+
+10\. If the moduli are pairwise relatively prime, which theorem guarantees a unique tuple representation for integers in 0 ≤ a < M?
+
+A. Fermat's Little Theorem
+
+B. Fundamental Theorem of Arithmetic
+
+C. Chinese Remainder Theorem
+
+D. Prime Number Theorem
+
+Submit answers
+
+## Module 14 revision sheet
+
+- Represent \\(a\\) by \\((a\bmod m_1,\ldots,a\bmod m_n)\\).
+- Choose pairwise relatively prime moduli.
+- Let \\(M=m_1m_2\cdots m_n\\).
+- Add or multiply corresponding tuple components, reducing each modulo its own modulus.
+- Use CRT to reconstruct the result.
+- To recover a nonnegative result exactly, ensure the result is less than \\(M\\).
+- Benefits: arithmetic on smaller values and independent calculations that can be performed in parallel.
+
+Module 14 complete.
+
+Next is Module 15: Fermat's Little Theorem — its two equivalent forms, the conditions for applying it, reducing large powers, finding modular inverses using the theorem, and MCQ traps involving composite moduli and pseudoprimes.
+
+Say next when you're ready.

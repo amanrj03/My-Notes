@@ -1,0 +1,391 @@
+# Module 9: Prime Number Theorem and Prime Distribution
+
+Number Theory-II · Based on Rosen, Number Theory and Cryptography, Section 4.3
+
+This module is about how prime numbers are distributed among the positive integers. We'll cover the definitions, mathematical results, approximations, interpretations, limitations, and MCQ traps—not just memorize one formula.
+
+The central question is:
+
+As integers become larger, how many of them are prime?
+
+The answer is not that primes stop appearing. There are infinitely many primes, but their proportion among the integers decreases.
+
+## 9.1 Prime-counting function
+
+The prime-counting function, written \\(\pi(x)\\), is defined as the number of primes less than or equal to the real number \\(x\\).
+
+\\[ \boxed{\pi(x)=\\#\\{p:p\text{ is prime and }p\le x\\}} \\]
+
+Here, \\(\\#\\) means “the number of elements in the set.”
+
+### Examples
+
+For \\(x=10\\), the primes not exceeding \\(10\\) are
+
+\\[ 2,3,5,7. \\]
+
+Therefore,
+
+\\[ \boxed{\pi(10)=4}. \\]
+
+Similarly, the primes not exceeding \\(20\\) are
+
+\\[ 2,3,5,7,11,13,17,19, \\]
+
+so
+
+\\[ \boxed{\pi(20)=8}. \\]
+
+And, from our previous module,
+
+\\[ \boxed{\pi(30)=10,\qquad \pi(100)=25}. \\]
+
+### Important properties
+
+Property 1: \\(\pi(x)\\) is nondecreasing.
+
+If \\(x\le y\\), then
+
+\\[ \boxed{\pi(x)\le\pi(y)}. \\]
+
+Why? Increasing the upper limit cannot remove primes that were already counted.
+
+Property 2: \\(\pi(x)\\) is a step function.
+
+It increases by exactly one whenever \\(x\\) passes a prime number. It remains unchanged between consecutive primes.
+
+For example,
+
+\\[ \pi(10)=4,\quad \pi(11)=5,\quad \pi(12)=5. \\]
+
+Property 3: The function counts primes, not all integers.
+
+For example, \\(\pi(10)=4\\), not \\(10\\), because only four primes are at most \\(10\\).
+
+## 9.2 The Prime Number Theorem (PNT)
+
+The Prime Number Theorem describes the long-term distribution of prime numbers.
+
+Statement from your textbook: The ratio of the number of primes not exceeding \\(x\\) to \\(x/\ln x\\) approaches \\(1\\) as \\(x\\) grows without bound. Here, \\(\ln x\\) denotes the natural logarithm.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+Mathematically,
+
+\\[ \boxed{\lim\_{x\to\infty} \frac{\pi(x)}{x/\ln x}=1} \\]
+
+Equivalently,
+
+\\[ \boxed{\pi(x)\sim\frac{x}{\ln x}} \\]
+
+The symbol \\(\sim\\) means that the ratio of the two quantities approaches \\(1\\) as \\(x\to\infty\\). It does not mean that the quantities are exactly equal.
+
+### What does the theorem tell us?
+
+For sufficiently large \\(x\\), the number of primes not exceeding \\(x\\) can be approximated by
+
+\\[ \boxed{\pi(x)\approx\frac{x}{\ln x}}. \\]
+
+This is an approximation, not a formula for obtaining the exact number of primes.
+
+### Example 1: Estimate the number of primes not exceeding 1,000
+
+Using the Prime Number Theorem,
+
+\\[ \pi(1000)\approx\frac{1000}{\ln1000}. \\]
+
+Since
+
+\\[ \ln1000\approx6.9078, \\]
+
+we obtain
+
+\\[ \pi(1000)\approx\frac{1000}{6.9078} \approx144.76. \\]
+
+So the estimate is approximately \\(145\\) primes. The actual count is \\(168\\).
+
+The difference is not a contradiction: the theorem gives an asymptotic approximation, not an exact count at every finite value.
+
+### Example 2: Estimate the number of primes not exceeding 1,000,000
+
+\\[ \pi(10^6)\approx\frac{10^6}{\ln(10^6)}. \\]
+
+Using \\(\ln(10^6)=6\ln10\approx13.8155\\),
+
+\\[ \pi(10^6)\approx \frac{1,000,000}{13.8155} \approx72,382. \\]
+
+The actual count is \\(78,498\\). Again, the PNT estimate is useful for understanding the scale of the count, even though it is not exact.
+
+MCQ distinction: If a question asks for an estimate using the PNT, use \\(x/\ln x\\). If it asks for the exact value of \\(\pi(x)\\), the approximation alone does not determine that value.
+
+## 9.3 Why is the natural logarithm used?
+
+The PNT specifically uses \\(\ln x\\), the logarithm to base \\(e\\), where \\(e\approx2.71828\\).
+
+\\[ \boxed{\ln x=\log_e x} \\]
+
+Recall the change-of-base formula:
+
+\\[ \ln x=\frac{\log\_{10}x}{\log\_{10}e}. \\]
+
+Thus, \\(\ln x\\) and \\(\log\_{10}x\\) are not interchangeable without a conversion factor.
+
+For example,
+
+\\[ \ln100\approx4.6052, \qquad \log\_{10}100=2. \\]
+
+Therefore, the PNT approximation at \\(x=100\\) is
+
+\\[ \frac{100}{\ln100}\approx21.71, \\]
+
+not \\(100/2=50\\).
+
+## 9.4 Probability that a large integer is prime
+
+The textbook uses the PNT to estimate the probability that a randomly selected positive integer near a large value \\(n\\) is prime. The approximation is
+
+\\[ \boxed{P(n\text{ is prime})\approx\frac{1}{\ln n}}. \\]
+
+The intuition is:
+
+- Approximately \\(n/\ln n\\) primes occur up to \\(n\\).
+- There are roughly \\(n\\) positive integers up to \\(n\\).
+- The estimated fraction that are prime is therefore
+
+\\[ \frac{n/\ln n}{n}=\frac1{\ln n}. \\]
+
+This is an approximate probability for integers near a large value, not an exact probability for every particular integer.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+### Example: An integer near \\(10^{1000}\\)
+
+The textbook gives the example of an integer near \\(10^{1000}\\). Its approximate probability of being prime is
+
+\\[ P\approx\frac{1}{\ln(10^{1000})}. \\]
+
+Using logarithm laws,
+
+\\[ \ln(10^{1000})=1000\ln10\approx2302.585. \\]
+
+Hence,
+
+\\[ P\approx\frac1{2302.585} \approx\frac1{2300}. \\]
+
+So the approximate odds of a randomly chosen integer near this size being prime are about 1 in 2,300.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+### Restricting the search to odd integers
+
+Every prime except \\(2\\) is odd. If we choose only odd integers greater than \\(2\\), we eliminate all even composite numbers from consideration.
+
+Consequently, the chance of finding a prime in this restricted search is approximately doubled:
+
+\\[ \boxed{P(\text{prime among selected odd integers}) \approx\frac{2}{\ln n}}. \\]
+
+This remains an approximation; it is not an exact probability.
+
+## 9.5 Prime density decreases as numbers increase
+
+The PNT gives us a way to understand the density of primes among integers near a large number \\(x\\).
+
+Approximately,
+
+\\[ \boxed{\text{Prime density near }x\approx\frac1{\ln x}}. \\]
+
+As \\(x\\) increases, \\(\ln x\\) increases, so \\(1/\ln x\\) decreases.
+
+For instance:
+
+| Approximate size \\(x\\) | \\(1/\ln x\\)    | Interpretation   |
+| ------------------------ | ---------------- | ---------------- |
+| \\(10^2\\)               | \\(1/4.605\\)    | About 1 in 4.6   |
+| \\(10^3\\)               | \\(1/6.908\\)    | About 1 in 6.9   |
+| \\(10^6\\)               | \\(1/13.816\\)   | About 1 in 13.8  |
+| \\(10^{1000}\\)          | \\(1/2302.585\\) | About 1 in 2,303 |
+
+These are asymptotic approximations. The first two rows, in particular, should not be interpreted as accurate predictions for individual small integers.
+
+### What can we conclude?
+
+1. Prime numbers become less frequent as a proportion of all integers.
+2. The number of primes up to \\(x\\) still grows without bound.
+3. The PNT does not give the exact location of the next prime.
+4. A decreasing prime density does not imply that primes eventually stop appearing.
+
+The last point is important: the existence of infinitely many primes is a separate theorem. The PNT gives much more information about their distribution.
+
+## 9.6 Why the PNT matters
+
+The theorem has mathematical and practical applications.
+
+1\. Estimating prime counts
+
+Instead of listing every prime up to a very large number, we can estimate the count using \\(x/\ln x\\).
+
+2\. Estimating the effort needed to find large primes
+
+If candidate integers are chosen near a large number \\(n\\), the approximate probability \\(1/\ln n\\) gives a rough indication of how many candidates might need to be examined before finding a prime.
+
+3\. Cryptography
+
+Large primes are important in some cryptographic systems. The PNT helps estimate how frequently prime candidates occur, although it does not itself provide a primality-testing algorithm or a prime number generator.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+### A limitation worth remembering
+
+Trial division gives a mathematical criterion for primality, but testing every prime divisor up to \\(\sqrt n\\) becomes inefficient for very large \\(n\\). The textbook discusses more efficient primality-testing methods in the context of cryptography.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+The PNT estimates how frequently primes occur; it does not tell us whether a particular candidate is prime.
+
+## 9.7 Common MCQ traps
+
+- PNT formula: \\(\pi(x)\approx x/\ln x\\), not \\(x/\log\_{10}x\\).
+- Exact versus approximate: \\(\pi(x)\sim x/\ln x\\) means the ratio tends to \\(1\\), not that the values are equal.
+- Prime-counting notation: \\(\pi(x)\\) counts primes less than or equal to \\(x\\).
+- Probability: For integers near a large \\(n\\), the approximate prime probability is \\(1/\ln n\\).
+- Odd-only search: For candidates restricted to odd integers greater than \\(2\\), the approximate probability doubles.
+- Density: Prime density decreases, but the total number of primes up to \\(x\\) increases without bound.
+- Theorems are distinct: “There are infinitely many primes” and the Prime Number Theorem are not equivalent statements.
+- Logarithm laws: \\(\ln(a^k)=k\ln a\\). In particular, \\(\ln(10^{1000})=1000\ln10\\).
+- The PNT does not identify individual primes: A count estimate is not a primality test.
+
+## 9.8 Exam-level MCQ test
+
+These questions test definitions, calculations, asymptotic notation, and conceptual traps.
+
+Choose one answer for each question. The score and explanations appear after submission.
+
+1\. What does π(20) represent?
+
+A. The twentieth prime number
+
+B. The number of primes less than or equal to 20
+
+C. The sum of primes up to 20
+
+D. The probability that 20 is prime
+
+2\. Which is the Prime Number Theorem approximation?
+
+A. π(x) ≈ x ln x
+
+B. π(x) ≈ ln x / x
+
+C. π(x) ≈ x / ln x
+
+D. π(x) = x / ln x exactly
+
+3\. The statement π(x) \~ x/ln x means:
+
+A. The quantities are exactly equal for all x
+
+B. Their ratio approaches 1 as x tends to infinity
+
+C. π(x) always exceeds x/ln x
+
+D. The ratio approaches 0
+
+4\. What is the approximate prime probability for an integer near 10⁶?
+
+A. 1/6
+
+B. 1/13.82
+
+C. 1/10⁶
+
+D. 1/ln(10)
+
+5\. Which logarithm appears in the PNT as stated in your textbook?
+
+A. Base 2 logarithm
+
+B. Base 10 logarithm
+
+C. Natural logarithm
+
+D. Any logarithm base without adjustment
+
+6\. What happens to the approximate prime density 1/ln x as x increases without bound?
+
+A. It approaches 1
+
+B. It approaches infinity
+
+C. It approaches 0
+
+D. It remains constant
+
+7\. Which statement is correct?
+
+A. The PNT gives the exact number of primes below every x
+
+B. The PNT implies primes stop occurring eventually
+
+C. The PNT estimates prime counts for large x
+
+D. The PNT says every odd integer is prime
+
+8\. If candidate integers are restricted to odd integers greater than 2, the approximate probability of finding a prime:
+
+A. Is halved
+
+B. Is approximately doubled
+
+C. Becomes exactly 1/2
+
+D. Does not change at all
+
+9\. Using the PNT, what is the approximate value of π(1000)?
+
+A. About 69
+
+B. About 145
+
+C. Exactly 168
+
+D. About 500
+
+10\. Which statement distinguishes the PNT from the theorem that infinitely many primes exist?
+
+A. They are identical statements
+
+B. The PNT provides a quantitative asymptotic estimate of prime counts
+
+C. The PNT applies only to even numbers
+
+D. The PNT proves there are finitely many primes
+
+Submit answers
+
+## Module 9: Final revision sheet
+
+Definitions and formulas to memorize
+
+\\[ \pi(x)=\\#\\{p\le x:p\text{ is prime}\\} \\]
+
+\\[ \lim\_{x\to\infty}\frac{\pi(x)}{x/\ln x}=1 \\]
+
+\\[ \pi(x)\approx\frac{x}{\ln x} \\]
+
+\\[ P(n\text{ is prime})\approx\frac{1}{\ln n} \\]
+
+For candidates restricted to odd integers greater than 2, the approximate probability is \\(2/\ln n\\).
+
+Module 9 complete. Next is Module 10: GCD, LCM and the Euclidean Algorithm. We'll cover definitions, prime-factorization formulas, proofs of the Euclidean algorithm, remainder chains, termination, and exam-level problems.
+
+Say next when you're ready.

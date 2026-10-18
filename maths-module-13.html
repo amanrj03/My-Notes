@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 13: Chinese Remainder Theorem (CRT) — Mathematics Study Guide</title>
+    <meta name="description" content="Number Theory &amp; Cryptography study notes — Module 13 of 17: Chinese Remainder Theorem (CRT). Complete with theorems, proofs, worked examples, and interactive self-test quiz.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+
+    <!-- MathJax 3 configuration for crisp LaTeX rendering -->
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['\\(', '\\)'], ['$', '$']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true,
+            macros: {
+                Z: '\\mathbb{Z}',
+                N: '\\mathbb{N}',
+                R: '\\mathbb{R}',
+                Q: '\\mathbb{Q}',
+                gcd: '\\operatorname{gcd}',
+                lcm: '\\operatorname{lcm}'
+            }
+        },
+        options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+/* ==========================================================================
+   MATHEMATICS THEME — Imperial Oxford Amethyst & Celestial Amber
+   ========================================================================== */
+:root {
+    --math-royal-primary: #7c3aed;
+    --math-royal-hover: #6d28d9;
+    --math-gold-accent: #f59e0b;
+    --math-gold-glow: rgba(245, 158, 11, 0.25);
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-body, #2d3748);
+    margin: 0; padding: 0;
+    background-color: var(--bg-body, #f4f6fb);
+}
+
+.page-container {
+    max-width: 1080px;
+    margin: 25px auto 50px;
+    padding: 40px 50px;
+    background-color: var(--bg-page, #ffffff);
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.07);
+    border-radius: 14px;
+}
+
+/* MATH HERO BANNER */
+.math-banner {
+    background: linear-gradient(135deg, #1b0a2a 0%, #341253 45%, #581c87 75%, #b45309 100%);
+    border-radius: 12px;
+    padding: 30px 34px;
+    margin-bottom: 28px;
+    color: #ffffff;
+    box-shadow: 0 6px 24px rgba(124, 58, 237, 0.25);
+    position: relative;
+    overflow: hidden;
+}
+.math-banner::after {
+    content: "∑ ∫ ∏ √";
+    position: absolute;
+    right: 20px;
+    bottom: -15px;
+    font-size: 80px;
+    font-weight: 800;
+    font-family: 'Outfit', sans-serif;
+    color: rgba(255, 255, 255, 0.05);
+    pointer-events: none;
+}
+.math-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.16);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    margin-bottom: 12px;
+}
+.math-banner-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.25;
+    margin: 0;
+    color: #ffffff;
+}
+
+/* NAVIGATION TOGGLE */
+.nav-toggle {
+    margin-bottom: 24px;
+}
+.nav-toggle-btn {
+    width: 100%;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #7c3aed;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+.nav-toggle-btn:hover {
+    background: rgba(124, 58, 237, 0.06);
+    border-color: #7c3aed;
+}
+.nav-panel {
+    display: none;
+    margin-top: 10px;
+    padding: 18px;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    column-count: 2;
+    column-gap: 16px;
+}
+.nav-panel.open { display: block; }
+.nav-item {
+    display: block;
+    padding: 6px 10px;
+    font-size: 13px;
+    color: var(--text-body, #334155);
+    text-decoration: none;
+    border-radius: 4px;
+    break-inside: avoid;
+    margin-bottom: 4px;
+    transition: all 0.15s ease;
+}
+.nav-item:hover {
+    background: rgba(124, 58, 237, 0.1);
+    color: #7c3aed;
+}
+.nav-item.current {
+    background: linear-gradient(135deg, #7c3aed, #4c1d95);
+    color: #ffffff !important;
+    font-weight: 700;
+}
+
+/* CONTENT STYLES */
+.module-content {
+    color: var(--text-body, #334155);
+    font-size: 15px;
+}
+.module-content h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-heading, #0f172a);
+    margin: 36px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(124, 58, 237, 0.2);
+}
+.module-content h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-heading, #0f172a);
+    margin: 28px 0 14px;
+}
+.module-content h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-heading, #0f172a);
+    margin: 22px 0 10px;
+}
+.module-content p {
+    margin: 0 0 14px;
+    line-height: 1.7;
+}
+.module-content ul, .module-content ol {
+    margin: 0 0 16px 22px;
+    padding: 0;
+}
+.module-content li {
+    margin-bottom: 7px;
+    line-height: 1.65;
+}
+
+/* MATHEMATICAL CALLOUTS */
+.math-callout {
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 22px 0;
+    border: 1px solid var(--border-color, #e2e8f0);
+    background: var(--bg-surface, #ffffff);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+}
+[data-theme="dark"] .math-callout {
+    background: #141728;
+    border-color: #242944;
+}
+.callout-badge {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+.callout-title {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--text-heading, #0f172a);
+}
+.math-callout.theorem {
+    border-left: 4px solid #7c3aed;
+    background: rgba(124, 58, 237, 0.04);
+}
+[data-theme="dark"] .math-callout.theorem { background: rgba(124, 58, 237, 0.1); }
+.callout-badge.theorem { background: #7c3aed; color: #fff; }
+
+.math-callout.definition {
+    border-left: 4px solid #0284c7;
+    background: rgba(2, 132, 199, 0.04);
+}
+[data-theme="dark"] .math-callout.definition { background: rgba(2, 132, 199, 0.1); }
+.callout-badge.definition { background: #0284c7; color: #fff; }
+
+.math-callout.property {
+    border-left: 4px solid #f59e0b;
+    background: rgba(245, 158, 11, 0.04);
+}
+[data-theme="dark"] .math-callout.property { background: rgba(245, 158, 11, 0.1); }
+.callout-badge.property { background: #f59e0b; color: #fff; }
+
+.math-callout.example {
+    border-left: 4px solid #10b981;
+    background: rgba(16, 185, 129, 0.04);
+}
+[data-theme="dark"] .math-callout.example { background: rgba(16, 185, 129, 0.1); }
+.callout-badge.example { background: #10b981; color: #fff; }
+
+/* DISPLAY MATH BOX */
+.math-display {
+    overflow-x: auto;
+    padding: 14px 18px;
+    margin: 20px 0;
+    text-align: center;
+    background: rgba(124, 58, 237, 0.03);
+    border: 1px dashed rgba(124, 58, 237, 0.25);
+    border-radius: 8px;
+}
+[data-theme="dark"] .math-display {
+    background: rgba(124, 58, 237, 0.08);
+    border-color: rgba(139, 92, 246, 0.35);
+}
+.math-inline {
+    display: inline-block;
+    padding: 0 2px;
+}
+
+/* REFERENCE PILL */
+.ref-pill {
+    display: inline-block;
+    background: rgba(124, 58, 237, 0.08);
+    color: #7c3aed;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 12px;
+    border-radius: 12px;
+    margin: 4px 0 14px;
+    border: 1px solid rgba(124, 58, 237, 0.2);
+}
+[data-theme="dark"] .ref-pill { color: #a78bfa; }
+
+/* REVISION SHEET BANNER */
+.exam-header-banner {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(245, 158, 11, 0.22) 100%);
+    border-left: 4px solid #f59e0b;
+    padding: 12px 18px;
+    border-radius: 0 8px 8px 0;
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--text-heading, #0f172a);
+    margin: 32px 0 18px;
+}
+
+/* TABLES */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 22px 0;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid var(--border-color, #cbd5e0);
+    padding: 10px 14px;
+    text-align: left;
+}
+th {
+    background: #6d28d9;
+    color: #ffffff;
+    font-weight: 600;
+}
+tr:nth-child(even) td {
+    background: var(--bg-table-stripe, #f8fafc);
+}
+
+/* BOTTOM NAVIGATION */
+.prev-next {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 45px;
+    padding-top: 24px;
+    border-top: 2px solid var(--border-color, #e2e8f0);
+}
+.pn-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #cbd5e0);
+    border-radius: 8px;
+    color: #7c3aed;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+.pn-btn:hover {
+    border-color: #7c3aed;
+    background: rgba(124, 58, 237, 0.08);
+    transform: translateY(-1px);
+}
+.pn-hub {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    background: #1e112a;
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+}
+.pn-hub:hover { background: #3b1d54; }
+
+@media (max-width: 768px) {
+    .page-container { margin: 12px; padding: 22px 18px; }
+    .prev-next { flex-direction: column; align-items: stretch; }
+    .pn-btn { justify-content: center; }
+    .nav-panel { column-count: 1; }
+}
+</style>
+
+<style>
+/* Mathematics Quiz Theme — Imperial Amethyst & Celestial Amber */
+.quiz-section-wrap {
+    margin: 40px 0;
+    padding: 0;
+}
+.quiz-card-container {
+    background: var(--bg-surface, #ffffff);
+    border: 1px solid rgba(124, 58, 237, 0.25);
+    border-radius: 14px;
+    padding: 32px 28px;
+    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.08);
+}
+[data-theme="dark"] .quiz-card-container {
+    background: #111424;
+    border-color: rgba(139, 92, 246, 0.3);
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+}
+.quiz-header {
+    border-bottom: 2px solid rgba(124, 58, 237, 0.15);
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+.quiz-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.12), rgba(245, 158, 11, 0.15));
+    color: #7c3aed;
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+}
+[data-theme="dark"] .quiz-badge {
+    color: #a78bfa;
+}
+.quiz-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-heading, #0f172a);
+    margin: 0 0 6px;
+}
+.quiz-desc {
+    font-size: 14px;
+    color: var(--text-secondary, #64748b);
+    margin: 0;
+}
+.quiz-score-badge {
+    background: linear-gradient(135deg, #7c3aed, #4c1d95);
+    color: #ffffff;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    display: none;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+.q-block {
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 20px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+[data-theme="dark"] .q-block {
+    background: #15192c;
+    border-color: #262c4a;
+}
+.q-title {
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--text-heading, #0f172a);
+    margin-bottom: 14px;
+    display: flex;
+    gap: 8px;
+}
+.q-num {
+    color: #7c3aed;
+    font-weight: 800;
+}
+[data-theme="dark"] .q-num {
+    color: #a78bfa;
+}
+.q-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.q-opt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-surface, #ffffff);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-body, #334155);
+    transition: all 0.2s ease;
+}
+[data-theme="dark"] .q-opt {
+    background: #1c223c;
+    border-color: #2d3558;
+    color: #cbd5e1;
+}
+.q-opt:hover {
+    border-color: #7c3aed;
+    background: rgba(124, 58, 237, 0.04);
+}
+.q-opt input[type="radio"] {
+    accent-color: #7c3aed;
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+}
+.q-opt.correct-choice {
+    border-color: #10b981 !important;
+    background: rgba(16, 185, 129, 0.1) !important;
+    color: #065f46 !important;
+}
+[data-theme="dark"] .q-opt.correct-choice {
+    color: #34d399 !important;
+    background: rgba(16, 185, 129, 0.15) !important;
+}
+.q-opt.wrong-choice {
+    border-color: #ef4444 !important;
+    background: rgba(239, 68, 68, 0.08) !important;
+    color: #991b1b !important;
+}
+[data-theme="dark"] .q-opt.wrong-choice {
+    color: #f87171 !important;
+    background: rgba(239, 68, 68, 0.15) !important;
+}
+.q-explanation {
+    display: none;
+    margin-top: 14px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    background: rgba(124, 58, 237, 0.08);
+    border-left: 4px solid #7c3aed;
+    color: var(--text-body, #334155);
+}
+[data-theme="dark"] .q-explanation {
+    background: rgba(124, 58, 237, 0.15);
+    color: #e2e8f0;
+}
+.quiz-actions {
+    display: flex;
+    gap: 14px;
+    margin-top: 26px;
+    flex-wrap: wrap;
+}
+.btn-quiz-check {
+    background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 26px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-quiz-check:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+}
+.btn-quiz-reset {
+    background: var(--bg-subtle, #f8fafc);
+    color: var(--text-secondary, #64748b);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 12px 22px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.btn-quiz-reset:hover {
+    color: var(--text-heading, #0f172a);
+    border-color: #7c3aed;
+}
+</style>
+
+</head>
+<body>
+
+
+    <header class="global-navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <span class="nav-brand-icon">⚡</span>
+                <span class="nav-brand-text">OmniCourse<span class="nav-brand-accent">.Hub</span></span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link"><span class="icon">🏠</span> All Subjects</a>
+                
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn active" style="color: #a78bfa;"><span class="icon">📐</span> Mathematics (17) ▾</button>
+                    <div class="nav-dropdown-menu">
+                        <a href="maths.html" class="nav-dropdown-header" style="background: linear-gradient(135deg, #7c3aed, #4c1d95); color: #fff;">📋 Mathematics Syllabus Hub</a>
+                        <a href="maths-module-1.html">Module 1: Divisibility and the Division Algorithm</a>
+<a href="maths-module-2.html">Module 2: Modular Arithmetic and Congruences</a>
+<a href="maths-module-3.html">Module 3: Integer Representations and Base Expansions</a>
+<a href="maths-module-4.html">Module 4: Octal, Hexadecimal & Fast Base Conversions</a>
+<a href="maths-module-5.html">Module 5: Algorithms for Integer Operations</a>
+<a href="maths-module-6.html">Module 6: Prime and Composite Numbers</a>
+<a href="maths-module-7.html">Module 7: Fundamental Theorem of Arithmetic</a>
+<a href="maths-module-8.html">Module 8: Trial Division and the Sieve of Eratosthenes</a>
+<a href="maths-module-9.html">Module 9: Prime Number Theorem and Prime Distribution</a>
+<a href="maths-module-10.html">Module 10: GCD, LCM and the Euclidean Algorithm</a>
+<a href="maths-module-11.html">Module 11: GCD as a Linear Combination (Bézout's Theorem)</a>
+<a href="maths-module-12.html">Module 12: Linear Congruences and Modular Inverses</a>
+<a href="maths-module-13.html">Module 13: Chinese Remainder Theorem (CRT)</a>
+<a href="maths-module-14.html">Module 14: Computer Arithmetic with Large Integers</a>
+<a href="maths-module-15.html">Module 15: Fermat's Little Theorem (FLT)</a>
+<a href="maths-module-16.html">Module 16: Applications of Congruences</a>
+<a href="maths-module-17.html">Module 17: Mixed MCQ Mastery and Final Revision</a>
+                    </div>
+                </div>
+
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn"><span class="icon">⛓️</span> Blockchain (13) ▾</button>
+                    <div class="nav-dropdown-menu">
+                        <a href="blockchain.html" class="nav-dropdown-header">📋 Blockchain Syllabus Hub</a>
+                        <a href="blockchain-module-1.html">Module 1: History &amp; Bitcoin</a>
+                        <a href="blockchain-module-2.html">Module 2: Distributed Systems</a>
+                        <a href="blockchain-module-3.html">Module 3: Consensus Protocols</a>
+                        <a href="blockchain-module-4.html">Module 4: Decentralization</a>
+                        <a href="blockchain-module-5.html">Module 5: Symmetric Crypto</a>
+                        <a href="blockchain-module-6.html">Module 6: Public Key Crypto</a>
+                        <a href="blockchain-module-7.html">Module 7: Digital Signatures</a>
+                        <a href="blockchain-module-8.html">Module 8: SHA &amp; Hashes</a>
+                        <a href="blockchain-module-9.html">Module 9: Consensus Problem &amp; Design</a>
+                        <a href="blockchain-module-10.html">Module 10: Paxos, Raft &amp; PBFT</a>
+                        <a href="blockchain-module-11.html">Module 11: PoW, PoS &amp; Selection</a>
+                        <a href="blockchain-module-12.html">Module 12: Bitcoin Keys &amp; UTXO</a>
+                        <a href="blockchain-module-13.html">Module 13: Mining, Network &amp; Forks</a>
+                        <a href="blockchain_guide.html" class="nav-dropdown-special">📖 Full 8-Module Reader</a>
+                    </div>
+                </div>
+
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn"><span class="icon">🐍</span> Django Course (45) ▾</button>
+                    <div class="nav-dropdown-menu">
+                        <a href="django.html" class="nav-dropdown-header">📋 Django Syllabus Hub</a>
+                        <a href="module-1.html">Module 1: Fundamentals</a>
+                        <a href="module-7.html">Module 7: URL Routing</a>
+                        <a href="module-12.html">Module 12: Templates</a>
+                        <a href="module-21.html">Module 21: Forms</a>
+                        <a href="module-25.html">Module 25: Models &amp; ORM</a>
+                        <a href="module-37.html">Module 37: Authentication</a>
+                        <a href="module-42.html">Module 42: Complete Revision</a>
+                        <a href="django_guide.html" class="nav-dropdown-special">📖 Full 44-Module Reader</a>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-actions">
+                <button id="themeToggleBtn" class="theme-btn" title="Toggle Dark/Light Mode">🌙</button>
+                <a href="maths.html" class="nav-action-pill" style="background: linear-gradient(135deg, #7c3aed, #4c1d95);" title="Return to Mathematics Hub">📋 Maths Hub</a>
+            </div>
+        </div>
+    </header>
+    
+
+<div class="page-container">
+
+    <div class="math-banner">
+        <div class="math-badge">∑ Module 13 of 17 — Number Theory &amp; Cryptography</div>
+        <h1 class="math-banner-title">Chinese Remainder Theorem (CRT)</h1>
+    </div>
+
+    <div class="nav-toggle">
+        <button class="nav-toggle-btn" onclick="document.getElementById('mathNavPanel').classList.toggle('open')">
+            📚 All 17 Mathematics Modules ▾
+        </button>
+        <div class="nav-panel" id="mathNavPanel">
+<a class="nav-item" href="maths-module-1.html">1. Divisibility and the Division Algorithm</a>
+<a class="nav-item" href="maths-module-2.html">2. Modular Arithmetic and Congruences</a>
+<a class="nav-item" href="maths-module-3.html">3. Integer Representations and Base Expansions</a>
+<a class="nav-item" href="maths-module-4.html">4. Octal, Hexadecimal & Fast Base Conversions</a>
+<a class="nav-item" href="maths-module-5.html">5. Algorithms for Integer Operations</a>
+<a class="nav-item" href="maths-module-6.html">6. Prime and Composite Numbers</a>
+<a class="nav-item" href="maths-module-7.html">7. Fundamental Theorem of Arithmetic</a>
+<a class="nav-item" href="maths-module-8.html">8. Trial Division and the Sieve of Eratosthenes</a>
+<a class="nav-item" href="maths-module-9.html">9. Prime Number Theorem and Prime Distribution</a>
+<a class="nav-item" href="maths-module-10.html">10. GCD, LCM and the Euclidean Algorithm</a>
+<a class="nav-item" href="maths-module-11.html">11. GCD as a Linear Combination (Bézout's Theorem)</a>
+<a class="nav-item" href="maths-module-12.html">12. Linear Congruences and Modular Inverses</a>
+<span class="nav-item current">13. Chinese Remainder Theorem (CRT)</span>
+<a class="nav-item" href="maths-module-14.html">14. Computer Arithmetic with Large Integers</a>
+<a class="nav-item" href="maths-module-15.html">15. Fermat's Little Theorem (FLT)</a>
+<a class="nav-item" href="maths-module-16.html">16. Applications of Congruences</a>
+<a class="nav-item" href="maths-module-17.html">17. Mixed MCQ Mastery and Final Revision</a>
+        </div>
+    </div>
+
+    <div class="module-content">
+<p>Number Theory-III · Rosen, Number Theory and Cryptography, Section 4.4</p>
+<p>The Chinese Remainder Theorem helps us solve several congruences involving the same unknown. It is especially useful when each congruence has a different modulus.</p>
+<p>By the end of this module, you should be able to solve CRT questions, understand why the solution is unique modulo a product, and recognize when the standard theorem does not directly apply.</p>
+<h2>13.1 What problem does CRT solve?</h2>
+<p>Suppose we want an integer <span class="math-inline">\(x\)</span> satisfying all three conditions:</p>
+<div class="math-display">\[\begin{aligned} x&\equiv2\pmod3,\\\ x&\equiv3\pmod5,\\\ x&\equiv2\pmod7. \end{aligned}\]</div>
+<p>These conditions mean:</p>
+<ul>
+<li>Dividing <span class="math-inline">\(x\)</span> by <span class="math-inline">\(3\)</span> leaves remainder <span class="math-inline">\(2\)</span>.</li>
+<li>Dividing <span class="math-inline">\(x\)</span> by <span class="math-inline">\(5\)</span> leaves remainder <span class="math-inline">\(3\)</span>.</li>
+<li>Dividing <span class="math-inline">\(x\)</span> by <span class="math-inline">\(7\)</span> leaves remainder <span class="math-inline">\(2\)</span>.</li>
+</ul>
+<p>We need a number satisfying all three simultaneously.</p>
+<p>The moduli <span class="math-inline">\(3,5,7\)</span> are pairwise relatively prime: every pair has GCD <span class="math-inline">\(1\)</span>.</p>
+<p>Try numbers congruent to <span class="math-inline">\(2\)</span> modulo <span class="math-inline">\(3\)</span>:</p>
+<div class="math-display">\[2,5,8,11,14,17,20,23,\ldots\]</div>
+<p>Among these, <span class="math-inline">\(23\)</span> leaves remainder <span class="math-inline">\(3\)</span> modulo <span class="math-inline">\(5\)</span>, and remainder <span class="math-inline">\(2\)</span> modulo <span class="math-inline">\(7\)</span>.</p>
+<p>So,</p>
+<div class="math-display">\[\boxed{x\equiv23\pmod{105}},\]</div>
+<p>because <span class="math-inline">\(105=3\cdot5\cdot7\)</span>.</p>
+<p>This means every solution is of the form</p>
+<div class="math-display">\[\boxed{x=23+105k,\qquad k\in\mathbb Z}.\]</div>
+<p>The CRT gives a systematic method for finding such a solution without relying on trial and error. Rosen introduces the theorem in Section 4.4 as a method for solving simultaneous congruences with pairwise relatively prime moduli.</p>
+<h2>13.2 Statement of the Chinese Remainder Theorem</h2>
+<p>Suppose <span class="math-inline">\(m_1,m_2,\ldots,m_n\)</span> are pairwise relatively prime positive integers, and <span class="math-inline">\(a_1,a_2,\ldots,a_n\)</span> are integers.</p>
+<p>Then the system</p>
+<div class="math-display">\[\begin{aligned} x&\equiv a_1\pmod{m_1},\\\ x&\equiv a_2\pmod{m_2},\\\ &\vdots\\\ x&\equiv a_n\pmod{m_n} \end{aligned}\]</div>
+<p>has a solution, and that solution is unique modulo</p>
+<div class="math-display">\[\boxed{M=m_1m_2\cdots m_n}.\]</div>
+<p>Two important conclusions follow:</p>
+<ol>
+<li>A solution always exists when the moduli are pairwise relatively prime.</li>
+<li>All solutions are congruent modulo the product <span class="math-inline">\(M\)</span>.</li>
+</ol>
+<p>Unique modulo <span class="math-inline">\(M\)</span> does not mean only one integer is a solution. It means there is exactly one solution residue in the range <span class="math-inline">\(0\le x\<M\)</span>, and every other integer solution differs from it by a multiple of <span class="math-inline">\(M\)</span>.</p>
+<h3>Pairwise relatively prime versus merely relatively prime</h3>
+<p>For three or more numbers, pairwise relatively prime means that every pair has GCD <span class="math-inline">\(1\)</span>.</p>
+<p>For example, <span class="math-inline">\(6,10,15\)</span> are not pairwise relatively prime because</p>
+<div class="math-display">\[\gcd(6,10)=2,\quad \gcd(6,15)=3,\quad \gcd(10,15)=5.\]</div>
+<p>But <span class="math-inline">\(3,5,7\)</span> are pairwise relatively prime.</p>
+<p>This condition is essential for applying the standard CRT theorem as stated above.</p>
+<h2>13.3 The construction formula for CRT</h2>
+<p>For exam questions, the most systematic method is the construction in the textbook's proof.</p>
+<p>Suppose</p>
+<div class="math-display">\[x\equiv a_i\pmod{m_i},\qquad i=1,\ldots,n,\]</div>
+<p>with pairwise relatively prime moduli.</p>
+<p>Step 1: Calculate the product</p>
+<div class="math-display">\[M=m_1m_2\cdots m_n.\]</div>
+<p>Step 2: Calculate each partial product</p>
+<div class="math-display">\[\boxed{M_i=\frac{M}{m_i}}.\]</div>
+<p>Thus, <span class="math-inline">\(M_i\)</span> is the product of all the moduli except <span class="math-inline">\(m_i\)</span>.</p>
+<p>Step 3: Find modular inverses</p>
+<p>For each <span class="math-inline">\(i\)</span>, find <span class="math-inline">\(y_i\)</span> such that</p>
+<div class="math-display">\[\boxed{M_i y_i\equiv1\pmod{m_i}}.\]</div>
+<p>These inverses exist because the moduli are pairwise relatively prime.</p>
+<p>Step 4: Combine the terms</p>
+<div class="math-display">\[\boxed{x\equiv\sum_{i=1}^{n}a_iM_i y_i\pmod M}.\]</div>
+<p>This is the CRT construction formula used in Rosen's proof.</p>
+<h3>Why does this formula work?</h3>
+<p>Consider one congruence, say modulo <span class="math-inline">\(m_k\)</span>.</p>
+<p>Every partial product <span class="math-inline">\(M_i\)</span> with <span class="math-inline">\(i\ne k\)</span> contains <span class="math-inline">\(m_k\)</span> as a factor. Therefore,</p>
+<div class="math-display">\[M_i\equiv0\pmod{m_k}\qquad(i\ne k).\]</div>
+<p>All terms except the <span class="math-inline">\(k\)</span>-th term disappear modulo <span class="math-inline">\(m_k\)</span>.</p>
+<p>The remaining term satisfies</p>
+<div class="math-display">\[a_kM_k y_k\equiv a_k(1)\equiv a_k\pmod{m_k}.\]</div>
+<p>Hence the constructed <span class="math-inline">\(x\)</span> satisfies every congruence in the system.</p>
+<h2>13.4 Complete worked example using the formula</h2>
+<p>Solve</p>
+<div class="math-display">\[\begin{aligned} x&\equiv2\pmod3,\\\ x&\equiv3\pmod5,\\\ x&\equiv2\pmod7. \end{aligned}\]</div>
+<h3>Step 1: Calculate <span class="math-inline">\(M\)</span></h3>
+<div class="math-display">\[M=3\cdot5\cdot7=105.\]</div>
+<h3>Step 2: Calculate the partial products</h3>
+<div class="math-display">\[M_1=\frac{105}{3}=35,\]</div>
+<div class="math-display">\[M_2=\frac{105}{5}=21,\]</div>
+<div class="math-display">\[M_3=\frac{105}{7}=15.\]</div>
+<h3>Step 3: Find their inverses</h3>
+<p>For the first modulus, find the inverse of <span class="math-inline">\(35\)</span> modulo <span class="math-inline">\(3\)</span>:</p>
+<div class="math-display">\[35\equiv2\pmod3.\]</div>
+<p>Since <span class="math-inline">\(2\cdot2\equiv1\pmod3\)</span>, choose <span class="math-inline">\(y_1=2\)</span>.</p>
+<p>For the second modulus,</p>
+<div class="math-display">\[21\equiv1\pmod5,\]</div>
+<p>so choose <span class="math-inline">\(y_2=1\)</span>.</p>
+<p>For the third modulus,</p>
+<div class="math-display">\[15\equiv1\pmod7,\]</div>
+<p>so choose <span class="math-inline">\(y_3=1\)</span>.</p>
+<p>Our values are:</p>
+<table>
+<thead>
+<tr>
+<th><span class="math-inline">\(i\)</span></th>
+<th><span class="math-inline">\(a_i\)</span></th>
+<th><span class="math-inline">\(m_i\)</span></th>
+<th><span class="math-inline">\(M_i\)</span></th>
+<th><span class="math-inline">\(y_i\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>35</td>
+<td>2</td>
+</tr>
+<tr>
+<td>2</td>
+<td>3</td>
+<td>5</td>
+<td>21</td>
+<td>1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2</td>
+<td>7</td>
+<td>15</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<h3>Step 4: Apply the formula</h3>
+<div class="math-display">\[\begin{aligned} x&\equiv a_1M_1y_1+a_2M_2y_2+a_3M_3y_3\\\ &\equiv2(35)(2)+3(21)(1)+2(15)(1)\\\ &\equiv140+63+30\\\ &\equiv233\pmod{105}. \end{aligned}\]</div>
+<p>Reduce <span class="math-inline">\(233\)</span> modulo <span class="math-inline">\(105\)</span>:</p>
+<div class="math-display">\[233=2(105)+23.\]</div>
+<p>Therefore,</p>
+<div class="math-display">\[\boxed{x\equiv23\pmod{105}}.\]</div>
+<p>This agrees with the textbook's worked CRT example.</p>
+<h3>Step 5: Verify every congruence</h3>
+<div class="math-display">\[23=7(3)+2\implies23\equiv2\pmod3,\]</div>
+<div class="math-display">\[23=4(5)+3\implies23\equiv3\pmod5,\]</div>
+<div class="math-display">\[23=3(7)+2\implies23\equiv2\pmod7.\]</div>
+<p>All three conditions hold.</p>
+<p>The complete solution is</p>
+<div class="math-display">\[\boxed{x=23+105k,\quad k\in\mathbb Z}.\]</div>
+<p>Important: You do not have to find the smallest positive solution during the construction itself. Calculate the formula first, then reduce the answer modulo <span class="math-inline">\(M\)</span> to get the standard representative between <span class="math-inline">\(0\)</span> and <span class="math-inline">\(M-1\)</span>.</p>
+<h2>13.5 An alternative method: Back substitution</h2>
+<p>The construction formula is systematic, but sometimes back substitution is shorter. Rosen demonstrates this as an alternative method.</p>
+<p>Consider</p>
+<div class="math-display">\[\begin{aligned} x&\equiv1\pmod5,\\\ x&\equiv2\pmod6,\\\ x&\equiv3\pmod7. \end{aligned}\]</div>
+<p>The moduli <span class="math-inline">\(5,6,7\)</span> are pairwise relatively prime, so the standard CRT applies.</p>
+<h3>Step 1: Use the first congruence</h3>
+<div class="math-display">\[x\equiv1\pmod5\]</div>
+<p>means</p>
+<div class="math-display">\[x=5t+1\]</div>
+<p>for some integer <span class="math-inline">\(t\)</span>.</p>
+<h3>Step 2: Substitute into the second congruence</h3>
+<div class="math-display">\[5t+1\equiv2\pmod6.\]</div>
+<p>Subtract <span class="math-inline">\(1\)</span>:</p>
+<div class="math-display">\[5t\equiv1\pmod6.\]</div>
+<p>Because <span class="math-inline">\(5\equiv-1\pmod6\)</span>,</p>
+<div class="math-display">\[-t\equiv1\pmod6,\]</div>
+<p>so</p>
+<div class="math-display">\[t\equiv5\pmod6.\]</div>
+<p>Write</p>
+<div class="math-display">\[t=6u+5.\]</div>
+<p>Substitute back into <span class="math-inline">\(x=5t+1\)</span>:</p>
+<div class="math-display">\[x=5(6u+5)+1=30u+26.\]</div>
+<h3>Step 3: Use the third congruence</h3>
+<p>We need</p>
+<div class="math-display">\[30u+26\equiv3\pmod7.\]</div>
+<p>Reduce the coefficients modulo <span class="math-inline">\(7\)</span>:</p>
+<div class="math-display">\[2u+5\equiv3\pmod7.\]</div>
+<p>Thus,</p>
+<div class="math-display">\[2u\equiv-2\equiv5\pmod7.\]</div>
+<p>The inverse of <span class="math-inline">\(2\)</span> modulo <span class="math-inline">\(7\)</span> is <span class="math-inline">\(4\)</span>, so</p>
+<div class="math-display">\[u\equiv4(5)=20\equiv6\pmod7.\]</div>
+<p>Therefore,</p>
+<div class="math-display">\[u=7v+6.\]</div>
+<p>Substitute into <span class="math-inline">\(x=30u+26\)</span>:</p>
+<div class="math-display">\[\begin{aligned} x&=30(7v+6)+26\\\ &=210v+206. \end{aligned}\]</div>
+<p>Hence,</p>
+<div class="math-display">\[\boxed{x\equiv206\pmod{210}}.\]</div>
+<p>The complete solution is <span class="math-inline">\(x=206+210v\)</span>, where <span class="math-inline">\(v\)</span> is any integer. Here, <span class="math-inline">\(210=5\cdot6\cdot7\)</span>.</p>
+<h3>When should you use each method?</h3>
+<ul>
+<li>Construction formula: Best for a predictable procedure, especially when an MCQ explicitly asks you to apply the CRT construction.</li>
+<li>Back substitution: Often faster when the congruences are simple and you can conveniently express <span class="math-inline">\(x\)</span> in terms of an integer parameter.</li>
+</ul>
+<p>Both methods must produce answers congruent modulo the product of the pairwise relatively prime moduli.</p>
+<h2>13.6 Why is the solution unique modulo the product?</h2>
+<p>The CRT claims not just that a solution exists, but also that it is unique modulo <span class="math-inline">\(M\)</span>.</p>
+<p>Suppose <span class="math-inline">\(x\)</span> and <span class="math-inline">\(y\)</span> are two solutions of the same system. For each modulus <span class="math-inline">\(m_i\)</span>,</p>
+<div class="math-display">\[x\equiv a_i\pmod{m_i}, \qquad y\equiv a_i\pmod{m_i}.\]</div>
+<p>Subtracting gives</p>
+<div class="math-display">\[x-y\equiv0\pmod{m_i}.\]</div>
+<p>Therefore,</p>
+<div class="math-display">\[m_i\mid(x-y)\]</div>
+<p>for every <span class="math-inline">\(i\)</span>.</p>
+<p>Since the moduli are pairwise relatively prime, their product divides <span class="math-inline">\(x-y\)</span>:</p>
+<div class="math-display">\[m_1m_2\cdots m_n\mid(x-y).\]</div>
+<p>Consequently,</p>
+<div class="math-display">\[\boxed{x\equiv y\pmod M}.\]</div>
+<p>This proves uniqueness modulo <span class="math-inline">\(M\)</span>, matching the uniqueness argument described in the textbook's exercises.</p>
+<h3>MCQ implication</h3>
+<p>Suppose you know one solution is <span class="math-inline">\(23\)</span>, and the moduli are <span class="math-inline">\(3,5,7\)</span>. Then any other solution must be congruent to <span class="math-inline">\(23\)</span> modulo <span class="math-inline">\(105\)</span>.</p>
+<p>For example, <span class="math-inline">\(128=23+105\)</span> is a solution, but <span class="math-inline">\(24\)</span> cannot be another solution because</p>
+<div class="math-display">\[24-23=1\]</div>
+<p>is not divisible by <span class="math-inline">\(105\)</span>.</p>
+<h2>13.7 What if the moduli are not pairwise relatively prime?</h2>
+<p>The standard CRT theorem requires pairwise relatively prime moduli. If this condition fails, do not automatically conclude that no solution exists. A solution may still exist, but compatibility between the congruences must be checked.</p>
+<p>This is an extension beyond the standard theorem statement above.</p>
+<div class="math-callout example"><div class="callout-badge example">💡 WORKED EXAMPLE</div><div class="callout-title">Example A: A compatible system</div></div>
+<p>Consider</p>
+<div class="math-display">\[x\equiv1\pmod4,\qquad x\equiv3\pmod6.\]</div>
+<p>The moduli are not relatively prime because <span class="math-inline">\(\gcd(4,6)=2\)</span>.</p>
+<p>The first condition gives numbers</p>
+<div class="math-display">\[1,5,9,13,17,21,\ldots\]</div>
+<p>Among them, <span class="math-inline">\(9\)</span> leaves remainder <span class="math-inline">\(3\)</span> modulo <span class="math-inline">\(6\)</span>. Thus <span class="math-inline">\(x=9\)</span> works, and</p>
+<div class="math-display">\[\boxed{x\equiv9\pmod{12}}.\]</div>
+<p>The solution repeats every <span class="math-inline">\(\operatorname{lcm}(4,6)=12\)</span>.</p>
+<div class="math-callout example"><div class="callout-badge example">💡 WORKED EXAMPLE</div><div class="callout-title">Example B: An incompatible system</div></div>
+<p>Consider</p>
+<div class="math-display">\[x\equiv1\pmod4,\qquad x\equiv2\pmod6.\]</div>
+<p>The first congruence requires <span class="math-inline">\(x\)</span> to be odd. The second requires <span class="math-inline">\(x\)</span> to be even. No integer can satisfy both.</p>
+<p>Thus,</p>
+<div class="math-display">\[\boxed{\text{No solution}}.\]</div>
+<h3>The general compatibility test</h3>
+<p>For two congruences,</p>
+<div class="math-display">\[x\equiv a\pmod m,\qquad x\equiv b\pmod n,\]</div>
+<p>a solution exists if and only if</p>
+<div class="math-display">\[\boxed{\gcd(m,n)\mid(b-a)}.\]</div>
+<p>This is a useful generalization. For the standard CRT exam questions, first check whether the moduli are pairwise relatively prime; if they are, use the standard theorem directly.</p>
+<h2>13.8 Common MCQ traps</h2>
+<ul>
+<li>Trap 1: The product <span class="math-inline">\(M\)</span> is the product of the moduli, not their sum.</li>
+<li>Trap 2: <span class="math-inline">\(M_i=M/m_i\)</span>; it excludes the current modulus.</li>
+<li>Trap 3: <span class="math-inline">\(y_i\)</span> is the inverse of <span class="math-inline">\(M_i\)</span> modulo <span class="math-inline">\(m_i\)</span>, not the inverse of <span class="math-inline">\(m_i\)</span>.</li>
+<li>Trap 4: Reduce the final result modulo <span class="math-inline">\(M\)</span>.</li>
+<li>Trap 5: The CRT solution is unique modulo <span class="math-inline">\(M\)</span>, not unique as an ordinary integer.</li>
+<li>Trap 6: Pairwise relatively prime means every pair of moduli has GCD <span class="math-inline">\(1\)</span>.</li>
+<li>Trap 7: If the moduli are not pairwise relatively prime, the standard theorem does not apply directly—but a solution might still exist.</li>
+<li>Trap 8: For compatible systems with non-coprime moduli, the solution may repeat modulo the LCM rather than the product.</li>
+</ul>
+
+    <div class="quiz-section-wrap" id="math-quiz-section">
+        <div class="quiz-card-container">
+            <div class="quiz-header">
+                <div>
+                    <div class="quiz-badge">Interactive Self-Test · 10 MCQs</div>
+                    <h3 class="quiz-title">Module 13 Self-Test &amp; Exam Practice</h3>
+                    <p class="quiz-desc">Test your understanding with instant grading, step-by-step mathematical proofs, and solutions.</p>
+                </div>
+                <div class="quiz-score-badge" id="quizScoreBadge_13">
+                    Score: <span id="quizScoreVal_13">0</span> / 10 (<span id="quizScorePct_13">0%</span>)
+                </div>
+            </div>
+
+            <div class="quiz-questions-wrap">
+                
+        <div class="q-block" id="q_block_13_1" data-corr="2">
+            <div class="q-title"><span class="q-num">1.</span> <span>The standard Chinese Remainder Theorem guarantees a unique solution modulo the product when the moduli are:</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_13_1_opt_0">
+                <input type="radio" name="math_q_13_1" value="0">
+                <span><strong>A.</strong> All prime</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_1_opt_1">
+                <input type="radio" name="math_q_13_1" value="1">
+                <span><strong>B.</strong> All odd</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_1_opt_2">
+                <input type="radio" name="math_q_13_1" value="2">
+                <span><strong>C.</strong> Pairwise relatively prime</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_1_opt_3">
+                <input type="radio" name="math_q_13_1" value="3">
+                <span><strong>D.</strong> In increasing order</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_13_1">
+                <strong>Mathematical Explanation:</strong> Refer to the textbook theorems and definitions for this module.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_13_2" data-corr="2">
+            <div class="q-title"><span class="q-num">2.</span> <span>For moduli 3, 5 and 7, what is the product M?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_13_2_opt_0">
+                <input type="radio" name="math_q_13_2" value="0">
+                <span><strong>A.</strong> 15</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_2_opt_1">
+                <input type="radio" name="math_q_13_2" value="1">
+                <span><strong>B.</strong> 35</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_2_opt_2">
+                <input type="radio" name="math_q_13_2" value="2">
+                <span><strong>C.</strong> 105</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_2_opt_3">
+                <input type="radio" name="math_q_13_2" value="3">
+                <span><strong>D.</strong> 210</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_13_2">
+                <strong>Mathematical Explanation:</strong> Refer to the textbook theorems and definitions for this module.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_13_3" data-corr="2">
+            <div class="q-title"><span class="q-num">3.</span> <span>In the CRT construction, if M = 105 and m₂ = 5, what is M₂?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_13_3_opt_0">
+                <input type="radio" name="math_q_13_3" value="0">
+                <span><strong>A.</strong> 5</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_3_opt_1">
+                <input type="radio" name="math_q_13_3" value="1">
+                <span><strong>B.</strong> 15</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_3_opt_2">
+                <input type="radio" name="math_q_13_3" value="2">
+                <span><strong>C.</strong> 21</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_3_opt_3">
+                <input type="radio" name="math_q_13_3" value="3">
+                <span><strong>D.</strong> 35</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_13_3">
+                <strong>Mathematical Explanation:</strong> Refer to the textbook theorems and definitions for this module.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_13_4" data-corr="2">
+            <div class="q-title"><span class="q-num">4.</span> <span>What is the inverse of 35 modulo 3?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_13_4_opt_0">
+                <input type="radio" name="math_q_13_4" value="0">
+                <span><strong>A.</strong> 0</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_4_opt_1">
+                <input type="radio" name="math_q_13_4" value="1">
+                <span><strong>B.</strong> 1</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_4_opt_2">
+                <input type="radio" name="math_q_13_4" value="2">
+                <span><strong>C.</strong> 2</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_4_opt_3">
+                <input type="radio" name="math_q_13_4" value="3">
+                <span><strong>D.</strong> No inverse</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_13_4">
+                <strong>Mathematical Explanation:</strong> Refer to the textbook theorems and definitions for this module.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_13_5" data-corr="1">
+            <div class="q-title"><span class="q-num">5.</span> <span>Solve x ≡ 2 (mod 3), x ≡ 3 (mod 5).</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_13_5_opt_0">
+                <input type="radio" name="math_q_13_5" value="0">
+                <span><strong>A.</strong> x ≡ 3 (mod 15)</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_5_opt_1">
+                <input type="radio" name="math_q_13_5" value="1">
+                <span><strong>B.</strong> x ≡ 8 (mod 15)</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_5_opt_2">
+                <input type="radio" name="math_q_13_5" value="2">
+                <span><strong>C.</strong> x ≡ 12 (mod 15)</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_5_opt_3">
+                <input type="radio" name="math_q_13_5" value="3">
+                <span><strong>D.</strong> x ≡ 13 (mod 15)</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_13_5">
+                <strong>Mathematical Explanation:</strong> Refer to the textbook theorems and definitions for this module.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_13_6" data-corr="0">
+            <div class="q-title"><span class="q-num">6.</span> <span>The CRT solution is x ≡ 23 (mod 105). Which is also a solution?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_13_6_opt_0">
+                <input type="radio" name="math_q_13_6" value="0">
+                <span><strong>A.</strong> 128</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_6_opt_1">
+                <input type="radio" name="math_q_13_6" value="1">
+                <span><strong>B.</strong> 127</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_6_opt_2">
+                <input type="radio" name="math_q_13_6" value="2">
+                <span><strong>C.</strong> 130</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_6_opt_3">
+                <input type="radio" name="math_q_13_6" value="3">
+                <span><strong>D.</strong> 230</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_13_6">
+                <strong>Mathematical Explanation:</strong> Refer to the textbook theorems and definitions for this module.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_13_7" data-corr="2">
+            <div class="q-title"><span class="q-num">7.</span> <span>For x ≡ 1 (mod 4) and x ≡ 3 (mod 6), which is true?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_13_7_opt_0">
+                <input type="radio" name="math_q_13_7" value="0">
+                <span><strong>A.</strong> No solution exists</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_7_opt_1">
+                <input type="radio" name="math_q_13_7" value="1">
+                <span><strong>B.</strong> The moduli are relatively prime</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_7_opt_2">
+                <input type="radio" name="math_q_13_7" value="2">
+                <span><strong>C.</strong> x ≡ 9 (mod 12) is a solution class</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_7_opt_3">
+                <input type="radio" name="math_q_13_7" value="3">
+                <span><strong>D.</strong> The solution is unique modulo 24</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_13_7">
+                <strong>Mathematical Explanation:</strong> Refer to the textbook theorems and definitions for this module.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_13_8" data-corr="1">
+            <div class="q-title"><span class="q-num">8.</span> <span>If x and y both solve a CRT system with pairwise relatively prime moduli whose product is M, what must be true?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_13_8_opt_0">
+                <input type="radio" name="math_q_13_8" value="0">
+                <span><strong>A.</strong> x = y exactly</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_8_opt_1">
+                <input type="radio" name="math_q_13_8" value="1">
+                <span><strong>B.</strong> x − y is divisible by M</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_8_opt_2">
+                <input type="radio" name="math_q_13_8" value="2">
+                <span><strong>C.</strong> x + y is divisible by M</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_8_opt_3">
+                <input type="radio" name="math_q_13_8" value="3">
+                <span><strong>D.</strong> x − y = 1</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_13_8">
+                <strong>Mathematical Explanation:</strong> Refer to the textbook theorems and definitions for this module.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_13_9" data-corr="2">
+            <div class="q-title"><span class="q-num">9.</span> <span>For x ≡ 1 (mod 4) and x ≡ 2 (mod 6), how many integer solutions exist?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_13_9_opt_0">
+                <input type="radio" name="math_q_13_9" value="0">
+                <span><strong>A.</strong> Exactly one integer</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_9_opt_1">
+                <input type="radio" name="math_q_13_9" value="1">
+                <span><strong>B.</strong> Infinitely many</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_9_opt_2">
+                <input type="radio" name="math_q_13_9" value="2">
+                <span><strong>C.</strong> No solutions</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_9_opt_3">
+                <input type="radio" name="math_q_13_9" value="3">
+                <span><strong>D.</strong> Exactly two</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_13_9">
+                <strong>Mathematical Explanation:</strong> Refer to the textbook theorems and definitions for this module.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_13_10" data-corr="1">
+            <div class="q-title"><span class="q-num">10.</span> <span>In the CRT construction, why do the terms aᵢMᵢyᵢ for i ≠ k vanish modulo mₖ?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_13_10_opt_0">
+                <input type="radio" name="math_q_13_10" value="0">
+                <span><strong>A.</strong> Because aᵢ = 0</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_10_opt_1">
+                <input type="radio" name="math_q_13_10" value="1">
+                <span><strong>B.</strong> Because Mᵢ contains mₖ as a factor</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_10_opt_2">
+                <input type="radio" name="math_q_13_10" value="2">
+                <span><strong>C.</strong> Because every inverse is zero</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_13_10_opt_3">
+                <input type="radio" name="math_q_13_10" value="3">
+                <span><strong>D.</strong> Because Mᵢ = 1</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_13_10">
+                <strong>Mathematical Explanation:</strong> Refer to the textbook theorems and definitions for this module.
+            </div>
+        </div>
+        
+            </div>
+
+            <div class="quiz-actions">
+                <button type="button" class="btn-quiz-check" onclick="checkMathQuiz(13, 10)">✓ Check Answers &amp; View Solutions</button>
+                <button type="button" class="btn-quiz-reset" onclick="resetMathQuiz(13, 10)">↺ Reset Quiz</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function checkMathQuiz(modNum, total) {
+        let score = 0;
+        for (let i = 1; i <= total; i++) {
+            let block = document.getElementById("q_block_" + modNum + "_" + i);
+            if (!block) continue;
+            let corr = parseInt(block.getAttribute("data-corr"));
+            let radios = document.getElementsByName("math_q_" + modNum + "_" + i);
+            let selected = -1;
+            for (let r of radios) {
+                if (r.checked) {
+                    selected = parseInt(r.value);
+                    break;
+                }
+            }
+
+            // reset classes
+            for (let j = 0; j < 4; j++) {
+                let optEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + j);
+                if (optEl) {
+                    optEl.classList.remove("correct-choice", "wrong-choice");
+                }
+            }
+
+            if (selected === corr) {
+                score++;
+                let correctEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + corr);
+                if (correctEl) correctEl.classList.add("correct-choice");
+            } else {
+                if (selected !== -1) {
+                    let wrongEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + selected);
+                    if (wrongEl) wrongEl.classList.add("wrong-choice");
+                }
+                let correctEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + corr);
+                if (correctEl) correctEl.classList.add("correct-choice");
+            }
+
+            let expl = document.getElementById("q_expl_" + modNum + "_" + i);
+            if (expl) expl.style.display = "block";
+        }
+
+        let badge = document.getElementById("quizScoreBadge_" + modNum);
+        let val = document.getElementById("quizScoreVal_" + modNum);
+        let pct = document.getElementById("quizScorePct_" + modNum);
+        if (badge && val && pct) {
+            val.innerText = score;
+            pct.innerText = Math.round((score / total) * 100) + "%";
+            badge.style.display = "inline-flex";
+            badge.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    }
+
+    function resetMathQuiz(modNum, total) {
+        for (let i = 1; i <= total; i++) {
+            let radios = document.getElementsByName("math_q_" + modNum + "_" + i);
+            for (let r of radios) r.checked = false;
+
+            for (let j = 0; j < 4; j++) {
+                let optEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + j);
+                if (optEl) optEl.classList.remove("correct-choice", "wrong-choice");
+            }
+
+            let expl = document.getElementById("q_expl_" + modNum + "_" + i);
+            if (expl) expl.style.display = "none";
+        }
+
+        let badge = document.getElementById("quizScoreBadge_" + modNum);
+        if (badge) badge.style.display = "none";
+    }
+    </script>
+    
+<h2>Module 13 revision sheet</h2>
+<p>Theorem</p>
+<div class="math-display">\[\gcd(m_i,m_j)=1\ (i\ne j)\implies \text{unique solution mod }M\]</div>
+<div class="math-display">\[M=\prod_{i=1}^n m_i,\qquad M_i=\frac{M}{m_i}\]</div>
+<div class="math-display">\[M_i y_i\equiv1\pmod{m_i}\]</div>
+<div class="math-display">\[x\equiv\sum_{i=1}^n a_iM_i y_i\pmod M\]</div>
+<p>Non-coprime compatibility check</p>
+<div class="math-display">\[x\equiv a\pmod m,\quad x\equiv b\pmod n\]</div>
+<div class="math-display">\[\text{A solution exists iff }\gcd(m,n)\mid(b-a)\]</div>
+<p>Module 13 complete.</p>
+<p>Next: Module 14 — Computer Arithmetic with Large Integers, including representing integers by their remainders, performing addition and multiplication componentwise, and reconstructing the answer using CRT.</p>
+<p>Say next when you're ready.</p>
+    </div>
+
+    <div class="prev-next">
+        <a class="pn-btn" href="maths-module-12.html">&larr; Module 12</a>
+        <a class="pn-hub" href="maths.html">📋 Mathematics Hub</a>
+        <a class="pn-btn" href="maths-module-14.html">Module 14 &rarr;</a>
+    </div>
+
+</div>
+
+<script src="shared.js"></script>
+</body>
+</html>

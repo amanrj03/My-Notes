@@ -1,0 +1,519 @@
+# Module 3 — Integer Representations and Base Expansions
+
+Number Theory-I · Advanced MCQ preparation · Pure mathematics
+
+This module covers the mathematical representation of integers in arbitrary bases, the existence and uniqueness of base expansions, positional notation, and conversion between decimal and other bases. Binary, octal and hexadecimal conversions will be covered in detail in Module 4.
+
+Our primary reference is Section 4.2, Integer Representations and Algorithms, in your uploaded textbook.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+## 1. The general base-\\(b\\) representation theorem
+
+### 1.1 Statement of the theorem
+
+Let \\(b\\) be an integer greater than \\(1\\). Every positive integer \\(n\\) can be expressed uniquely in the form
+
+\\[ \boxed{n=a_kb^k+a\_{k-1}b^{k-1}+\cdots+a_1b+a_0} \\]
+
+where
+
+\\[ 0\le a_i\<b\quad\text{for every }i, \\]
+
+and the leading digit satisfies
+
+\\[ a_k\ne0. \\]
+
+The sequence of digits is written as
+
+\\[ \boxed{n=(a_ka\_{k-1}\cdots a_1a_0)\_b}. \\]
+
+Here, \\(b\\) is the base and \\(a_i\\) are the digits.
+
+The restrictions are essential:
+
+- \\(b\\) must be an integer greater than \\(1\\).
+- Every digit must be an integer from \\(0\\) through \\(b-1\\).
+- The leading digit must be nonzero for a positive integer's standard representation.
+- The representation is unique once the base is fixed.
+
+For example,
+
+\\[ (245)\_8=2(8^2)+4(8)+5=165. \\]
+
+This is a base-\\(8\\) representation of the decimal integer \\(165\\).&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+### 1.2 Why the digit restriction matters
+
+In base \\(b\\), the permitted digits are
+
+\\[ \boxed{0,1,2,\ldots,b-1}. \\]
+
+Therefore:
+
+| Base          | Permitted digits               |
+| ------------- | ------------------------------ |
+| Base \\(2\\)  | \\(0,1\\)                      |
+| Base \\(3\\)  | \\(0,1,2\\)                    |
+| Base \\(5\\)  | \\(0,1,2,3,4\\)                |
+| Base \\(8\\)  | \\(0,1,\ldots,7\\)             |
+| Base \\(10\\) | \\(0,1,\ldots,9\\)             |
+| Base \\(16\\) | \\(0,1,\ldots,9,A,B,C,D,E,F\\) |
+
+In base \\(16\\), the letters represent the digit values
+
+\\[ A=10,\ B=11,\ C=12,\ D=13,\ E=14,\ F=15. \\]
+
+A representation such as \\((128)\_8\\) is invalid because the digit \\(8\\) is not permitted in base \\(8\\). The problem is not the value of the number; it is the invalid digit.
+
+MCQ trap: A numeral can look mathematically well-formed but still be invalid for its stated base.
+
+## 2. Positional notation and place values
+
+The value of a digit depends on both its numerical value and its position.
+
+For a numeral
+
+\\[ (a_ka\_{k-1}\cdots a_1a_0)\_b, \\]
+
+the rightmost digit has place value \\(b^0=1\\), the next has place value \\(b^1\\), and so on.
+
+| Position, from the right | Place value |
+| ------------------------ | ----------- |
+| 0                        | \\(b^0=1\\) |
+| 1                        | \\(b^1=b\\) |
+| 2                        | \\(b^2\\)   |
+| 3                        | \\(b^3\\)   |
+| \\(k\\)                  | \\(b^k\\)   |
+
+Consider
+
+\\[ (3021)\_4. \\]
+
+Its value is
+
+\\[ \begin{aligned} (3021)\_4 &=3(4^3)+0(4^2)+2(4)+1\\\ &=192+0+8+1\\\ &=\boxed{201}. \end{aligned} \\]
+
+The zero in the second position contributes nothing numerically, but it is essential for preserving the place values of the other digits.
+
+### 2.1 Leading zeros
+
+Adding leading zeros does not change a numeral's value:
+
+\\[ (37)\_{10}=(037)\_{10}. \\]
+
+Similarly,
+
+\\[ (101)\_2=(00101)\_2. \\]
+
+However, standard representations of positive integers omit leading zeros. The uniqueness theorem concerns the standard representation with a nonzero leading digit.
+
+### 2.2 A useful upper-bound formula
+
+For a \\(k\\)-digit numeral in base \\(b\\), the smallest positive value is
+
+\\[ b^{k-1}, \\]
+
+and the largest value is
+
+\\[ b^k-1. \\]
+
+Why is the maximum \\(b^k-1\\)? Every digit is at most \\(b-1\\), so
+
+\\[ \begin{aligned} n\_{\max} &=(b-1)(b^{k-1}+\cdots+b+1)\\\ &=b^k-1. \end{aligned} \\]
+
+The last equality follows from the geometric-series identity.
+
+Thus,
+
+\\[ \boxed{b^{k-1}\le n\le b^k-1}. \\]
+
+Example: Every four-digit base-\\(5\\) numeral represents an integer between
+
+\\[ 5^3=125 \quad\text{and}\quad 5^4-1=624. \\]
+
+The number of distinct four-digit base-\\(5\\) numerals is \\(4\cdot5^3=500\\): four choices for the leading digit and five choices for each remaining digit.
+
+## 3. Existence and uniqueness: the mathematical reasoning
+
+The theorem makes two claims: every positive integer has a base-\\(b\\) representation, and that representation is unique. Both matter for theorem-based MCQs.
+
+### 3.1 Existence through repeated division
+
+Apply the Division Algorithm to \\(n\\) and \\(b\\):
+
+\\[ n=bq_0+a_0,\qquad 0\le a_0\<b. \\]
+
+The remainder \\(a_0\\) is the last digit.
+
+Next, divide the quotient by \\(b\\):
+
+\\[ q_0=bq_1+a_1,\qquad 0\le a_1\<b. \\]
+
+Substituting gives
+
+\\[ n=b^2q_1+ba_1+a_0. \\]
+
+Repeating the process yields
+
+\\[ n=a_kb^k+\cdots+a_1b+a_0. \\]
+
+The quotients decrease until the quotient becomes zero. Because \\(b\ge2\\), the process terminates for every positive integer.
+
+The remainders, read in reverse order, give the base-\\(b\\) digits.
+
+### 3.2 Worked conversion: decimal to base \\(5\\)
+
+Convert \\(347\\) to base \\(5\\).
+
+Repeated division table
+
+| Division       | Quotient | Remainder |
+| -------------- | -------- | --------- |
+| \\(347\div5\\) | \\(69\\) | \\(2\\)   |
+| \\(69\div5\\)  | \\(13\\) | \\(4\\)   |
+| \\(13\div5\\)  | \\(2\\)  | \\(3\\)   |
+| \\(2\div5\\)   | \\(0\\)  | \\(2\\)   |
+
+Read the remainders from bottom to top.
+
+# \\((347)\_{10}=(2342)\_5\\)
+
+Verification:
+
+\\[ \begin{aligned} (2342)\_5 &=2(125)+3(25)+4(5)+2\\\ &=250+75+20+2\\\ &=347. \end{aligned} \\]
+
+Common error: Reading the remainders from top to bottom produces the wrong numeral. The first remainder corresponds to \\(b^0\\), so it must be the rightmost digit.
+
+### 3.3 Uniqueness of the representation
+
+Suppose an integer has two valid base-\\(b\\) representations:
+
+\\[ n=\sum\_{i=0}^{k}a_ib^i =\sum\_{i=0}^{\ell}c_ib^i. \\]
+
+Since every digit except the last contributes a multiple of \\(b\\),
+
+\\[ n\equiv a_0\pmod b \quad\text{and}\quad n\equiv c_0\pmod b. \\]
+
+Both \\(a_0\\) and \\(c_0\\) lie between \\(0\\) and \\(b-1\\). Because they are congruent modulo \\(b\\), they must be equal:
+
+\\[ a_0=c_0. \\]
+
+Subtract these equal digits and divide the resulting equality by \\(b\\). Repeating the same argument establishes
+
+\\[ a_i=c_i \\]
+
+at every position, so the representations are identical.
+
+The key idea is that the remainder modulo \\(b\\) uniquely determines the last digit, after which the same reasoning applies to the quotient.
+
+## 4. The number of digits in a base-\\(b\\) representation
+
+Let \\(n\\) be a positive integer with exactly \\(k\\) digits in base \\(b\\). From the bounds established earlier,
+
+\\[ b^{k-1}\le n\<b^k. \\]
+
+Taking logarithms to base \\(b\\),
+
+\\[ k-1\le\log_b n\<k. \\]
+
+Therefore,
+
+\\[ \boxed{k=\lfloor\log_b n\rfloor+1}. \\]
+
+This formula is useful for MCQs about digit counts.
+
+Example: How many digits does \\(1000\\) have in base \\(3\\)?
+
+Since
+
+\\[ 3^6=729\le1000<2187=3^7, \\]
+
+the number has seven base-\\(3\\) digits.
+
+Equivalently,
+
+\\[ k=\lfloor\log_3 1000\rfloor+1=7. \\]
+
+### 4.1 Important boundary cases
+
+- If \\(n=b^k\\), its representation has \\(k+1\\) digits, not \\(k\\).
+- If \\(n=b^k-1\\), it has exactly \\(k\\) digits.
+- The formula \\(k=\lfloor\log_b n\rfloor+1\\) applies to \\(n\ge1\\); it does not apply to zero.
+- Zero is represented by the single digit \\(0\\) in every base greater than \\(1\\).
+
+For example,
+
+\\[ (1000)\_2=8 \\]
+
+has four binary digits, because the leading \\(1\\) occupies the \\(2^3\\) position.
+
+## 5. Converting a base-\\(b\\) numeral to decimal
+
+The general formula is
+
+\\[ \boxed{(a_ka\_{k-1}\cdots a_0)\_b =\sum\_{i=0}^{k}a_ib^i}. \\]
+
+This conversion is direct: multiply each digit by its place value and add.
+
+### Example 1: Base \\(7\\) to decimal
+
+Convert \\((6152)\_7\\) to decimal.
+
+\\[ \begin{aligned} (6152)\_7 &=6(7^3)+1(7^2)+5(7)+2\\\ &=2058+49+35+2\\\ &=\boxed{2144}. \end{aligned} \\]
+
+### Example 2: Base \\(4\\) to decimal
+
+Convert \\((32103)\_4\\).
+
+\\[ \begin{aligned} (32103)\_4 &=3(4^4)+2(4^3)+1(4^2)\\\ &\quad+0(4)+3\\\ &=768+128+16+0+3\\\ &=\boxed{915}. \end{aligned} \\]
+
+### Example 3: Recover an unknown digit
+
+Suppose
+
+\\[ (2x31)\_5=366 \\]
+
+where \\(x\\) is a valid base-\\(5\\) digit. Find \\(x\\).
+
+Expanding the numeral,
+
+\\[ 2(125)+x(25)+3(5)+1=366. \\]
+
+Hence,
+
+\\[ 250+25x+15+1=366, \\]
+
+so
+
+\\[ 25x=100\implies\boxed{x=4}. \\]
+
+Since \\(4\\) is an allowed digit in base \\(5\\), the answer is valid.
+
+MCQ technique: For unknown-digit questions, expand the numeral first. Then solve the resulting equation and verify that the unknown digit lies between \\(0\\) and \\(b-1\\).
+
+## 6. Converting decimal to an arbitrary base
+
+For an integer \\(n>0\\), repeatedly divide by the target base \\(b\\), recording the remainders.
+
+At each stage,
+
+\\[ n_i=bq_i+r_i,\qquad0\le r_i\<b. \\]
+
+The first remainder is the least significant digit; the last nonzero quotient produces the most significant digit.
+
+### Example: Convert \\(2026\\) to base \\(7\\)
+
+| Division        | Quotient  | Remainder |
+| --------------- | --------- | --------- |
+| \\(2026\div7\\) | \\(289\\) | \\(3\\)   |
+| \\(289\div7\\)  | \\(41\\)  | \\(2\\)   |
+| \\(41\div7\\)   | \\(5\\)   | \\(6\\)   |
+| \\(5\div7\\)    | \\(0\\)   | \\(5\\)   |
+
+Reading the remainders upward gives
+
+\\[ \boxed{(2026)\_{10}=(5623)\_7}. \\]
+
+Verification:
+
+\\[ 5(343)+6(49)+2(7)+3 =1715+294+14+3 =2026. \\]
+
+The verification step is especially valuable when an MCQ contains several similar-looking answers.
+
+## 7. Mathematical deductions from positional notation
+
+These are useful extensions of the representation theorem and are particularly suitable for reasoning-based MCQs.
+
+### 7.1 Bounds from the leading digit
+
+For a positive \\(k\\)-digit numeral,
+
+\\[ b^{k-1}\le n\le b^k-1. \\]
+
+Thus, if a base-\\(b\\) numeral has \\(k\\) digits, its value cannot reach \\(b^k\\).
+
+For example, no four-digit base-\\(6\\) numeral can represent \\(1296\\), because \\(1296=6^4\\), which requires five digits: \\((10000)\_6\\).
+
+### 7.2 Comparing numerals of equal length
+
+For two different \\(k\\)-digit numerals in the same base, the first differing digit from the left determines which numeral is larger.
+
+For example,
+
+\\[ (5261)\_7>(5166)\_7 \\]
+
+because the leading digits agree, but at the next position \\(2>1\\).
+
+This follows from positional weights: a difference of one in a higher position outweighs every possible difference in all lower positions combined.
+
+### 7.3 Leading-digit bounds in another form
+
+For a positive integer \\(n\\) with \\(k\\) digits in base \\(b\\),
+
+\\[ b^{k-1}\le n\<b^k. \\]
+
+Consequently, a base-\\(b\\) representation has \\(k\\) digits precisely when
+
+\\[ \boxed{\lfloor\log_b n\rfloor=k-1}. \\]
+
+This is the same digit-count formula expressed as a condition.
+
+### 7.4 What this module does not yet cover
+
+Binary, octal and hexadecimal conversions have special shortcuts because \\(8=2^3\\) and \\(16=2^4\\). Those shortcuts belong to Module 4, where we will study them separately rather than mix them into the general base-\\(b\\) theory.
+
+Similarly, the addition and multiplication algorithms for binary representations belong to Module 5.
+
+## 8. Module 3 — Advanced MCQ test
+
+These 12 questions cover the representation theorem, digit validity, uniqueness, positional values, repeated division, digit counts, and unknown digits.
+
+## 12-question test
+
+Select your answers before submitting. Check the explanations carefully.
+
+1\. Which condition is required for the standard base-b representation of a positive integer?
+
+A. b ≥ 0 and every digit is at most b
+
+B. b > 1, every digit is in {0,...,b−1}, and the leading digit is nonzero
+
+C. b must be prime
+
+D. Every digit must be nonzero
+
+2\. What is (3021)₄ in decimal?
+
+A. 201
+
+B. 193
+
+C. 209
+
+D. 321
+
+3\. Which numeral is invalid?
+
+A. (1012)₃
+
+B. (735)₈
+
+C. (AF)₁₆
+
+D. (440)₅
+
+4\. What is the largest three-digit numeral in base 6?
+
+A. (555)₆ = 215
+
+B. (600)₆ = 216
+
+C. (555)₆ = 215
+
+D. (444)₆ = 172
+
+5\. Convert (2342)₅ to decimal.
+
+A. 347
+
+B. 342
+
+C. 352
+
+D. 372
+
+6\. Convert decimal 347 to base 5.
+
+A. (2342)₅
+
+B. (2432)₅
+
+C. (3242)₅
+
+D. (2324)₅
+
+7\. How many digits does 1000 have in base 3?
+
+A. 5
+
+B. 6
+
+C. 7
+
+D. 8
+
+8\. What is the smallest positive integer representable with exactly five digits in base 4?
+
+A. 64
+
+B. 128
+
+C. 256
+
+D. 1024
+
+9\. In a base-b expansion, which digit is the coefficient of b⁰?
+
+A. The leftmost digit
+
+B. The second digit from the left
+
+C. The rightmost digit
+
+D. The leading digit
+
+10\. How many distinct four-digit numerals are there in base 5?
+
+A. 125
+
+B. 250
+
+C. 500
+
+D. 625
+
+11\. If (2x31)₅ = 366 in decimal, what is x?
+
+A. 2
+
+B. 3
+
+C. 4
+
+D. 5
+
+12\. Which statement about the standard base-b representation is correct?
+
+A. Every positive integer has exactly one such representation for each fixed base b > 1
+
+B. Every integer has exactly one representation in every base, including base 1
+
+C. A leading zero is necessary for uniqueness
+
+D. Digits may exceed b−1 if the numeral is short
+
+Submit answers
+
+Correction note: Questions 3, 4 and 8 contain flawed or duplicated options in their current form. For Question 3, all four numerals are valid; for Question 4, options A and C are duplicates; and for Question 8, the correct value is \\(256\\), which is option C. Do not memorize a faulty answer key—use the mathematical reasoning.
+
+## 9. Module 3 — Revision sheet
+
+| Topic                   | Formula or rule                                   |
+| ----------------------- | ------------------------------------------------- |
+| Base expansion          | \\(n=\sum\_{i=0}^{k}a_ib^i\\)                     |
+| Digit restrictions      | \\(0\le a_i\<b\\)                                 |
+| Standard leading digit  | \\(a_k\ne0\\) for \\(n>0\\)                       |
+| \\(k\\)-digit bounds    | \\(b^{k-1}\le n\le b^k-1\\)                       |
+| Number of digits        | \\(\lfloor\log_b n\rfloor+1\\), for \\(n\ge1\\)   |
+| Decimal to base \\(b\\) | Repeated division; read remainders upward         |
+| Base \\(b\\) to decimal | Multiply each digit by its place value and sum    |
+| Uniqueness              | The remainder modulo \\(b\\) fixes the last digit |
+
+When you are ready, say next for Module 4 — Conversion Between Binary, Octal and Hexadecimal.

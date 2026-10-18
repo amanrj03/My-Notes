@@ -1,0 +1,532 @@
+# Module 13: Chinese Remainder Theorem (CRT)
+
+Number Theory-III · Rosen, Number Theory and Cryptography, Section 4.4
+
+The Chinese Remainder Theorem helps us solve several congruences involving the same unknown. It is especially useful when each congruence has a different modulus.
+
+By the end of this module, you should be able to solve CRT questions, understand why the solution is unique modulo a product, and recognize when the standard theorem does not directly apply.
+
+## 13.1 What problem does CRT solve?
+
+Suppose we want an integer \\(x\\) satisfying all three conditions:
+
+\\[ \begin{aligned} x&\equiv2\pmod3,\\\ x&\equiv3\pmod5,\\\ x&\equiv2\pmod7. \end{aligned} \\]
+
+These conditions mean:
+
+- Dividing \\(x\\) by \\(3\\) leaves remainder \\(2\\).
+- Dividing \\(x\\) by \\(5\\) leaves remainder \\(3\\).
+- Dividing \\(x\\) by \\(7\\) leaves remainder \\(2\\).
+
+We need a number satisfying all three simultaneously.
+
+The moduli \\(3,5,7\\) are pairwise relatively prime: every pair has GCD \\(1\\).
+
+Try numbers congruent to \\(2\\) modulo \\(3\\):
+
+\\[ 2,5,8,11,14,17,20,23,\ldots \\]
+
+Among these, \\(23\\) leaves remainder \\(3\\) modulo \\(5\\), and remainder \\(2\\) modulo \\(7\\).
+
+So,
+
+\\[ \boxed{x\equiv23\pmod{105}}, \\]
+
+because \\(105=3\cdot5\cdot7\\).
+
+This means every solution is of the form
+
+\\[ \boxed{x=23+105k,\qquad k\in\mathbb Z}. \\]
+
+The CRT gives a systematic method for finding such a solution without relying on trial and error. Rosen introduces the theorem in Section 4.4 as a method for solving simultaneous congruences with pairwise relatively prime moduli.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+## 13.2 Statement of the Chinese Remainder Theorem
+
+Suppose \\(m_1,m_2,\ldots,m_n\\) are pairwise relatively prime positive integers, and \\(a_1,a_2,\ldots,a_n\\) are integers.
+
+Then the system
+
+\\[ \begin{aligned} x&\equiv a_1\pmod{m_1},\\\ x&\equiv a_2\pmod{m_2},\\\ &\vdots\\\ x&\equiv a_n\pmod{m_n} \end{aligned} \\]
+
+has a solution, and that solution is unique modulo
+
+\\[ \boxed{M=m_1m_2\cdots m_n}. \\]
+
+Two important conclusions follow:
+
+1. A solution always exists when the moduli are pairwise relatively prime.
+2. All solutions are congruent modulo the product \\(M\\).
+
+Unique modulo \\(M\\) does not mean only one integer is a solution. It means there is exactly one solution residue in the range \\(0\le x\<M\\), and every other integer solution differs from it by a multiple of \\(M\\).
+
+### Pairwise relatively prime versus merely relatively prime
+
+For three or more numbers, pairwise relatively prime means that every pair has GCD \\(1\\).
+
+For example, \\(6,10,15\\) are not pairwise relatively prime because
+
+\\[ \gcd(6,10)=2,\quad \gcd(6,15)=3,\quad \gcd(10,15)=5. \\]
+
+But \\(3,5,7\\) are pairwise relatively prime.
+
+This condition is essential for applying the standard CRT theorem as stated above.
+
+## 13.3 The construction formula for CRT
+
+For exam questions, the most systematic method is the construction in the textbook's proof.
+
+Suppose
+
+\\[ x\equiv a_i\pmod{m_i},\qquad i=1,\ldots,n, \\]
+
+with pairwise relatively prime moduli.
+
+Step 1: Calculate the product
+
+\\[ M=m_1m_2\cdots m_n. \\]
+
+Step 2: Calculate each partial product
+
+\\[ \boxed{M_i=\frac{M}{m_i}}. \\]
+
+Thus, \\(M_i\\) is the product of all the moduli except \\(m_i\\).
+
+Step 3: Find modular inverses
+
+For each \\(i\\), find \\(y_i\\) such that
+
+\\[ \boxed{M_i y_i\equiv1\pmod{m_i}}. \\]
+
+These inverses exist because the moduli are pairwise relatively prime.
+
+Step 4: Combine the terms
+
+\\[ \boxed{x\equiv\sum\_{i=1}^{n}a_iM_i y_i\pmod M}. \\]
+
+This is the CRT construction formula used in Rosen's proof.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+### Why does this formula work?
+
+Consider one congruence, say modulo \\(m_k\\).
+
+Every partial product \\(M_i\\) with \\(i\ne k\\) contains \\(m_k\\) as a factor. Therefore,
+
+\\[ M_i\equiv0\pmod{m_k}\qquad(i\ne k). \\]
+
+All terms except the \\(k\\)-th term disappear modulo \\(m_k\\).
+
+The remaining term satisfies
+
+\\[ a_kM_k y_k\equiv a_k(1)\equiv a_k\pmod{m_k}. \\]
+
+Hence the constructed \\(x\\) satisfies every congruence in the system.
+
+## 13.4 Complete worked example using the formula
+
+Solve
+
+\\[ \begin{aligned} x&\equiv2\pmod3,\\\ x&\equiv3\pmod5,\\\ x&\equiv2\pmod7. \end{aligned} \\]
+
+### Step 1: Calculate \\(M\\)
+
+\\[ M=3\cdot5\cdot7=105. \\]
+
+### Step 2: Calculate the partial products
+
+\\[ M_1=\frac{105}{3}=35, \\]
+
+\\[ M_2=\frac{105}{5}=21, \\]
+
+\\[ M_3=\frac{105}{7}=15. \\]
+
+### Step 3: Find their inverses
+
+For the first modulus, find the inverse of \\(35\\) modulo \\(3\\):
+
+\\[ 35\equiv2\pmod3. \\]
+
+Since \\(2\cdot2\equiv1\pmod3\\), choose \\(y_1=2\\).
+
+For the second modulus,
+
+\\[ 21\equiv1\pmod5, \\]
+
+so choose \\(y_2=1\\).
+
+For the third modulus,
+
+\\[ 15\equiv1\pmod7, \\]
+
+so choose \\(y_3=1\\).
+
+Our values are:
+
+| \\(i\\) | \\(a_i\\) | \\(m_i\\) | \\(M_i\\) | \\(y_i\\) |
+| ------- | --------- | --------- | --------- | --------- |
+| 1       | 2         | 3         | 35        | 2         |
+| 2       | 3         | 5         | 21        | 1         |
+| 3       | 2         | 7         | 15        | 1         |
+
+### Step 4: Apply the formula
+
+\\[ \begin{aligned} x&\equiv a_1M_1y_1+a_2M_2y_2+a_3M_3y_3\\\ &\equiv2(35)(2)+3(21)(1)+2(15)(1)\\\ &\equiv140+63+30\\\ &\equiv233\pmod{105}. \end{aligned} \\]
+
+Reduce \\(233\\) modulo \\(105\\):
+
+\\[ 233=2(105)+23. \\]
+
+Therefore,
+
+\\[ \boxed{x\equiv23\pmod{105}}. \\]
+
+This agrees with the textbook's worked CRT example.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+### Step 5: Verify every congruence
+
+\\[ 23=7(3)+2\implies23\equiv2\pmod3, \\]
+
+\\[ 23=4(5)+3\implies23\equiv3\pmod5, \\]
+
+\\[ 23=3(7)+2\implies23\equiv2\pmod7. \\]
+
+All three conditions hold.
+
+The complete solution is
+
+\\[ \boxed{x=23+105k,\quad k\in\mathbb Z}. \\]
+
+Important: You do not have to find the smallest positive solution during the construction itself. Calculate the formula first, then reduce the answer modulo \\(M\\) to get the standard representative between \\(0\\) and \\(M-1\\).
+
+## 13.5 An alternative method: Back substitution
+
+The construction formula is systematic, but sometimes back substitution is shorter. Rosen demonstrates this as an alternative method.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+Consider
+
+\\[ \begin{aligned} x&\equiv1\pmod5,\\\ x&\equiv2\pmod6,\\\ x&\equiv3\pmod7. \end{aligned} \\]
+
+The moduli \\(5,6,7\\) are pairwise relatively prime, so the standard CRT applies.
+
+### Step 1: Use the first congruence
+
+\\[ x\equiv1\pmod5 \\]
+
+means
+
+\\[ x=5t+1 \\]
+
+for some integer \\(t\\).
+
+### Step 2: Substitute into the second congruence
+
+\\[ 5t+1\equiv2\pmod6. \\]
+
+Subtract \\(1\\):
+
+\\[ 5t\equiv1\pmod6. \\]
+
+Because \\(5\equiv-1\pmod6\\),
+
+\\[ -t\equiv1\pmod6, \\]
+
+so
+
+\\[ t\equiv5\pmod6. \\]
+
+Write
+
+\\[ t=6u+5. \\]
+
+Substitute back into \\(x=5t+1\\):
+
+\\[ x=5(6u+5)+1=30u+26. \\]
+
+### Step 3: Use the third congruence
+
+We need
+
+\\[ 30u+26\equiv3\pmod7. \\]
+
+Reduce the coefficients modulo \\(7\\):
+
+\\[ 2u+5\equiv3\pmod7. \\]
+
+Thus,
+
+\\[ 2u\equiv-2\equiv5\pmod7. \\]
+
+The inverse of \\(2\\) modulo \\(7\\) is \\(4\\), so
+
+\\[ u\equiv4(5)=20\equiv6\pmod7. \\]
+
+Therefore,
+
+\\[ u=7v+6. \\]
+
+Substitute into \\(x=30u+26\\):
+
+\\[ \begin{aligned} x&=30(7v+6)+26\\\ &=210v+206. \end{aligned} \\]
+
+Hence,
+
+\\[ \boxed{x\equiv206\pmod{210}}. \\]
+
+The complete solution is \\(x=206+210v\\), where \\(v\\) is any integer. Here, \\(210=5\cdot6\cdot7\\).&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+### When should you use each method?
+
+- Construction formula: Best for a predictable procedure, especially when an MCQ explicitly asks you to apply the CRT construction.
+- Back substitution: Often faster when the congruences are simple and you can conveniently express \\(x\\) in terms of an integer parameter.
+
+Both methods must produce answers congruent modulo the product of the pairwise relatively prime moduli.
+
+## 13.6 Why is the solution unique modulo the product?
+
+The CRT claims not just that a solution exists, but also that it is unique modulo \\(M\\).
+
+Suppose \\(x\\) and \\(y\\) are two solutions of the same system. For each modulus \\(m_i\\),
+
+\\[ x\equiv a_i\pmod{m_i}, \qquad y\equiv a_i\pmod{m_i}. \\]
+
+Subtracting gives
+
+\\[ x-y\equiv0\pmod{m_i}. \\]
+
+Therefore,
+
+\\[ m_i\mid(x-y) \\]
+
+for every \\(i\\).
+
+Since the moduli are pairwise relatively prime, their product divides \\(x-y\\):
+
+\\[ m_1m_2\cdots m_n\mid(x-y). \\]
+
+Consequently,
+
+\\[ \boxed{x\equiv y\pmod M}. \\]
+
+This proves uniqueness modulo \\(M\\), matching the uniqueness argument described in the textbook's exercises.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+### MCQ implication
+
+Suppose you know one solution is \\(23\\), and the moduli are \\(3,5,7\\). Then any other solution must be congruent to \\(23\\) modulo \\(105\\).
+
+For example, \\(128=23+105\\) is a solution, but \\(24\\) cannot be another solution because
+
+\\[ 24-23=1 \\]
+
+is not divisible by \\(105\\).
+
+## 13.7 What if the moduli are not pairwise relatively prime?
+
+The standard CRT theorem requires pairwise relatively prime moduli. If this condition fails, do not automatically conclude that no solution exists. A solution may still exist, but compatibility between the congruences must be checked.
+
+This is an extension beyond the standard theorem statement above.
+
+### Example A: A compatible system
+
+Consider
+
+\\[ x\equiv1\pmod4,\qquad x\equiv3\pmod6. \\]
+
+The moduli are not relatively prime because \\(\gcd(4,6)=2\\).
+
+The first condition gives numbers
+
+\\[ 1,5,9,13,17,21,\ldots \\]
+
+Among them, \\(9\\) leaves remainder \\(3\\) modulo \\(6\\). Thus \\(x=9\\) works, and
+
+\\[ \boxed{x\equiv9\pmod{12}}. \\]
+
+The solution repeats every \\(\operatorname{lcm}(4,6)=12\\).
+
+### Example B: An incompatible system
+
+Consider
+
+\\[ x\equiv1\pmod4,\qquad x\equiv2\pmod6. \\]
+
+The first congruence requires \\(x\\) to be odd. The second requires \\(x\\) to be even. No integer can satisfy both.
+
+Thus,
+
+\\[ \boxed{\text{No solution}}. \\]
+
+### The general compatibility test
+
+For two congruences,
+
+\\[ x\equiv a\pmod m,\qquad x\equiv b\pmod n, \\]
+
+a solution exists if and only if
+
+\\[ \boxed{\gcd(m,n)\mid(b-a)}. \\]
+
+This is a useful generalization. For the standard CRT exam questions, first check whether the moduli are pairwise relatively prime; if they are, use the standard theorem directly.
+
+## 13.8 Common MCQ traps
+
+- Trap 1: The product \\(M\\) is the product of the moduli, not their sum.
+- Trap 2: \\(M_i=M/m_i\\); it excludes the current modulus.
+- Trap 3: \\(y_i\\) is the inverse of \\(M_i\\) modulo \\(m_i\\), not the inverse of \\(m_i\\).
+- Trap 4: Reduce the final result modulo \\(M\\).
+- Trap 5: The CRT solution is unique modulo \\(M\\), not unique as an ordinary integer.
+- Trap 6: Pairwise relatively prime means every pair of moduli has GCD \\(1\\).
+- Trap 7: If the moduli are not pairwise relatively prime, the standard theorem does not apply directly—but a solution might still exist.
+- Trap 8: For compatible systems with non-coprime moduli, the solution may repeat modulo the LCM rather than the product.
+
+## 13.9 Exam-level MCQ test
+
+Choose one answer per question, then submit to check your score.
+
+1\. The standard Chinese Remainder Theorem guarantees a unique solution modulo the product when the moduli are:
+
+A. All prime
+
+B. All odd
+
+C. Pairwise relatively prime
+
+D. In increasing order
+
+2\. For moduli 3, 5 and 7, what is the product M?
+
+A. 15
+
+B. 35
+
+C. 105
+
+D. 210
+
+3\. In the CRT construction, if M = 105 and m₂ = 5, what is M₂?
+
+A. 5
+
+B. 15
+
+C. 21
+
+D. 35
+
+4\. What is the inverse of 35 modulo 3?
+
+A. 0
+
+B. 1
+
+C. 2
+
+D. No inverse
+
+5\. Solve x ≡ 2 (mod 3), x ≡ 3 (mod 5).
+
+A. x ≡ 3 (mod 15)
+
+B. x ≡ 8 (mod 15)
+
+C. x ≡ 12 (mod 15)
+
+D. x ≡ 13 (mod 15)
+
+6\. The CRT solution is x ≡ 23 (mod 105). Which is also a solution?
+
+A. 128
+
+B. 127
+
+C. 130
+
+D. 230
+
+7\. For x ≡ 1 (mod 4) and x ≡ 3 (mod 6), which is true?
+
+A. No solution exists
+
+B. The moduli are relatively prime
+
+C. x ≡ 9 (mod 12) is a solution class
+
+D. The solution is unique modulo 24
+
+8\. If x and y both solve a CRT system with pairwise relatively prime moduli whose product is M, what must be true?
+
+A. x = y exactly
+
+B. x − y is divisible by M
+
+C. x + y is divisible by M
+
+D. x − y = 1
+
+9\. For x ≡ 1 (mod 4) and x ≡ 2 (mod 6), how many integer solutions exist?
+
+A. Exactly one integer
+
+B. Infinitely many
+
+C. No solutions
+
+D. Exactly two
+
+10\. In the CRT construction, why do the terms aᵢMᵢyᵢ for i ≠ k vanish modulo mₖ?
+
+A. Because aᵢ = 0
+
+B. Because Mᵢ contains mₖ as a factor
+
+C. Because every inverse is zero
+
+D. Because Mᵢ = 1
+
+Submit answers
+
+## Module 13 revision sheet
+
+Theorem
+
+\\[ \gcd(m_i,m_j)=1\ (i\ne j)\implies \text{unique solution mod }M \\]
+
+\\[ M=\prod\_{i=1}^n m_i,\qquad M_i=\frac{M}{m_i} \\]
+
+\\[ M_i y_i\equiv1\pmod{m_i} \\]
+
+\\[ x\equiv\sum\_{i=1}^n a_iM_i y_i\pmod M \\]
+
+Non-coprime compatibility check
+
+\\[ x\equiv a\pmod m,\quad x\equiv b\pmod n \\]
+
+\\[ \text{A solution exists iff }\gcd(m,n)\mid(b-a) \\]
+
+Module 13 complete.
+
+Next: Module 14 — Computer Arithmetic with Large Integers, including representing integers by their remainders, performing addition and multiplication componentwise, and reconstructing the answer using CRT.
+
+Say next when you're ready.

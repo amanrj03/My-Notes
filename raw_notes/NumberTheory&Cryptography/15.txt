@@ -1,0 +1,405 @@
+# Module 15: Fermat’s Little Theorem
+
+Number Theory-III · Rosen, Number Theory and Cryptography, Section 4.4
+
+Fermat’s Little Theorem (FLT) is one of the most useful results for MCQs involving large powers modulo a prime. It lets us simplify expressions such as \\(7^{222}\bmod11\\) without calculating the enormous power.
+
+We'll cover the theorem and its equivalent form, the conditions for applying it, worked problems, modular inverses, and the distinction between primes and pseudoprimes.
+
+## 15.1 Statement of Fermat’s Little Theorem
+
+Theorem: If \\(p\\) is prime and \\(a\\) is an integer not divisible by \\(p\\), then
+
+\\[ \boxed{a^{p-1}\equiv1\pmod p}. \\]
+
+The condition \\(p\nmid a\\) is essential for this form of the theorem.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+For example, because \\(11\\) is prime and \\(11\nmid7\\),
+
+\\[ \boxed{7^{10}\equiv1\pmod{11}}. \\]
+
+Similarly, because \\(13\\) is prime and \\(13\nmid2\\),
+
+\\[ \boxed{2^{12}\equiv1\pmod{13}}. \\]
+
+### The second form
+
+Rosen also states the following form, which holds for every integer \\(a\\) whenever \\(p\\) is prime:
+
+\\[ \boxed{a^p\equiv a\pmod p}. \\]
+
+Unlike the first form, this version does not require \\(p\nmid a\\).
+
+For example, with \\(a=11\\) and \\(p=11\\),
+
+\\[ 11^{11}\equiv11\equiv0\pmod{11}. \\]
+
+The first form cannot be applied here because \\(11\mid11\\), but the second form remains valid.
+
+### Compare the two forms
+
+| Form        | Statement                   | Condition                          |
+| ----------- | --------------------------- | ---------------------------------- |
+| First form  | \\(a^{p-1}\equiv1\pmod p\\) | \\(p\\) prime and \\(p\nmid a\\)   |
+| Second form | \\(a^p\equiv a\pmod p\\)    | \\(p\\) prime; any integer \\(a\\) |
+
+MCQ trap: If \\(a\\) is divisible by \\(p\\), do not use the first form. You may still use the second form.
+
+## 15.2 Why does the theorem simplify large powers?
+
+Suppose \\(p\\) is prime and \\(p\nmid a\\). Fermat’s Little Theorem gives
+
+\\[ a^{p-1}\equiv1\pmod p. \\]
+
+Now write an exponent \\(n\\) using the division algorithm:
+
+\\[ n=q(p-1)+r,\qquad 0\le r\<p-1. \\]
+
+Then
+
+\\[ \begin{aligned} a^n &=a^{q(p-1)+r}\\\ &=(a^{p-1})^q a^r\\\ &\equiv1^q a^r\\\ &\equiv a^r\pmod p. \end{aligned} \\]
+
+Thus,
+
+\\[ \boxed{a^n\equiv a^{\\,n\bmod(p-1)}\pmod p} \\]
+
+when \\(p\\) is prime and \\(p\nmid a\\).
+
+This means we can reduce the exponent modulo \\(p-1\\) before evaluating the power.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+## 15.3 Worked example: Find \\(7^{222}\bmod11\\)
+
+We know \\(11\\) is prime and \\(11\nmid7\\). Therefore,
+
+\\[ 7^{10}\equiv1\pmod{11}. \\]
+
+Divide the exponent by \\(10\\):
+
+\\[ 222=22(10)+2. \\]
+
+Hence,
+
+\\[ \begin{aligned} 7^{222} &=(7^{10})^{22}7^2\\\ &\equiv1^{22}\cdot49\pmod{11}\\\ &\equiv49\pmod{11}\\\ &\equiv5\pmod{11}. \end{aligned} \\]
+
+Therefore,
+
+\\[ \boxed{7^{222}\bmod11=5}. \\]
+
+This is Rosen's worked example of applying Fermat's Little Theorem to a large exponent.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+### Another example: Find \\(2^{100}\bmod13\\)
+
+Since \\(13\\) is prime and \\(13\nmid2\\),
+
+\\[ 2^{12}\equiv1\pmod{13}. \\]
+
+Divide the exponent by \\(12\\):
+
+\\[ 100=8(12)+4. \\]
+
+Then
+
+\\[ \begin{aligned} 2^{100} &=(2^{12})^8 2^4\\\ &\equiv2^4\pmod{13}\\\ &\equiv16\pmod{13}\\\ &\equiv3\pmod{13}. \end{aligned} \\]
+
+So,
+
+\\[ \boxed{2^{100}\equiv3\pmod{13}}. \\]
+
+### What if the exponent is a multiple of \\(p-1\\)?
+
+If \\(p\\) is prime and \\(p\nmid a\\), then
+
+\\[ \boxed{a^{k(p-1)}\equiv1\pmod p} \\]
+
+for any positive integer \\(k\\).
+
+For instance,
+
+\\[ 3^{40}\equiv1\pmod{11}, \\]
+
+because \\(40=4(10)\\) and \\(3^{10}\equiv1\pmod{11}\\).
+
+## 15.4 Using Fermat’s Little Theorem to find modular inverses
+
+Recall from Module 12 that an inverse of \\(a\\) modulo \\(m\\) satisfies
+
+\\[ aa^{-1}\equiv1\pmod m. \\]
+
+When \\(p\\) is prime and \\(p\nmid a\\), FLT gives
+
+\\[ a^{p-1}\equiv1\pmod p. \\]
+
+Rewrite this as
+
+\\[ a\cdot a^{p-2}\equiv1\pmod p. \\]
+
+Therefore, \\(a^{p-2}\\) is an inverse of \\(a\\) modulo \\(p\\):
+
+\\[ \boxed{a^{-1}\equiv a^{p-2}\pmod p}. \\]
+
+### Example: Find the inverse of \\(5\\) modulo \\(41\\)
+
+Since \\(41\\) is prime and \\(41\nmid5\\),
+
+\\[ 5^{-1}\equiv5^{39}\pmod{41}. \\]
+
+We can verify the inverse using repeated squaring:
+
+\\[ 5^2=25, \\]
+
+\\[ 5^4\equiv25^2=625\equiv10\pmod{41}, \\]
+
+\\[ 5^8\equiv10^2=100\equiv18\pmod{41}, \\]
+
+\\[ 5^{16}\equiv18^2=324\equiv37\equiv-4\pmod{41}, \\]
+
+\\[ 5^{32}\equiv(-4)^2=16\pmod{41}. \\]
+
+Since \\(39=32+4+2+1\\),
+
+\\[ \begin{aligned} 5^{39} &=5^{32}5^4 5^2 5\\\ &\equiv16\cdot10\cdot25\cdot5\pmod{41}\\\ &\equiv33\pmod{41}. \end{aligned} \\]
+
+Check:
+
+\\[ 5(33)=165=4(41)+1. \\]
+
+Therefore,
+
+\\[ \boxed{5^{-1}\equiv33\pmod{41}}. \\]
+
+When to use which method: The Euclidean algorithm works for any relatively prime coefficient and modulus. The FLT method is available when the modulus is prime and the coefficient is not divisible by that prime.
+
+## 15.5 A critical limitation: The modulus must be prime
+
+You cannot blindly apply Fermat’s Little Theorem to a composite modulus.
+
+For example, consider \\(a=2\\) and modulus \\(9\\). It would be incorrect to conclude that
+
+\\[ 2^8\equiv1\pmod9 \\]
+
+just because \\(8=9-1\\).
+
+In fact,
+
+\\[ 2^8=256\equiv4\pmod9. \\]
+
+The theorem's prime-modulus condition is essential.
+
+A related trap: even when the modulus is prime, the first form requires that \\(a\\) not be divisible by \\(p\\). If \\(p\mid a\\), then \\(a^{p-1}\equiv1\pmod p\\) is generally false.
+
+## 15.6 The converse is not always true: Pseudoprimes
+
+Fermat's Little Theorem says that if \\(p\\) is prime and \\(p\nmid a\\), then
+
+\\[ a^{p-1}\equiv1\pmod p. \\]
+
+A natural question is: If an integer \\(n\\) satisfies \\(a^{n-1}\equiv1\pmod n\\), must \\(n\\) be prime?
+
+No. The converse is false.
+
+A pseudoprime to base \\(a\\) is a composite integer \\(n\\) satisfying
+
+\\[ \boxed{a^{n-1}\equiv1\pmod n}. \\]
+
+The base must be relatively prime to \\(n\\) for this standard pseudoprime test.
+
+### Example: \\(341\\) is a pseudoprime to base \\(2\\)
+
+First, factor it:
+
+\\[ 341=11\cdot31. \\]
+
+So \\(341\\) is composite. Now observe that
+
+\\[ 2^{10}=1024=3(341)+1, \\]
+
+which means
+
+\\[ 2^{10}\equiv1\pmod{341}. \\]
+
+Since \\(340=34(10)\\),
+
+\\[ \begin{aligned} 2^{340} &=(2^{10})^{34}\\\ &\equiv1^{34}\\\ &\equiv1\pmod{341}. \end{aligned} \\]
+
+Thus, \\(341\\) passes the Fermat test for base \\(2\\), even though it is composite.
+
+Conclusion: Passing a single Fermat test does not prove that a number is prime.
+
+## 15.7 Carmichael numbers
+
+Rosen introduces a stronger type of counterexample: a Carmichael number is a composite integer \\(n\\) satisfying
+
+\\[ \boxed{a^{n-1}\equiv1\pmod n} \\]
+
+for every positive integer \\(a\\) relatively prime to \\(n\\).&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+The textbook's example is
+
+\\[ \boxed{561=3\cdot11\cdot17}. \\]
+
+It is composite, but it satisfies the Fermat congruence for every base relatively prime to \\(561\\).
+
+The distinction is:
+
+| Type                        | What it satisfies                                                           |
+| --------------------------- | --------------------------------------------------------------------------- |
+| Pseudoprime to base \\(a\\) | Passes the Fermat congruence for a particular base \\(a\\)                  |
+| Carmichael number           | Passes the Fermat congruence for every positive base relatively prime to it |
+
+For MCQs, remember that a Carmichael number is composite. It demonstrates why Fermat's Little Theorem gives a necessary property of primes, but not a sufficient test for primality.
+
+## 15.8 Common MCQ traps
+
+- Trap 1: The modulus \\(p\\) must be prime to apply Fermat's Little Theorem.
+- Trap 2: \\(a^{p-1}\equiv1\pmod p\\) requires \\(p\nmid a\\).
+- Trap 3: \\(a^p\equiv a\pmod p\\) holds for every integer \\(a\\) when \\(p\\) is prime.
+- Trap 4: When reducing the exponent, use \\(p-1\\), not \\(p\\), in the first form.
+- Trap 5: The inverse of \\(a\\) modulo prime \\(p\\) is \\(a^{p-2}\bmod p\\), provided \\(p\nmid a\\).
+- Trap 6: A composite number can pass the Fermat test for some bases.
+- Trap 7: A Carmichael number passes the Fermat congruence for every base relatively prime to it.
+
+## 15.9 Exam-level MCQ test
+
+Choose one answer for each question and submit to see your score and explanations.
+
+1\. If p is prime and p does not divide a, what is a^(p−1) modulo p?
+
+A. 0
+
+B. 1
+
+C. p−1
+
+D. a
+
+2\. Find 7^222 mod 11.
+
+A. 1
+
+B. 3
+
+C. 5
+
+D. 7
+
+3\. Find 2^100 mod 13.
+
+A. 1
+
+B. 2
+
+C. 3
+
+D. 4
+
+4\. If p is prime and p does not divide a, which expression gives the inverse of a modulo p?
+
+A. a^(p−1)
+
+B. a^p
+
+C. a^(p−2)
+
+D. p−a
+
+5\. Which form of FLT applies even when p divides a?
+
+A. a^(p−1) ≡ 1 (mod p)
+
+B. a^p ≡ a (mod p)
+
+C. a^(p+1) ≡ 1 (mod p)
+
+D. None of the forms
+
+6\. Which statement about the modulus in FLT is correct?
+
+A. It must be composite
+
+B. It must be even
+
+C. It must be prime
+
+D. It can be any positive integer
+
+7\. Why is 341 a pseudoprime to base 2?
+
+A. 341 is prime
+
+B. 2^340 ≡ 1 (mod 341), but 341 is composite
+
+C. 2 divides 341
+
+D. 341 divides 2
+
+8\. Which number is the textbook's example of a Carmichael number?
+
+A. 341
+
+B. 561
+
+C. 1001
+
+D. 1024
+
+9\. What is the inverse of 5 modulo 41?
+
+A. 5
+
+B. 8
+
+C. 33
+
+D. 40
+
+10\. What is 3^40 mod 11?
+
+A. 0
+
+B. 1
+
+C. 3
+
+D. 10
+
+Submit answers
+
+## Module 15 revision sheet
+
+Fermat's Little Theorem
+
+\\[ p\text{ prime},\ p\nmid a\implies a^{p-1}\equiv1\pmod p \\]
+
+\\[ p\text{ prime}\implies a^p\equiv a\pmod p \\]
+
+Exponent reduction
+
+\\[ n=q(p-1)+r\implies a^n\equiv a^r\pmod p \\]
+
+Modular inverse
+
+\\[ a^{-1}\equiv a^{p-2}\pmod p \\]
+
+Primality-test limitation
+
+Passing a Fermat test does not guarantee primality. Pseudoprimes pass for particular bases; Carmichael numbers pass for all bases relatively prime to them.
+
+Module 15 complete.
+
+Next is Module 16: Applications of Congruences — including the applications relevant to your syllabus and textbook, with worked examples and MCQs. Say next when you're ready.

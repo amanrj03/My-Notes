@@ -1,0 +1,568 @@
+# Module 1 — Divisibility and the Division Algorithm
+
+Number Theory-I · Advanced MCQ preparation · Pure mathematics
+
+This module establishes the mathematical foundation for the rest of Number Theory. We will cover divisibility, its properties, the division algorithm, quotient and remainder for negative integers, and the floor-function formulas used in tricky MCQs.
+
+Our primary reference is Section 4.1 of your uploaded textbook, Number Theory and Cryptography, Chapter 4.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+## 1. Divisibility of integers
+
+### 1.1 Definition and notation
+
+For integers \\(a,b\\), with \\(a\ne 0\\), we say that \\(a\\) divides \\(b\\) if there exists an integer \\(k\\) such that
+
+\\[ b=ak,\qquad k\in\mathbb Z. \\]
+
+We write \\(a\mid b\\). If no such integer \\(k\\) exists, we write \\(a\nmid b\\).
+
+The integer \\(a\\) is a divisor or factor of \\(b\\), while \\(b\\) is a multiple of \\(a\\).
+
+Important: Divisibility is a statement about integers, not about whether a quotient exists in the real numbers. For example,
+
+\\[ 3\mid 12,\qquad 3\nmid 14, \\]
+
+because \\(12/3=4\\) is an integer, whereas \\(14/3\\) is not.
+
+### 1.2 Conditions that MCQs frequently test
+
+- The divisor \\(a\\) must be nonzero under the textbook's definition.
+- The dividend \\(b\\) may be positive, negative, or zero.
+- The multiplier \\(k\\) must be an integer; it need not be positive.
+- Divisibility does not require \\(b/a\\) to be positive.
+- Every nonzero integer divides zero, because \\(0=a\cdot0\\).
+- \\(1\\) and \\(-1\\) divide every integer.
+
+For instance,
+
+\\[ -4\mid 20,\qquad 4\mid -20,\qquad 7\mid 0. \\]
+
+All three are true.
+
+But \\(0\mid 7\\) is not defined under this definition. Also, \\(0\mid0\\) is not allowed under it, even though the equation \\(0=0\cdot k\\) holds for every integer \\(k\\).
+
+Do not confuse the definition with the separate question of whether \\(0\\) divides another integer.
+
+## 2. Fundamental properties of divisibility
+
+Your textbook states the following three properties for integers \\(a,b,c\\), where \\(a\ne0\\).&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+### Property 1: Sum property
+
+If \\(a\mid b\\) and \\(a\mid c\\), then
+
+\\[ \boxed{a\mid(b+c)}. \\]
+
+The proof follows directly from the definition. Suppose
+
+\\[ b=ax,\qquad c=ay \\]
+
+for integers \\(x,y\\). Then
+
+\\[ b+c=a(x+y). \\]
+
+Since \\(x+y\\) is an integer, \\(a\mid(b+c)\\).
+
+The same reasoning also gives
+
+\\[ a\mid(b-c). \\]
+
+MCQ consequence: If a number divides two integers, it divides their sum and difference.
+
+### Property 2: Multiplication property
+
+If \\(a\mid b\\), then for every integer \\(c\\),
+
+\\[ \boxed{a\mid bc}. \\]
+
+Indeed, if \\(b=ax\\), then \\(bc=a(xc)\\), and \\(xc\\) is an integer.
+
+This remains true when \\(c=0\\) or \\(c\\) is negative.
+
+### Property 3: Transitivity
+
+If
+
+\\[ a\mid b \quad\text{and}\quad b\mid c, \\]
+
+then
+
+\\[ \boxed{a\mid c}. \\]
+
+To prove this, write \\(b=ax\\) and \\(c=by\\), with \\(x,y\in\mathbb Z\\). Substituting,
+
+\\[ c=(ax)y=a(xy). \\]
+
+Since \\(xy\\) is an integer, \\(a\mid c\\).
+
+### 2.1 Linear-combination property
+
+A particularly useful consequence is
+
+\\[ \boxed{a\mid b,\ a\mid c \implies a\mid (mb+nc)} \\]
+
+for all integers \\(m,n\\).
+
+This includes sums, differences, and arbitrary integer multiples.
+
+For example, if \\(7\mid 35\\) and \\(7\mid 21\\), then
+
+\\[ 7\mid(2\cdot35-3\cdot21)=7. \\]
+
+The converse is not generally valid: knowing that \\(a\mid(mb+nc)\\) does not automatically imply that \\(a\mid b\\) and \\(a\mid c\\).
+
+### 2.2 More divisibility results worth memorizing
+
+These are natural consequences of the definition and are useful in statement-based MCQs.
+
+Result A — Mutual divisibility
+
+For nonzero integers \\(a,b\\),
+
+\\[ a\mid b\ \text{and}\ b\mid a \iff \boxed{|a|=|b|}. \\]
+
+Equivalently, \\(a=b\\) or \\(a=-b\\).
+
+Result B — Divisibility bounds
+
+If \\(a\mid b\\), with \\(a\ne0\\) and \\(b\ne0\\), then
+
+\\[ \boxed{|a|\le |b|}. \\]
+
+Why? Since \\(b=ak\\), the integer \\(k\\) is nonzero, so \\(|k|\ge1\\). Therefore \\(|b|=|a||k|\ge|a|\\).
+
+Result C — Counting positive multiples
+
+For positive integers \\(n,d\\), the number of positive integers not exceeding \\(n\\) that are divisible by \\(d\\) is
+
+\\[ \boxed{\left\lfloor\frac nd\right\rfloor}. \\]
+
+For example, the positive multiples of \\(6\\) not exceeding \\(25\\) are \\(6,12,18,24\\). Their number is
+
+\\[ \left\lfloor\frac{25}{6}\right\rfloor=4. \\]
+
+The floor function means the greatest integer less than or equal to its argument.
+
+Result D — A common false statement
+
+If \\(a\mid bc\\), it does not necessarily follow that \\(a\mid b\\) or \\(a\mid c\\).
+
+Counterexample:
+
+\\[ 6\mid(2\cdot3),\qquad 6\nmid2,\qquad 6\nmid3. \\]
+
+The stronger conclusion becomes valid when \\(a\\) is prime; we will study that property in Number Theory-II.
+
+## 3. The Division Algorithm
+
+This is one of the most important results in Module 1, especially because MCQs frequently use negative dividends.
+
+### 3.1 Exact theorem
+
+Let \\(a\\) be any integer and \\(d\\) a positive integer. Then there exist unique integers \\(q,r\\) such that
+
+\\[ \boxed{a=dq+r,\qquad 0\le r\<d}. \\]
+
+Here:
+
+- \\(a\\): dividend
+- \\(d\\): positive divisor
+- \\(q\\): quotient
+- \\(r\\): remainder
+
+The conditions are essential. The remainder must be nonnegative and strictly less than the divisor.
+
+Notice that the theorem allows \\(a\\) to be negative, but requires \\(d>0\\).
+
+### 3.2 Existence and uniqueness
+
+There are two distinct claims in the theorem.
+
+Existence: At least one pair \\((q,r)\\) satisfies the equation and remainder bounds.
+
+Uniqueness: No two different pairs satisfy all those conditions.
+
+To understand uniqueness, suppose
+
+\\[ a=dq+r=dq'+r', \\]
+
+where \\(0\le r,r'\<d\\).
+
+Subtracting,
+
+\\[ d(q-q')=r'-r. \\]
+
+Because both remainders lie between \\(0\\) and \\(d-1\\),
+
+\\[ -(d-1)\le r'-r\le d-1. \\]
+
+The difference \\(r'-r\\) is a multiple of \\(d\\), but the only multiple of \\(d\\) strictly between \\(-d\\) and \\(d\\) is zero. Therefore,
+
+\\[ r'=r,\qquad q'=q. \\]
+
+Thus the quotient and remainder are unique.
+
+MCQ trap: The equation \\(a=dq+r\\) alone is insufficient to determine the quotient and remainder uniquely. The bounds \\(0\le r\<d\\) are part of the theorem.
+
+### 3.3 Quotient and remainder notation
+
+Your textbook uses
+
+\\[ \boxed{q=a\operatorname{ div}d,\qquad r=a\operatorname{ mod}d}. \\]
+
+For positive \\(d\\), the quotient and remainder can be calculated using the floor function:
+
+\\[ \boxed{a\operatorname{ div}d= \left\lfloor\frac ad\right\rfloor} \\]
+
+and
+
+\\[ \boxed{a\operatorname{ mod}d= a-d\left\lfloor\frac ad\right\rfloor}. \\]
+
+The second formula follows by rearranging \\(a=dq+r\\).
+
+The floor, not ordinary rounding or truncation toward zero, is crucial when \\(a\\) is negative.
+
+## 4. Negative dividends: the most important trap
+
+Consider dividing \\(-11\\) by \\(3\\).
+
+We need integers \\(q,r\\) satisfying
+
+\\[ -11=3q+r,\qquad 0\le r<3. \\]
+
+The correct representation is
+
+\\[ \boxed{-11=3(-4)+1}. \\]
+
+Therefore,
+
+\\[ \boxed{-11\operatorname{ div}3=-4,\qquad -11\operatorname{ mod}3=1}. \\]
+
+Why not quotient \\(-3\\) and remainder \\(-2\\)?
+
+Although
+
+\\[ -11=3(-3)-2, \\]
+
+the remainder \\(-2\\) violates \\(0\le r<3\\).
+
+### 4.1 Floor versus truncation
+
+Example: \\(-11/3\\)
+
+Floor
+
+# −4
+
+\\(\lfloor-11/3\rfloor=-4\\)
+
+Truncation toward zero
+
+# −3
+
+Not the division-algorithm quotient
+
+For any real number \\(x\\),
+
+- \\(\lfloor x\rfloor\\) is the greatest integer less than or equal to \\(x\\).
+- Truncation toward zero removes the fractional part, moving toward zero.
+
+For negative nonintegers, these operations differ.
+
+### 4.2 Worked examples
+
+| Dividend \\(a\\) | Divisor \\(d\\) | Quotient \\(q\\) | Remainder \\(r\\) |
+| ---------------- | --------------- | ---------------- | ----------------- |
+| \\(17\\)         | \\(5\\)         | \\(3\\)          | \\(2\\)           |
+| \\(-17\\)        | \\(5\\)         | \\(-4\\)         | \\(3\\)           |
+| \\(17\\)         | \\(5\\)         | \\(3\\)          | \\(2\\)           |
+| \\(-1\\)         | \\(3\\)         | \\(-1\\)         | \\(2\\)           |
+| \\(-15\\)        | \\(5\\)         | \\(-3\\)         | \\(0\\)           |
+| \\(0\\)          | \\(5\\)         | \\(0\\)          | \\(0\\)           |
+
+The repeated positive example reinforces the rule; the negative examples are where mistakes most often occur.
+
+For \\(-17\\) divided by \\(5\\),
+
+\\[ -17=5(-4)+3, \\]
+
+and for \\(-1\\) divided by \\(3\\),
+
+\\[ -1=3(-1)+2. \\]
+
+In both cases, the remainder is in \\(\\{0,1,\ldots,d-1\\}\\).
+
+### 4.3 General shortcut
+
+For any integer \\(a\\) and positive integer \\(d\\),
+
+\\[ q=\left\lfloor\frac ad\right\rfloor,\qquad r=a-dq. \\]
+
+Use these formulas even if the dividend is negative. They work for every integer dividend.
+
+Divisibility connection: An integer \\(a\\) is divisible by a positive integer \\(d\\) exactly when
+
+\\[ \boxed{a\operatorname{ mod}d=0}. \\]
+
+This equivalence will become particularly useful in modular arithmetic.
+
+## 5. Deeper consequences of the Division Algorithm
+
+### 5.1 Every remainder belongs to a fixed set
+
+For a fixed positive divisor \\(d\\), every integer has exactly one remainder among
+
+\\[ \boxed{0,1,2,\ldots,d-1}. \\]
+
+There are exactly \\(d\\) possible remainders.
+
+For example, division by \\(7\\) can produce only \\(0,1,2,3,4,5,6\\). A remainder of \\(7\\) or \\(-1\\) is impossible under the theorem.
+
+This remains true for negative dividends.
+
+### 5.2 When the remainder is zero
+
+From
+
+\\[ a=dq+r,\qquad 0\le r\<d, \\]
+
+we get
+
+\\[ \boxed{d\mid a\iff r=0}. \\]
+
+The forward direction follows because if \\(d\mid a\\), then \\(a=dq\\) for some integer \\(q\\), so the remainder is zero. Conversely, if \\(r=0\\), then \\(a=dq\\), which means \\(d\mid a\\).
+
+### 5.3 Quotient and remainder are functions
+
+For fixed \\(d>0\\), both \\(a\operatorname{ div}d\\) and \\(a\operatorname{ mod}d\\) assign exactly one integer to each integer \\(a\\).
+
+However, they behave differently:
+
+- The quotient can be any integer.
+- The remainder always lies between \\(0\\) and \\(d-1\\).
+- The quotient changes as \\(a\\) changes.
+- The remainder repeats periodically with period \\(d\\).
+
+For example,
+
+\\[ 8\operatorname{ mod}5 =13\operatorname{ mod}5 =18\operatorname{ mod}5 =3. \\]
+
+Adding \\(d\\) to a dividend preserves its remainder:
+
+\\[ \boxed{(a+d)\operatorname{ mod}d=a\operatorname{ mod}d}. \\]
+
+More generally, adding any integer multiple of \\(d\\) preserves the remainder.
+
+### 5.4 Quotient formula for positive integers
+
+For positive integers \\(n,k\\), the textbook gives the identity
+
+\\[ \boxed{ \left\lfloor\frac nk\right\rfloor = \left\lfloor\frac{n-1}{k}\right\rfloor+1 }. \\]
+
+This identity is useful for counting multiples and converting between integer bounds. It applies when \\(n,k\\) are positive integers.
+
+For example,
+
+\\[ \left\lfloor\frac{20}{6}\right\rfloor = \left\lfloor\frac{19}{6}\right\rfloor+1 =3+1=4. \\]
+
+### 5.5 Smallest-absolute-value representative
+
+A related congruence question asks for the integer of smallest absolute value congruent to \\(a\\) modulo \\(m\\).
+
+Since all such integers differ by multiples of \\(m\\), a representative can be chosen from the interval centred at zero. For odd \\(m\\), the usual interval is
+
+\\[ -\frac{m-1}{2}\le r\le\frac{m-1}{2}. \\]
+
+For even \\(m\\), the two integers \\(m/2\\) and \\(-m/2\\) have equal absolute value and are congruent modulo \\(m\\). Thus the smallest-absolute-value representative need not be unique.
+
+Example: modulo \\(9\\), the representative of \\(20\\) is \\(2\\), since \\(20=2+2(9)\\). The representative of \\(17\\) is \\(-1\\), since \\(17=-1+2(9)\\).
+
+We will formalize congruence classes in Module 2.
+
+## 6. Module 1 — MCQ practice
+
+Try these without looking at the answers first. They cover the theorem, its consequences, negative dividends, and common false statements.
+
+## 15-question test
+
+0/15 answered
+
+1\. Which statement is true for every integer a and every positive integer d?
+
+A. a = dq + r, where 0 ≤ r < d, for unique integers q,r
+
+B. a = dq + r, where −d < r < d, for unique integers q,r
+
+C. a = dq + r, where 0 < r ≤ d, for unique integers q,r
+
+D. a = dq + r, where r can be any integer
+
+2\. What is −29 div 6 under the Division Algorithm?
+
+A. −4
+
+B. −5
+
+C. 4
+
+D. −6
+
+3\. What is −29 mod 6?
+
+A. −5
+
+B. −1
+
+C. 1
+
+D. 5
+
+4\. Which statement is always true?
+
+A. 0 divides every integer
+
+B. Every nonzero integer divides 0
+
+C. Every integer divides 1
+
+D. A negative integer cannot divide a positive integer
+
+5\. If a | b and a | c, which conclusion must hold?
+
+A. a | (b − c)
+
+B. b | c
+
+C. a = b
+
+D. a | bc only when c is positive
+
+6\. If a | b and b | a for nonzero integers a and b, then:
+
+A. a = b only
+
+B. a = −b only
+
+C. |a| = |b|
+
+D. a and b must be prime
+
+7\. If a | bc, must a divide b or c?
+
+A. Always
+
+B. Only when b and c are positive
+
+C. No, for example 6 | 2·3 but 6 divides neither factor
+
+D. Only when a is even
+
+8\. How many positive multiples of 8 are at most 70?
+
+A. 7
+
+B. 8
+
+C. 9
+
+D. 10
+
+9\. What are the quotient and remainder when 0 is divided by 7?
+
+A. q = 0, r = 7
+
+B. q = 7, r = 0
+
+C. q = 0, r = 0
+
+D. Not defined
+
+10\. Which is the correct remainder when −1 is divided by 8?
+
+A. −1
+
+B. 0
+
+C. 1
+
+D. 7
+
+11\. If a = dq + r with 0 ≤ r < d, when is d a divisor of a?
+
+A. When r = d − 1
+
+B. When q = 0
+
+C. When r = 0
+
+D. Whenever a is positive
+
+12\. Which expression correctly gives a mod d for integer a and positive integer d?
+
+A. a − d⌈a/d⌉
+
+B. a − d⌊a/d⌋
+
+C. ⌊a/d⌋ − a
+
+D. d⌊a/d⌋ − a
+
+13\. What is −35 div 7?
+
+A. −4
+
+B. −5
+
+C. 5
+
+D. 0
+
+14\. If d > 0, how many possible remainders exist under the Division Algorithm?
+
+A. d − 1
+
+B. d
+
+C. d + 1
+
+D. Infinitely many
+
+15\. For positive integers n and k, which identity is correct?
+
+A. ⌊n/k⌋ = ⌊(n−1)/k⌋
+
+B. ⌊n/k⌋ = ⌊(n−1)/k⌋ + 1
+
+C. ⌊n/k⌋ = ⌈(n−1)/k⌉ + 1
+
+D. ⌊n/k⌋ = n − k
+
+Submit answers
+
+## 7. Final revision sheet
+
+Memorize these results before moving on.
+
+| Concept                      | Result                                                                |
+| ---------------------------- | --------------------------------------------------------------------- |
+| Divisibility                 | \\(a\mid b\iff b=ak\\) for some \\(k\in\mathbb Z\\), with \\(a\ne0\\) |
+| Sum property                 | \\(a\mid b,\ a\mid c\Rightarrow a\mid(b+c)\\)                         |
+| Linear combinations          | \\(a\mid b,\ a\mid c\Rightarrow a\mid(mb+nc)\\)                       |
+| Mutual divisibility          | \\(a\mid b,\ b\mid a\Rightarrow \|a\|=\|b\|\\), for nonzero \\(a,b\\) |
+| Division Algorithm           | \\(a=dq+r,\ 0\le r\<d\\), uniquely, for \\(d>0\\)                     |
+| Quotient                     | \\(q=\lfloor a/d\rfloor\\)                                            |
+| Remainder                    | \\(r=a-d\lfloor a/d\rfloor\\)                                         |
+| Divisibility test            | \\(d\mid a\iff a\bmod d=0\\)                                          |
+| Number of positive multiples | \\(\lfloor n/d\rfloor\\), for positive integers \\(n,d\\)             |
+
+Before you move on: complete the 15-question test above. Pay particular attention to the negative-dividend questions and the distinction between a true divisibility property and its false converse.
+
+When you're ready, say next and we'll begin Module 2: Modular Arithmetic and Congruences.

@@ -1,0 +1,342 @@
+# Module 5: Algorithms for Integer Operations
+
+Number Theory-I · Rosen, Number Theory and Cryptography, Section 4.2
+
+This module covers the mathematics of binary addition, binary multiplication, carry propagation, and computational complexity measured in bit operations. These are mathematical procedures, not programming exercises.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+## 5.1 Binary addition
+
+Binary numbers use only two digits, \\(0\\) and \\(1\\). Addition follows the ordinary place-value principle, but each column can produce a carry into the next column.
+
+The four basic cases are:
+
+| First bit | Second bit | Sum bit | Carry |
+| --------- | ---------- | ------- | ----- |
+| 0         | 0          | 0       | 0     |
+| 0         | 1          | 1       | 0     |
+| 1         | 0          | 1       | 0     |
+| 1         | 1          | 0       | 1     |
+
+The crucial identity is
+
+\\[ 1+1=10_2 \\]
+
+This means a sum bit of \\(0\\) and a carry of \\(1\\).
+
+When a carry is already present, three ones can occur in a column:
+
+\\[ 1+1+1=11_2 \\]
+
+The resulting sum bit is \\(1\\), and the carry is \\(1\\).
+
+### The mathematical rule for every column
+
+Let \\(a_i\\) and \\(b_i\\) be the bits in position \\(i\\), and let \\(c\_{i-1}\\) be the carry from the previous position. Then
+
+\\[ a_i+b_i+c\_{i-1}=2c_i+s_i \\]
+
+where:
+
+- \\(s_i\\) is the resulting bit in position \\(i\\).
+- \\(c_i\\) is the carry into the next position.
+- Each of \\(s_i\\) and \\(c_i\\) is either \\(0\\) or \\(1\\).
+
+Equivalently,
+
+\\[ s_i=(a_i+b_i+c\_{i-1})\bmod 2 \\]
+
+\\[ c_i=\left\lfloor\frac{a_i+b_i+c\_{i-1}}{2}\right\rfloor \\]
+
+This formula is important for conceptual MCQs because it explains the entire binary addition procedure.
+
+## 5.2 Worked example: binary addition
+
+Add
+
+\\[ (1110)\_2+(1011)\_2 \\]
+
+First align the bits from the right:
+
+Binary addition
+
+\\[ \begin{array}{rrrrr} &1&1&1&0\\\\+&1&0&1&1\\\\\hline 1&1&0&0&1\end{array} \\]
+
+\\[ \boxed{(1110)\_2+(1011)\_2=(11001)\_2} \\]
+
+Verify using decimal values:
+
+\\[ (1110)\_2=14,\qquad (1011)\_2=11 \\]
+
+\\[ 14+11=25=(11001)\_2 \\]
+
+### Column-by-column analysis
+
+| Position (from right) | Calculation including carry | Result bit | Carry out |
+| --------------------- | --------------------------- | ---------- | --------- |
+| 0                     | \\(0+1+0=1\\)               | 1          | 0         |
+| 1                     | \\(1+1+0=2\\)               | 0          | 1         |
+| 2                     | \\(1+0+1=2\\)               | 0          | 1         |
+| 3                     | \\(1+1+1=3\\)               | 1          | 1         |
+| Final carry           | Carry from position 3       | 1          | —         |
+
+Reading the result from the highest position to the lowest gives \\(11001\\).
+
+### Theorem: complexity of binary addition
+
+Suppose two positive integers each have \\(n\\) binary bits. We may add leading zeros to the shorter representation so both have \\(n\\) bits.
+
+At each position, the procedure adds two bits and the incoming carry. The number of bit additions is bounded by a constant times \\(n\\). Therefore,
+
+\\[ \boxed{T\_{\text{addition}}(n)=O(n)} \\]
+
+This means the number of elementary bit operations grows at most proportionally to the number of input bits. It does not mean that adding two arbitrary \\(n\\)-bit integers takes constant time.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+## 5.3 Binary multiplication
+
+Binary multiplication follows the distributive law.
+
+Suppose
+
+\\[ a=(a\_{n-1}\cdots a_1a_0)\_2 \\]
+
+and
+
+\\[ b=(b\_{n-1}\cdots b_1b_0)\_2. \\]
+
+The binary expansion of \\(b\\) means
+
+\\[ b=b_0 2^0+b_1 2^1+\cdots+b\_{n-1}2^{n-1}. \\]
+
+Multiplying both sides by \\(a\\),
+
+\\[ ab=ab_0 2^0+ab_1 2^1+\cdots+ab\_{n-1}2^{n-1}. \\]
+
+Each \\(b_j\\) is either \\(0\\) or \\(1\\). Consequently,
+
+\\[ ab_j= \begin{cases} 0,&b_j=0,\\\ a,&b_j=1. \end{cases} \\]
+
+Multiplication by \\(2^j\\) shifts the binary representation \\(j\\) places to the left. Thus the conventional multiplication procedure consists of:
+
+1. Forming partial products according to the bits of the multiplier.
+2. Shifting each nonzero partial product to the appropriate position.
+3. Adding the partial products.
+
+### Binary multiplication facts
+
+| Operation             | Mathematical effect                      |
+| --------------------- | ---------------------------------------- |
+| Multiply by \\(0\\)   | Gives \\(0\\)                            |
+| Multiply by \\(1\\)   | Leaves the number unchanged              |
+| Multiply by \\(2\\)   | Shifts binary digits one place left      |
+| Multiply by \\(2^j\\) | Shifts binary digits \\(j\\) places left |
+
+For example,
+
+\\[ (110)\_2\times 2=(1100)\_2. \\]
+
+This follows from \\(6\times2=12\\).
+
+## 5.4 Worked example: binary multiplication
+
+Find
+
+\\[ (110)\_2\times(101)\_2. \\]
+
+The multiplier is \\(101_2\\). Its bits, from right to left, are \\(1,0,1\\).
+
+Partial products
+
+\\[ \begin{array}{r}110\\\\\times\ 101\\\\\hline 110\\\0000\\\11000\\\\\hline 11110\end{array} \\]
+
+Therefore,
+
+\\[ \boxed{(110)\_2(101)\_2=(11110)\_2} \\]
+
+Why are the partial products different?
+
+- The rightmost multiplier bit is \\(1\\), so the first partial product is \\(110\\).
+- The next bit is \\(0\\), so its shifted partial product is \\(0000\\).
+- The third bit is \\(1\\), so shift \\(110\\) two positions left to get \\(11000\\).
+
+Add the nonzero partial products:
+
+\\[ \begin{aligned} 110_2+11000_2&=11110_2. \end{aligned} \\]
+
+Verify:
+
+\\[ (110)\_2=6,\qquad(101)\_2=5 \\]
+
+\\[ 6\times5=30=(11110)\_2. \\]
+
+The procedure and example follow the textbook's conventional multiplication algorithm.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+## 5.5 Complexity of conventional binary multiplication
+
+This is a particularly important MCQ topic because multiplication is more expensive than addition under the conventional methods described here.
+
+Assume both integers have \\(n\\) bits.
+
+### A. Number of shifts
+
+The partial product for bit position \\(j\\) is shifted \\(j\\) places. In the worst case, shifts are needed for positions
+
+\\[ 0,1,2,\ldots,n-1. \\]
+
+The total number of bit shifts is bounded by
+
+\\[ 0+1+2+\cdots+(n-1) =\frac{n(n-1)}2. \\]
+
+Therefore, the number of shifts is
+
+\\[ \boxed{O(n^2)}. \\]
+
+### B. Number of bit additions
+
+There can be as many as \\(n\\) partial products to add. Their lengths grow as the shifts increase, so the additions collectively require at most a quadratic number of bit additions.
+
+Thus,
+
+\\[ \boxed{\text{Bit additions}=O(n^2)}. \\]
+
+### C. Overall complexity
+
+Combining the work for shifts and additions, the conventional multiplication algorithm has the upper bound
+
+\\[ \boxed{T\_{\text{multiplication}}(n)=O(n^2)}. \\]
+
+The textbook also notes that more efficient multiplication methods exist. It mentions a method with complexity \\(O(n^{1.585})\\), but the standard algorithm in this module uses \\(O(n^2)\\) bit operations.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+## 5.6 Compare addition and multiplication
+
+| Property                      | Binary addition                            | Conventional binary multiplication            |
+| ----------------------------- | ------------------------------------------ | --------------------------------------------- |
+| Main operation                | Add corresponding bits and carries         | Form and add shifted partial products         |
+| Number of bit operations      | \\(O(n)\\)                                 | \\(O(n^2)\\)                                  |
+| Growth for twice as many bits | Linear-order upper bound grows by factor 2 | Quadratic-order upper bound grows by factor 4 |
+| Extra final bit possible?     | Yes, due to final carry                    | Product can have up to \\(2n\\) bits          |
+| Main source of work           | Processing bit positions                   | Processing partial products and their shifts  |
+
+The last row is an important distinction: multiplying two \\(n\\)-bit positive integers produces a result with at most \\(2n\\) bits. More precisely, for \\(n\ge1\\),
+
+\\[ a,b<2^n \implies ab<2^{2n}. \\]
+
+So the product requires at most \\(2n\\) bits.
+
+## 5.7 Advanced MCQs
+
+Select all eight answers, then submit to reveal the answer key and explanations.
+
+1\. What is the result of (1011)₂ + (1101)₂?
+
+A. 10100₂
+
+B. 11000₂
+
+C. 11010₂
+
+D. 11100₂
+
+2\. What is the result of (111)₂ × (101)₂?
+
+A. 100011₂
+
+B. 101011₂
+
+C. 100101₂
+
+D. 110011₂
+
+3\. The conventional binary addition algorithm for two n-bit integers uses how many bit operations asymptotically?
+
+A. O(1)
+
+B. O(log n)
+
+C. O(n)
+
+D. O(n²)
+
+4\. In conventional binary multiplication, how many positions does a partial product for multiplier bit bⱼ shift?
+
+A. n positions always
+
+B. j positions to the left
+
+C. j+1 positions to the right
+
+D. No shift is ever needed
+
+5\. What is the worst-case asymptotic complexity of conventional multiplication of two n-bit integers?
+
+A. O(n)
+
+B. O(n log n)
+
+C. O(n²)
+
+D. O(2ⁿ)
+
+6\. What is the maximum number of bits needed to represent the product of two positive n-bit integers?
+
+A. n bits
+
+B. n+1 bits
+
+C. 2n bits
+
+D. n² bits
+
+7\. Which statement about binary multiplication is correct?
+
+A. A multiplier bit of 0 produces a nonzero partial product
+
+B. Multiplication by 2 shifts the binary representation one place left
+
+C. Every partial product has the same bit length
+
+D. Multiplication never requires addition
+
+8\. If the input bit length doubles, what happens to the quadratic upper bound for conventional multiplication?
+
+A. It doubles
+
+B. It becomes four times as large
+
+C. It becomes eight times as large
+
+D. It remains unchanged
+
+Submit answers
+
+## Module 5: Final revision sheet
+
+Memorize these facts before moving on:
+
+- Binary addition uses bit sums and carries.
+- For each position, \\(a_i+b_i+c\_{i-1}=2c_i+s_i\\).
+- Addition of two \\(n\\)-bit integers: \\(O(n)\\) bit operations.
+- Conventional multiplication uses shifted partial products.
+- The total number of shifts is bounded by \\(0+1+\cdots+(n-1)=n(n-1)/2\\).
+- Conventional multiplication: \\(O(n^2)\\) bit operations.
+- The product of two \\(n\\)-bit positive integers requires at most \\(2n\\) bits.
+- Faster multiplication algorithms exist, but do not confuse their complexity with the conventional algorithm's complexity.
+
+Number Theory-I is now complete. The next module begins Number Theory-II.
+
+When you're ready, say next for Module 6: Prime and Composite Numbers.

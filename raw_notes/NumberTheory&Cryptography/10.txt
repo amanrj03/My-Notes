@@ -1,0 +1,666 @@
+# Module 10: GCD, LCM and the Euclidean Algorithm
+
+Number Theory-II · Rosen, Number Theory and Cryptography, Section 4.3
+
+This module covers three closely related ideas:
+
+1. Greatest common divisor (GCD): the largest positive integer dividing two integers.
+2. Least common multiple (LCM): the smallest positive integer divisible by two positive integers.
+3. Euclidean algorithm: an efficient method for computing the GCD without finding complete prime factorizations first.
+
+We'll study definitions, theorems, proofs, worked examples, special cases, and MCQ traps using your textbook as the primary reference.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+## 10.1 Greatest common divisor (GCD)
+
+### Definition
+
+Let \\(a\\) and \\(b\\) be integers, not both zero. Their greatest common divisor, written
+
+\\[ \gcd(a,b), \\]
+
+is the largest positive integer that divides both \\(a\\) and \\(b\\).
+
+For example, the positive divisors common to \\(18\\) and \\(30\\) are
+
+\\[ 1,2,3,6. \\]
+
+Therefore,
+
+\\[ \boxed{\gcd(18,30)=6}. \\]
+
+### Formal definition using divisibility
+
+A positive integer \\(d\\) is \\(\gcd(a,b)\\) when:
+
+1. \\(d\mid a\\) and \\(d\mid b\\).
+2. Every common divisor of \\(a\\) and \\(b\\) divides \\(d\\).
+
+The second condition is stronger than simply saying \\(d\\) is a common divisor. It ensures that \\(d\\) is the greatest common divisor.
+
+### Common divisor versus greatest common divisor
+
+For \\(18\\) and \\(30\\):
+
+- \\(2\\) is a common divisor.
+- \\(3\\) is a common divisor.
+- \\(6\\) is a common divisor.
+- \\(9\\) is not a common divisor because \\(9\nmid30\\).
+
+Only \\(6\\) is the greatest common divisor.
+
+MCQ trap: The GCD is not necessarily one of the numbers' prime factors considered separately; it is the largest positive integer dividing both numbers.
+
+## 10.2 Relatively prime integers
+
+Definition: Two integers \\(a\\) and \\(b\\) are relatively prime if
+
+\\[ \boxed{\gcd(a,b)=1}. \\]
+
+For example,
+
+\\[ \gcd(17,22)=1, \\]
+
+so \\(17\\) and \\(22\\) are relatively prime. Neither number needs to be prime itself.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+### Important consequences
+
+1\. Two distinct primes are relatively prime.
+
+If \\(p\\) and \\(q\\) are distinct primes, their only common positive divisor is \\(1\\). Hence,
+
+\\[ \boxed{\gcd(p,q)=1\quad(p\ne q)}. \\]
+
+2\. Consecutive positive integers are relatively prime.
+
+For every positive integer \\(n\\),
+
+\\[ \boxed{\gcd(n,n+1)=1}. \\]
+
+Proof: Any common divisor of \\(n\\) and \\(n+1\\) must divide their difference:
+
+\\[ (n+1)-n=1. \\]
+
+The only positive divisor of \\(1\\) is \\(1\\). Therefore, the GCD is \\(1\\).
+
+3\. Relatively prime does not mean both numbers are prime.
+
+For example,
+
+\\[ \gcd(8,15)=1. \\]
+
+Although both numbers are composite, they are relatively prime.
+
+### Pairwise relatively prime
+
+A set of integers \\(a_1,a_2,\ldots,a_k\\) is pairwise relatively prime if every pair has GCD \\(1\\):
+
+\\[ \boxed{\gcd(a_i,a_j)=1\quad\text{for every }i\<j}. \\]
+
+For example, \\(10,17,21\\) are pairwise relatively prime because
+
+\\[ \gcd(10,17)=1,\quad \gcd(10,21)=1,\quad \gcd(17,21)=1. \\]
+
+MTH381 U123 TB.pdf
+
+Subtle MCQ trap: Having a GCD of \\(1\\) for the entire set is not the definition of pairwise relative primality. You must check every pair.
+
+For instance, the numbers \\(6,10,15\\) have no common divisor greater than \\(1\\) shared by all three, but they are not pairwise relatively prime:
+
+\\[ \gcd(6,10)=2,\quad \gcd(6,15)=3,\quad \gcd(10,15)=5. \\]
+
+## 10.3 GCD using prime factorization
+
+Suppose two positive integers have prime factorizations
+
+\\[ a=p_1^{\alpha_1}p_2^{\alpha_2}\cdots p_k^{\alpha_k} \\]
+
+and
+
+\\[ b=p_1^{\beta_1}p_2^{\beta_2}\cdots p_k^{\beta_k}. \\]
+
+Include every prime appearing in either factorization, using exponent \\(0\\) when a prime is absent.
+
+Then
+
+\\[ \boxed{\gcd(a,b)= p_1^{\min(\alpha_1,\beta_1)} \cdots p_k^{\min(\alpha_k,\beta_k)}}. \\]
+
+In words: take the smaller exponent of every prime factor.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+### Why do we take minimum exponents?
+
+A common divisor cannot contain a prime to a greater power than that prime occurs in either number. The greatest common divisor uses the largest power that fits into both factorizations, which is the smaller of the two exponents.
+
+### Worked example
+
+Find \\(\gcd(120,500)\\).
+
+Prime factorizations:
+
+\\[ 120=2^3\cdot3^1\cdot5^1 \\]
+
+\\[ 500=2^2\cdot3^0\cdot5^3. \\]
+
+Take minimum exponents:
+
+\\[ \begin{aligned} \gcd(120,500) &=2^{\min(3,2)}   3^{\min(1,0)}   5^{\min(1,3)}\\\ &=2^2\cdot3^0\cdot5^1\\\ &=4\cdot1\cdot5. \end{aligned} \\]
+
+Therefore,
+
+\\[ \boxed{\gcd(120,500)=20}. \\]
+
+MTH381 U123 TB.pdf
+
+## 10.4 Least common multiple (LCM)
+
+### Definition
+
+For positive integers \\(a\\) and \\(b\\), the least common multiple, written \\(\operatorname{lcm}(a,b)\\), is the smallest positive integer divisible by both \\(a\\) and \\(b\\).&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+For example, the positive multiples of \\(6\\) are
+
+\\[ 6,12,18,24,30,36,\ldots \\]
+
+and those of \\(8\\) are
+
+\\[ 8,16,24,32,40,\ldots \\]
+
+The smallest positive common multiple is \\(24\\), so
+
+\\[ \boxed{\operatorname{lcm}(6,8)=24}. \\]
+
+### LCM using prime factorization
+
+Using the same factorizations as before,
+
+\\[ a=p_1^{\alpha_1}\cdots p_k^{\alpha_k}, \qquad b=p_1^{\beta_1}\cdots p_k^{\beta_k}, \\]
+
+the formula is
+
+\\[ \boxed{\operatorname{lcm}(a,b)= p_1^{\max(\alpha_1,\beta_1)} \cdots p_k^{\max(\alpha_k,\beta_k)}}. \\]
+
+In words: take the larger exponent of every prime factor.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+Why? A common multiple must contain enough copies of every prime to be divisible by both numbers. The maximum exponent is the smallest exponent that satisfies both requirements.
+
+### Worked example
+
+Find \\(\operatorname{lcm}(120,500)\\).
+
+We already have
+
+\\[ 120=2^3\cdot3\cdot5, \qquad 500=2^2\cdot5^3. \\]
+
+Take maximum exponents:
+
+\\[ \begin{aligned} \operatorname{lcm}(120,500) &=2^{\max(3,2)}   3^{\max(1,0)}   5^{\max(1,3)}\\\ &=2^3\cdot3\cdot5^3\\\ &=8\cdot3\cdot125. \end{aligned} \\]
+
+Thus,
+
+\\[ \boxed{\operatorname{lcm}(120,500)=3000}. \\]
+
+### GCD versus LCM: the exponent rule
+
+| Quantity | Prime-factor exponent |
+| -------- | --------------------- |
+| GCD      | Minimum               |
+| LCM      | Maximum               |
+
+This is one of the most frequently tested distinctions in this topic.
+
+## 10.5 The relationship between GCD and LCM
+
+For any two positive integers \\(a\\) and \\(b\\), Rosen's Theorem 5 states
+
+\\[ \boxed{ab=\gcd(a,b)\cdot\operatorname{lcm}(a,b)}. \\]
+
+MTH381 U123 TB.pdf
+
+Equivalently,
+
+\\[ \boxed{\operatorname{lcm}(a,b)= \frac{ab}{\gcd(a,b)}}. \\]
+
+And
+
+\\[ \boxed{\gcd(a,b)= \frac{ab}{\operatorname{lcm}(a,b)}}. \\]
+
+### Why is this identity true?
+
+Consider the prime factorizations
+
+\\[ a=\prod_i p_i^{\alpha_i}, \qquad b=\prod_i p_i^{\beta_i}. \\]
+
+The product \\(ab\\) contains each prime \\(p_i\\) with exponent
+
+\\[ \alpha_i+\beta_i. \\]
+
+Meanwhile, the product of the GCD and LCM contains it with exponent
+
+\\[ \min(\alpha_i,\beta_i)+ \max(\alpha_i,\beta_i). \\]
+
+For any two numbers \\(\alpha_i,\beta_i\\),
+
+\\[ \min(\alpha_i,\beta_i)+ \max(\alpha_i,\beta_i) =\alpha_i+\beta_i. \\]
+
+So the two products have identical prime factorizations. By uniqueness of prime factorization, they are equal.
+
+### Worked example
+
+Suppose
+
+\\[ a=84,\qquad b=126. \\]
+
+Their prime factorizations are
+
+\\[ 84=2^2\cdot3\cdot7, \qquad 126=2\cdot3^2\cdot7. \\]
+
+Therefore,
+
+\\[ \gcd(84,126)=2\cdot3\cdot7=42 \\]
+
+and
+
+\\[ \operatorname{lcm}(84,126)=2^2\cdot3^2\cdot7=252. \\]
+
+Verify the identity:
+
+\\[ 84\cdot126=10584 \\]
+
+and
+
+\\[ 42\cdot252=10584. \\]
+
+Hence the identity holds.
+
+MCQ shortcut: If \\(a\\), \\(b\\), and their GCD are given, calculate the LCM using \\(ab/\gcd(a,b)\\). This is often faster than factorizing both numbers.
+
+### Special case: relatively prime integers
+
+If \\(\gcd(a,b)=1\\), then
+
+\\[ \boxed{\operatorname{lcm}(a,b)=ab}. \\]
+
+For example, since \\(\gcd(8,15)=1\\),
+
+\\[ \operatorname{lcm}(8,15)=8\cdot15=120. \\]
+
+Be careful: \\(\operatorname{lcm}(a,b)=ab\\) is not true for every pair. It holds when the two positive integers are relatively prime.
+
+## 10.6 The Euclidean algorithm
+
+Prime factorization is mathematically useful, but finding complete factorizations can be difficult for large numbers. The Euclidean algorithm computes the GCD by repeatedly applying the division algorithm.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+Its central theorem is:
+
+\\[ \boxed{\gcd(a,b)=\gcd(b,r)} \\]
+
+whenever
+
+\\[ a=bq+r. \\]
+
+Here \\(q\\) is the quotient and \\(r\\) is the remainder.
+
+### Lemma: Why does the GCD remain unchanged?
+
+Suppose
+
+\\[ a=bq+r. \\]
+
+We will prove that \\(a,b\\) and \\(b,r\\) have exactly the same common divisors.
+
+Direction 1: Suppose \\(d\mid a\\) and \\(d\mid b\\).
+
+Since \\(d\\) divides \\(a\\) and \\(bq\\), it also divides their difference:
+
+\\[ a-bq=r. \\]
+
+Thus \\(d\mid r\\). Therefore, every common divisor of \\(a,b\\) is also a common divisor of \\(b,r\\).
+
+Direction 2: Suppose \\(d\mid b\\) and \\(d\mid r\\).
+
+Since \\(d\\) divides \\(bq\\) and \\(r\\), it divides their sum:
+
+\\[ bq+r=a. \\]
+
+Thus \\(d\mid a\\). Therefore, every common divisor of \\(b,r\\) is also a common divisor of \\(a,b\\).
+
+Both pairs have the same common divisors, so they must have the same greatest common divisor:
+
+\\[ \boxed{\gcd(a,b)=\gcd(b,r)}. \\]
+
+This is the key mathematical justification for the Euclidean algorithm.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+### General procedure
+
+To calculate \\(\gcd(a,b)\\), where \\(a\ge b>0\\):
+
+1. Divide \\(a\\) by \\(b\\), writing \\(a=bq+r\\).
+2. Replace the pair \\((a,b)\\) with \\((b,r)\\).
+3. Repeat the division with the new pair.
+4. Stop when the remainder is \\(0\\).
+5. The last nonzero remainder is the GCD.
+
+Why does the method terminate? Every nonzero remainder is a nonnegative integer strictly smaller than the divisor used to obtain it. The positive remainders therefore keep decreasing, so eventually a remainder of \\(0\\) must occur.
+
+## 10.7 Worked example: \\(\gcd(287,91)\\)
+
+This is the example used in your textbook.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+Start with the larger number divided by the smaller.
+
+Step 1
+
+\\[ 287=91(3)+14 \\]
+
+Therefore,
+
+\\[ \gcd(287,91)=\gcd(91,14). \\]
+
+Step 2
+
+\\[ 91=14(6)+7 \\]
+
+Therefore,
+
+\\[ \gcd(91,14)=\gcd(14,7). \\]
+
+Step 3
+
+\\[ 14=7(2)+0 \\]
+
+The remainder is now \\(0\\). The last nonzero remainder is \\(7\\).
+
+Hence,
+
+\\[ \boxed{\gcd(287,91)=7}. \\]
+
+### Observe the remainder sequence
+
+## 287
+
+Dividend
+
+## 91
+
+Divisor
+
+## 14
+
+Remainder
+
+## 91
+
+## 14
+
+## 7
+
+Remainder
+
+## 14
+
+## 7
+
+## 0
+
+Stop
+
+GCD = last nonzero remainder = 7
+
+## 10.8 A more involved example: \\(\gcd(12345,54321)\\)
+
+Apply successive divisions:
+
+\\[ 54321=12345(4)+4941 \\]
+
+\\[ 12345=4941(2)+2463 \\]
+
+\\[ 4941=2463(2)+15 \\]
+
+\\[ 2463=15(164)+3 \\]
+
+\\[ 15=3(5)+0. \\]
+
+The last nonzero remainder is \\(3\\). Therefore,
+
+\\[ \boxed{\gcd(12345,54321)=3}. \\]
+
+Notice how the numbers become smaller without requiring their prime factorizations. This is why the Euclidean algorithm is useful for large integers.
+
+### What if the first division has remainder zero?
+
+If \\(a=bq\\), then \\(b\mid a\\). In that case,
+
+\\[ \gcd(a,b)=b \\]
+
+for positive \\(a\ge b\\). The algorithm stops immediately, and the divisor \\(b\\) is the GCD.
+
+For example,
+
+\\[ 72=12(6)+0 \quad\Longrightarrow\quad \gcd(72,12)=12. \\]
+
+## 10.9 GCD, LCM and the Euclidean algorithm: when to use each method
+
+| Question type                                       | Most direct method                         |
+| --------------------------------------------------- | ------------------------------------------ |
+| Small numbers with easy factors                     | List common divisors                       |
+| Numbers with known prime factorizations             | Minimum-exponent rule                      |
+| Large integers whose factors are unknown            | Euclidean algorithm                        |
+| Find LCM when GCD is known                          | \\(\operatorname{lcm}(a,b)=ab/\gcd(a,b)\\) |
+| Check whether two numbers are relatively prime      | Calculate whether their GCD is \\(1\\)     |
+| Prove two consecutive integers are relatively prime | Use their difference, which is \\(1\\)     |
+
+## 10.10 Important edge cases and advanced MCQ traps
+
+### A. GCD with zero
+
+For any nonzero integer \\(a\\),
+
+\\[ \boxed{\gcd(a,0)=|a|}. \\]
+
+Why? Every divisor of \\(a\\) divides \\(0\\), because \\(0=a\cdot0\\). The largest positive common divisor is therefore \\(|a|\\).
+
+Examples:
+
+\\[ \gcd(17,0)=17,\qquad \gcd(-24,0)=24. \\]
+
+The expression \\(\gcd(0,0)\\) is conventionally left undefined in this setting because there is no largest positive common divisor.
+
+### B. GCD with negative integers
+
+The GCD is always taken to be nonnegative, and for inputs not both zero, it is positive:
+
+\\[ \boxed{\gcd(a,b)=\gcd(|a|,|b|)}. \\]
+
+For example,
+
+\\[ \gcd(-18,30)=\gcd(18,30)=6. \\]
+
+### C. The remainder is not necessarily the GCD
+
+In
+
+\\[ a=bq+r, \\]
+
+the remainder \\(r\\) preserves the GCD through \\(\gcd(a,b)=\gcd(b,r)\\). But \\(r\\) itself need not equal the GCD.
+
+For example,
+
+\\[ 287=91(3)+14. \\]
+
+The remainder is \\(14\\), but the GCD is \\(7\\).
+
+### D. Pairwise relative primality versus a common GCD of \\(1\\)
+
+For a set containing three or more numbers, these are different properties.
+
+- Pairwise relatively prime: Every pair has GCD \\(1\\).
+- Collectively having GCD \\(1\\): The GCD of the entire set is \\(1\\).
+
+For example, \\(6,10,15\\) have collective GCD \\(1\\), but they are not pairwise relatively prime.
+
+### E. LCM and GCD are not always equal to the smaller and larger inputs
+
+It is not generally true that the GCD is the smaller input or that the LCM is the larger input. Those statements hold only in special divisibility cases.
+
+For instance,
+
+\\[ \gcd(12,18)=6,\qquad \operatorname{lcm}(12,18)=36. \\]
+
+The GCD is smaller than both inputs, while the LCM is larger than both.
+
+## 10.11 Exam-level MCQ test
+
+Answer all 10 questions, then submit to check your result.
+
+1\. What is gcd(84,126)?
+
+A. 14
+
+B. 21
+
+C. 42
+
+D. 84
+
+2\. Which formula gives the GCD from prime factorizations?
+
+A. Take the maximum exponent of each prime
+
+B. Take the minimum exponent of each prime
+
+C. Add all exponents
+
+D. Use only the common prime bases without exponents
+
+3\. What is lcm(12,18)?
+
+A. 6
+
+B. 24
+
+C. 36
+
+D. 216
+
+4\. If gcd(a,b)=1 for positive integers a and b, then:
+
+A. lcm(a,b)=1
+
+B. lcm(a,b)=a+b
+
+C. lcm(a,b)=ab
+
+D. a and b must both be prime
+
+5\. In the Euclidean algorithm, if a = bq + r, which identity is valid?
+
+A. gcd(a,b)=gcd(a,r)
+
+B. gcd(a,b)=gcd(b,r)
+
+C. gcd(a,b)=r always
+
+D. gcd(a,b)=b+r
+
+6\. The divisions are 91 = 14·6 + 7 and 14 = 7·2 + 0. What is gcd(91,14)?
+
+A. 14
+
+B. 7
+
+C. 6
+
+D. 0
+
+7\. What is gcd(−24,0)?
+
+A. −24
+
+B. 0
+
+C. 1
+
+D. 24
+
+8\. Which set is pairwise relatively prime?
+
+A. 6, 10, 15
+
+B. 10, 17, 21
+
+C. 8, 12, 25
+
+D. 9, 15, 22
+
+9\. If gcd(a,b)=12 and ab=4320, what is lcm(a,b)?
+
+A. 12
+
+B. 180
+
+C. 360
+
+D. 51840
+
+10\. What is gcd(12345,54321)?
+
+A. 1
+
+B. 3
+
+C. 9
+
+D. 15
+
+Submit answers
+
+Correction before you submit: Question 9's correct answer is 360 (option C). Its explanation states the right calculation, \\(4320/12=360\\); use option C for that question.
+
+## Module 10 revision sheet
+
+Memorize these results
+
+\\[ \gcd(a,b)=\gcd(b,r)\quad\text{if }a=bq+r \\]
+
+\\[ ab=\gcd(a,b)\operatorname{lcm}(a,b) \\]
+
+\\[ \operatorname{lcm}(a,b)=\frac{ab}{\gcd(a,b)} \\]
+
+\\[ \gcd(a,b)=1\iff a,b\text{ are relatively prime} \\]
+
+Prime-factorization rule: GCD uses minimum exponents; LCM uses maximum exponents. Euclidean algorithm rule: the last nonzero remainder is the GCD.
+
+Next module: Module 11 — GCD as a Linear Combination, including Bézout's theorem, proofs, and how to express a GCD in the form \\(sa+tb\\) for integers \\(s,t\\).
+
+Say next when you're ready.

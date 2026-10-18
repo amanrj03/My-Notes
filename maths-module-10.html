@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 10: GCD, LCM and the Euclidean Algorithm — Mathematics Study Guide</title>
+    <meta name="description" content="Number Theory &amp; Cryptography study notes — Module 10 of 17: GCD, LCM and the Euclidean Algorithm. Complete with theorems, proofs, worked examples, and interactive self-test quiz.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+
+    <!-- MathJax 3 configuration for crisp LaTeX rendering -->
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['\\(', '\\)'], ['$', '$']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true,
+            macros: {
+                Z: '\\mathbb{Z}',
+                N: '\\mathbb{N}',
+                R: '\\mathbb{R}',
+                Q: '\\mathbb{Q}',
+                gcd: '\\operatorname{gcd}',
+                lcm: '\\operatorname{lcm}'
+            }
+        },
+        options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+/* ==========================================================================
+   MATHEMATICS THEME — Imperial Oxford Amethyst & Celestial Amber
+   ========================================================================== */
+:root {
+    --math-royal-primary: #7c3aed;
+    --math-royal-hover: #6d28d9;
+    --math-gold-accent: #f59e0b;
+    --math-gold-glow: rgba(245, 158, 11, 0.25);
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-body, #2d3748);
+    margin: 0; padding: 0;
+    background-color: var(--bg-body, #f4f6fb);
+}
+
+.page-container {
+    max-width: 1080px;
+    margin: 25px auto 50px;
+    padding: 40px 50px;
+    background-color: var(--bg-page, #ffffff);
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.07);
+    border-radius: 14px;
+}
+
+/* MATH HERO BANNER */
+.math-banner {
+    background: linear-gradient(135deg, #1b0a2a 0%, #341253 45%, #581c87 75%, #b45309 100%);
+    border-radius: 12px;
+    padding: 30px 34px;
+    margin-bottom: 28px;
+    color: #ffffff;
+    box-shadow: 0 6px 24px rgba(124, 58, 237, 0.25);
+    position: relative;
+    overflow: hidden;
+}
+.math-banner::after {
+    content: "∑ ∫ ∏ √";
+    position: absolute;
+    right: 20px;
+    bottom: -15px;
+    font-size: 80px;
+    font-weight: 800;
+    font-family: 'Outfit', sans-serif;
+    color: rgba(255, 255, 255, 0.05);
+    pointer-events: none;
+}
+.math-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.16);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    margin-bottom: 12px;
+}
+.math-banner-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.25;
+    margin: 0;
+    color: #ffffff;
+}
+
+/* NAVIGATION TOGGLE */
+.nav-toggle {
+    margin-bottom: 24px;
+}
+.nav-toggle-btn {
+    width: 100%;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #7c3aed;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+.nav-toggle-btn:hover {
+    background: rgba(124, 58, 237, 0.06);
+    border-color: #7c3aed;
+}
+.nav-panel {
+    display: none;
+    margin-top: 10px;
+    padding: 18px;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    column-count: 2;
+    column-gap: 16px;
+}
+.nav-panel.open { display: block; }
+.nav-item {
+    display: block;
+    padding: 6px 10px;
+    font-size: 13px;
+    color: var(--text-body, #334155);
+    text-decoration: none;
+    border-radius: 4px;
+    break-inside: avoid;
+    margin-bottom: 4px;
+    transition: all 0.15s ease;
+}
+.nav-item:hover {
+    background: rgba(124, 58, 237, 0.1);
+    color: #7c3aed;
+}
+.nav-item.current {
+    background: linear-gradient(135deg, #7c3aed, #4c1d95);
+    color: #ffffff !important;
+    font-weight: 700;
+}
+
+/* CONTENT STYLES */
+.module-content {
+    color: var(--text-body, #334155);
+    font-size: 15px;
+}
+.module-content h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-heading, #0f172a);
+    margin: 36px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(124, 58, 237, 0.2);
+}
+.module-content h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-heading, #0f172a);
+    margin: 28px 0 14px;
+}
+.module-content h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-heading, #0f172a);
+    margin: 22px 0 10px;
+}
+.module-content p {
+    margin: 0 0 14px;
+    line-height: 1.7;
+}
+.module-content ul, .module-content ol {
+    margin: 0 0 16px 22px;
+    padding: 0;
+}
+.module-content li {
+    margin-bottom: 7px;
+    line-height: 1.65;
+}
+
+/* MATHEMATICAL CALLOUTS */
+.math-callout {
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 22px 0;
+    border: 1px solid var(--border-color, #e2e8f0);
+    background: var(--bg-surface, #ffffff);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+}
+[data-theme="dark"] .math-callout {
+    background: #141728;
+    border-color: #242944;
+}
+.callout-badge {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+.callout-title {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--text-heading, #0f172a);
+}
+.math-callout.theorem {
+    border-left: 4px solid #7c3aed;
+    background: rgba(124, 58, 237, 0.04);
+}
+[data-theme="dark"] .math-callout.theorem { background: rgba(124, 58, 237, 0.1); }
+.callout-badge.theorem { background: #7c3aed; color: #fff; }
+
+.math-callout.definition {
+    border-left: 4px solid #0284c7;
+    background: rgba(2, 132, 199, 0.04);
+}
+[data-theme="dark"] .math-callout.definition { background: rgba(2, 132, 199, 0.1); }
+.callout-badge.definition { background: #0284c7; color: #fff; }
+
+.math-callout.property {
+    border-left: 4px solid #f59e0b;
+    background: rgba(245, 158, 11, 0.04);
+}
+[data-theme="dark"] .math-callout.property { background: rgba(245, 158, 11, 0.1); }
+.callout-badge.property { background: #f59e0b; color: #fff; }
+
+.math-callout.example {
+    border-left: 4px solid #10b981;
+    background: rgba(16, 185, 129, 0.04);
+}
+[data-theme="dark"] .math-callout.example { background: rgba(16, 185, 129, 0.1); }
+.callout-badge.example { background: #10b981; color: #fff; }
+
+/* DISPLAY MATH BOX */
+.math-display {
+    overflow-x: auto;
+    padding: 14px 18px;
+    margin: 20px 0;
+    text-align: center;
+    background: rgba(124, 58, 237, 0.03);
+    border: 1px dashed rgba(124, 58, 237, 0.25);
+    border-radius: 8px;
+}
+[data-theme="dark"] .math-display {
+    background: rgba(124, 58, 237, 0.08);
+    border-color: rgba(139, 92, 246, 0.35);
+}
+.math-inline {
+    display: inline-block;
+    padding: 0 2px;
+}
+
+/* REFERENCE PILL */
+.ref-pill {
+    display: inline-block;
+    background: rgba(124, 58, 237, 0.08);
+    color: #7c3aed;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 12px;
+    border-radius: 12px;
+    margin: 4px 0 14px;
+    border: 1px solid rgba(124, 58, 237, 0.2);
+}
+[data-theme="dark"] .ref-pill { color: #a78bfa; }
+
+/* REVISION SHEET BANNER */
+.exam-header-banner {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(245, 158, 11, 0.22) 100%);
+    border-left: 4px solid #f59e0b;
+    padding: 12px 18px;
+    border-radius: 0 8px 8px 0;
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--text-heading, #0f172a);
+    margin: 32px 0 18px;
+}
+
+/* TABLES */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 22px 0;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid var(--border-color, #cbd5e0);
+    padding: 10px 14px;
+    text-align: left;
+}
+th {
+    background: #6d28d9;
+    color: #ffffff;
+    font-weight: 600;
+}
+tr:nth-child(even) td {
+    background: var(--bg-table-stripe, #f8fafc);
+}
+
+/* BOTTOM NAVIGATION */
+.prev-next {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 45px;
+    padding-top: 24px;
+    border-top: 2px solid var(--border-color, #e2e8f0);
+}
+.pn-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #cbd5e0);
+    border-radius: 8px;
+    color: #7c3aed;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+.pn-btn:hover {
+    border-color: #7c3aed;
+    background: rgba(124, 58, 237, 0.08);
+    transform: translateY(-1px);
+}
+.pn-hub {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    background: #1e112a;
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+}
+.pn-hub:hover { background: #3b1d54; }
+
+@media (max-width: 768px) {
+    .page-container { margin: 12px; padding: 22px 18px; }
+    .prev-next { flex-direction: column; align-items: stretch; }
+    .pn-btn { justify-content: center; }
+    .nav-panel { column-count: 1; }
+}
+</style>
+
+<style>
+/* Mathematics Quiz Theme — Imperial Amethyst & Celestial Amber */
+.quiz-section-wrap {
+    margin: 40px 0;
+    padding: 0;
+}
+.quiz-card-container {
+    background: var(--bg-surface, #ffffff);
+    border: 1px solid rgba(124, 58, 237, 0.25);
+    border-radius: 14px;
+    padding: 32px 28px;
+    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.08);
+}
+[data-theme="dark"] .quiz-card-container {
+    background: #111424;
+    border-color: rgba(139, 92, 246, 0.3);
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+}
+.quiz-header {
+    border-bottom: 2px solid rgba(124, 58, 237, 0.15);
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+.quiz-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.12), rgba(245, 158, 11, 0.15));
+    color: #7c3aed;
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+}
+[data-theme="dark"] .quiz-badge {
+    color: #a78bfa;
+}
+.quiz-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-heading, #0f172a);
+    margin: 0 0 6px;
+}
+.quiz-desc {
+    font-size: 14px;
+    color: var(--text-secondary, #64748b);
+    margin: 0;
+}
+.quiz-score-badge {
+    background: linear-gradient(135deg, #7c3aed, #4c1d95);
+    color: #ffffff;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    display: none;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+.q-block {
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 20px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+[data-theme="dark"] .q-block {
+    background: #15192c;
+    border-color: #262c4a;
+}
+.q-title {
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--text-heading, #0f172a);
+    margin-bottom: 14px;
+    display: flex;
+    gap: 8px;
+}
+.q-num {
+    color: #7c3aed;
+    font-weight: 800;
+}
+[data-theme="dark"] .q-num {
+    color: #a78bfa;
+}
+.q-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.q-opt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-surface, #ffffff);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-body, #334155);
+    transition: all 0.2s ease;
+}
+[data-theme="dark"] .q-opt {
+    background: #1c223c;
+    border-color: #2d3558;
+    color: #cbd5e1;
+}
+.q-opt:hover {
+    border-color: #7c3aed;
+    background: rgba(124, 58, 237, 0.04);
+}
+.q-opt input[type="radio"] {
+    accent-color: #7c3aed;
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+}
+.q-opt.correct-choice {
+    border-color: #10b981 !important;
+    background: rgba(16, 185, 129, 0.1) !important;
+    color: #065f46 !important;
+}
+[data-theme="dark"] .q-opt.correct-choice {
+    color: #34d399 !important;
+    background: rgba(16, 185, 129, 0.15) !important;
+}
+.q-opt.wrong-choice {
+    border-color: #ef4444 !important;
+    background: rgba(239, 68, 68, 0.08) !important;
+    color: #991b1b !important;
+}
+[data-theme="dark"] .q-opt.wrong-choice {
+    color: #f87171 !important;
+    background: rgba(239, 68, 68, 0.15) !important;
+}
+.q-explanation {
+    display: none;
+    margin-top: 14px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    background: rgba(124, 58, 237, 0.08);
+    border-left: 4px solid #7c3aed;
+    color: var(--text-body, #334155);
+}
+[data-theme="dark"] .q-explanation {
+    background: rgba(124, 58, 237, 0.15);
+    color: #e2e8f0;
+}
+.quiz-actions {
+    display: flex;
+    gap: 14px;
+    margin-top: 26px;
+    flex-wrap: wrap;
+}
+.btn-quiz-check {
+    background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 26px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-quiz-check:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+}
+.btn-quiz-reset {
+    background: var(--bg-subtle, #f8fafc);
+    color: var(--text-secondary, #64748b);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 12px 22px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.btn-quiz-reset:hover {
+    color: var(--text-heading, #0f172a);
+    border-color: #7c3aed;
+}
+</style>
+
+</head>
+<body>
+
+
+    <header class="global-navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <span class="nav-brand-icon">⚡</span>
+                <span class="nav-brand-text">OmniCourse<span class="nav-brand-accent">.Hub</span></span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link"><span class="icon">🏠</span> All Subjects</a>
+                
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn active" style="color: #a78bfa;"><span class="icon">📐</span> Mathematics (17) ▾</button>
+                    <div class="nav-dropdown-menu">
+                        <a href="maths.html" class="nav-dropdown-header" style="background: linear-gradient(135deg, #7c3aed, #4c1d95); color: #fff;">📋 Mathematics Syllabus Hub</a>
+                        <a href="maths-module-1.html">Module 1: Divisibility and the Division Algorithm</a>
+<a href="maths-module-2.html">Module 2: Modular Arithmetic and Congruences</a>
+<a href="maths-module-3.html">Module 3: Integer Representations and Base Expansions</a>
+<a href="maths-module-4.html">Module 4: Octal, Hexadecimal & Fast Base Conversions</a>
+<a href="maths-module-5.html">Module 5: Algorithms for Integer Operations</a>
+<a href="maths-module-6.html">Module 6: Prime and Composite Numbers</a>
+<a href="maths-module-7.html">Module 7: Fundamental Theorem of Arithmetic</a>
+<a href="maths-module-8.html">Module 8: Trial Division and the Sieve of Eratosthenes</a>
+<a href="maths-module-9.html">Module 9: Prime Number Theorem and Prime Distribution</a>
+<a href="maths-module-10.html">Module 10: GCD, LCM and the Euclidean Algorithm</a>
+<a href="maths-module-11.html">Module 11: GCD as a Linear Combination (Bézout's Theorem)</a>
+<a href="maths-module-12.html">Module 12: Linear Congruences and Modular Inverses</a>
+<a href="maths-module-13.html">Module 13: Chinese Remainder Theorem (CRT)</a>
+<a href="maths-module-14.html">Module 14: Computer Arithmetic with Large Integers</a>
+<a href="maths-module-15.html">Module 15: Fermat's Little Theorem (FLT)</a>
+<a href="maths-module-16.html">Module 16: Applications of Congruences</a>
+<a href="maths-module-17.html">Module 17: Mixed MCQ Mastery and Final Revision</a>
+                    </div>
+                </div>
+
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn"><span class="icon">⛓️</span> Blockchain (13) ▾</button>
+                    <div class="nav-dropdown-menu">
+                        <a href="blockchain.html" class="nav-dropdown-header">📋 Blockchain Syllabus Hub</a>
+                        <a href="blockchain-module-1.html">Module 1: History &amp; Bitcoin</a>
+                        <a href="blockchain-module-2.html">Module 2: Distributed Systems</a>
+                        <a href="blockchain-module-3.html">Module 3: Consensus Protocols</a>
+                        <a href="blockchain-module-4.html">Module 4: Decentralization</a>
+                        <a href="blockchain-module-5.html">Module 5: Symmetric Crypto</a>
+                        <a href="blockchain-module-6.html">Module 6: Public Key Crypto</a>
+                        <a href="blockchain-module-7.html">Module 7: Digital Signatures</a>
+                        <a href="blockchain-module-8.html">Module 8: SHA &amp; Hashes</a>
+                        <a href="blockchain-module-9.html">Module 9: Consensus Problem &amp; Design</a>
+                        <a href="blockchain-module-10.html">Module 10: Paxos, Raft &amp; PBFT</a>
+                        <a href="blockchain-module-11.html">Module 11: PoW, PoS &amp; Selection</a>
+                        <a href="blockchain-module-12.html">Module 12: Bitcoin Keys &amp; UTXO</a>
+                        <a href="blockchain-module-13.html">Module 13: Mining, Network &amp; Forks</a>
+                        <a href="blockchain_guide.html" class="nav-dropdown-special">📖 Full 8-Module Reader</a>
+                    </div>
+                </div>
+
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn"><span class="icon">🐍</span> Django Course (45) ▾</button>
+                    <div class="nav-dropdown-menu">
+                        <a href="django.html" class="nav-dropdown-header">📋 Django Syllabus Hub</a>
+                        <a href="module-1.html">Module 1: Fundamentals</a>
+                        <a href="module-7.html">Module 7: URL Routing</a>
+                        <a href="module-12.html">Module 12: Templates</a>
+                        <a href="module-21.html">Module 21: Forms</a>
+                        <a href="module-25.html">Module 25: Models &amp; ORM</a>
+                        <a href="module-37.html">Module 37: Authentication</a>
+                        <a href="module-42.html">Module 42: Complete Revision</a>
+                        <a href="django_guide.html" class="nav-dropdown-special">📖 Full 44-Module Reader</a>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-actions">
+                <button id="themeToggleBtn" class="theme-btn" title="Toggle Dark/Light Mode">🌙</button>
+                <a href="maths.html" class="nav-action-pill" style="background: linear-gradient(135deg, #7c3aed, #4c1d95);" title="Return to Mathematics Hub">📋 Maths Hub</a>
+            </div>
+        </div>
+    </header>
+    
+
+<div class="page-container">
+
+    <div class="math-banner">
+        <div class="math-badge">∑ Module 10 of 17 — Number Theory &amp; Cryptography</div>
+        <h1 class="math-banner-title">GCD, LCM and the Euclidean Algorithm</h1>
+    </div>
+
+    <div class="nav-toggle">
+        <button class="nav-toggle-btn" onclick="document.getElementById('mathNavPanel').classList.toggle('open')">
+            📚 All 17 Mathematics Modules ▾
+        </button>
+        <div class="nav-panel" id="mathNavPanel">
+<a class="nav-item" href="maths-module-1.html">1. Divisibility and the Division Algorithm</a>
+<a class="nav-item" href="maths-module-2.html">2. Modular Arithmetic and Congruences</a>
+<a class="nav-item" href="maths-module-3.html">3. Integer Representations and Base Expansions</a>
+<a class="nav-item" href="maths-module-4.html">4. Octal, Hexadecimal & Fast Base Conversions</a>
+<a class="nav-item" href="maths-module-5.html">5. Algorithms for Integer Operations</a>
+<a class="nav-item" href="maths-module-6.html">6. Prime and Composite Numbers</a>
+<a class="nav-item" href="maths-module-7.html">7. Fundamental Theorem of Arithmetic</a>
+<a class="nav-item" href="maths-module-8.html">8. Trial Division and the Sieve of Eratosthenes</a>
+<a class="nav-item" href="maths-module-9.html">9. Prime Number Theorem and Prime Distribution</a>
+<span class="nav-item current">10. GCD, LCM and the Euclidean Algorithm</span>
+<a class="nav-item" href="maths-module-11.html">11. GCD as a Linear Combination (Bézout's Theorem)</a>
+<a class="nav-item" href="maths-module-12.html">12. Linear Congruences and Modular Inverses</a>
+<a class="nav-item" href="maths-module-13.html">13. Chinese Remainder Theorem (CRT)</a>
+<a class="nav-item" href="maths-module-14.html">14. Computer Arithmetic with Large Integers</a>
+<a class="nav-item" href="maths-module-15.html">15. Fermat's Little Theorem (FLT)</a>
+<a class="nav-item" href="maths-module-16.html">16. Applications of Congruences</a>
+<a class="nav-item" href="maths-module-17.html">17. Mixed MCQ Mastery and Final Revision</a>
+        </div>
+    </div>
+
+    <div class="module-content">
+<p>Number Theory-II · Rosen, Number Theory and Cryptography, Section 4.3</p>
+<p>This module covers three closely related ideas:</p>
+<ol>
+<li>Greatest common divisor (GCD): the largest positive integer dividing two integers.</li>
+<li>Least common multiple (LCM): the smallest positive integer divisible by two positive integers.</li>
+<li>Euclidean algorithm: an efficient method for computing the GCD without finding complete prime factorizations first.</li>
+</ol>
+<p>We'll study definitions, theorems, proofs, worked examples, special cases, and MCQ traps using your textbook as the primary reference.</p>
+<h2>10.1 Greatest common divisor (GCD)</h2>
+<div class="math-callout definition"><div class="callout-badge definition">📖 DEFINITION</div><div class="callout-title">Definition</div></div>
+<p>Let <span class="math-inline">\(a\)</span> and <span class="math-inline">\(b\)</span> be integers, not both zero. Their greatest common divisor, written</p>
+<div class="math-display">\[\gcd(a,b),\]</div>
+<p>is the largest positive integer that divides both <span class="math-inline">\(a\)</span> and <span class="math-inline">\(b\)</span>.</p>
+<p>For example, the positive divisors common to <span class="math-inline">\(18\)</span> and <span class="math-inline">\(30\)</span> are</p>
+<div class="math-display">\[1,2,3,6.\]</div>
+<p>Therefore,</p>
+<div class="math-display">\[\boxed{\gcd(18,30)=6}.\]</div>
+<h3>Formal definition using divisibility</h3>
+<p>A positive integer <span class="math-inline">\(d\)</span> is <span class="math-inline">\(\gcd(a,b)\)</span> when:</p>
+<ol>
+<li><span class="math-inline">\(d\mid a\)</span> and <span class="math-inline">\(d\mid b\)</span>.</li>
+<li>Every common divisor of <span class="math-inline">\(a\)</span> and <span class="math-inline">\(b\)</span> divides <span class="math-inline">\(d\)</span>.</li>
+</ol>
+<p>The second condition is stronger than simply saying <span class="math-inline">\(d\)</span> is a common divisor. It ensures that <span class="math-inline">\(d\)</span> is the greatest common divisor.</p>
+<h3>Common divisor versus greatest common divisor</h3>
+<p>For <span class="math-inline">\(18\)</span> and <span class="math-inline">\(30\)</span>:</p>
+<ul>
+<li><span class="math-inline">\(2\)</span> is a common divisor.</li>
+<li><span class="math-inline">\(3\)</span> is a common divisor.</li>
+<li><span class="math-inline">\(6\)</span> is a common divisor.</li>
+<li><span class="math-inline">\(9\)</span> is not a common divisor because <span class="math-inline">\(9\nmid30\)</span>.</li>
+</ul>
+<p>Only <span class="math-inline">\(6\)</span> is the greatest common divisor.</p>
+<p>MCQ trap: The GCD is not necessarily one of the numbers' prime factors considered separately; it is the largest positive integer dividing both numbers.</p>
+<h2>10.2 Relatively prime integers</h2>
+<p>Definition: Two integers <span class="math-inline">\(a\)</span> and <span class="math-inline">\(b\)</span> are relatively prime if</p>
+<div class="math-display">\[\boxed{\gcd(a,b)=1}.\]</div>
+<p>For example,</p>
+<div class="math-display">\[\gcd(17,22)=1,\]</div>
+<p>so <span class="math-inline">\(17\)</span> and <span class="math-inline">\(22\)</span> are relatively prime. Neither number needs to be prime itself.</p>
+<h3>Important consequences</h3>
+<p>1. Two distinct primes are relatively prime.</p>
+<p>If <span class="math-inline">\(p\)</span> and <span class="math-inline">\(q\)</span> are distinct primes, their only common positive divisor is <span class="math-inline">\(1\)</span>. Hence,</p>
+<div class="math-display">\[\boxed{\gcd(p,q)=1\quad(p\ne q)}.\]</div>
+<p>2. Consecutive positive integers are relatively prime.</p>
+<p>For every positive integer <span class="math-inline">\(n\)</span>,</p>
+<div class="math-display">\[\boxed{\gcd(n,n+1)=1}.\]</div>
+<p>Proof: Any common divisor of <span class="math-inline">\(n\)</span> and <span class="math-inline">\(n+1\)</span> must divide their difference:</p>
+<div class="math-display">\[(n+1)-n=1.\]</div>
+<p>The only positive divisor of <span class="math-inline">\(1\)</span> is <span class="math-inline">\(1\)</span>. Therefore, the GCD is <span class="math-inline">\(1\)</span>.</p>
+<p>3. Relatively prime does not mean both numbers are prime.</p>
+<p>For example,</p>
+<div class="math-display">\[\gcd(8,15)=1.\]</div>
+<p>Although both numbers are composite, they are relatively prime.</p>
+<h3>Pairwise relatively prime</h3>
+<p>A set of integers <span class="math-inline">\(a_1,a_2,\ldots,a_k\)</span> is pairwise relatively prime if every pair has GCD <span class="math-inline">\(1\)</span>:</p>
+<div class="math-display">\[\boxed{\gcd(a_i,a_j)=1\quad\text{for every }i\<j}.\]</div>
+<p>For example, <span class="math-inline">\(10,17,21\)</span> are pairwise relatively prime because</p>
+<div class="math-display">\[\gcd(10,17)=1,\quad \gcd(10,21)=1,\quad \gcd(17,21)=1.\]</div>
+<p>Subtle MCQ trap: Having a GCD of <span class="math-inline">\(1\)</span> for the entire set is not the definition of pairwise relative primality. You must check every pair.</p>
+<p>For instance, the numbers <span class="math-inline">\(6,10,15\)</span> have no common divisor greater than <span class="math-inline">\(1\)</span> shared by all three, but they are not pairwise relatively prime:</p>
+<div class="math-display">\[\gcd(6,10)=2,\quad \gcd(6,15)=3,\quad \gcd(10,15)=5.\]</div>
+<h2>10.3 GCD using prime factorization</h2>
+<p>Suppose two positive integers have prime factorizations</p>
+<div class="math-display">\[a=p_1^{\alpha_1}p_2^{\alpha_2}\cdots p_k^{\alpha_k}\]</div>
+<p>and</p>
+<div class="math-display">\[b=p_1^{\beta_1}p_2^{\beta_2}\cdots p_k^{\beta_k}.\]</div>
+<p>Include every prime appearing in either factorization, using exponent <span class="math-inline">\(0\)</span> when a prime is absent.</p>
+<p>Then</p>
+<div class="math-display">\[\boxed{\gcd(a,b)= p_1^{\min(\alpha_1,\beta_1)} \cdots p_k^{\min(\alpha_k,\beta_k)}}.\]</div>
+<p>In words: take the smaller exponent of every prime factor.</p>
+<h3>Why do we take minimum exponents?</h3>
+<p>A common divisor cannot contain a prime to a greater power than that prime occurs in either number. The greatest common divisor uses the largest power that fits into both factorizations, which is the smaller of the two exponents.</p>
+<div class="math-callout example"><div class="callout-badge example">💡 WORKED EXAMPLE</div><div class="callout-title">Worked example</div></div>
+<p>Find <span class="math-inline">\(\gcd(120,500)\)</span>.</p>
+<p>Prime factorizations:</p>
+<div class="math-display">\[120=2^3\cdot3^1\cdot5^1\]</div>
+<div class="math-display">\[500=2^2\cdot3^0\cdot5^3.\]</div>
+<p>Take minimum exponents:</p>
+<div class="math-display">\[\begin{aligned} \gcd(120,500) &=2^{\min(3,2)}   3^{\min(1,0)}   5^{\min(1,3)}\\\ &=2^2\cdot3^0\cdot5^1\\\ &=4\cdot1\cdot5. \end{aligned}\]</div>
+<p>Therefore,</p>
+<div class="math-display">\[\boxed{\gcd(120,500)=20}.\]</div>
+<h2>10.4 Least common multiple (LCM)</h2>
+<div class="math-callout definition"><div class="callout-badge definition">📖 DEFINITION</div><div class="callout-title">Definition</div></div>
+<p>For positive integers <span class="math-inline">\(a\)</span> and <span class="math-inline">\(b\)</span>, the least common multiple, written <span class="math-inline">\(\operatorname{lcm}(a,b)\)</span>, is the smallest positive integer divisible by both <span class="math-inline">\(a\)</span> and <span class="math-inline">\(b\)</span>.</p>
+<p>For example, the positive multiples of <span class="math-inline">\(6\)</span> are</p>
+<div class="math-display">\[6,12,18,24,30,36,\ldots\]</div>
+<p>and those of <span class="math-inline">\(8\)</span> are</p>
+<div class="math-display">\[8,16,24,32,40,\ldots\]</div>
+<p>The smallest positive common multiple is <span class="math-inline">\(24\)</span>, so</p>
+<div class="math-display">\[\boxed{\operatorname{lcm}(6,8)=24}.\]</div>
+<h3>LCM using prime factorization</h3>
+<p>Using the same factorizations as before,</p>
+<div class="math-display">\[a=p_1^{\alpha_1}\cdots p_k^{\alpha_k}, \qquad b=p_1^{\beta_1}\cdots p_k^{\beta_k},\]</div>
+<p>the formula is</p>
+<div class="math-display">\[\boxed{\operatorname{lcm}(a,b)= p_1^{\max(\alpha_1,\beta_1)} \cdots p_k^{\max(\alpha_k,\beta_k)}}.\]</div>
+<p>In words: take the larger exponent of every prime factor.</p>
+<p>Why? A common multiple must contain enough copies of every prime to be divisible by both numbers. The maximum exponent is the smallest exponent that satisfies both requirements.</p>
+<div class="math-callout example"><div class="callout-badge example">💡 WORKED EXAMPLE</div><div class="callout-title">Worked example</div></div>
+<p>Find <span class="math-inline">\(\operatorname{lcm}(120,500)\)</span>.</p>
+<p>We already have</p>
+<div class="math-display">\[120=2^3\cdot3\cdot5, \qquad 500=2^2\cdot5^3.\]</div>
+<p>Take maximum exponents:</p>
+<div class="math-display">\[\begin{aligned} \operatorname{lcm}(120,500) &=2^{\max(3,2)}   3^{\max(1,0)}   5^{\max(1,3)}\\\ &=2^3\cdot3\cdot5^3\\\ &=8\cdot3\cdot125. \end{aligned}\]</div>
+<p>Thus,</p>
+<div class="math-display">\[\boxed{\operatorname{lcm}(120,500)=3000}.\]</div>
+<h3>GCD versus LCM: the exponent rule</h3>
+<table>
+<thead>
+<tr>
+<th>Quantity</th>
+<th>Prime-factor exponent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GCD</td>
+<td>Minimum</td>
+</tr>
+<tr>
+<td>LCM</td>
+<td>Maximum</td>
+</tr>
+</tbody>
+</table>
+<p>This is one of the most frequently tested distinctions in this topic.</p>
+<h2>10.5 The relationship between GCD and LCM</h2>
+<p>For any two positive integers <span class="math-inline">\(a\)</span> and <span class="math-inline">\(b\)</span>, Rosen's Theorem 5 states</p>
+<div class="math-display">\[\boxed{ab=\gcd(a,b)\cdot\operatorname{lcm}(a,b)}.\]</div>
+<p>Equivalently,</p>
+<div class="math-display">\[\boxed{\operatorname{lcm}(a,b)= \frac{ab}{\gcd(a,b)}}.\]</div>
+<p>And</p>
+<div class="math-display">\[\boxed{\gcd(a,b)= \frac{ab}{\operatorname{lcm}(a,b)}}.\]</div>
+<h3>Why is this identity true?</h3>
+<p>Consider the prime factorizations</p>
+<div class="math-display">\[a=\prod_i p_i^{\alpha_i}, \qquad b=\prod_i p_i^{\beta_i}.\]</div>
+<p>The product <span class="math-inline">\(ab\)</span> contains each prime <span class="math-inline">\(p_i\)</span> with exponent</p>
+<div class="math-display">\[\alpha_i+\beta_i.\]</div>
+<p>Meanwhile, the product of the GCD and LCM contains it with exponent</p>
+<div class="math-display">\[\min(\alpha_i,\beta_i)+ \max(\alpha_i,\beta_i).\]</div>
+<p>For any two numbers <span class="math-inline">\(\alpha_i,\beta_i\)</span>,</p>
+<div class="math-display">\[\min(\alpha_i,\beta_i)+ \max(\alpha_i,\beta_i) =\alpha_i+\beta_i.\]</div>
+<p>So the two products have identical prime factorizations. By uniqueness of prime factorization, they are equal.</p>
+<div class="math-callout example"><div class="callout-badge example">💡 WORKED EXAMPLE</div><div class="callout-title">Worked example</div></div>
+<p>Suppose</p>
+<div class="math-display">\[a=84,\qquad b=126.\]</div>
+<p>Their prime factorizations are</p>
+<div class="math-display">\[84=2^2\cdot3\cdot7, \qquad 126=2\cdot3^2\cdot7.\]</div>
+<p>Therefore,</p>
+<div class="math-display">\[\gcd(84,126)=2\cdot3\cdot7=42\]</div>
+<p>and</p>
+<div class="math-display">\[\operatorname{lcm}(84,126)=2^2\cdot3^2\cdot7=252.\]</div>
+<p>Verify the identity:</p>
+<div class="math-display">\[84\cdot126=10584\]</div>
+<p>and</p>
+<div class="math-display">\[42\cdot252=10584.\]</div>
+<p>Hence the identity holds.</p>
+<p>MCQ shortcut: If <span class="math-inline">\(a\)</span>, <span class="math-inline">\(b\)</span>, and their GCD are given, calculate the LCM using <span class="math-inline">\(ab/\gcd(a,b)\)</span>. This is often faster than factorizing both numbers.</p>
+<h3>Special case: relatively prime integers</h3>
+<p>If <span class="math-inline">\(\gcd(a,b)=1\)</span>, then</p>
+<div class="math-display">\[\boxed{\operatorname{lcm}(a,b)=ab}.\]</div>
+<p>For example, since <span class="math-inline">\(\gcd(8,15)=1\)</span>,</p>
+<div class="math-display">\[\operatorname{lcm}(8,15)=8\cdot15=120.\]</div>
+<p>Be careful: <span class="math-inline">\(\operatorname{lcm}(a,b)=ab\)</span> is not true for every pair. It holds when the two positive integers are relatively prime.</p>
+<h2>10.6 The Euclidean algorithm</h2>
+<p>Prime factorization is mathematically useful, but finding complete factorizations can be difficult for large numbers. The Euclidean algorithm computes the GCD by repeatedly applying the division algorithm.</p>
+<p>Its central theorem is:</p>
+<div class="math-display">\[\boxed{\gcd(a,b)=\gcd(b,r)}\]</div>
+<p>whenever</p>
+<div class="math-display">\[a=bq+r.\]</div>
+<p>Here <span class="math-inline">\(q\)</span> is the quotient and <span class="math-inline">\(r\)</span> is the remainder.</p>
+<h3>Lemma: Why does the GCD remain unchanged?</h3>
+<p>Suppose</p>
+<div class="math-display">\[a=bq+r.\]</div>
+<p>We will prove that <span class="math-inline">\(a,b\)</span> and <span class="math-inline">\(b,r\)</span> have exactly the same common divisors.</p>
+<p>Direction 1: Suppose <span class="math-inline">\(d\mid a\)</span> and <span class="math-inline">\(d\mid b\)</span>.</p>
+<p>Since <span class="math-inline">\(d\)</span> divides <span class="math-inline">\(a\)</span> and <span class="math-inline">\(bq\)</span>, it also divides their difference:</p>
+<div class="math-display">\[a-bq=r.\]</div>
+<p>Thus <span class="math-inline">\(d\mid r\)</span>. Therefore, every common divisor of <span class="math-inline">\(a,b\)</span> is also a common divisor of <span class="math-inline">\(b,r\)</span>.</p>
+<p>Direction 2: Suppose <span class="math-inline">\(d\mid b\)</span> and <span class="math-inline">\(d\mid r\)</span>.</p>
+<p>Since <span class="math-inline">\(d\)</span> divides <span class="math-inline">\(bq\)</span> and <span class="math-inline">\(r\)</span>, it divides their sum:</p>
+<div class="math-display">\[bq+r=a.\]</div>
+<p>Thus <span class="math-inline">\(d\mid a\)</span>. Therefore, every common divisor of <span class="math-inline">\(b,r\)</span> is also a common divisor of <span class="math-inline">\(a,b\)</span>.</p>
+<p>Both pairs have the same common divisors, so they must have the same greatest common divisor:</p>
+<div class="math-display">\[\boxed{\gcd(a,b)=\gcd(b,r)}.\]</div>
+<p>This is the key mathematical justification for the Euclidean algorithm.</p>
+<h3>General procedure</h3>
+<p>To calculate <span class="math-inline">\(\gcd(a,b)\)</span>, where <span class="math-inline">\(a\ge b\gt 0\)</span>:</p>
+<ol>
+<li>Divide <span class="math-inline">\(a\)</span> by <span class="math-inline">\(b\)</span>, writing <span class="math-inline">\(a=bq+r\)</span>.</li>
+<li>Replace the pair <span class="math-inline">\((a,b)\)</span> with <span class="math-inline">\((b,r)\)</span>.</li>
+<li>Repeat the division with the new pair.</li>
+<li>Stop when the remainder is <span class="math-inline">\(0\)</span>.</li>
+<li>The last nonzero remainder is the GCD.</li>
+</ol>
+<p>Why does the method terminate? Every nonzero remainder is a nonnegative integer strictly smaller than the divisor used to obtain it. The positive remainders therefore keep decreasing, so eventually a remainder of <span class="math-inline">\(0\)</span> must occur.</p>
+<h2>10.7 Worked example: <span class="math-inline">\(\gcd(287,91)\)</span></h2>
+<p>This is the example used in your textbook.</p>
+<p>Start with the larger number divided by the smaller.</p>
+<p>Step 1</p>
+<div class="math-display">\[287=91(3)+14\]</div>
+<p>Therefore,</p>
+<div class="math-display">\[\gcd(287,91)=\gcd(91,14).\]</div>
+<p>Step 2</p>
+<div class="math-display">\[91=14(6)+7\]</div>
+<p>Therefore,</p>
+<div class="math-display">\[\gcd(91,14)=\gcd(14,7).\]</div>
+<p>Step 3</p>
+<div class="math-display">\[14=7(2)+0\]</div>
+<p>The remainder is now <span class="math-inline">\(0\)</span>. The last nonzero remainder is <span class="math-inline">\(7\)</span>.</p>
+<p>Hence,</p>
+<div class="math-display">\[\boxed{\gcd(287,91)=7}.\]</div>
+<h3>Observe the remainder sequence</h3>
+<h2>287</h2>
+<p>Dividend</p>
+<h2>91</h2>
+<p>Divisor</p>
+<h2>14</h2>
+<p>Remainder</p>
+<h2>91</h2>
+<h2>14</h2>
+<h2>7</h2>
+<p>Remainder</p>
+<h2>14</h2>
+<h2>7</h2>
+<h2>0</h2>
+<p>Stop</p>
+<p>GCD = last nonzero remainder = 7</p>
+<h2>10.8 A more involved example: <span class="math-inline">\(\gcd(12345,54321)\)</span></h2>
+<p>Apply successive divisions:</p>
+<div class="math-display">\[54321=12345(4)+4941\]</div>
+<div class="math-display">\[12345=4941(2)+2463\]</div>
+<div class="math-display">\[4941=2463(2)+15\]</div>
+<div class="math-display">\[2463=15(164)+3\]</div>
+<div class="math-display">\[15=3(5)+0.\]</div>
+<p>The last nonzero remainder is <span class="math-inline">\(3\)</span>. Therefore,</p>
+<div class="math-display">\[\boxed{\gcd(12345,54321)=3}.\]</div>
+<p>Notice how the numbers become smaller without requiring their prime factorizations. This is why the Euclidean algorithm is useful for large integers.</p>
+<h3>What if the first division has remainder zero?</h3>
+<p>If <span class="math-inline">\(a=bq\)</span>, then <span class="math-inline">\(b\mid a\)</span>. In that case,</p>
+<div class="math-display">\[\gcd(a,b)=b\]</div>
+<p>for positive <span class="math-inline">\(a\ge b\)</span>. The algorithm stops immediately, and the divisor <span class="math-inline">\(b\)</span> is the GCD.</p>
+<p>For example,</p>
+<div class="math-display">\[72=12(6)+0 \quad\Longrightarrow\quad \gcd(72,12)=12.\]</div>
+<h2>10.9 GCD, LCM and the Euclidean algorithm: when to use each method</h2>
+<table>
+<thead>
+<tr>
+<th>Question type</th>
+<th>Most direct method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Small numbers with easy factors</td>
+<td>List common divisors</td>
+</tr>
+<tr>
+<td>Numbers with known prime factorizations</td>
+<td>Minimum-exponent rule</td>
+</tr>
+<tr>
+<td>Large integers whose factors are unknown</td>
+<td>Euclidean algorithm</td>
+</tr>
+<tr>
+<td>Find LCM when GCD is known</td>
+<td><span class="math-inline">\(\operatorname{lcm}(a,b)=ab/\gcd(a,b)\)</span></td>
+</tr>
+<tr>
+<td>Check whether two numbers are relatively prime</td>
+<td>Calculate whether their GCD is <span class="math-inline">\(1\)</span></td>
+</tr>
+<tr>
+<td>Prove two consecutive integers are relatively prime</td>
+<td>Use their difference, which is <span class="math-inline">\(1\)</span></td>
+</tr>
+</tbody>
+</table>
+<h2>10.10 Important edge cases and advanced MCQ traps</h2>
+<h3>A. GCD with zero</h3>
+<p>For any nonzero integer <span class="math-inline">\(a\)</span>,</p>
+<div class="math-display">\[\boxed{\gcd(a,0)=|a|}.\]</div>
+<p>Why? Every divisor of <span class="math-inline">\(a\)</span> divides <span class="math-inline">\(0\)</span>, because <span class="math-inline">\(0=a\cdot0\)</span>. The largest positive common divisor is therefore <span class="math-inline">\(|a|\)</span>.</p>
+<p>Examples:</p>
+<div class="math-display">\[\gcd(17,0)=17,\qquad \gcd(-24,0)=24.\]</div>
+<p>The expression <span class="math-inline">\(\gcd(0,0)\)</span> is conventionally left undefined in this setting because there is no largest positive common divisor.</p>
+<h3>B. GCD with negative integers</h3>
+<p>The GCD is always taken to be nonnegative, and for inputs not both zero, it is positive:</p>
+<div class="math-display">\[\boxed{\gcd(a,b)=\gcd(|a|,|b|)}.\]</div>
+<p>For example,</p>
+<div class="math-display">\[\gcd(-18,30)=\gcd(18,30)=6.\]</div>
+<h3>C. The remainder is not necessarily the GCD</h3>
+<p>In</p>
+<div class="math-display">\[a=bq+r,\]</div>
+<p>the remainder <span class="math-inline">\(r\)</span> preserves the GCD through <span class="math-inline">\(\gcd(a,b)=\gcd(b,r)\)</span>. But <span class="math-inline">\(r\)</span> itself need not equal the GCD.</p>
+<p>For example,</p>
+<div class="math-display">\[287=91(3)+14.\]</div>
+<p>The remainder is <span class="math-inline">\(14\)</span>, but the GCD is <span class="math-inline">\(7\)</span>.</p>
+<h3>D. Pairwise relative primality versus a common GCD of <span class="math-inline">\(1\)</span></h3>
+<p>For a set containing three or more numbers, these are different properties.</p>
+<ul>
+<li>Pairwise relatively prime: Every pair has GCD <span class="math-inline">\(1\)</span>.</li>
+<li>Collectively having GCD <span class="math-inline">\(1\)</span>: The GCD of the entire set is <span class="math-inline">\(1\)</span>.</li>
+</ul>
+<p>For example, <span class="math-inline">\(6,10,15\)</span> have collective GCD <span class="math-inline">\(1\)</span>, but they are not pairwise relatively prime.</p>
+<h3>E. LCM and GCD are not always equal to the smaller and larger inputs</h3>
+<p>It is not generally true that the GCD is the smaller input or that the LCM is the larger input. Those statements hold only in special divisibility cases.</p>
+<p>For instance,</p>
+<div class="math-display">\[\gcd(12,18)=6,\qquad \operatorname{lcm}(12,18)=36.\]</div>
+<p>The GCD is smaller than both inputs, while the LCM is larger than both.</p>
+
+    <div class="quiz-section-wrap" id="math-quiz-section">
+        <div class="quiz-card-container">
+            <div class="quiz-header">
+                <div>
+                    <div class="quiz-badge">Interactive Self-Test · 10 MCQs</div>
+                    <h3 class="quiz-title">Module 10 Self-Test &amp; Exam Practice</h3>
+                    <p class="quiz-desc">Test your understanding with instant grading, step-by-step mathematical proofs, and solutions.</p>
+                </div>
+                <div class="quiz-score-badge" id="quizScoreBadge_10">
+                    Score: <span id="quizScoreVal_10">0</span> / 10 (<span id="quizScorePct_10">0%</span>)
+                </div>
+            </div>
+
+            <div class="quiz-questions-wrap">
+                
+        <div class="q-block" id="q_block_10_1" data-corr="2">
+            <div class="q-title"><span class="q-num">1.</span> <span>What is gcd(84,126)?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_10_1_opt_0">
+                <input type="radio" name="math_q_10_1" value="0">
+                <span><strong>A.</strong> 14</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_1_opt_1">
+                <input type="radio" name="math_q_10_1" value="1">
+                <span><strong>B.</strong> 21</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_1_opt_2">
+                <input type="radio" name="math_q_10_1" value="2">
+                <span><strong>C.</strong> 42</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_1_opt_3">
+                <input type="radio" name="math_q_10_1" value="3">
+                <span><strong>D.</strong> 84</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_10_1">
+                <strong>Mathematical Explanation:</strong> Refer to the textbook theorems and definitions for this module.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_10_2" data-corr="1">
+            <div class="q-title"><span class="q-num">2.</span> <span>Which formula gives the GCD from prime factorizations?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_10_2_opt_0">
+                <input type="radio" name="math_q_10_2" value="0">
+                <span><strong>A.</strong> Take the maximum exponent of each prime</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_2_opt_1">
+                <input type="radio" name="math_q_10_2" value="1">
+                <span><strong>B.</strong> Take the minimum exponent of each prime</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_2_opt_2">
+                <input type="radio" name="math_q_10_2" value="2">
+                <span><strong>C.</strong> Add all exponents</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_2_opt_3">
+                <input type="radio" name="math_q_10_2" value="3">
+                <span><strong>D.</strong> Use only the common prime bases without exponents</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_10_2">
+                <strong>Mathematical Explanation:</strong> Refer to the textbook theorems and definitions for this module.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_10_3" data-corr="2">
+            <div class="q-title"><span class="q-num">3.</span> <span>What is lcm(12,18)?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_10_3_opt_0">
+                <input type="radio" name="math_q_10_3" value="0">
+                <span><strong>A.</strong> 6</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_3_opt_1">
+                <input type="radio" name="math_q_10_3" value="1">
+                <span><strong>B.</strong> 24</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_3_opt_2">
+                <input type="radio" name="math_q_10_3" value="2">
+                <span><strong>C.</strong> 36</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_3_opt_3">
+                <input type="radio" name="math_q_10_3" value="3">
+                <span><strong>D.</strong> 216</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_10_3">
+                <strong>Mathematical Explanation:</strong> Refer to the textbook theorems and definitions for this module.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_10_4" data-corr="2">
+            <div class="q-title"><span class="q-num">4.</span> <span>If gcd(a,b)=1 for positive integers a and b, then:</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_10_4_opt_0">
+                <input type="radio" name="math_q_10_4" value="0">
+                <span><strong>A.</strong> lcm(a,b)=1</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_4_opt_1">
+                <input type="radio" name="math_q_10_4" value="1">
+                <span><strong>B.</strong> lcm(a,b)=a+b</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_4_opt_2">
+                <input type="radio" name="math_q_10_4" value="2">
+                <span><strong>C.</strong> lcm(a,b)=ab</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_4_opt_3">
+                <input type="radio" name="math_q_10_4" value="3">
+                <span><strong>D.</strong> a and b must both be prime</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_10_4">
+                <strong>Mathematical Explanation:</strong> Refer to the textbook theorems and definitions for this module.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_10_5" data-corr="1">
+            <div class="q-title"><span class="q-num">5.</span> <span>In the Euclidean algorithm, if a = bq + r, which identity is valid?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_10_5_opt_0">
+                <input type="radio" name="math_q_10_5" value="0">
+                <span><strong>A.</strong> gcd(a,b)=gcd(a,r)</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_5_opt_1">
+                <input type="radio" name="math_q_10_5" value="1">
+                <span><strong>B.</strong> gcd(a,b)=gcd(b,r)</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_5_opt_2">
+                <input type="radio" name="math_q_10_5" value="2">
+                <span><strong>C.</strong> gcd(a,b)=r always</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_5_opt_3">
+                <input type="radio" name="math_q_10_5" value="3">
+                <span><strong>D.</strong> gcd(a,b)=b+r</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_10_5">
+                <strong>Mathematical Explanation:</strong> Refer to the textbook theorems and definitions for this module.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_10_6" data-corr="1">
+            <div class="q-title"><span class="q-num">6.</span> <span>The divisions are 91 = 14·6 + 7 and 14 = 7·2 + 0. What is gcd(91,14)?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_10_6_opt_0">
+                <input type="radio" name="math_q_10_6" value="0">
+                <span><strong>A.</strong> 14</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_6_opt_1">
+                <input type="radio" name="math_q_10_6" value="1">
+                <span><strong>B.</strong> 7</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_6_opt_2">
+                <input type="radio" name="math_q_10_6" value="2">
+                <span><strong>C.</strong> 6</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_6_opt_3">
+                <input type="radio" name="math_q_10_6" value="3">
+                <span><strong>D.</strong> 0</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_10_6">
+                <strong>Mathematical Explanation:</strong> Refer to the textbook theorems and definitions for this module.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_10_7" data-corr="3">
+            <div class="q-title"><span class="q-num">7.</span> <span>What is gcd(−24,0)?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_10_7_opt_0">
+                <input type="radio" name="math_q_10_7" value="0">
+                <span><strong>A.</strong> −24</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_7_opt_1">
+                <input type="radio" name="math_q_10_7" value="1">
+                <span><strong>B.</strong> 0</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_7_opt_2">
+                <input type="radio" name="math_q_10_7" value="2">
+                <span><strong>C.</strong> 1</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_7_opt_3">
+                <input type="radio" name="math_q_10_7" value="3">
+                <span><strong>D.</strong> 24</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_10_7">
+                <strong>Mathematical Explanation:</strong> Refer to the textbook theorems and definitions for this module.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_10_8" data-corr="1">
+            <div class="q-title"><span class="q-num">8.</span> <span>Which set is pairwise relatively prime?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_10_8_opt_0">
+                <input type="radio" name="math_q_10_8" value="0">
+                <span><strong>A.</strong> 6, 10, 15</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_8_opt_1">
+                <input type="radio" name="math_q_10_8" value="1">
+                <span><strong>B.</strong> 10, 17, 21</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_8_opt_2">
+                <input type="radio" name="math_q_10_8" value="2">
+                <span><strong>C.</strong> 8, 12, 25</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_8_opt_3">
+                <input type="radio" name="math_q_10_8" value="3">
+                <span><strong>D.</strong> 9, 15, 22</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_10_8">
+                <strong>Mathematical Explanation:</strong> Refer to the textbook theorems and definitions for this module.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_10_9" data-corr="2">
+            <div class="q-title"><span class="q-num">9.</span> <span>If gcd(a,b)=12 and ab=4320, what is lcm(a,b)?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_10_9_opt_0">
+                <input type="radio" name="math_q_10_9" value="0">
+                <span><strong>A.</strong> 12</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_9_opt_1">
+                <input type="radio" name="math_q_10_9" value="1">
+                <span><strong>B.</strong> 180</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_9_opt_2">
+                <input type="radio" name="math_q_10_9" value="2">
+                <span><strong>C.</strong> 360</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_9_opt_3">
+                <input type="radio" name="math_q_10_9" value="3">
+                <span><strong>D.</strong> 51840</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_10_9">
+                <strong>Mathematical Explanation:</strong> Refer to the textbook theorems and definitions for this module.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_10_10" data-corr="1">
+            <div class="q-title"><span class="q-num">10.</span> <span>What is gcd(12345,54321)?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_10_10_opt_0">
+                <input type="radio" name="math_q_10_10" value="0">
+                <span><strong>A.</strong> 1</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_10_opt_1">
+                <input type="radio" name="math_q_10_10" value="1">
+                <span><strong>B.</strong> 3</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_10_opt_2">
+                <input type="radio" name="math_q_10_10" value="2">
+                <span><strong>C.</strong> 9</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_10_10_opt_3">
+                <input type="radio" name="math_q_10_10" value="3">
+                <span><strong>D.</strong> 15</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_10_10">
+                <strong>Mathematical Explanation:</strong> Refer to the textbook theorems and definitions for this module.
+            </div>
+        </div>
+        
+            </div>
+
+            <div class="quiz-actions">
+                <button type="button" class="btn-quiz-check" onclick="checkMathQuiz(10, 10)">✓ Check Answers &amp; View Solutions</button>
+                <button type="button" class="btn-quiz-reset" onclick="resetMathQuiz(10, 10)">↺ Reset Quiz</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function checkMathQuiz(modNum, total) {
+        let score = 0;
+        for (let i = 1; i <= total; i++) {
+            let block = document.getElementById("q_block_" + modNum + "_" + i);
+            if (!block) continue;
+            let corr = parseInt(block.getAttribute("data-corr"));
+            let radios = document.getElementsByName("math_q_" + modNum + "_" + i);
+            let selected = -1;
+            for (let r of radios) {
+                if (r.checked) {
+                    selected = parseInt(r.value);
+                    break;
+                }
+            }
+
+            // reset classes
+            for (let j = 0; j < 4; j++) {
+                let optEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + j);
+                if (optEl) {
+                    optEl.classList.remove("correct-choice", "wrong-choice");
+                }
+            }
+
+            if (selected === corr) {
+                score++;
+                let correctEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + corr);
+                if (correctEl) correctEl.classList.add("correct-choice");
+            } else {
+                if (selected !== -1) {
+                    let wrongEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + selected);
+                    if (wrongEl) wrongEl.classList.add("wrong-choice");
+                }
+                let correctEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + corr);
+                if (correctEl) correctEl.classList.add("correct-choice");
+            }
+
+            let expl = document.getElementById("q_expl_" + modNum + "_" + i);
+            if (expl) expl.style.display = "block";
+        }
+
+        let badge = document.getElementById("quizScoreBadge_" + modNum);
+        let val = document.getElementById("quizScoreVal_" + modNum);
+        let pct = document.getElementById("quizScorePct_" + modNum);
+        if (badge && val && pct) {
+            val.innerText = score;
+            pct.innerText = Math.round((score / total) * 100) + "%";
+            badge.style.display = "inline-flex";
+            badge.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    }
+
+    function resetMathQuiz(modNum, total) {
+        for (let i = 1; i <= total; i++) {
+            let radios = document.getElementsByName("math_q_" + modNum + "_" + i);
+            for (let r of radios) r.checked = false;
+
+            for (let j = 0; j < 4; j++) {
+                let optEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + j);
+                if (optEl) optEl.classList.remove("correct-choice", "wrong-choice");
+            }
+
+            let expl = document.getElementById("q_expl_" + modNum + "_" + i);
+            if (expl) expl.style.display = "none";
+        }
+
+        let badge = document.getElementById("quizScoreBadge_" + modNum);
+        if (badge) badge.style.display = "none";
+    }
+    </script>
+    
+<p>Correction before you submit: Question 9's correct answer is 360 (option C). Its explanation states the right calculation, <span class="math-inline">\(4320/12=360\)</span>; use option C for that question.</p>
+<h2>Module 10 revision sheet</h2>
+<p>Memorize these results</p>
+<div class="math-display">\[\gcd(a,b)=\gcd(b,r)\quad\text{if }a=bq+r\]</div>
+<div class="math-display">\[ab=\gcd(a,b)\operatorname{lcm}(a,b)\]</div>
+<div class="math-display">\[\operatorname{lcm}(a,b)=\frac{ab}{\gcd(a,b)}\]</div>
+<div class="math-display">\[\gcd(a,b)=1\iff a,b\text{ are relatively prime}\]</div>
+<p>Prime-factorization rule: GCD uses minimum exponents; LCM uses maximum exponents. Euclidean algorithm rule: the last nonzero remainder is the GCD.</p>
+<p>Next module: Module 11 — GCD as a Linear Combination, including Bézout's theorem, proofs, and how to express a GCD in the form <span class="math-inline">\(sa+tb\)</span> for integers <span class="math-inline">\(s,t\)</span>.</p>
+<p>Say next when you're ready.</p>
+    </div>
+
+    <div class="prev-next">
+        <a class="pn-btn" href="maths-module-9.html">&larr; Module 9</a>
+        <a class="pn-hub" href="maths.html">📋 Mathematics Hub</a>
+        <a class="pn-btn" href="maths-module-11.html">Module 11 &rarr;</a>
+    </div>
+
+</div>
+
+<script src="shared.js"></script>
+</body>
+</html>

@@ -1,0 +1,354 @@
+# Module 11: GCD as a Linear Combination
+
+Number Theory-II · Rosen, Number Theory and Cryptography, Section 4.3
+
+This module connects the Euclidean algorithm to one of the most important results in number theory: Bézout's theorem.
+
+Previously, we used repeated division to calculate a GCD. Now we'll learn how to express that GCD in the form
+
+\\[ \boxed{\gcd(a,b)=sa+tb} \\]
+
+where \\(s\\) and \\(t\\) are integers.
+
+This is more than a calculation trick. It establishes a mathematical property of the GCD and becomes useful later when solving linear congruences and finding modular inverses.
+
+## 11.1 What is a linear combination?
+
+A linear combination of integers \\(a\\) and \\(b\\) is an expression of the form
+
+\\[ \boxed{sa+tb} \\]
+
+where \\(s,t\in\mathbb Z\\).
+
+The coefficients may be positive, negative, or zero.
+
+For example, let \\(a=12\\) and \\(b=8\\). Then
+
+\\[ 2(12)-1(8)=16 \\]
+
+is a linear combination of \\(12\\) and \\(8\\).
+
+Likewise,
+
+\\[ 1(12)-1(8)=4 \\]
+
+is another linear combination.
+
+Since
+
+\\[ \gcd(12,8)=4, \\]
+
+we have expressed their GCD as a linear combination:
+
+\\[ \boxed{4=1(12)-1(8)}. \\]
+
+The key question is: Can we always express the GCD of two integers as a linear combination of them?
+
+The answer is yes, provided they are not both zero.
+
+## 11.2 Bézout's theorem
+
+Theorem: If \\(a\\) and \\(b\\) are positive integers, there exist integers \\(s\\) and \\(t\\) such that
+
+\\[ \boxed{\gcd(a,b)=sa+tb}. \\]
+
+This is Bézout's theorem, and the equation is called Bézout's identity. The integers \\(s,t\\) are called Bézout coefficients.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+### Example: \\(\gcd(6,14)=2\\)
+
+We can write
+
+\\[ \boxed{2=(-2)(6)+(1)(14)}. \\]
+
+Here,
+
+\\[ s=-2,\qquad t=1. \\]
+
+Verify:
+
+\\[ -12+14=2. \\]
+
+The negative coefficient is perfectly valid. Bézout coefficients do not have to be positive.
+
+### What the theorem does not say
+
+Bézout's theorem does not claim that every linear combination \\(sa+tb\\) equals the GCD. It says that at least one choice of integer coefficients produces the GCD.
+
+For example, \\(2(6)+3(14)=54\\), which is a linear combination but not the GCD.
+
+## 11.3 Finding Bézout coefficients by reversing the Euclidean algorithm
+
+The textbook's method is to first calculate the GCD using successive divisions, then work backward to express the last nonzero remainder in terms of the original numbers.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+Let's work through the full process.
+
+### Example: Express \\(\gcd(252,198)=18\\) as a linear combination
+
+Step 1: Apply the Euclidean algorithm.
+
+\\[ 252=1(198)+54 \tag{1} \\]
+
+\\[ 198=3(54)+36 \tag{2} \\]
+
+\\[ 54=1(36)+18 \tag{3} \\]
+
+\\[ 36=2(18)+0 \tag{4} \\]
+
+The last nonzero remainder is \\(18\\). Thus,
+
+\\[ \gcd(252,198)=18. \\]
+
+Step 2: Start with the equation containing the GCD.
+
+From equation (3),
+
+\\[ 18=54-36. \\]
+
+This expresses \\(18\\) as a linear combination of \\(54\\) and \\(36\\).
+
+Step 3: Replace \\(36\\) using equation (2).
+
+From equation (2),
+
+\\[ 36=198-3(54). \\]
+
+Substitute:
+
+\\[ \begin{aligned} 18&=54-[198-3(54)]\\\ &=54-198+3(54)\\\ &=4(54)-198. \end{aligned} \\]
+
+Now \\(18\\) is a linear combination of \\(54\\) and \\(198\\).
+
+Step 4: Replace \\(54\\) using equation (1).
+
+From equation (1),
+
+\\[ 54=252-198. \\]
+
+Substitute:
+
+\\[ \begin{aligned} 18&=4(252-198)-198\\\ &=4(252)-4(198)-198\\\ &=4(252)-5(198). \end{aligned} \\]
+
+Therefore,
+
+\\[ \boxed{18=4(252)-5(198)}. \\]
+
+The Bézout coefficients are
+
+\\[ \boxed{s=4,\qquad t=-5}. \\]
+
+This is the worked example given in your textbook.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+## 11.4 Why does reversing the divisions work?
+
+Every division in the Euclidean algorithm has the form
+
+\\[ r=a-bq. \\]
+
+Thus, each remainder is an integer linear combination of the two numbers used in that division.
+
+For example,
+
+\\[ 54=252-198. \\]
+
+So \\(54\\) is a linear combination of the original inputs. Similarly,
+
+\\[ 36=198-3(54) \\]
+
+is also a linear combination of \\(252\\) and \\(198\\), because \\(54\\) already is one.
+
+Repeating this reasoning backward shows that the last nonzero remainder—the GCD—is an integer linear combination of the original inputs.
+
+This explains the construction behind Bézout's identity. Your textbook states Bézout's theorem in Section 4.3 and refers to a later section for a formal proof.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+## 11.5 Are Bézout coefficients unique?
+
+No. Different integer pairs can represent the same GCD.
+
+For example, since
+
+\\[ 2=(-2)(6)+14, \\]
+
+we have one representation of \\(\gcd(6,14)=2\\).
+
+But also,
+
+\\[ 2=5(6)-2(14)=30-28. \\]
+
+Both are valid.
+
+More generally, if
+
+\\[ sa+tb=d,\qquad d=\gcd(a,b), \\]
+
+then for any integer \\(k\\),
+
+\\[ \boxed{ (s+kb)a+(t-ka)b=d }. \\]
+
+Why? Expanding the expression gives
+
+\\[ sa+kab+tb-kab=sa+tb=d. \\]
+
+The extra terms cancel.
+
+Therefore, Bézout coefficients are generally not unique.
+
+### A useful special case
+
+If \\(\gcd(a,b)=1\\), Bézout's identity becomes
+
+\\[ \boxed{sa+tb=1}. \\]
+
+For example, because \\(\gcd(3,7)=1\\),
+
+\\[ \boxed{(-2)(3)+(1)(7)=1}. \\]
+
+This particular form will be essential in Module 12 when we study modular inverses.
+
+## 11.6 A key consequence: the GCD divides every linear combination
+
+Let
+
+\\[ d=\gcd(a,b). \\]
+
+Since \\(d\mid a\\) and \\(d\mid b\\), it follows that
+
+\\[ d\mid sa \quad\text{and}\quad d\mid tb \\]
+
+for all integers \\(s,t\\). Hence,
+
+\\[ \boxed{d\mid(sa+tb)}. \\]
+
+In plain language, every integer linear combination of \\(a\\) and \\(b\\) is divisible by their GCD.
+
+For example, every expression \\(6s+14t\\), with integer \\(s,t\\), must be even because \\(\gcd(6,14)=2\\).
+
+This gives a useful test:
+
+- If \\(sa+tb=1\\) for some integers \\(s,t\\), then \\(\gcd(a,b)=1\\).
+- If \\(\gcd(a,b)=1\\), Bézout's theorem guarantees that such integers \\(s,t\\) exist.
+
+Therefore,
+
+\\[ \boxed{ \gcd(a,b)=1 \iff \exists s,t\in\mathbb Z:\ sa+tb=1 }. \\]
+
+This equivalence is one of the most important results to remember for MCQs.
+
+## 11.7 Exam-level MCQ test
+
+Answer all eight questions and submit to see explanations.
+
+1\. Bézout's theorem states that for positive integers a and b:
+
+A. gcd(a,b) = a + b
+
+B. There exist integers s,t such that gcd(a,b) = sa + tb
+
+C. s and t must both be positive
+
+D. gcd(a,b) = st
+
+2\. Given 252 = 198 + 54, 198 = 3(54) + 36, and 54 = 36 + 18, what is gcd(252,198)?
+
+A. 36
+
+B. 18
+
+C. 9
+
+D. 6
+
+3\. Which expression correctly represents gcd(252,198) as a linear combination?
+
+A. 4(252) − 5(198)
+
+B. 5(252) − 4(198)
+
+C. 4(252) + 5(198)
+
+D. 252 − 198
+
+4\. If gcd(a,b)=1, which equation must have an integer solution s,t?
+
+A. sa + tb = 0 only
+
+B. sa + tb = 1
+
+C. sa + tb = a + b only
+
+D. sa + tb = ab only
+
+5\. Which statement about Bézout coefficients is correct?
+
+A. They must be positive
+
+B. They are always unique
+
+C. They are integers and need not be unique
+
+D. They must equal the original inputs
+
+6\. If d = gcd(a,b), what is guaranteed for all integers s,t?
+
+A. d divides sa + tb
+
+B. sa + tb divides d
+
+C. sa + tb is always positive
+
+D. sa + tb equals d
+
+7\. Given 7 = 2(3) + 1, which Bézout identity follows directly?
+
+A. 1 = 2(3) + 7
+
+B. 1 = 7 − 2(3)
+
+C. 1 = 7 + 2(3)
+
+D. 1 = 3 − 2(7)
+
+8\. Which condition is equivalent to gcd(a,b)=1 for positive integers a,b?
+
+A. There exist integers s,t with sa + tb = 1
+
+B. a and b must both be prime
+
+C. a + b must be prime
+
+D. ab must equal 1
+
+Submit answers
+
+## Module 11 revision sheet
+
+Essential results
+
+\\[ \gcd(a,b)=sa+tb,\quad s,t\in\mathbb Z \\]
+
+\\[ \gcd(a,b)=1\iff sa+tb=1\text{ for some }s,t\in\mathbb Z \\]
+
+\\[ d=\gcd(a,b)\implies d\mid(sa+tb) \\]
+
+Method: perform the Euclidean algorithm, then reverse the divisions by substitution. Bézout coefficients need not be unique or positive.
+
+Module 11 complete. You've now finished Number Theory-II.
+
+Next: Module 12 — Linear Congruences and Modular Inverses. We'll study solvability conditions, the number of solutions, modular inverse existence, and systematic methods for solving congruences.
+
+Say next when you're ready.

@@ -1,0 +1,748 @@
+# Module 12: Linear Congruences and Modular Inverses
+
+Number Theory-III · Rosen, Number Theory and Cryptography, Section 4.4
+
+This is a particularly important module because it combines modular arithmetic, the GCD, Bézout's theorem, and the Euclidean algorithm.
+
+We'll cover:
+
+1. What a linear congruence is.
+2. What a modular inverse is and when it exists.
+3. How to find an inverse using Bézout's identity.
+4. How to solve a linear congruence.
+5. What happens when the coefficient and modulus are not relatively prime.
+6. How to determine whether a congruence has no solutions, one solution class, or several distinct solution classes.
+
+The textbook's central method is to find a modular inverse and multiply both sides of a congruence by that inverse.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+## 12.1 What is a linear congruence?
+
+A linear congruence has the form
+
+\\[ \boxed{ax\equiv b\pmod m} \\]
+
+where \\(a,b\\) are integers, \\(m\\) is a positive integer, and \\(x\\) is the unknown.
+
+The goal is to find all integers \\(x\\) satisfying the congruence.
+
+Recall that
+
+\\[ ax\equiv b\pmod m \\]
+
+means
+
+\\[ \boxed{m\mid(ax-b)}. \\]
+
+Equivalently, there exists an integer \\(k\\) such that
+
+\\[ ax-b=km, \\]
+
+or
+
+\\[ ax=b+km. \\]
+
+This divisibility interpretation is the starting point for understanding solvability.
+
+### Example
+
+Consider
+
+\\[ 3x\equiv4\pmod7. \\]
+
+We want integers \\(x\\) for which \\(3x\\) leaves remainder \\(4\\) when divided by \\(7\\).
+
+Try \\(x=6\\):
+
+\\[ 3(6)=18=2(7)+4. \\]
+
+Thus,
+
+\\[ 3(6)\equiv4\pmod7. \\]
+
+So \\(x=6\\) is a solution. But is it the only integer solution? No. Since \\(13=6+7\\),
+
+\\[ 3(13)=39=5(7)+4, \\]
+
+so \\(x=13\\) is also a solution.
+
+In fact, all solutions are
+
+\\[ \boxed{x\equiv6\pmod7}, \\]
+
+meaning \\(x=6+7k\\) for any integer \\(k\\). This is Rosen's Example 3.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+## 12.2 Modular inverses
+
+### Definition
+
+An integer \\(a'\\) is an inverse of \\(a\\) modulo \\(m\\) if
+
+\\[ \boxed{aa'\equiv1\pmod m}. \\]
+
+We often write the inverse as \\(a^{-1}\pmod m\\), but this notation is meaningful only when the inverse exists.
+
+For example,
+
+\\[ 3(5)=15\equiv1\pmod7. \\]
+
+Therefore,
+
+\\[ \boxed{5\text{ is an inverse of }3\pmod7}. \\]
+
+Notice that an inverse is not necessarily the ordinary fraction \\(1/a\\). Modular inverses are defined through congruences.
+
+### Why is an inverse useful?
+
+Suppose we have
+
+\\[ ax\equiv b\pmod m \\]
+
+and \\(a'\\) is an inverse of \\(a\\) modulo \\(m\\). Multiplying both sides by \\(a'\\) gives
+
+\\[ a'ax\equiv a'b\pmod m. \\]
+
+Because \\(a'a\equiv1\pmod m\\),
+
+\\[ \boxed{x\equiv a'b\pmod m}. \\]
+
+So finding the inverse lets us isolate \\(x\\) in the congruence.
+
+## 12.3 Theorem: When does a modular inverse exist?
+
+This is one of the most important theorems in the module.
+
+Theorem: If \\(m>1\\), then \\(a\\) has an inverse modulo \\(m\\) if and only if
+
+\\[ \boxed{\gcd(a,m)=1}. \\]
+
+The textbook states that when \\(a\\) and \\(m\\) are relatively prime, the inverse exists and is unique modulo \\(m\\).&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+Let's understand both directions.
+
+### Part A: If \\(\gcd(a,m)=1\\), an inverse exists
+
+Because \\(a\\) and \\(m\\) are relatively prime, Bézout's theorem guarantees integers \\(s,t\\) such that
+
+\\[ sa+tm=1. \\]
+
+Reduce both sides modulo \\(m\\):
+
+\\[ sa+tm\equiv1\pmod m. \\]
+
+Since \\(tm\equiv0\pmod m\\),
+
+\\[ sa\equiv1\pmod m. \\]
+
+Therefore, \\(s\\) is an inverse of \\(a\\) modulo \\(m\\).
+
+\\[ \boxed{\gcd(a,m)=1\implies a^{-1}\text{ exists modulo }m} \\]
+
+This is precisely why the previous module on Bézout's theorem matters.
+
+### Part B: If an inverse exists, \\(\gcd(a,m)=1\\)
+
+Suppose \\(a'\\) is an inverse of \\(a\\) modulo \\(m\\). Then
+
+\\[ aa'\equiv1\pmod m. \\]
+
+By the definition of congruence, there is an integer \\(k\\) such that
+
+\\[ aa'-1=km. \\]
+
+Rearranging,
+
+\\[ aa'-km=1. \\]
+
+Thus, \\(1\\) is an integer linear combination of \\(a\\) and \\(m\\). Any common divisor of \\(a\\) and \\(m\\) must divide \\(1\\). Therefore,
+
+\\[ \boxed{\gcd(a,m)=1}. \\]
+
+Combining both directions gives the complete result:
+
+\\[ \boxed{ a\text{ has an inverse modulo }m \iff \gcd(a,m)=1 } \\]
+
+### Examples: Does an inverse exist?
+
+| Coefficient and modulus | GCD     | Inverse exists? |
+| ----------------------- | ------- | --------------- |
+| \\(3\pmod7\\)           | \\(1\\) | Yes             |
+| \\(4\pmod9\\)           | \\(1\\) | Yes             |
+| \\(6\pmod9\\)           | \\(3\\) | No              |
+| \\(10\pmod{21}\\)       | \\(1\\) | Yes             |
+| \\(12\pmod{18}\\)       | \\(6\\) | No              |
+
+MCQ trap: A number does not need to be prime to have a modular inverse. It only needs to be relatively prime to the modulus. For instance, \\(10\\) has an inverse modulo \\(21\\), even though \\(10\\) is composite.
+
+## 12.4 Why is the modular inverse unique?
+
+When \\(\gcd(a,m)=1\\), the inverse is unique modulo \\(m\\). This does not mean there is only one integer inverse; it means all integer inverses belong to the same congruence class.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+### Example
+
+Since
+
+\\[ 3(5)=15\equiv1\pmod7, \\]
+
+\\(5\\) is an inverse of \\(3\\) modulo \\(7\\).
+
+But so are
+
+\\[ -2,\quad12,\quad19,\quad-9, \\]
+
+because each is congruent to \\(5\\) modulo \\(7\\).
+
+They are all equivalent modulo \\(7\\):
+
+\\[ 5\equiv-2\equiv12\equiv19\pmod7. \\]
+
+Thus, the unique inverse residue in the range \\(0\le r<7\\) is \\(5\\).
+
+### Proof of uniqueness modulo \\(m\\)
+
+Suppose \\(u\\) and \\(v\\) are both inverses of \\(a\\) modulo \\(m\\). Then
+
+\\[ au\equiv1\pmod m \quad\text{and}\quad av\equiv1\pmod m. \\]
+
+Subtracting,
+
+\\[ au-av\equiv0\pmod m, \\]
+
+so
+
+\\[ a(u-v)\equiv0\pmod m. \\]
+
+Equivalently, \\(m\mid a(u-v)\\). Since \\(\gcd(a,m)=1\\), the cancellation property gives
+
+\\[ m\mid(u-v). \\]
+
+Therefore,
+
+\\[ \boxed{u\equiv v\pmod m}. \\]
+
+This proves that any two inverses are congruent modulo \\(m\\).
+
+## 12.5 Finding a modular inverse by inspection
+
+When the modulus is small, it may be easiest to test multiples of \\(a\\) until one leaves remainder \\(1\\).
+
+### Example: Find the inverse of \\(2\\) modulo \\(7\\)
+
+We need an integer \\(u\\) satisfying
+
+\\[ 2u\equiv1\pmod7. \\]
+
+Check multiples of \\(2\\):
+
+\\[ 2,\ 4,\ 6,\ 8. \\]
+
+Since
+
+\\[ 2(4)=8\equiv1\pmod7, \\]
+
+we have
+
+\\[ \boxed{2^{-1}\equiv4\pmod7}. \\]
+
+### Example: Find the inverse of \\(4\\) modulo \\(9\\)
+
+We need
+
+\\[ 4u\equiv1\pmod9. \\]
+
+Try \\(u=1,2,3,\ldots\\). We find
+
+\\[ 4(7)=28=3(9)+1. \\]
+
+Therefore,
+
+\\[ \boxed{4^{-1}\equiv7\pmod9}. \\]
+
+Verification:
+
+\\[ 4(7)=28\equiv1\pmod9. \\]
+
+### When is inspection unsuitable?
+
+For a large modulus, testing every possible residue can be inefficient. The Euclidean algorithm combined with Bézout's identity provides a systematic method.
+
+## 12.6 Finding a modular inverse using the Euclidean algorithm
+
+This is the method you should be comfortable using in numerical MCQs.
+
+### Worked example: Find the inverse of \\(101\\) modulo \\(4620\\)
+
+We need integers \\(s,t\\) such that
+
+\\[ 101s+4620t=1. \\]
+
+First, apply the Euclidean algorithm:
+
+\\[ 4620=45(101)+75 \\]
+
+\\[ 101=1(75)+26 \\]
+
+\\[ 75=2(26)+23 \\]
+
+\\[ 26=1(23)+3 \\]
+
+\\[ 23=7(3)+2 \\]
+
+\\[ 3=1(2)+1. \\]
+
+The last nonzero remainder is \\(1\\), so
+
+\\[ \gcd(101,4620)=1. \\]
+
+An inverse exists.
+
+Now work backward.
+
+From the final division,
+
+\\[ 1=3-2. \\]
+
+Since \\(2=23-7(3)\\),
+
+\\[ \begin{aligned} 1&=3-[23-7(3)]\\\ &=8(3)-23. \end{aligned} \\]
+
+Since \\(3=26-23\\),
+
+\\[ \begin{aligned} 1&=8(26-23)-23\\\ &=8(26)-9(23). \end{aligned} \\]
+
+Since \\(23=75-2(26)\\),
+
+\\[ \begin{aligned} 1&=8(26)-9[75-2(26)]\\\ &=26(26)-9(75). \end{aligned} \\]
+
+Since \\(26=101-75\\),
+
+\\[ \begin{aligned} 1&=26(101-75)-9(75)\\\ &=26(101)-35(75). \end{aligned} \\]
+
+Finally, since \\(75=4620-45(101)\\),
+
+\\[ \begin{aligned} 1&=26(101)-35[4620-45(101)]\\\ &=1601(101)-35(4620). \end{aligned} \\]
+
+Therefore,
+
+\\[ \boxed{1601(101)\equiv1\pmod{4620}}. \\]
+
+So the inverse is
+
+\\[ \boxed{101^{-1}\equiv1601\pmod{4620}}. \\]
+
+This is Rosen's worked example in Section 4.4.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+The reusable method:
+
+1. Find the GCD using the Euclidean algorithm.
+2. If the GCD is not \\(1\\), there is no modular inverse.
+3. If the GCD is \\(1\\), reverse the divisions to express \\(1\\) as a linear combination.
+4. The coefficient of \\(a\\) in \\(sa+tm=1\\) is an inverse of \\(a\\) modulo \\(m\\).
+5. Reduce that coefficient modulo \\(m\\) to obtain the standard representative \\(0\le s\<m\\).
+
+## 12.7 Solving a linear congruence when an inverse exists
+
+Consider
+
+\\[ ax\equiv b\pmod m. \\]
+
+If \\(\gcd(a,m)=1\\), multiply both sides by the inverse \\(a^{-1}\\):
+
+\\[ a^{-1}ax\equiv a^{-1}b\pmod m. \\]
+
+Therefore,
+
+\\[ \boxed{x\equiv a^{-1}b\pmod m}. \\]
+
+This gives exactly one solution class modulo \\(m\\).
+
+### Worked example: Solve \\(3x\equiv4\pmod7\\)
+
+From Section 12.5,
+
+\\[ 3^{-1}\equiv5\pmod7. \\]
+
+Multiply both sides by \\(5\\):
+
+\\[ \begin{aligned} x&\equiv5(4)\pmod7\\\ &\equiv20\pmod7\\\ &\equiv6\pmod7. \end{aligned} \\]
+
+Hence,
+
+\\[ \boxed{x\equiv6\pmod7}. \\]
+
+The complete set of integer solutions is
+
+\\[ \boxed{x=6+7k,\qquad k\in\mathbb Z}. \\]
+
+Examples include \\(6,13,20,-1,-8,\ldots\\).
+
+### Verification
+
+Substitute \\(x=6\\):
+
+\\[ 3x=18\equiv4\pmod7. \\]
+
+Any \\(x=6+7k\\) also works, since
+
+\\[ 3(6+7k)=18+21k\equiv4\pmod7. \\]
+
+So we have both found a solution and verified that its entire congruence class satisfies the original equation.
+
+### Another example: Solve \\(4x\equiv5\pmod9\\)
+
+We know
+
+\\[ 4^{-1}\equiv7\pmod9. \\]
+
+Multiply both sides by \\(7\\):
+
+\\[ \begin{aligned} x&\equiv7(5)\pmod9\\\ &\equiv35\pmod9\\\ &\equiv8\pmod9. \end{aligned} \\]
+
+Therefore,
+
+\\[ \boxed{x\equiv8\pmod9}. \\]
+
+Check:
+
+\\[ 4(8)=32\equiv5\pmod9. \\]
+
+## 12.8 What if the coefficient and modulus are not relatively prime?
+
+This is the subtle case that distinguishes a deeper understanding from simply memorizing “multiply by the inverse.”
+
+Consider
+
+\\[ 6x\equiv8\pmod{14}. \\]
+
+Here,
+
+\\[ \gcd(6,14)=2. \\]
+
+Therefore, \\(6\\) has no inverse modulo \\(14\\). We cannot use the inverse method directly.
+
+However, the congruence can still have solutions.
+
+### The general solvability theorem
+
+For the linear congruence
+
+\\[ \boxed{ax\equiv b\pmod m}, \\]
+
+let
+
+\\[ d=\gcd(a,m). \\]
+
+Then:
+
+- If \\(d\nmid b\\), there are no solutions.
+- If \\(d\mid b\\), there are exactly \\(d\\) distinct solution classes modulo \\(m\\).
+
+The second part counts solution classes modulo \\(m\\), not the infinitely many integer representatives of those classes.
+
+### Why must \\(d\\) divide \\(b\\)?
+
+From
+
+\\[ ax\equiv b\pmod m, \\]
+
+we know
+
+\\[ ax-b=km \\]
+
+for some integer \\(k\\). Therefore,
+
+\\[ ax-km=b. \\]
+
+Since \\(d\\) divides both \\(a\\) and \\(m\\), it divides \\(ax\\) and \\(km\\). Hence, it must divide their difference:
+
+\\[ \boxed{d\mid b}. \\]
+
+So \\(d\mid b\\) is necessary for a solution.
+
+### Example A: No solutions
+
+Consider
+
+\\[ 6x\equiv5\pmod{14}. \\]
+
+Here,
+
+\\[ \gcd(6,14)=2. \\]
+
+But \\(2\nmid5\\). Therefore,
+
+\\[ \boxed{\text{No solutions}}. \\]
+
+This conclusion requires no trial-and-error search.
+
+### Example B: Several solution classes
+
+Return to
+
+\\[ 6x\equiv8\pmod{14}. \\]
+
+We have
+
+\\[ d=\gcd(6,14)=2, \\]
+
+and \\(2\mid8\\), so solutions exist. Divide the coefficient, right-hand side, and modulus by \\(2\\):
+
+\\[ \boxed{3x\equiv4\pmod7}. \\]
+
+We already solved this reduced congruence:
+
+\\[ x\equiv6\pmod7. \\]
+
+But be careful: the original modulus was \\(14\\), not \\(7\\). The reduced solution class splits into two distinct classes modulo \\(14\\):
+
+\\[ \boxed{x\equiv6\pmod{14} \quad\text{or}\quad x\equiv13\pmod{14}}. \\]
+
+Let's verify:
+
+\\[ 6(6)=36\equiv8\pmod{14} \\]
+
+and
+
+\\[ 6(13)=78\equiv8\pmod{14}. \\]
+
+Both work.
+
+### Why exactly two solution classes?
+
+The reduced congruence gives
+
+\\[ x\equiv6\pmod7. \\]
+
+So all integer solutions have the form
+
+\\[ x=6+7k. \\]
+
+If \\(k\\) is even, the solutions are congruent to \\(6\\) modulo \\(14\\). If \\(k\\) is odd, they are congruent to \\(13\\) modulo \\(14\\).
+
+Therefore, the two distinct classes modulo \\(14\\) are \\(6\\) and \\(13\\), as predicted by \\(d=2\\).
+
+## 12.9 Proof of the general solvability theorem
+
+Let's justify why the GCD determines both existence and the number of solutions.
+
+Start with
+
+\\[ ax\equiv b\pmod m \\]
+
+and let \\(d=\gcd(a,m)\\).
+
+### Case 1: \\(d\nmid b\\)
+
+As shown above, any solution would imply \\(d\mid b\\). Therefore, if \\(d\\) does not divide \\(b\\), there can be no solution.
+
+### Case 2: \\(d\mid b\\)
+
+Write
+
+\\[ a=da',\qquad b=db',\qquad m=dm'. \\]
+
+The original congruence means
+
+\\[ m\mid(ax-b). \\]
+
+Substituting the factorizations,
+
+\\[ dm'\mid d(a'x-b'). \\]
+
+Cancelling the common positive factor \\(d\\) in this divisibility statement gives
+
+\\[ m'\mid(a'x-b'). \\]
+
+Equivalently,
+
+\\[ \boxed{a'x\equiv b'\pmod{m'}}. \\]
+
+Because \\(d=\gcd(a,m)\\), we have
+
+\\[ \gcd(a',m')=1. \\]
+
+Thus, \\(a'\\) has an inverse modulo \\(m'\\), and the reduced congruence has exactly one solution class modulo \\(m'\\).
+
+Since \\(m'=m/d\\), that class has exactly \\(d\\) distinct representatives modulo \\(m\\):
+
+\\[ x_0,\quad x_0+m',\quad x_0+2m',\quad\ldots,\quad x_0+(d-1)m'. \\]
+
+Consequently, the original congruence has exactly \\(d\\) distinct solution classes modulo \\(m\\).
+
+Therefore,
+
+\\[ \boxed{ \begin{array}{ll} d\nmid b &: \text{no solutions},\\\\[2pt] d\mid b &: \text{exactly }d\text{ classes modulo }m, \end{array} \qquad d=\gcd(a,m). } \\]
+
+## 12.10 A quick decision method for MCQs
+
+For any linear congruence \\(ax\equiv b\pmod m\\), use this order:
+
+### Calculate \\(d=\gcd(a,m)\\)
+
+Does \\(d\\) divide \\(b\\)?
+
+No
+
+No solutions
+
+Yes
+
+Exactly \\(d\\) classes modulo \\(m\\)
+
+If \\(d=1\\), there is one solution class and the modular inverse method applies directly. If \\(d>1\\) and \\(d\mid b\\), divide all three quantities \\(a,b,m\\) by \\(d\\), solve the reduced congruence, then recover the \\(d\\) classes modulo the original \\(m\\).
+
+## 12.11 Common MCQ traps
+
+- Trap 1: \\(a^{-1}\\) is not the ordinary reciprocal \\(1/a\\). It is an integer satisfying \\(aa^{-1}\equiv1\pmod m\\).
+- Trap 2: An inverse exists precisely when \\(\gcd(a,m)=1\\).
+- Trap 3: The inverse is unique modulo \\(m\\), but infinitely many integers represent that same residue class.
+- Trap 4: No inverse does not automatically mean no solutions to \\(ax\equiv b\pmod m\\).
+- Trap 5: If \\(d=\gcd(a,m)\\) does not divide \\(b\\), the congruence has no solutions.
+- Trap 6: If \\(d\mid b\\), there are exactly \\(d\\) distinct solution classes modulo \\(m\\).
+- Trap 7: After dividing a congruence by \\(d\\), remember that the reduced modulus is \\(m/d\\). The original solution classes must still be counted modulo \\(m\\).
+- Trap 8: Always verify a computed inverse by multiplying it by the original coefficient and checking that the result is congruent to \\(1\\).
+
+## 12.12 Exam-level MCQ test
+
+Select an answer for all ten questions to reveal your score and explanations.
+
+1\. When does a have an inverse modulo m, for m > 1?
+
+A. Whenever a is prime
+
+B. Whenever gcd(a,m)=1
+
+C. Whenever a\<m
+
+D. Whenever a is odd
+
+2\. What is the inverse of 3 modulo 7?
+
+A. 2
+
+B. 3
+
+C. 5
+
+D. 6
+
+3\. Solve 4x ≡ 5 (mod 9).
+
+A. x ≡ 2 (mod 9)
+
+B. x ≡ 5 (mod 9)
+
+C. x ≡ 7 (mod 9)
+
+D. x ≡ 8 (mod 9)
+
+4\. Does 6 have an inverse modulo 14?
+
+A. Yes, inverse 3
+
+B. Yes, inverse 5
+
+C. No, because gcd(6,14)=2
+
+D. No, because 6 is even
+
+5\. How many distinct solution classes modulo 14 satisfy 6x ≡ 8 (mod 14)?
+
+A. None
+
+B. One
+
+C. Two
+
+D. Eight
+
+6\. How many solutions classes does 10x ≡ 15 (mod 35) have modulo 35?
+
+A. None
+
+B. One
+
+C. Five
+
+D. Ten
+
+7\. What happens to 8x ≡ 7 (mod 12)?
+
+A. It has exactly 4 solution classes
+
+B. It has exactly 2 solution classes
+
+C. It has one solution class
+
+D. It has no solutions
+
+8\. If 101s + 4620t = 1, what is the inverse of 101 modulo 4620?
+
+A. −35
+
+B. 35
+
+C. 1601
+
+D. 4620
+
+9\. If two integers u and v are both inverses of a modulo m, what must be true?
+
+A. u=v as ordinary integers
+
+B. u+v=m
+
+C. u ≡ v (mod m)
+
+D. uv ≡ 0 (mod m)
+
+10\. Which statement is always true for ax ≡ b (mod m), with d=gcd(a,m)?
+
+A. A solution always exists
+
+B. There are exactly d solution classes whether or not d divides b
+
+C. A solution exists exactly when d divides b
+
+D. A solution exists only when a is prime
+
+Submit answers
+
+## Module 12 revision sheet
+
+Essential formulas
+
+\\[ a^{-1}\text{ exists mod }m\iff\gcd(a,m)=1 \\]
+
+\\[ ax\equiv b\pmod m\implies x\equiv a^{-1}b\pmod m \\]
+
+\\[ d=\gcd(a,m) \\]
+
+\\[ \begin{cases}d\nmid b &: \text{no solutions}\\\ d\mid b &: d\text{ solution classes mod }m\end{cases} \\]
+
+Use Bézout's identity to find inverses. If the coefficient and modulus are not relatively prime, check the GCD divisibility condition before trying to solve.
+
+Module 12 complete.
+
+Next is Module 13: Chinese Remainder Theorem (CRT). We'll cover the theorem's conditions, proof idea, the construction formula, worked systems of congruences, uniqueness modulo the product, and cases where the moduli are not pairwise relatively prime.
+
+Say next when you're ready.

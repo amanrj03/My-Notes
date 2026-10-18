@@ -1,0 +1,609 @@
+# Module 2 — Modular Arithmetic and Congruences
+
+Number Theory-I · Advanced MCQ preparation · Pure mathematics
+
+This module builds on the Division Algorithm from Module 1. We will study congruences, their mathematical properties, arithmetic modulo \\(m\\), cancellation, powers, and the conditions under which familiar algebraic operations are valid.
+
+The main reference is Section 4.1, Divisibility and Modular Arithmetic, in your uploaded textbook.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+## 1. Congruence modulo \\(m\\)
+
+### 1.1 Definition
+
+Let \\(a,b\\) be integers and \\(m\\) a positive integer. We say that \\(a\\) is congruent to \\(b\\) modulo \\(m\\) if \\(m\\) divides \\(a-b\\).
+
+\\[ \boxed{a\equiv b\pmod m\iff m\mid(a-b)} \\]
+
+The notation \\(a\equiv b\pmod m\\) is called a congruence, and \\(m\\) is its modulus.
+
+For example,
+
+\\[ 17\equiv5\pmod6 \\]
+
+because \\(6\mid(17-5)=12\\).
+
+However,
+
+\\[ 24\not\equiv14\pmod6 \\]
+
+because \\(6\nmid10\\).
+
+### 1.2 Equivalent characterizations
+
+For integers \\(a,b\\) and positive integer \\(m\\), the following statements are equivalent:
+
+1. \\(a\equiv b\pmod m\\).
+2. \\(m\mid(a-b)\\).
+3. There exists \\(k\in\mathbb Z\\) such that \\(a=b+km\\).
+4. \\(a\\) and \\(b\\) have the same remainder when divided by \\(m\\).
+5. \\(a\bmod m=b\bmod m\\).
+
+These equivalences are stated or developed in your textbook's Section 4.1.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+Worked example
+
+Determine whether \\(103\equiv7\pmod{12}\\).
+
+\\[ 103-7=96=12(8). \\]
+
+Since \\(12\mid96\\),
+
+\\[ \boxed{103\equiv7\pmod{12}}. \\]
+
+Alternatively, \\(103=12(8)+7\\), so its remainder is \\(7\\). The integer \\(7\\) also has remainder \\(7\\) modulo \\(12\\).
+
+### 1.3 The difference must be divisible by the modulus
+
+A congruence does not mean that the two integers are equal. It means their difference is a multiple of the modulus.
+
+For example,
+
+\\[ -5\equiv7\pmod{12} \\]
+
+because
+
+\\[ -5-7=-12. \\]
+
+The integers \\(-5\\) and \\(7\\) are different, but they are congruent modulo \\(12\\).
+
+### 1.4 The modulus matters
+
+The same pair of integers may be congruent under one modulus but not another.
+
+For example,
+
+\\[ 20\equiv8\pmod4 \\]
+
+is true because \\(4\mid12\\), whereas
+
+\\[ 20\not\equiv8\pmod5 \\]
+
+is false as a congruence because \\(5\nmid12\\).
+
+A useful general fact is:
+
+\\[ a\equiv b\pmod m \quad\Longleftrightarrow\quad a\equiv b\pmod n \\]
+
+is not automatically true when \\(m\ne n\\). Always check the particular modulus.
+
+## 2. Properties of congruences
+
+These properties are central to MCQs because questions often ask which transformations preserve a congruence.
+
+### 2.1 Reflexive, symmetric and transitive properties
+
+For a fixed positive integer \\(m\\):
+
+Reflexive
+
+\\[ \boxed{a\equiv a\pmod m} \\]
+
+because \\(a-a=0\\), and every nonzero integer divides zero.
+
+Symmetric
+
+\\[ \boxed{a\equiv b\pmod m \implies b\equiv a\pmod m} \\]
+
+because if \\(m\mid(a-b)\\), then \\(m\mid-(a-b)=b-a\\).
+
+Transitive
+
+\\[ \boxed{ a\equiv b\pmod m,\quad b\equiv c\pmod m \implies a\equiv c\pmod m } \\]
+
+because \\(a-b\\) and \\(b-c\\) are both multiples of \\(m\\), so their sum \\(a-c\\) is also a multiple of \\(m\\).
+
+Consequently, congruence modulo \\(m\\) is an equivalence relation on the integers.
+
+### 2.2 Addition and subtraction
+
+If
+
+\\[ a\equiv b\pmod m,\qquad c\equiv d\pmod m, \\]
+
+then
+
+\\[ \boxed{a+c\equiv b+d\pmod m} \\]
+
+and
+
+\\[ \boxed{a-c\equiv b-d\pmod m}. \\]
+
+For subtraction, observe that
+
+\\[ (a-c)-(b-d)=(a-b)-(c-d). \\]
+
+Both differences on the right are divisible by \\(m\\), so their difference is also divisible by \\(m\\).
+
+Example
+
+Given
+
+\\[ a\equiv8\pmod{11},\qquad b\equiv5\pmod{11}, \\]
+
+we obtain
+
+\\[ a-b\equiv8-5\equiv3\pmod{11}. \\]
+
+The exact values of \\(a\\) and \\(b\\) are unnecessary.
+
+### 2.3 Multiplication
+
+Under the same assumptions,
+
+\\[ \boxed{ac\equiv bd\pmod m}. \\]
+
+To see why, write \\(a=b+km\\) and \\(c=d+\ell m\\), for integers \\(k,\ell\\). Then
+
+\\[ \begin{aligned} ac-bd &=(b+km)(d+\ell m)-bd\\\ &=m(b\ell+dk+k\ell m). \end{aligned} \\]
+
+The difference is divisible by \\(m\\), proving the result.
+
+In particular,
+
+\\[ \boxed{a\equiv b\pmod m \implies ac\equiv bc\pmod m} \\]
+
+for every integer \\(c\\).
+
+### 2.4 Powers
+
+If
+
+\\[ a\equiv b\pmod m, \\]
+
+then for every nonnegative integer \\(n\\),
+
+\\[ \boxed{a^n\equiv b^n\pmod m}. \\]
+
+For \\(n=0\\), both powers are \\(1\\). For positive \\(n\\), this follows from repeated multiplication.
+
+For example, since
+
+\\[ 17\equiv2\pmod5, \\]
+
+we have
+
+\\[ 17^3\equiv2^3=8\equiv3\pmod5. \\]
+
+This is a powerful simplification: replace a large integer with its smaller congruent representative before calculating its powers.
+
+### 2.5 Polynomial expressions
+
+A direct consequence of addition, subtraction, multiplication and powers is:
+
+If \\(a\equiv b\pmod m\\), then for any polynomial \\(P(x)\\) with integer coefficients,
+
+\\[ \boxed{P(a)\equiv P(b)\pmod m}. \\]
+
+For example, if \\(a\equiv3\pmod7\\), then
+
+\\[ a^2+2a+4 \equiv3^2+2(3)+4 =19 \equiv5\pmod7. \\]
+
+This remains valid for polynomials with negative integer coefficients.
+
+## 3. Remainder arithmetic
+
+The textbook distinguishes the remainder function from the congruence relation. This difference is important.
+
+### 3.1 Two different notations
+
+- \\(a\bmod m\\) is a number: the remainder in \\(\\{0,1,\ldots,m-1\\}\\).
+- \\(a\equiv b\pmod m\\) is a statement: it says \\(m\mid(a-b)\\).
+
+For example,
+
+\\[ 23\bmod7=2 \\]
+
+is an equality, whereas
+
+\\[ 23\equiv2\pmod7 \\]
+
+is a congruence.
+
+The two statements are related, but they are not the same kind of mathematical object.
+
+### 3.2 Addition of remainders
+
+For positive \\(m\\),
+
+\\[ \boxed{ (a+b)\bmod m = \big((a\bmod m)+(b\bmod m)\big)\bmod m }. \\]
+
+Example
+
+Find \\(157+248\bmod11\\).
+
+First,
+
+\\[ 157\bmod11=3,\qquad248\bmod11=6. \\]
+
+Therefore,
+
+\\[ (157+248)\bmod11 =(3+6)\bmod11 =\boxed9. \\]
+
+This works because replacing an integer with its remainder preserves its congruence class.
+
+### 3.3 Multiplication of remainders
+
+Similarly,
+
+\\[ \boxed{ (ab)\bmod m = \big((a\bmod m)(b\bmod m)\big)\bmod m }. \\]
+
+Example
+
+Find \\(37\cdot46\bmod9\\).
+
+Since
+
+\\[ 37\bmod9=1,\qquad46\bmod9=1, \\]
+
+we obtain
+
+\\[ 37\cdot46\bmod9 =(1\cdot1)\bmod9 =\boxed1. \\]
+
+This avoids multiplying large numbers unnecessarily.
+
+### 3.4 Nested remainders
+
+For positive integers \\(m,n\\),
+
+\\[ \boxed{(a\bmod m)\bmod n} \\]
+
+is a valid expression, but it is not generally equal to \\(a\bmod n\\).
+
+For example,
+
+\\[ 23\bmod7=2 \\]
+
+and hence
+
+\\[ (23\bmod7)\bmod5=2. \\]
+
+But
+
+\\[ 23\bmod5=3. \\]
+
+Therefore,
+
+\\[ \boxed{(a\bmod m)\bmod n\ne a\bmod n} \\]
+
+in general.
+
+This is a common MCQ trap. The inner remainder changes the integer before the outer operation is applied.
+
+## 4. Cancellation: when can you divide a congruence?
+
+This is one of the highest-priority topics in this module.
+
+In ordinary algebra, if \\(ac=bc\\) and \\(c\ne0\\), then \\(a=b\\). In modular arithmetic, cancellation has an additional condition.
+
+### 4.1 The cancellation theorem
+
+If
+
+\\[ \boxed{ac\equiv bc\pmod m}, \\]
+
+then
+
+\\[ \boxed{a\equiv b\pmod{\frac{m}{\gcd(c,m)}}}. \\]
+
+Here \\(m>0\\), and \\(\gcd(c,m)\\) denotes the greatest common divisor of \\(c\\) and \\(m\\).
+
+This is the general cancellation result.
+
+Special case: If \\(\gcd(c,m)=1\\), then
+
+\\[ \boxed{ac\equiv bc\pmod m \implies a\equiv b\pmod m}. \\]
+
+Thus, cancellation is valid without changing the modulus when the cancelled factor is relatively prime to the modulus.
+
+### 4.2 Example: cancellation is valid
+
+Suppose
+
+\\[ 7a\equiv7b\pmod{20}. \\]
+
+Since \\(\gcd(7,20)=1\\), we may cancel \\(7\\):
+
+\\[ \boxed{a\equiv b\pmod{20}}. \\]
+
+### 4.3 Example: cancellation changes the modulus
+
+Suppose
+
+\\[ 6a\equiv6b\pmod{18}. \\]
+
+Now,
+
+\\[ \gcd(6,18)=6. \\]
+
+The general theorem gives
+
+\\[ a\equiv b\pmod{\frac{18}{6}}, \\]
+
+so
+
+\\[ \boxed{a\equiv b\pmod3}. \\]
+
+We cannot conclude \\(a\equiv b\pmod{18}\\).
+
+For a concrete counterexample, take \\(a=1,b=4\\). Then
+
+\\[ 6(1)=6,\qquad6(4)=24, \\]
+
+and \\(6\equiv24\pmod{18}\\), since their difference is \\(18\\).
+
+But \\(1\not\equiv4\pmod{18}\\), although \\(1\equiv4\pmod3\\).
+
+### 4.4 A second important example
+
+Consider
+
+\\[ 4a\equiv4b\pmod{14}. \\]
+
+Here \\(\gcd(4,14)=2\\). Therefore,
+
+\\[ \boxed{a\equiv b\pmod7}. \\]
+
+The modulus becomes \\(14/2=7\\), not \\(14\\).
+
+Exam rule: Never cancel a common factor automatically. First calculate its GCD with the modulus.
+
+## 5. Arithmetic modulo \\(m\\)
+
+Your textbook defines arithmetic modulo \\(m\\) on the set
+
+\\[ \boxed{\mathbb Z_m=\\{0,1,\ldots,m-1\\}}. \\]
+
+Here \\(m\\) is a positive integer; the standard nontrivial setting for these arithmetic properties is \\(m\ge2\\).
+
+The operations are defined as follows.
+
+### 5.1 Addition modulo \\(m\\)
+
+\\[ \boxed{a+\_m b=(a+b)\bmod m}. \\]
+
+Example in \\(\mathbb Z\_{11}\\):
+
+\\[ 7+\_{11}9=16\bmod11=\boxed5. \\]
+
+### 5.2 Multiplication modulo \\(m\\)
+
+\\[ \boxed{a\cdot_m b=(ab)\bmod m}. \\]
+
+Example:
+
+\\[ 7\cdot\_{11}9=63\bmod11=\boxed8. \\]
+
+The result of either operation always belongs to \\(\mathbb Z_m\\).
+
+### 5.3 Algebraic properties
+
+The operations modulo \\(m\\) satisfy the following properties.
+
+| Property                  | Addition modulo \\(m\\)                  | Multiplication modulo \\(m\\)         |
+| ------------------------- | ---------------------------------------- | ------------------------------------- |
+| Closure                   | Yes                                      | Yes                                   |
+| Associativity             | Yes                                      | Yes                                   |
+| Commutativity             | Yes                                      | Yes                                   |
+| Identity                  | \\(0\\)                                  | \\(1\\)                               |
+| Distributivity            | Multiplication distributes over addition | —                                     |
+| Inverse for every element | Additive inverse exists                  | Multiplicative inverse need not exist |
+
+These are mathematical properties of the operations, not merely calculation shortcuts.
+
+### 5.4 Additive inverses
+
+For \\(a\in\mathbb Z_m\\), the additive inverse is the element that adds to \\(a\\) to produce \\(0\\) modulo \\(m\\).
+
+For \\(a=0\\), the additive inverse is \\(0\\).
+
+For \\(a\ne0\\), it is
+
+\\[ \boxed{m-a}. \\]
+
+For example, in \\(\mathbb Z\_{11}\\), the additive inverse of \\(4\\) is \\(7\\), because
+
+\\[ 4+\_{11}7=11\bmod11=0. \\]
+
+### 5.5 Multiplicative inverses
+
+A multiplicative inverse of \\(a\\) modulo \\(m\\) is an integer \\(x\\) satisfying
+
+\\[ \boxed{ax\equiv1\pmod m}. \\]
+
+Unlike additive inverses, multiplicative inverses do not exist for every element of \\(\mathbb Z_m\\).
+
+For example, \\(2\\) has no multiplicative inverse modulo \\(6\\). Indeed, \\(2x\\) is always even, and no even integer is congruent to \\(1\\) modulo \\(6\\).
+
+The precise condition is
+
+\\[ \boxed{\gcd(a,m)=1}. \\]
+
+For \\(m>1\\), an integer \\(a\\) has a multiplicative inverse modulo \\(m\\) if and only if \\(a\\) and \\(m\\) are relatively prime. We will use this result extensively in Module 12 when solving linear congruences.
+
+### 5.6 Why this matters for MCQs
+
+The set \\(\mathbb Z_m\\) with addition modulo \\(m\\) forms a commutative group. With both addition and multiplication modulo \\(m\\), it forms a commutative ring.
+
+For the scope of your syllabus, focus on the stated properties and the fact that multiplicative inverses are not guaranteed. You do not need to study abstract algebra beyond what these properties require.
+
+## 6. High-value theorem traps
+
+These are the distinctions I want you to be able to identify immediately in an MCQ.
+
+| Statement                                                           | Verdict             |
+| ------------------------------------------------------------------- | ------------------- |
+| \\(a\equiv b\pmod m\Rightarrow a+c\equiv b+c\pmod m\\)              | True                |
+| \\(a\equiv b\pmod m\Rightarrow ac\equiv bc\pmod m\\)                | True                |
+| \\(ac\equiv bc\pmod m\Rightarrow a\equiv b\pmod m\\)                | False in general    |
+| \\(a\equiv b\pmod m\Rightarrow a^n\equiv b^n\pmod m\\), \\(n\ge0\\) | True                |
+| \\(a\equiv b\pmod m\Rightarrow 1/a\equiv1/b\pmod m\\)               | Not generally valid |
+| \\(a\bmod m=b\bmod m\Rightarrow a\equiv b\pmod m\\)                 | True                |
+| \\((a\bmod m)\bmod n=a\bmod n\\)                                    | False in general    |
+| Every element of \\(\mathbb Z_m\\) has an additive inverse          | True                |
+| Every element of \\(\mathbb Z_m\\) has a multiplicative inverse     | False in general    |
+
+One subtle point: the expression \\(1/a\\) in modular arithmetic is not ordinary real-number division. A modular inverse must exist, and its existence depends on the GCD condition.
+
+## 7. Module 2 — MCQ mastery test
+
+Try these 12 questions before moving on. They focus on conceptual distinctions and calculation traps rather than elementary arithmetic.
+
+## 12-question test
+
+0/12 answered
+
+Select one option per question, then submit to see the explanations.
+
+1\. Which condition is equivalent to a ≡ b (mod m)?
+
+A. m divides a+b
+
+B. m divides a−b
+
+C. a divides m−b
+
+D. a and b are positive
+
+2\. Which statement is true?
+
+A. 23 mod 7 = 23 ≡ 2 mod 7
+
+B. 23 mod 7 = 2 and 23 ≡ 2 (mod 7)
+
+C. 23 mod 7 = 2 (mod 7)
+
+D. 23 ≡ 7 (mod 2) means 23 = 7
+
+3\. If a ≡ b (mod m) and c ≡ d (mod m), which must hold?
+
+A. a+c ≡ b−d (mod m)
+
+B. ac ≡ bd (mod m)
+
+C. a/c ≡ b/d (mod m) always
+
+D. a ≡ c (mod m)
+
+4\. What is 2^10 mod 7?
+
+A. 1
+
+B. 2
+
+C. 4
+
+D. 6
+
+5\. If 6a ≡ 6b (mod 18), what can be concluded?
+
+A. a ≡ b (mod 18)
+
+B. a ≡ b (mod 6) only
+
+C. a ≡ b (mod 3)
+
+D. a = b
+
+6\. When can c be cancelled from ac ≡ bc (mod m) without changing m?
+
+A. Whenever c is nonzero
+
+B. Whenever c is positive
+
+C. When gcd(c,m)=1
+
+D. Whenever m is even
+
+7\. Which is the additive inverse of 8 in Z_13?
+
+A. 5
+
+B. 8
+
+C. −8 only
+
+D. 13
+
+8\. Which element has no multiplicative inverse modulo 8?
+
+A. 3
+
+B. 5
+
+C. 7
+
+D. 2
+
+9\. Which statement about Z_m is correct for m ≥ 2?
+
+A. Every element has a multiplicative inverse
+
+B. Every element has an additive inverse
+
+C. Addition is not associative
+
+D. Multiplication is not commutative
+
+10\. If a ≡ b (mod m), what follows for every integer-coefficient polynomial P?
+
+A. P(a) = P(b) as integers
+
+B. P(a) ≡ P(b) (mod m)
+
+C. P(a) divides P(b)
+
+D. P(a) and P(b) must be positive
+
+11\. What is (23 mod 7) mod 5?
+
+A. 3
+
+B. 2
+
+C. 0
+
+D. 4
+
+12\. Which statement about congruence is correct?
+
+A. It is reflexive, symmetric and transitive
+
+B. It is symmetric but not reflexive
+
+C. It is transitive only for prime moduli
+
+D. It requires a and b to be positive
+
+Submit answers
+
+Correction note for Question 4: \\(2^{10}\bmod7=2\\), because \\(2^3\equiv1\pmod7\\). The correct option is B, not C. Keep the mathematical derivation as the authority if an option or answer key contains a mistake.
+
+When you're ready, say next to begin Module 3 — Integer Representations and Base Expansions.

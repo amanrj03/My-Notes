@@ -1,0 +1,315 @@
+# Module 17: Mixed MCQ Mastery and Final Revision
+
+This is the final module of your Number Theory syllabus. We'll combine all three units into a mixed exam-style test, with questions on definitions, calculations, theorems, and common MCQ traps.
+
+The questions cover the syllabus and concepts we've studied from Rosen's Number Theory and Cryptography. This is a comprehensive revision test, not a guarantee of a particular exam score.
+
+## Part A — High-yield formula sheet
+
+### Unit I: Number Theory-I
+
+1\. Division Algorithm
+
+\\[ a=dq+r,\qquad 0\le r\<d \\]
+
+2\. Congruence
+
+\\[ a\equiv b\pmod m\iff m\mid(a-b) \\]
+
+3\. Cancellation
+
+From \\(ac\equiv bc\pmod m\\), conclude
+
+\\[ a\equiv b\pmod{\frac{m}{\gcd(c,m)}}. \\]
+
+If \\(\gcd(c,m)=1\\), cancellation preserves modulus \\(m\\).
+
+4\. Base-\\(b\\) representation
+
+\\[ n=a_kb^k+\cdots+a_1b+a_0,\quad 0\le a_i\<b \\]
+
+5\. Operation counts
+
+Binary addition takes \\(O(n)\\) bit operations; conventional binary multiplication takes \\(O(n^2)\\).
+
+### Unit II: Number Theory-II
+
+6\. Fundamental Theorem of Arithmetic
+
+Every integer greater than \\(1\\) has a unique prime factorization, apart from the order of factors.
+
+7\. Trial division
+
+If \\(n\\) is composite, it has a prime divisor at most \\(\sqrt n\\).
+
+8\. Prime Number Theorem
+
+\\[ \pi(x)\sim\frac{x}{\ln x} \\]
+
+9\. GCD and LCM
+
+\\[ \gcd(a,b)\operatorname{lcm}(a,b)=|ab| \\]
+
+for integers \\(a,b\\) not both zero, using positive GCD and LCM.
+
+10\. Euclidean algorithm and Bézout
+
+\\[ \gcd(a,b)=\gcd(b,a\bmod b) \\]
+
+\\[ \gcd(a,b)=sa+tb \\]
+
+for some integers \\(s,t\\).
+
+### Unit III: Number Theory-III
+
+11\. Linear congruence
+
+\\(ax\equiv b\pmod m\\) is solvable exactly when \\(\gcd(a,m)\mid b\\). If solvable, it has exactly \\(\gcd(a,m)\\) distinct solution classes modulo \\(m\\).
+
+12\. Chinese Remainder Theorem
+
+Pairwise relatively prime moduli give a unique solution class modulo their product.
+
+13\. Fermat's Little Theorem
+
+\\[ a^{p-1}\equiv1\pmod p \\]
+
+if \\(p\\) is prime and \\(p\nmid a\\).
+
+14\. Modular inverse
+
+\\[ a^{-1}\equiv a^{p-2}\pmod p \\]
+
+when \\(p\\) is prime and \\(p\nmid a\\).
+
+15\. Large-integer arithmetic
+
+Residues can be added and multiplied componentwise modulo pairwise coprime moduli. Exact reconstruction requires a sufficiently large product of moduli.
+
+## Part B — Full-syllabus mixed MCQ test
+
+## 20-question test
+
+0/20 answered
+
+Try answering without looking at the formula sheet. Submit when you've answered all 20 questions.
+
+1\. In the division algorithm, write −17 = 5q + r with 0 ≤ r < 5. What is r?
+
+A. −2
+
+B. 2
+
+C. 3
+
+D. 4
+
+2\. What is 2^10 mod 7?
+
+A. 1
+
+B. 2
+
+C. 4
+
+D. 6
+
+3\. Which condition is equivalent to a ≡ b (mod m)?
+
+A. m divides a+b
+
+B. m divides a−b
+
+C. a divides m−b
+
+D. a+b=m
+
+4\. Convert (101101)₂ to octal.
+
+A. 45₈
+
+B. 54₈
+
+C. 55₈
+
+D. 65₈
+
+5\. Convert (125)₁₀ to hexadecimal.
+
+A. 7B₁₆
+
+B. 7D₁₆
+
+C. 8D₁₆
+
+D. 7E₁₆
+
+6\. How many distinct prime factors does 360 have?
+
+A. 2
+
+B. 3
+
+C. 4
+
+D. 5
+
+7\. To test whether 97 is prime by trial division, which is sufficient?
+
+A. Test every integer up to 97
+
+B. Test prime divisors up to √97
+
+C. Test only 2
+
+D. Test divisors only greater than √97
+
+8\. Find gcd(252, 198).
+
+A. 6
+
+B. 9
+
+C. 18
+
+D. 36
+
+9\. Which is a valid Bézout identity for gcd(252,198)=18?
+
+A. 4·252 − 5·198 = 18
+
+B. 5·252 − 4·198 = 18
+
+C. 252 − 198 = 18
+
+D. 3·252 − 4·198 = 18
+
+10\. How many distinct solution classes modulo 14 does 6x ≡ 8 (mod 14) have?
+
+A. 0
+
+B. 1
+
+C. 2
+
+D. 6
+
+11\. Solve x ≡ 2 (mod 3), x ≡ 3 (mod 5). What is the least nonnegative solution?
+
+A. 3
+
+B. 5
+
+C. 8
+
+D. 13
+
+12\. Find 3^100 mod 7.
+
+A. 1
+
+B. 2
+
+C. 4
+
+D. 6
+
+13\. Find the inverse of 5 modulo 11.
+
+A. 2
+
+B. 3
+
+C. 5
+
+D. 9
+
+14\. Which statement about the Prime Number Theorem is correct?
+
+A. π(x) = x exactly
+
+B. π(x) is approximately x/ln x for large x
+
+C. Every integer greater than 2 is prime
+
+D. The number of primes is finite
+
+15\. What is the usual time complexity of conventional multiplication of two n-bit integers?
+
+A. O(1)
+
+B. O(log n)
+
+C. O(n)
+
+D. O(n²)
+
+16\. How many positive integers not exceeding 100 are divisible by 7?
+
+A. 13
+
+B. 14
+
+C. 15
+
+D. 16
+
+17\. If gcd(a,b)=6 and lcm(a,b)=36, what is |ab|?
+
+A. 42
+
+B. 108
+
+C. 216
+
+D. 432
+
+18\. Which set is pairwise relatively prime?
+
+A. 6, 10, 15
+
+B. 8, 9, 25
+
+C. 4, 6, 7
+
+D. 9, 15, 21
+
+19\. Which statement about 341 is correct?
+
+A. It is prime because 2^340 ≡ 1 (mod 341)
+
+B. It is composite and a pseudoprime to base 2
+
+C. It is a Carmichael number because it is even
+
+D. It has no prime factors
+
+20\. In modular arithmetic with pairwise coprime moduli, what does the Chinese Remainder Theorem guarantee?
+
+A. No solution ever exists
+
+B. A unique solution class modulo the product of the moduli
+
+C. The solution must be prime
+
+D. All moduli must be equal
+
+Submit test
+
+## Part C — Final preparation strategy
+
+Before your exam, make sure you can do these without notes:
+
+- Find quotients and nonnegative remainders, including for negative integers.
+- Simplify modular expressions and recognize when cancellation is valid.
+- Convert between decimal, binary, octal and hexadecimal.
+- Factor integers into primes and apply the square-root bound.
+- Use the Euclidean algorithm and express a GCD as a linear combination.
+- Solve linear congruences and systems using CRT.
+- Reduce large exponents with Fermat's Little Theorem.
+- Recognize pseudoprimes and understand the limitations of the theorem.
+- Explain the role of congruences in pseudorandom sequences, memory assignment and check digits.
+
+The most important exam habit: check theorem conditions before applying a formula. Many difficult-looking MCQs become straightforward once you identify whether the modulus is prime, whether the numbers are relatively prime, and whether the question asks for a remainder or a full solution class.
+
+You've now completed the 17-module sequence. If you want to improve further, the next useful step is a timed mock exam with harder, mixed questions and no explanations until after you submit.

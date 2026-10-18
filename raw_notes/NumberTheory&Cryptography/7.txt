@@ -1,0 +1,281 @@
+# Module 7: Fundamental Theorem of Arithmetic
+
+Number Theory-II · Rosen, Number Theory and Cryptography, Section 4.3
+
+This is one of the central theorems in elementary number theory. It explains why prime numbers act as the fundamental building blocks of positive integers.
+
+We'll cover the theorem precisely, uniqueness of prime factorization, exponent notation, and the MCQ traps that follow from it.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+## 7.1 Prime factorization
+
+A prime factorization expresses an integer greater than \\(1\\) as a product of prime numbers.
+
+Examples:
+
+\\[ 12=2\times2\times3=2^2\times3 \\]
+
+\\[ 60=2\times2\times3\times5=2^2\times3\times5 \\]
+
+\\[ 100=2^2\times5^2 \\]
+
+\\[ 1024=2^{10} \\]
+
+Every factor in the final product must be prime. For example, \\(12=3\times4\\) is a factorization, but it is not a prime factorization, because \\(4\\) is composite.
+
+## 7.2 The Fundamental Theorem of Arithmetic (FTA)
+
+Theorem: Every integer greater than \\(1\\) can be written uniquely as a prime or as a product of two or more primes, with the prime factors arranged in nondecreasing order.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+The theorem has two essential parts.
+
+1. Existence: Every integer \\(n>1\\) has a prime factorization.
+2. Uniqueness: That prime factorization is unique, apart from the order in which the factors are written.
+
+For example,
+
+\\[ 30=2\times3\times5. \\]
+
+You can write \\(30=5\times2\times3\\), but this is not a different prime factorization; it is the same collection of prime factors in a different order.
+
+In nondecreasing order, we write
+
+\\[ \boxed{30=2\times3\times5}. \\]
+
+### Why uniqueness matters
+
+Consider the number \\(36\\).
+
+\\[ 36=2^2\times3^2. \\]
+
+You may discover this factorization through different steps:
+
+\\[ 36=4\times9=(2\times2)(3\times3) \\]
+
+or
+
+\\[ 36=6\times6=(2\times3)(2\times3). \\]
+
+Both methods give exactly the same prime factors, counted with multiplicity: two \\(2\\)'s and two \\(3\\)'s.
+
+The FTA guarantees that no matter how you begin factoring \\(36\\), the final prime factors and their exponents will be the same.
+
+## 7.3 Standard notation for prime factorization
+
+The FTA allows us to write a positive integer \\(n>1\\) in the form
+
+\\[ \boxed{n=p_1^{a_1}p_2^{a_2}\cdots p_k^{a_k}} \\]
+
+where:
+
+- \\(p_1,p_2,\ldots,p_k\\) are distinct primes in increasing order.
+- \\(a_1,a_2,\ldots,a_k\\) are positive integers.
+- Each exponent records how many times that prime occurs.
+
+For example,
+
+\\[ 360=2^3\times3^2\times5^1. \\]
+
+Here the distinct prime factors are \\(2,3,5\\), and their exponents are \\(3,2,1\\), respectively.
+
+Important distinction: The number of prime factors counting repetitions is
+
+\\[ 3+2+1=6, \\]
+
+whereas the number of distinct prime factors is \\(3\\).
+
+For \\(360=2\times2\times2\times3\times3\times5\\), both counts are easy to see.
+
+## 7.4 Worked examples of prime factorization
+
+### Example A: Factorize \\(999\\)
+
+Divide by the smallest primes that divide the number:
+
+\\[ \begin{aligned} 999&=3\times333\\\ &=3\times3\times111\\\ &=3\times3\times3\times37. \end{aligned} \\]
+
+Since \\(37\\) is prime,
+
+\\[ \boxed{999=3^3\times37}. \\]
+
+### Example B: Factorize \\(1024\\)
+
+Repeatedly divide by \\(2\\):
+
+\\[ 1024=2^{10}. \\]
+
+Thus,
+
+\\[ \boxed{1024=2^{10}}. \\]
+
+This is a useful recognition fact: powers of \\(2\\) have only one distinct prime factor.
+
+### Example C: Factorize \\(7007\\)
+
+The textbook gives this example in Section 4.3.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+\\[ \begin{aligned} 7007&=7\times1001\\\ &=7\times7\times143\\\ &=7\times7\times11\times13. \end{aligned} \\]
+
+Therefore,
+
+\\[ \boxed{7007=7^2\times11\times13}. \\]
+
+The prime factors are in nondecreasing order: \\(7,7,11,13\\).
+
+## 7.5 Consequences of the FTA
+
+### Consequence 1: Prime factorization is independent of the method
+
+You can start factoring a number using any available factor. If you continue until every factor is prime, you must obtain the same prime factors with the same multiplicities.
+
+For instance, factorizing \\(60\\) by either \\(6\times10\\) or \\(4\times15\\) leads to
+
+\\[ 60=2^2\times3\times5. \\]
+
+### Consequence 2: A prime has exactly one prime factor
+
+A prime \\(p\\) is already a prime factorization by itself:
+
+\\[ p=p^1. \\]
+
+For example, \\(641\\) is prime, so its prime factorization is simply \\(641\\).&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+### Consequence 3: Equality of positive integers forces matching prime exponents
+
+If
+
+\\[ 2^a3^b=2^c3^d, \\]
+
+where the bases \\(2\\) and \\(3\\) are distinct primes and all exponents are nonnegative integers, then
+
+\\[ \boxed{a=c\quad\text{and}\quad b=d}. \\]
+
+Why? The FTA guarantees that each prime must appear with exactly the same multiplicity in both factorizations.
+
+For example, \\(2^4\times3^2\\) cannot equal \\(2^3\times3^3\\), because their prime exponents differ.
+
+## 7.6 Advanced MCQ traps
+
+1\. Prime factors versus distinct prime factors: For \\(180=2^2\times3^2\times5\\), there are \\(5\\) prime factors counting repetitions, but only \\(3\\) distinct prime factors.
+
+2\. Prime factorization versus ordinary factorization: \\(12=3\times4\\) is a factorization, but not a prime factorization.
+
+3\. Uniqueness does not mean one possible order: \\(2\times3\times5\\) and \\(5\times3\times2\\) contain the same prime factors. The theorem states uniqueness when factors are arranged in nondecreasing order.
+
+4\. The integer \\(1\\): It has no prime factors. It is not a prime number.
+
+5\. A prime number's factorization: A prime \\(p\\) has prime factorization \\(p\\) itself, not a product of two or more primes.
+
+## 7.7 Module 7 practice test
+
+Choose one answer for each question. Submit when all eight are answered.
+
+1\. Which is the prime factorization of 360?
+
+A. 2³ × 3² × 5
+
+B. 2² × 3³ × 5
+
+C. 2³ × 3 × 5²
+
+D. 2 × 3² × 5²
+
+2\. How many prime factors does 7007 have, counting repetitions?
+
+A. 2
+
+B. 3
+
+C. 4
+
+D. 5
+
+3\. How many distinct prime factors does 7007 have?
+
+A. 2
+
+B. 3
+
+C. 4
+
+D. 5
+
+4\. Which statement expresses the uniqueness part of the Fundamental Theorem of Arithmetic?
+
+A. Every integer is prime
+
+B. Every integer greater than 1 has only one divisor
+
+C. Prime factorization is unique apart from the order of factors
+
+D. Every composite integer is even
+
+5\. What is the prime factorization of 1024?
+
+A. 2⁸
+
+B. 2⁹
+
+C. 2¹⁰
+
+D. 2¹¹
+
+6\. Which is a prime factorization of 999?
+
+A. 3² × 37
+
+B. 3³ × 37
+
+C. 3 × 37²
+
+D. 3³ × 31
+
+7\. If 2ᵃ × 3ᵇ = 2ᶜ × 3ᵈ for nonnegative integer exponents, what must hold?
+
+A. a+b = c+d only
+
+B. a = c and b = d
+
+C. a = d and b = c
+
+D. The exponents need not match
+
+8\. Which statement is false?
+
+A. Every prime is its own prime factorization
+
+B. Prime factorization counts repeated prime factors
+
+C. The integer 1 has a prime factorization consisting of 1
+
+D. The prime factorization of 60 is 2² × 3 × 5
+
+Submit answers
+
+## Module 7 revision sheet
+
+- FTA: Every integer greater than \\(1\\) has a unique prime factorization, apart from the order of factors.
+- Prime factorization uses only prime factors.
+- Exponents represent repeated occurrences of each prime.
+- Distinguish the number of prime factors counting repetitions from the number of distinct prime factors.
+- Equal positive integers must have matching prime factors and multiplicities.
+- The prime factorization of a prime is the prime itself.
+
+Next module: Module 8 — Trial Division and the Sieve of Eratosthenes. We'll study how to test primality efficiently, why the square-root bound works, and how to find all primes up to a given limit.
+
+Say next when you're ready.

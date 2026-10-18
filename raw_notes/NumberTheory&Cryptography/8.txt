@@ -1,0 +1,553 @@
+# Module 8: Trial Division and the Sieve of Eratosthenes
+
+Number Theory-II · Rosen, Number Theory and Cryptography, Section 4.3
+
+This module covers two fundamental methods for working with prime numbers:
+
+- Trial division: Determine whether a particular integer is prime and find its prime factors.
+- Sieve of Eratosthenes: Find all prime numbers up to a specified limit.
+
+The most important mathematical result is the square-root bound: to test whether \\(n>1\\) is prime, you only need to check prime divisors not exceeding \\(\sqrt n\\).&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+## 8.1 The square-root theorem
+
+Theorem: If \\(n\\) is a composite integer, then \\(n\\) has a prime divisor less than or equal to \\(\sqrt n\\).&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+### Proof
+
+Suppose \\(n\\) is composite. Then
+
+\\[ n=ab,\qquad 1\<a\le b\<n. \\]
+
+Assume, for contradiction, that both \\(a>\sqrt n\\) and \\(b>\sqrt n\\).
+
+Multiplying these inequalities gives
+
+\\[ ab>\sqrt n\cdot\sqrt n=n. \\]
+
+But \\(ab=n\\), which is a contradiction.
+
+Therefore, at least one factor is at most \\(\sqrt n\\). If that factor is composite, it has a prime factor no larger than itself. Consequently, \\(n\\) must have a prime divisor \\(p\\) satisfying
+
+\\[ \boxed{p\le\sqrt n}. \\]
+
+### The contrapositive—the version used in MCQs
+
+For an integer \\(n>1\\),
+
+\\[ \boxed{\text{If no prime }p\le\sqrt n\text{ divides }n,\text{ then }n\text{ is prime}.} \\]
+
+This does not mean every number less than \\(\sqrt n\\) must be tested. Only prime numbers up to \\(\sqrt n\\) need to be checked.
+
+## 8.2 Trial division: testing whether a number is prime
+
+Trial division tests divisibility by successive prime numbers, beginning with \\(2\\), and stopping once the tested prime exceeds \\(\sqrt n\\).
+
+The mathematical procedure is:
+
+1. Take an integer \\(n>1\\).
+2. Determine \\(\sqrt n\\).
+3. List the primes \\(p\le\sqrt n\\).
+4. Check whether any of those primes divides \\(n\\) exactly.
+5. If one divides \\(n\\), then \\(n\\) is composite. If none divides \\(n\\), then \\(n\\) is prime.
+
+### Example 1: Prove that \\(101\\) is prime
+
+First, calculate the square-root bound:
+
+\\[ \sqrt{101}\approx10.05. \\]
+
+The primes not exceeding this bound are
+
+\\[ 2,\ 3,\ 5,\ 7. \\]
+
+Now test each:
+
+| Prime divisor | Test                                 | Result          |
+| ------------- | ------------------------------------ | --------------- |
+| \\(2\\)       | \\(101\\) is odd                     | Does not divide |
+| \\(3\\)       | Digit sum \\(=1+0+1=2\\)             | Does not divide |
+| \\(5\\)       | Last digit is not \\(0\\) or \\(5\\) | Does not divide |
+| \\(7\\)       | \\(101=7(14)+3\\)                    | Does not divide |
+
+No prime up to \\(\sqrt{101}\\) divides \\(101\\). Hence,
+
+\\[ \boxed{101\text{ is prime}.} \\]
+
+This is also the example used in your textbook.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+### Example 2: Prove that \\(221\\) is composite
+
+\\[ \sqrt{221}\approx14.87. \\]
+
+Test primes \\(2,3,5,7,11,13\\).
+
+The first five do not divide \\(221\\), but
+
+\\[ 221=13\times17. \\]
+
+Therefore,
+
+\\[ \boxed{221\text{ is composite}.} \\]
+
+MCQ insight: To establish that a number is composite, you need only find one proper divisor. To establish that it is prime using trial division, you must rule out every prime divisor up to the square-root bound.
+
+## 8.3 Finding prime factors using trial division
+
+Trial division can also find the complete prime factorization of an integer.
+
+### Example 3: Factorize \\(756\\)
+
+Start with the smallest prime, \\(2\\), and repeatedly divide whenever possible.
+
+\\[ \begin{aligned} 756&=2\times378\\\ &=2^2\times189\\\ &=2^2\times3\times63\\\ &=2^2\times3^2\times21\\\ &=2^2\times3^3\times7. \end{aligned} \\]
+
+Since \\(2,3,7\\) are prime, the factorization is complete:
+
+\\[ \boxed{756=2^2\times3^3\times7}. \\]
+
+Notice that we divide out repeated prime factors before moving on to larger primes. Once the remaining factor is prime, the process ends.
+
+## 8.4 The Sieve of Eratosthenes
+
+The Sieve of Eratosthenes is a systematic method for finding all prime numbers up to a given positive integer \\(N\\). Unlike trial division, which tests one number at a time, the sieve eliminates composite numbers from a whole list.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+### Mathematical procedure
+
+1. List the integers from \\(2\\) through \\(N\\). We start at \\(2\\) because \\(1\\) is not prime.
+2. The first remaining number, \\(2\\), is prime. Cross out all its multiples greater than \\(2\\).
+3. Move to the next number that has not been crossed out. It is \\(3\\), so cross out its multiples greater than \\(3\\).
+4. Continue with the next uncrossed number, repeating the process.
+5. Stop when the number being processed exceeds \\(\sqrt N\\). All remaining uncrossed numbers are prime.
+
+Why can we stop at \\(\sqrt N\\)? Every composite number at most \\(N\\) has a prime divisor at most \\(\sqrt N\\). By processing all such primes, every composite number in the list is eliminated.
+
+### Worked example: Find every prime up to \\(30\\)
+
+Start with the integers \\(2\\) through \\(30\\).
+
+### Initial list
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+
+9
+
+10
+
+11
+
+12
+
+13
+
+14
+
+15
+
+16
+
+17
+
+18
+
+19
+
+20
+
+21
+
+22
+
+23
+
+24
+
+25
+
+26
+
+27
+
+28
+
+29
+
+30
+
+Step 1: Keep 2 and cross out its multiples greater than 2.
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+
+9
+
+10
+
+11
+
+12
+
+13
+
+14
+
+15
+
+16
+
+17
+
+18
+
+19
+
+20
+
+21
+
+22
+
+23
+
+24
+
+25
+
+26
+
+27
+
+28
+
+29
+
+30
+
+Step 2: Keep 3 and cross out its remaining multiples greater than 3.
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+
+9
+
+10
+
+11
+
+12
+
+13
+
+14
+
+15
+
+16
+
+17
+
+18
+
+19
+
+20
+
+21
+
+22
+
+23
+
+24
+
+25
+
+26
+
+27
+
+28
+
+29
+
+30
+
+Step 3: Process 5 and cross out its multiples greater than 5 that remain.
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+
+9
+
+10
+
+11
+
+12
+
+13
+
+14
+
+15
+
+16
+
+17
+
+18
+
+19
+
+20
+
+21
+
+22
+
+23
+
+24
+
+25
+
+26
+
+27
+
+28
+
+29
+
+30
+
+Step 4: Process 7. Its only multiple up to 30 that remains to be eliminated is 49, which exceeds 30. The remaining uncrossed numbers are prime.
+
+Primes not exceeding 30
+
+## 2, 3, 5, 7, 11, 13, 17, 19, 23, 29
+
+Here,
+
+\\[ \sqrt{30}\approx5.48. \\]
+
+So the essential sieving primes are \\(2,3,5\\). Processing \\(7\\) is unnecessary because \\(7>\sqrt{30}\\).
+
+### Why can we start crossing out multiples at \\(p^2\\)?
+
+For a sieving prime \\(p\\), its multiples are
+
+\\[ 2p,3p,4p,\ldots \\]
+
+But any multiple \\(kp\\) with \\(k\<p\\) has already been eliminated when we processed a smaller prime factor of that multiple. Therefore, the first new multiple that needs crossing out is
+
+\\[ \boxed{p^2}. \\]
+
+For example, when processing \\(5\\), the multiples \\(10,15,20\\) have already been eliminated by \\(2\\) or \\(3\\). We can begin at \\(25\\).
+
+This optimization does not change which numbers remain prime; it only avoids repeated work.
+
+## 8.5 The Sieve of Eratosthenes up to 100
+
+Your textbook uses this as its main illustration. Since
+
+\\[ \sqrt{100}=10, \\]
+
+we need to process the primes not exceeding \\(10\\):
+
+\\[ \boxed{2,\ 3,\ 5,\ 7}. \\]
+
+After eliminating multiples of these primes (while keeping each prime itself), all uncrossed integers greater than \\(1\\) and at most \\(100\\) are prime.&#x20;
+
+MTH381 U123 TB.pdf
+
+
+
+The complete list is:
+
+\\[ \begin{aligned} &2,3,5,7,11,13,17,19,23,29,\\\ &31,37,41,43,47,53,59,61,67,71,\\\ &73,79,83,89,97. \end{aligned} \\]
+
+There are 25 primes not exceeding 100.
+
+Notice that we do not need to process \\(11\\), because \\(11>\sqrt{100}\\). Every composite number in the list has already been eliminated by a smaller prime.
+
+## 8.6 Trial division versus the sieve
+
+| Feature       | Trial division                                         | Sieve of Eratosthenes                    |
+| ------------- | ------------------------------------------------------ | ---------------------------------------- |
+| Main purpose  | Test an individual number or factorize it              | Find all primes up to \\(N\\)            |
+| Method        | Check divisibility by primes up to a square-root bound | Eliminate multiples of successive primes |
+| Stopping rule | Stop when the next prime exceeds \\(\sqrt n\\)         | Process primes up to \\(\sqrt N\\)       |
+| Best use      | Is a particular number prime?                          | Which numbers up to \\(N\\) are prime?   |
+
+Both methods rely on the same square-root theorem.
+
+## 8.7 Common MCQ traps
+
+- Trap 1: Testing every integer up to \\(n-1\\) is unnecessary for primality. Testing primes up to \\(\sqrt n\\) is sufficient.
+- Trap 2: If \\(n\\) is composite, it must have a prime divisor \\(p\le\sqrt n\\).
+- Trap 3: In the sieve, do not cross out the prime itself—cross out only its multiples greater than itself.
+- Trap 4: The sieve begins at \\(2\\), not \\(1\\).
+- Trap 5: The stopping condition is based on the square root of the upper limit \\(N\\), not on the square root of the current number.
+- Trap 6: Starting at \\(p^2\\) is valid because smaller multiples of \\(p\\) have already been eliminated.
+- Trap 7: To show that a number is composite, one divisor is enough. To prove primality by trial division, all required prime divisors must be ruled out.
+
+## 8.8 Exam-level MCQs
+
+Answer all eight questions to reveal your score and explanations.
+
+1\. Which prime divisors must be checked to establish that 127 is prime by trial division?
+
+A. 2, 3, 5, 7
+
+B. 2, 3, 5, 7, 11
+
+C. All primes below 127
+
+D. Only 2, 3, 5
+
+2\. Which statement is guaranteed for every composite integer n > 1?
+
+A. n has a prime divisor greater than √n only
+
+B. n has a prime divisor less than or equal to √n
+
+C. n must be even
+
+D. n has exactly two prime factors
+
+3\. When using the Sieve of Eratosthenes to find primes up to 100, which primes need to be processed?
+
+A. 2, 3
+
+B. 2, 3, 5
+
+C. 2, 3, 5, 7
+
+D. 2, 3, 5, 7, 11
+
+4\. Why can the sieve begin crossing out multiples of a prime p at p²?
+
+A. p² is always composite
+
+B. Every smaller multiple has already been eliminated by a smaller prime factor
+
+C. Multiples below p² are prime
+
+D. The square-root theorem requires this starting point
+
+5\. Which is the prime factorization of 756?
+
+A. 2² × 3³ × 7
+
+B. 2³ × 3² × 7
+
+C. 2² × 3² × 7²
+
+D. 2 × 3³ × 7
+
+6\. How many primes are there not exceeding 30?
+
+A. 8
+
+B. 9
+
+C. 10
+
+D. 11
+
+7\. Which statement about trial division is correct?
+
+A. If no prime ≤ √n divides n, then n is prime, provided n > 1
+
+B. If 2 does not divide n, then n is prime
+
+C. Every integer below √n must be tested
+
+D. A composite number has no prime divisors
+
+8\. To find all primes up to 200 using the sieve, what is the largest prime that needs to be processed?
+
+A. 7
+
+B. 11
+
+C. 13
+
+D. 17
+
+Submit answers
+
+## Module 8 revision sheet
+
+- Square-root theorem: If \\(n\\) is composite, some prime \\(p\le\sqrt n\\) divides it.
+- Trial division: Test prime divisors up to \\(\sqrt n\\).
+- Prime factorization: Repeatedly divide by prime factors until the remaining factor is prime.
+- Sieve: Find all primes up to \\(N\\) by eliminating multiples of primes up to \\(\sqrt N\\).
+- Optimized sieve: For each prime \\(p\\), start crossing out multiples at \\(p^2\\).
+- Primes up to 100: There are 25.
+
+Next module: Module 9 — Prime Number Theorem and Prime Distribution. We'll cover the approximation \\(\pi(x)\approx x/\ln x\\), the meaning of \\(\pi(x)\\), and conceptual MCQs about how primes become less frequent among larger integers.
+
+Say next when you're ready.
