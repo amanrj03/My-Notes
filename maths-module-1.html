@@ -162,11 +162,24 @@ body {
     font-weight: 700;
 }
 
-/* CONTENT STYLES */
+/* CONTENT STYLES — STRICT LEFT ALIGNMENT */
 .module-content {
     color: var(--text-body, #334155);
     font-size: 15px;
+    text-align: left !important;
 }
+.module-content h1, 
+.module-content h2, 
+.module-content h3, 
+.module-content h4, 
+.module-content p, 
+.module-content ul, 
+.module-content ol, 
+.module-content li, 
+.module-content table {
+    text-align: left !important;
+}
+
 .module-content h1 {
     font-family: 'Outfit', sans-serif;
     font-size: 24px;
@@ -181,36 +194,41 @@ body {
     font-size: 20px;
     font-weight: 700;
     color: var(--text-heading, #0f172a);
-    margin: 28px 0 14px;
+    margin: 30px 0 14px;
 }
 .module-content h3 {
     font-family: 'Outfit', sans-serif;
     font-size: 17px;
     font-weight: 700;
     color: var(--text-heading, #0f172a);
-    margin: 22px 0 10px;
+    margin: 24px 0 10px;
 }
 .module-content p {
     margin: 0 0 14px;
     line-height: 1.7;
+    text-align: left !important;
 }
 .module-content ul, .module-content ol {
-    margin: 0 0 16px 22px;
-    padding: 0;
+    margin: 12px 0 18px 28px !important;
+    padding: 0 !important;
+    text-align: left !important;
+    list-style-position: outside !important;
 }
 .module-content li {
-    margin-bottom: 7px;
+    margin-bottom: 8px !important;
     line-height: 1.65;
+    text-align: left !important;
 }
 
 /* MATHEMATICAL CALLOUTS */
 .math-callout {
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 16px 20px;
-    margin: 22px 0;
+    margin: 22px 0 16px;
     border: 1px solid var(--border-color, #e2e8f0);
     background: var(--bg-surface, #ffffff);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    text-align: left !important;
 }
 [data-theme="dark"] .math-callout {
     background: #141728;
@@ -230,6 +248,7 @@ body {
     font-weight: 700;
     font-size: 16px;
     color: var(--text-heading, #0f172a);
+    text-align: left !important;
 }
 .math-callout.theorem {
     border-left: 4px solid #7c3aed;
@@ -259,19 +278,23 @@ body {
 [data-theme="dark"] .math-callout.example { background: rgba(16, 185, 129, 0.1); }
 .callout-badge.example { background: #10b981; color: #fff; }
 
-/* DISPLAY MATH BOX */
+/* DISPLAY MATH BOX — CLEAN AND PROPORTIONATE */
 .math-display {
+    display: block;
+    clear: both;
+    width: 100%;
+    box-sizing: border-box;
     overflow-x: auto;
-    padding: 14px 18px;
+    padding: 16px 20px;
     margin: 20px 0;
-    text-align: center;
-    background: rgba(124, 58, 237, 0.03);
-    border: 1px dashed rgba(124, 58, 237, 0.25);
-    border-radius: 8px;
+    text-align: center !important;
+    background: rgba(124, 58, 237, 0.04);
+    border: 1px dashed rgba(124, 58, 237, 0.3);
+    border-radius: 10px;
 }
 [data-theme="dark"] .math-display {
-    background: rgba(124, 58, 237, 0.08);
-    border-color: rgba(139, 92, 246, 0.35);
+    background: rgba(124, 58, 237, 0.1);
+    border-color: rgba(167, 139, 250, 0.35);
 }
 .math-inline {
     display: inline-block;
@@ -296,30 +319,33 @@ body {
 .exam-header-banner {
     background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(245, 158, 11, 0.22) 100%);
     border-left: 4px solid #f59e0b;
-    padding: 12px 18px;
+    padding: 14px 20px;
     border-radius: 0 8px 8px 0;
     font-weight: 700;
-    font-size: 17px;
+    font-size: 18px;
     color: var(--text-heading, #0f172a);
-    margin: 32px 0 18px;
+    margin: 34px 0 18px;
+    text-align: left !important;
 }
 
 /* TABLES */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin: 22px 0;
+    margin: 24px 0;
     font-size: 14px;
+    text-align: left !important;
 }
 th, td {
     border: 1px solid var(--border-color, #cbd5e0);
-    padding: 10px 14px;
-    text-align: left;
+    padding: 11px 16px;
+    text-align: left !important;
+    vertical-align: middle;
 }
 th {
-    background: #6d28d9;
+    background: linear-gradient(135deg, #7c3aed, #5b21b6);
     color: #ffffff;
-    font-weight: 600;
+    font-weight: 700;
 }
 tr:nth-child(even) td {
     background: var(--bg-table-stripe, #f8fafc);
@@ -381,6 +407,7 @@ tr:nth-child(even) td {
 .quiz-section-wrap {
     margin: 40px 0;
     padding: 0;
+    text-align: left !important;
 }
 .quiz-card-container {
     background: var(--bg-surface, #ffffff);
@@ -388,6 +415,7 @@ tr:nth-child(even) td {
     border-radius: 14px;
     padding: 32px 28px;
     box-shadow: 0 4px 20px rgba(124, 58, 237, 0.08);
+    text-align: left !important;
 }
 [data-theme="dark"] .quiz-card-container {
     background: #111424;
@@ -450,26 +478,26 @@ tr:nth-child(even) td {
     border-radius: 10px;
     padding: 20px 22px;
     margin-bottom: 20px;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: all 0.2s ease;
+    text-align: left !important;
 }
-[data-theme="dark"] .q-block {
-    background: #15192c;
-    border-color: #262c4a;
+.q-block:hover {
+    border-color: rgba(124, 58, 237, 0.4);
 }
 .q-title {
-    font-size: 15.5px;
     font-weight: 700;
+    font-size: 15.5px;
     color: var(--text-heading, #0f172a);
     margin-bottom: 14px;
     display: flex;
-    gap: 8px;
+    gap: 10px;
+    align-items: baseline;
+    text-align: left !important;
 }
 .q-num {
     color: #7c3aed;
+    font-family: 'JetBrains Mono', monospace;
     font-weight: 800;
-}
-[data-theme="dark"] .q-num {
-    color: #a78bfa;
 }
 .q-options {
     display: flex;
@@ -480,19 +508,19 @@ tr:nth-child(even) td {
     display: flex;
     align-items: center;
     gap: 12px;
+    padding: 12px 16px;
     background: var(--bg-surface, #ffffff);
     border: 1px solid var(--border-color, #e2e8f0);
     border-radius: 8px;
-    padding: 10px 14px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 14.5px;
     color: var(--text-body, #334155);
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
+    text-align: left !important;
 }
 [data-theme="dark"] .q-opt {
-    background: #1c223c;
-    border-color: #2d3558;
-    color: #cbd5e1;
+    background: #181c30;
+    border-color: #242944;
 }
 .q-opt:hover {
     border-color: #7c3aed;
@@ -502,20 +530,22 @@ tr:nth-child(even) td {
     accent-color: #7c3aed;
     width: 17px;
     height: 17px;
+    margin: 0;
     cursor: pointer;
 }
 .q-opt.correct-choice {
-    border-color: #10b981 !important;
     background: rgba(16, 185, 129, 0.1) !important;
+    border-color: #10b981 !important;
     color: #065f46 !important;
+    font-weight: 600;
 }
 [data-theme="dark"] .q-opt.correct-choice {
     color: #34d399 !important;
-    background: rgba(16, 185, 129, 0.15) !important;
+    background: rgba(16, 185, 129, 0.18) !important;
 }
 .q-opt.wrong-choice {
-    border-color: #ef4444 !important;
     background: rgba(239, 68, 68, 0.08) !important;
+    border-color: #ef4444 !important;
     color: #991b1b !important;
 }
 [data-theme="dark"] .q-opt.wrong-choice {
@@ -532,6 +562,7 @@ tr:nth-child(even) td {
     background: rgba(124, 58, 237, 0.08);
     border-left: 4px solid #7c3aed;
     color: var(--text-body, #334155);
+    text-align: left !important;
 }
 [data-theme="dark"] .q-explanation {
     background: rgba(124, 58, 237, 0.15);
@@ -665,11 +696,12 @@ tr:nth-child(even) td {
     </div>
 
     <div class="nav-toggle">
-        <button class="nav-toggle-btn" onclick="document.getElementById('mathNavPanel').classList.toggle('open')">
-            📚 All 17 Mathematics Modules ▾
+        <button class="nav-toggle-btn" onclick="toggleNavPanel()">
+            <span>📚 All 17 Mathematics Modules ▾</span>
+            <span style="font-size: 12px; opacity: 0.8;">Jump to Module</span>
         </button>
-        <div class="nav-panel" id="mathNavPanel">
-<span class="nav-item current">1. Divisibility and the Division Algorithm</span>
+        <div class="nav-panel" id="navPanel">
+            <span class="nav-item current">1. Divisibility and the Division Algorithm</span>
 <a class="nav-item" href="maths-module-2.html">2. Modular Arithmetic and Congruences</a>
 <a class="nav-item" href="maths-module-3.html">3. Integer Representations and Base Expansions</a>
 <a class="nav-item" href="maths-module-4.html">4. Octal, Hexadecimal & Fast Base Conversions</a>
@@ -690,7 +722,7 @@ tr:nth-child(even) td {
     </div>
 
     <div class="module-content">
-<p>Number Theory-I · Advanced MCQ preparation · Pure mathematics</p>
+        <p>Number Theory-I · Advanced MCQ preparation · Pure mathematics</p>
 <p>This module establishes the mathematical foundation for the rest of Number Theory. We will cover divisibility, its properties, the division algorithm, quotient and remainder for negative integers, and the floor-function formulas used in tricky MCQs.</p>
 <p>Our primary reference is Section 4.1 of your uploaded textbook, Number Theory and Cryptography, Chapter 4.</p>
 <h2>1. Divisibility of integers</h2>
@@ -775,7 +807,7 @@ tr:nth-child(even) td {
 <p>This is one of the most important results in Module 1, especially because MCQs frequently use negative dividends.</p>
 <h3>3.1 Exact theorem</h3>
 <p>Let <span class="math-inline">\(a\)</span> be any integer and <span class="math-inline">\(d\)</span> a positive integer. Then there exist unique integers <span class="math-inline">\(q,r\)</span> such that</p>
-<div class="math-display">\[\boxed{a=dq+r,\qquad 0\le r\<d}.\]</div>
+<div class="math-display">\[\boxed{a=dq+r,\qquad 0\le r\lt d}.\]</div>
 <p>Here:</p>
 <ul>
 <li><span class="math-inline">\(a\)</span>: dividend</li>
@@ -791,7 +823,7 @@ tr:nth-child(even) td {
 <p>Uniqueness: No two different pairs satisfy all those conditions.</p>
 <p>To understand uniqueness, suppose</p>
 <div class="math-display">\[a=dq+r=dq'+r',\]</div>
-<p>where <span class="math-inline">\(0\le r,r'\<d\)</span>.</p>
+<p>where <span class="math-inline">\(0\le r,r'\lt d\)</span>.</p>
 <p>Subtracting,</p>
 <div class="math-display">\[d(q-q')=r'-r.\]</div>
 <p>Because both remainders lie between <span class="math-inline">\(0\)</span> and <span class="math-inline">\(d-1\)</span>,</p>
@@ -799,7 +831,7 @@ tr:nth-child(even) td {
 <p>The difference <span class="math-inline">\(r'-r\)</span> is a multiple of <span class="math-inline">\(d\)</span>, but the only multiple of <span class="math-inline">\(d\)</span> strictly between <span class="math-inline">\(-d\)</span> and <span class="math-inline">\(d\)</span> is zero. Therefore,</p>
 <div class="math-display">\[r'=r,\qquad q'=q.\]</div>
 <p>Thus the quotient and remainder are unique.</p>
-<p>MCQ trap: The equation <span class="math-inline">\(a=dq+r\)</span> alone is insufficient to determine the quotient and remainder uniquely. The bounds <span class="math-inline">\(0\le r\<d\)</span> are part of the theorem.</p>
+<p>MCQ trap: The equation <span class="math-inline">\(a=dq+r\)</span> alone is insufficient to determine the quotient and remainder uniquely. The bounds <span class="math-inline">\(0\le r\lt d\)</span> are part of the theorem.</p>
 <h3>3.3 Quotient and remainder notation</h3>
 <p>Your textbook uses</p>
 <div class="math-display">\[\boxed{q=a\operatorname{ div}d,\qquad r=a\operatorname{ mod}d}.\]</div>
@@ -906,7 +938,7 @@ tr:nth-child(even) td {
 <p>This remains true for negative dividends.</p>
 <h3>5.2 When the remainder is zero</h3>
 <p>From</p>
-<div class="math-display">\[a=dq+r,\qquad 0\le r\<d,\]</div>
+<div class="math-display">\[a=dq+r,\qquad 0\le r\lt d,\]</div>
 <p>we get</p>
 <div class="math-display">\[\boxed{d\mid a\iff r=0}.\]</div>
 <p>The forward direction follows because if <span class="math-inline">\(d\mid a\)</span>, then <span class="math-inline">\(a=dq\)</span> for some integer <span class="math-inline">\(q\)</span>, so the remainder is zero. Conversely, if <span class="math-inline">\(r=0\)</span>, then <span class="math-inline">\(a=dq\)</span>, which means <span class="math-inline">\(d\mid a\)</span>.</p>
@@ -1568,11 +1600,11 @@ tr:nth-child(even) td {
 </tr>
 <tr>
 <td>Mutual divisibility</td>
-<td><span class="math-inline">\(a\mid b,\ b\mid a\Rightarrow \|a\|=\|b\|\)</span>, for nonzero <span class="math-inline">\(a,b\)</span></td>
+<td><span class="math-inline">\(a\mid b,\ b\mid a\Rightarrow |a|=|b|\)</span>, for nonzero <span class="math-inline">\(a,b\)</span></td>
 </tr>
 <tr>
 <td>Division Algorithm</td>
-<td><span class="math-inline">\(a=dq+r,\ 0\le r\<d\)</span>, uniquely, for <span class="math-inline">\(d\gt 0\)</span></td>
+<td><span class="math-inline">\(a=dq+r,\ 0\le r\lt d\)</span>, uniquely, for <span class="math-inline">\(d\gt 0\)</span></td>
 </tr>
 <tr>
 <td>Quotient</td>
@@ -1605,5 +1637,11 @@ tr:nth-child(even) td {
 </div>
 
 <script src="shared.js"></script>
+<script>
+function toggleNavPanel() {
+    var panel = document.getElementById('navPanel');
+    if (panel) panel.classList.toggle('open');
+}
+</script>
 </body>
 </html>
