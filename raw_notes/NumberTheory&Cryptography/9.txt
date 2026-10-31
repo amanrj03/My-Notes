@@ -14,7 +14,7 @@ The answer is not that primes stop appearing. There are infinitely many primes, 
 
 The prime-counting function, written \\(\pi(x)\\), is defined as the number of primes less than or equal to the real number \\(x\\).
 
-\\[ \boxed{\pi(x)=\\#\\{p:p\text{ is prime and }p\le x\\}} \\]
+\\[ \boxed{\pi(x)=\\#\{p:p\text{ is prime and }p\le x\}} \\]
 
 Here, \\(\\#\\) means “the number of elements in the set.”
 
@@ -376,7 +376,7 @@ Submit answers
 
 Definitions and formulas to memorize
 
-\\[ \pi(x)=\\#\\{p\le x:p\text{ is prime}\\} \\]
+\\[ \pi(x)=\\#\{p\le x:p\text{ is prime}\} \\]
 
 \\[ \lim\_{x\to\infty}\frac{\pi(x)}{x/\ln x}=1 \\]
 

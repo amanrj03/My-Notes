@@ -154,6 +154,10 @@ def convert_txt_to_html_body(raw_text, mod_num):
         c = m.group(1).strip()
         c = re.sub(r'ARRAYLINEBREAK(\d+pt)END', r'\\\\\\[\1\\]', c)
         c = c.replace(r'\_', '_').replace(r'\\%', r'\%')
+        # Fix set braces \\{ and \\} and escaped hash \\#
+        c = c.replace(r'\\#', r'\#').replace(r'\\{', r'\{').replace(r'\\}', r'\}')
+        # Ensure any unescaped # is escaped as \# for MathJax
+        c = re.sub(r'(?<!\\)#', r'\#', c)
         # Replace norm symbols \|a\| with |a|
         c = re.sub(r'\\\|([^|]+?)\\\|', r'|\1|', c)
         # Replace ALL \< and < with \lt
@@ -171,6 +175,10 @@ def convert_txt_to_html_body(raw_text, mod_num):
         idx = len(math_inline)
         c = m.group(1).strip()
         c = c.replace(r'\_', '_').replace(r'\\%', r'\%')
+        # Fix set braces \\{ and \\} and escaped hash \\#
+        c = c.replace(r'\\#', r'\#').replace(r'\\{', r'\{').replace(r'\\}', r'\}')
+        # Ensure any unescaped # is escaped as \# for MathJax
+        c = re.sub(r'(?<!\\)#', r'\#', c)
         # Replace norm symbols \|a\| with |a|
         c = re.sub(r'\\\|([^|]+?)\\\|', r'|\1|', c)
         # Replace ALL \< and < with \lt
