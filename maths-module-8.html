@@ -351,6 +351,187 @@ tr:nth-child(even) td {
     background: var(--bg-table-stripe, #f8fafc);
 }
 
+/* SIEVE OF ERATOSTHENES VISUAL BOARD */
+.sieve-board {
+    margin: 24px 0 28px;
+    padding: 24px;
+    background: var(--bg-surface, #ffffff);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+[data-theme="dark"] .sieve-board {
+    background: #141728;
+    border-color: #242944;
+}
+.sieve-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border-color, #e2e8f0);
+    font-size: 13px;
+    font-weight: 600;
+}
+.sieve-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+.sieve-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 800;
+    font-family: 'JetBrains Mono', monospace;
+}
+.sieve-badge.prime {
+    background: rgba(16, 185, 129, 0.15);
+    color: #059669;
+    border: 1px solid #10b981;
+}
+[data-theme="dark"] .sieve-badge.prime {
+    background: rgba(16, 185, 129, 0.25);
+    color: #34d399;
+}
+.sieve-badge.elim-2 {
+    background: rgba(239, 68, 68, 0.12);
+    color: #dc2626;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+[data-theme="dark"] .sieve-badge.elim-2 {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+}
+.sieve-badge.elim-3 {
+    background: rgba(245, 158, 11, 0.12);
+    color: #d97706;
+    border: 1px solid rgba(245, 158, 11, 0.4);
+}
+[data-theme="dark"] .sieve-badge.elim-3 {
+    background: rgba(245, 158, 11, 0.2);
+    color: #fbbf24;
+}
+.sieve-badge.elim-5 {
+    background: rgba(2, 132, 199, 0.12);
+    color: #0284c7;
+    border: 1px solid rgba(2, 132, 199, 0.4);
+}
+[data-theme="dark"] .sieve-badge.elim-5 {
+    background: rgba(2, 132, 199, 0.2);
+    color: #38bdf8;
+}
+.sieve-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+}
+@media (max-width: 640px) {
+    .sieve-grid { grid-template-columns: repeat(5, 1fr); }
+}
+.sieve-num {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 4px;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    font-weight: 700;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    border: 1px solid transparent;
+}
+.sieve-num:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+.sieve-num.prime {
+    background: rgba(16, 185, 129, 0.12);
+    border-color: #10b981;
+    color: #047857;
+}
+[data-theme="dark"] .sieve-num.prime {
+    background: rgba(16, 185, 129, 0.22);
+    color: #34d399;
+    border-color: rgba(52, 211, 153, 0.4);
+}
+.sieve-num.elim-2 {
+    background: rgba(239, 68, 68, 0.06);
+    border-color: rgba(239, 68, 68, 0.25);
+    color: #b91c1c;
+    text-decoration: line-through;
+    opacity: 0.85;
+}
+[data-theme="dark"] .sieve-num.elim-2 {
+    background: rgba(239, 68, 68, 0.14);
+    color: #fca5a5;
+    border-color: rgba(239, 68, 68, 0.35);
+}
+.sieve-num.elim-3 {
+    background: rgba(245, 158, 11, 0.08);
+    border-color: rgba(245, 158, 11, 0.3);
+    color: #b45309;
+    text-decoration: line-through;
+    opacity: 0.85;
+}
+[data-theme="dark"] .sieve-num.elim-3 {
+    background: rgba(245, 158, 11, 0.16);
+    color: #fcd34d;
+    border-color: rgba(245, 158, 11, 0.35);
+}
+.sieve-num.elim-5 {
+    background: rgba(2, 132, 199, 0.08);
+    border-color: rgba(2, 132, 199, 0.3);
+    color: #0369a1;
+    text-decoration: line-through;
+    opacity: 0.85;
+}
+[data-theme="dark"] .sieve-num.elim-5 {
+    background: rgba(2, 132, 199, 0.18);
+    color: #7dd3fc;
+    border-color: rgba(2, 132, 199, 0.35);
+}
+.sieve-sub {
+    font-size: 10px;
+    font-weight: 600;
+    text-decoration: none !important;
+    display: block;
+    margin-top: 3px;
+}
+.sieve-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 20px 0;
+}
+.sieve-step-card {
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-left: 4px solid #7c3aed;
+    border-radius: 8px;
+    padding: 16px 20px;
+    text-align: left !important;
+}
+[data-theme="dark"] .sieve-step-card {
+    background: #141728;
+    border-color: #242944;
+    border-left-color: #a78bfa;
+}
+.sieve-step-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-heading, #0f172a);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 /* BOTTOM NAVIGATION */
 .prev-next {
     display: flex;
@@ -821,134 +1002,164 @@ tr:nth-child(even) td {
 <li>Stop when the number being processed exceeds <span class="math-inline">\(\sqrt N\)</span>. All remaining uncrossed numbers are prime.</li>
 </ol>
 <p>Why can we stop at <span class="math-inline">\(\sqrt N\)</span>? Every composite number at most <span class="math-inline">\(N\)</span> has a prime divisor at most <span class="math-inline">\(\sqrt N\)</span>. By processing all such primes, every composite number in the list is eliminated.</p>
-<h3>Worked example: Find every prime up to <span class="math-inline">\(30\)</span></h3>
-<p>Start with the integers <span class="math-inline">\(2\)</span> through <span class="math-inline">\(30\)</span>.</p>
-<h3>Initial list</h3>
-<p>2</p>
-<p>3</p>
-<p>4</p>
-<p>5</p>
-<p>6</p>
-<p>7</p>
-<p>8</p>
-<p>9</p>
-<p>10</p>
-<p>11</p>
-<p>12</p>
-<p>13</p>
-<p>14</p>
-<p>15</p>
-<p>16</p>
-<p>17</p>
-<p>18</p>
-<p>19</p>
-<p>20</p>
-<p>21</p>
-<p>22</p>
-<p>23</p>
-<p>24</p>
-<p>25</p>
-<p>26</p>
-<p>27</p>
-<p>28</p>
-<p>29</p>
-<p>30</p>
-<p>Step 1: Keep 2 and cross out its multiples greater than 2.</p>
-<p>2</p>
-<p>3</p>
-<p>4</p>
-<p>5</p>
-<p>6</p>
-<p>7</p>
-<p>8</p>
-<p>9</p>
-<p>10</p>
-<p>11</p>
-<p>12</p>
-<p>13</p>
-<p>14</p>
-<p>15</p>
-<p>16</p>
-<p>17</p>
-<p>18</p>
-<p>19</p>
-<p>20</p>
-<p>21</p>
-<p>22</p>
-<p>23</p>
-<p>24</p>
-<p>25</p>
-<p>26</p>
-<p>27</p>
-<p>28</p>
-<p>29</p>
-<p>30</p>
-<p>Step 2: Keep 3 and cross out its remaining multiples greater than 3.</p>
-<p>2</p>
-<p>3</p>
-<p>4</p>
-<p>5</p>
-<p>6</p>
-<p>7</p>
-<p>8</p>
-<p>9</p>
-<p>10</p>
-<p>11</p>
-<p>12</p>
-<p>13</p>
-<p>14</p>
-<p>15</p>
-<p>16</p>
-<p>17</p>
-<p>18</p>
-<p>19</p>
-<p>20</p>
-<p>21</p>
-<p>22</p>
-<p>23</p>
-<p>24</p>
-<p>25</p>
-<p>26</p>
-<p>27</p>
-<p>28</p>
-<p>29</p>
-<p>30</p>
-<p>Step 3: Process 5 and cross out its multiples greater than 5 that remain.</p>
-<p>2</p>
-<p>3</p>
-<p>4</p>
-<p>5</p>
-<p>6</p>
-<p>7</p>
-<p>8</p>
-<p>9</p>
-<p>10</p>
-<p>11</p>
-<p>12</p>
-<p>13</p>
-<p>14</p>
-<p>15</p>
-<p>16</p>
-<p>17</p>
-<p>18</p>
-<p>19</p>
-<p>20</p>
-<p>21</p>
-<p>22</p>
-<p>23</p>
-<p>24</p>
-<p>25</p>
-<p>26</p>
-<p>27</p>
-<p>28</p>
-<p>29</p>
-<p>30</p>
-<p>Step 4: Process 7. Its only multiple up to 30 that remains to be eliminated is 49, which exceeds 30. The remaining uncrossed numbers are prime.</p>
-<p>Primes not exceeding 30</p>
-<h2>2, 3, 5, 7, 11, 13, 17, 19, 23, 29</h2>
-<p>Here,</p>
-<div class="math-display">\[\sqrt{30}\approx5.48.\]</div>
-<p>So the essential sieving primes are <span class="math-inline">\(2,3,5\)</span>. Processing <span class="math-inline">\(7\)</span> is unnecessary because <span class="math-inline">\(7\gt \sqrt{30}\)</span>.</p>
+<div class="math-callout example"><div class="callout-badge example">💡 WORKED EXAMPLE</div><div class="callout-title">Worked example: Find every prime up to 30</div></div>
+<p>We want to systematically find all prime numbers up to <span class="math-inline">\(N = 30\)</span> using the <strong>Sieve of Eratosthenes</strong>.</p>
+<h4>Step 0: Determine the stopping bound</h4>
+<p>Before crossing out any numbers, we determine which primes we must sieve with by applying the square-root theorem:</p>
+<div class="math-display">\[\sqrt{30} \approx 5.48 \implies \lfloor \sqrt{30} \rfloor = 5.\]</div>
+<p>Every composite integer <span class="math-inline">\(n \le 30\)</span> must have at least one prime divisor <span class="math-inline">\(p \le \sqrt{30}\)</span>. Therefore, we only need to sieve by the primes not exceeding <span class="math-inline">\(5\)</span>:</p>
+<div class="math-display">\[\boxed{p \in \{2, 3, 5\}}.\]</div>
+<p>Testing <span class="math-inline">\(p = 7\)</span> is unnecessary because <span class="math-inline">\(7 \gt  \sqrt{30}\)</span> (its first new composite multiple is <span class="math-inline">\(7^2 = 49 \gt  30\)</span>).</p>
+<hr />
+<h4>Step-by-step sieving procedure</h4>
+<div class="sieve-steps">
+
+<div class="sieve-step-card">
+<div class="sieve-step-title"><span>🔢 Step 1:</span> Sieve with prime <span class="math-inline">\(p = 2\)</span></div>
+<p>Keep <strong>2</strong> as prime. Cross out all multiples of <span class="math-inline">\(2\)</span> greater than <span class="math-inline">\(2\)</span> (starting at <span class="math-inline">\(2^2 = 4\)</span>):</p>
+<p><strong>Multiples eliminated (14 numbers):</strong></p>
+<div class="math-display">
+
+<div class="math-display">\[4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30\]</div>
+
+</div>
+<p><em>Remaining uncrossed candidates:</em> <span class="math-inline">\(2\text{ (prime)}, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29\)</span>.</p>
+</div>
+
+<div class="sieve-step-card">
+<div class="sieve-step-title"><span>🔢 Step 2:</span> Sieve with prime <span class="math-inline">\(p = 3\)</span></div>
+<p>The next uncrossed number is <strong>3</strong>. Keep <strong>3</strong> as prime.</p>
+<p>Cross out its remaining multiples greater than <span class="math-inline">\(3\)</span>. We begin at <span class="math-inline">\(3^2 = 9\)</span> because <span class="math-inline">\(3 \times 2 = 6\)</span> was already eliminated in Step 1.</p>
+<p><strong>New multiples eliminated (4 numbers):</strong></p>
+<div class="math-display">
+
+<div class="math-display">\[9, 15, 21, 27\]</div>
+
+</div>
+<p><em>(Note: <span class="math-inline">\(6, 12, 18, 24, 30\)</span> were already crossed out by <span class="math-inline">\(2\)</span>.)</em></p>
+<p><em>Remaining uncrossed candidates:</em> <span class="math-inline">\(2, 3\text{ (primes)}, 5, 7, 11, 13, 17, 19, 23, 25, 29\)</span>.</p>
+</div>
+
+<div class="sieve-step-card">
+<div class="sieve-step-title"><span>🔢 Step 3:</span> Sieve with prime <span class="math-inline">\(p = 5\)</span></div>
+<p>The next uncrossed number is <strong>5</strong>. Keep <strong>5</strong> as prime.</p>
+<p>Cross out its remaining multiples greater than <span class="math-inline">\(5\)</span>. We begin at <span class="math-inline">\(5^2 = 25\)</span> because <span class="math-inline">\(5 \times 2 = 10\)</span>, <span class="math-inline">\(5 \times 3 = 15\)</span>, and <span class="math-inline">\(5 \times 4 = 20\)</span> were already eliminated by <span class="math-inline">\(2\)</span> or <span class="math-inline">\(3\)</span>.</p>
+<p><strong>New multiple eliminated (1 number):</strong></p>
+<div class="math-display">
+
+<div class="math-display">\[25\]</div>
+
+</div>
+<p><em>(Note: <span class="math-inline">\(10, 15, 20, 30\)</span> were already eliminated earlier.)</em></p>
+<p><em>Remaining uncrossed candidates:</em> <span class="math-inline">\(2, 3, 5\text{ (primes)}, 7, 11, 13, 17, 19, 23, 29\)</span>.</p>
+</div>
+
+<div class="sieve-step-card">
+<div class="sieve-step-title"><span>🛑 Step 4:</span> Stopping check at <span class="math-inline">\(p = 7\)</span></div>
+<p>The next uncrossed number is <strong>7</strong>.</p>
+<p>Because <span class="math-inline">\(7 \gt  \sqrt{30} \approx 5.48\)</span> and <span class="math-inline">\(7^2 = 49 \gt  30\)</span>, all remaining uncrossed integers have no proper prime factors <span class="math-inline">\(\le \sqrt{30}\)</span>. By the square-root theorem, <strong>every remaining uncrossed integer must be prime</strong>.</p>
+<p><strong>The algorithm terminates immediately!</strong></p>
+</div>
+
+</div>
+
+<hr />
+<h4>Visual Sieve Board (Integers 2 to 30)</h4>
+<div class="sieve-board">
+    <div class="sieve-legend">
+        <span class="sieve-legend-item"><span class="sieve-badge prime">&#10003; Prime</span> Prime (Kept)</span>
+        <span class="sieve-legend-item"><span class="sieve-badge elim-2">&times; 2</span> Crossed by 2</span>
+        <span class="sieve-legend-item"><span class="sieve-badge elim-3">&times; 3</span> Crossed by 3</span>
+        <span class="sieve-legend-item"><span class="sieve-badge elim-5">&times; 5</span> Crossed by 5</span>
+    </div>
+    <div class="sieve-grid">
+        <div class="sieve-num prime">2 <span class="sieve-sub">Prime</span></div>
+        <div class="sieve-num prime">3 <span class="sieve-sub">Prime</span></div>
+        <div class="sieve-num elim-2">4 <span class="sieve-sub">&times; 2</span></div>
+        <div class="sieve-num prime">5 <span class="sieve-sub">Prime</span></div>
+        <div class="sieve-num elim-2">6 <span class="sieve-sub">&times; 2</span></div>
+        <div class="sieve-num prime">7 <span class="sieve-sub">Prime</span></div>
+        <div class="sieve-num elim-2">8 <span class="sieve-sub">&times; 2</span></div>
+        <div class="sieve-num elim-3">9 <span class="sieve-sub">&times; 3</span></div>
+        <div class="sieve-num elim-2">10 <span class="sieve-sub">&times; 2</span></div>
+        <div class="sieve-num prime">11 <span class="sieve-sub">Prime</span></div>
+        <div class="sieve-num elim-2">12 <span class="sieve-sub">&times; 2</span></div>
+        <div class="sieve-num prime">13 <span class="sieve-sub">Prime</span></div>
+        <div class="sieve-num elim-2">14 <span class="sieve-sub">&times; 2</span></div>
+        <div class="sieve-num elim-3">15 <span class="sieve-sub">&times; 3</span></div>
+        <div class="sieve-num elim-2">16 <span class="sieve-sub">&times; 2</span></div>
+        <div class="sieve-num prime">17 <span class="sieve-sub">Prime</span></div>
+        <div class="sieve-num elim-2">18 <span class="sieve-sub">&times; 2</span></div>
+        <div class="sieve-num prime">19 <span class="sieve-sub">Prime</span></div>
+        <div class="sieve-num elim-2">20 <span class="sieve-sub">&times; 2</span></div>
+        <div class="sieve-num elim-3">21 <span class="sieve-sub">&times; 3</span></div>
+        <div class="sieve-num elim-2">22 <span class="sieve-sub">&times; 2</span></div>
+        <div class="sieve-num prime">23 <span class="sieve-sub">Prime</span></div>
+        <div class="sieve-num elim-2">24 <span class="sieve-sub">&times; 2</span></div>
+        <div class="sieve-num elim-5">25 <span class="sieve-sub">&times; 5</span></div>
+        <div class="sieve-num elim-2">26 <span class="sieve-sub">&times; 2</span></div>
+        <div class="sieve-num elim-3">27 <span class="sieve-sub">&times; 3</span></div>
+        <div class="sieve-num elim-2">28 <span class="sieve-sub">&times; 2</span></div>
+        <div class="sieve-num prime">29 <span class="sieve-sub">Prime</span></div>
+        <div class="sieve-num elim-2">30 <span class="sieve-sub">&times; 2</span></div>
+    </div>
+</div>
+
+<h4>Summary table of elimination passes</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Sieving Prime <span class="math-inline">\(p\)</span></th>
+<th style="text-align: center;">Starting Multiple (<span class="math-inline">\(p^2\)</span>)</th>
+<th style="text-align: left;">Multiples Eliminated in this Step</th>
+<th style="text-align: center;">New Eliminations</th>
+<th style="text-align: center;">Remaining Candidates</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong>Initial list</strong></td>
+<td style="text-align: center;">—</td>
+<td style="text-align: left;">None (integers <span class="math-inline">\(2\)</span> through <span class="math-inline">\(30\)</span>)</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">29</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong><span class="math-inline">\(p = 2\)</span></strong></td>
+<td style="text-align: center;"><span class="math-inline">\(4\)</span></td>
+<td style="text-align: left;"><span class="math-inline">\(4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30\)</span></td>
+<td style="text-align: center;">14</td>
+<td style="text-align: center;">15</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong><span class="math-inline">\(p = 3\)</span></strong></td>
+<td style="text-align: center;"><span class="math-inline">\(9\)</span></td>
+<td style="text-align: left;"><span class="math-inline">\(9, 15, 21, 27\)</span></td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">11</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong><span class="math-inline">\(p = 5\)</span></strong></td>
+<td style="text-align: center;"><span class="math-inline">\(25\)</span></td>
+<td style="text-align: left;"><span class="math-inline">\(25\)</span></td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">10</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong><span class="math-inline">\(p = 7\)</span></strong></td>
+<td style="text-align: center;"><span class="math-inline">\(49\)</span></td>
+<td style="text-align: left;"><span class="math-inline">\(49 \gt  30 \implies\)</span> <strong>Algorithm terminates</strong></td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;"><strong>10 primes</strong></td>
+</tr>
+</tbody>
+</table>
+<h4>Final Result</h4>
+<p>The prime numbers not exceeding <span class="math-inline">\(30\)</span> are:</p>
+<div class="math-display">\[\boxed{2,\ 3,\ 5,\ 7,\ 11,\ 13,\ 17,\ 19,\ 23,\ 29}.\]</div>
+<p>The total prime count is <span class="math-inline">\(\pi(30) = 10\)</span>.</p>
+<p>&gt; <strong>High-yield exam takeaway:</strong>
+&gt; Notice that we only needed <strong>three elimination passes</strong> (primes <span class="math-inline">\(2, 3, 5\)</span>) to find every prime up to 30. All other 7 primes (<span class="math-inline">\(7, 11, 13, 17, 19, 23, 29\)</span>) were certified prime without ever performing trial division on them!</p>
 <h3>Why can we start crossing out multiples at <span class="math-inline">\(p^2\)</span>?</h3>
 <p>For a sieving prime <span class="math-inline">\(p\)</span>, its multiples are</p>
 <div class="math-display">\[2p,3p,4p,\ldots\]</div>

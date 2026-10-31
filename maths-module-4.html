@@ -351,6 +351,187 @@ tr:nth-child(even) td {
     background: var(--bg-table-stripe, #f8fafc);
 }
 
+/* SIEVE OF ERATOSTHENES VISUAL BOARD */
+.sieve-board {
+    margin: 24px 0 28px;
+    padding: 24px;
+    background: var(--bg-surface, #ffffff);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+[data-theme="dark"] .sieve-board {
+    background: #141728;
+    border-color: #242944;
+}
+.sieve-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border-color, #e2e8f0);
+    font-size: 13px;
+    font-weight: 600;
+}
+.sieve-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+.sieve-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 800;
+    font-family: 'JetBrains Mono', monospace;
+}
+.sieve-badge.prime {
+    background: rgba(16, 185, 129, 0.15);
+    color: #059669;
+    border: 1px solid #10b981;
+}
+[data-theme="dark"] .sieve-badge.prime {
+    background: rgba(16, 185, 129, 0.25);
+    color: #34d399;
+}
+.sieve-badge.elim-2 {
+    background: rgba(239, 68, 68, 0.12);
+    color: #dc2626;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+[data-theme="dark"] .sieve-badge.elim-2 {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+}
+.sieve-badge.elim-3 {
+    background: rgba(245, 158, 11, 0.12);
+    color: #d97706;
+    border: 1px solid rgba(245, 158, 11, 0.4);
+}
+[data-theme="dark"] .sieve-badge.elim-3 {
+    background: rgba(245, 158, 11, 0.2);
+    color: #fbbf24;
+}
+.sieve-badge.elim-5 {
+    background: rgba(2, 132, 199, 0.12);
+    color: #0284c7;
+    border: 1px solid rgba(2, 132, 199, 0.4);
+}
+[data-theme="dark"] .sieve-badge.elim-5 {
+    background: rgba(2, 132, 199, 0.2);
+    color: #38bdf8;
+}
+.sieve-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+}
+@media (max-width: 640px) {
+    .sieve-grid { grid-template-columns: repeat(5, 1fr); }
+}
+.sieve-num {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 4px;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    font-weight: 700;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    border: 1px solid transparent;
+}
+.sieve-num:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+.sieve-num.prime {
+    background: rgba(16, 185, 129, 0.12);
+    border-color: #10b981;
+    color: #047857;
+}
+[data-theme="dark"] .sieve-num.prime {
+    background: rgba(16, 185, 129, 0.22);
+    color: #34d399;
+    border-color: rgba(52, 211, 153, 0.4);
+}
+.sieve-num.elim-2 {
+    background: rgba(239, 68, 68, 0.06);
+    border-color: rgba(239, 68, 68, 0.25);
+    color: #b91c1c;
+    text-decoration: line-through;
+    opacity: 0.85;
+}
+[data-theme="dark"] .sieve-num.elim-2 {
+    background: rgba(239, 68, 68, 0.14);
+    color: #fca5a5;
+    border-color: rgba(239, 68, 68, 0.35);
+}
+.sieve-num.elim-3 {
+    background: rgba(245, 158, 11, 0.08);
+    border-color: rgba(245, 158, 11, 0.3);
+    color: #b45309;
+    text-decoration: line-through;
+    opacity: 0.85;
+}
+[data-theme="dark"] .sieve-num.elim-3 {
+    background: rgba(245, 158, 11, 0.16);
+    color: #fcd34d;
+    border-color: rgba(245, 158, 11, 0.35);
+}
+.sieve-num.elim-5 {
+    background: rgba(2, 132, 199, 0.08);
+    border-color: rgba(2, 132, 199, 0.3);
+    color: #0369a1;
+    text-decoration: line-through;
+    opacity: 0.85;
+}
+[data-theme="dark"] .sieve-num.elim-5 {
+    background: rgba(2, 132, 199, 0.18);
+    color: #7dd3fc;
+    border-color: rgba(2, 132, 199, 0.35);
+}
+.sieve-sub {
+    font-size: 10px;
+    font-weight: 600;
+    text-decoration: none !important;
+    display: block;
+    margin-top: 3px;
+}
+.sieve-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 20px 0;
+}
+.sieve-step-card {
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-left: 4px solid #7c3aed;
+    border-radius: 8px;
+    padding: 16px 20px;
+    text-align: left !important;
+}
+[data-theme="dark"] .sieve-step-card {
+    background: #141728;
+    border-color: #242944;
+    border-left-color: #a78bfa;
+}
+.sieve-step-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-heading, #0f172a);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 /* BOTTOM NAVIGATION */
 .prev-next {
     display: flex;
