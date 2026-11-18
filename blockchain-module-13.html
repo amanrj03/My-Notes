@@ -1263,7 +1263,7 @@ tr:nth-child(even) td {
     </div>
 
     <div class="module-content">
-<p><span class="ref-pill">📄 Slides Reference: <span class="ref-pill">📄 Slides Reference: All topics of bitcoin.pptx</span></span>, <span class="ref-pill">📄 Slides Reference: Transaction and mining in bitcoin.pptx</span>, <span class="ref-pill">📄 Slides Reference: BitcoinSCript.pptx</span> <span class="ref-pill">📄 Slides Reference: and the blockchain architecture material in Unit1_Part2.pptx</span>.</p>
+<p><span class="ref-pill">📄 Slides Reference: All topics of bitcoin.pptx</span>, <span class="ref-pill">📄 Slides Reference: Transaction and mining in bitcoin.pptx</span>, <span class="ref-pill">📄 Slides Reference: BitcoinSCript.pptx</span> <span class="ref-pill">📄 Slides Reference: and the blockchain architecture material in Unit1_Part2.pptx</span>.</p>
 <p>This is the final module of Chapter 3. We'll connect the topics you have already learned and study how Bitcoin maintains its blockchain, propagates transactions, mines blocks and handles forks.</p>
 <h2>Module roadmap</h2>
 <ol>
@@ -1480,7 +1480,7 @@ Miners hash only the 80-byte header during Proof of Work, not the entire megabyt
 </div>
 <p>Important distinction: the block header contains the Merkle root, not the complete list of transactions. The Merkle root commits to the transaction data.</p>
 <h1>Topic 3: Merkle Trees and Merkle Roots</h1>
-<p>This is an important blockchain theory topic. <span class="ref-pill">📄 Slides Reference: <span class="ref-pill">📄 Slides Reference: BitcoinSCript.pptx</span></span> includes a Merkle-tree example and explains that transactions are organised as a Merkle tree, with the Merkle root used in constructing the block hash.</p>
+<p>This is an important blockchain theory topic. <span class="ref-pill">📄 Slides Reference: BitcoinSCript.pptx</span> includes a Merkle-tree example and explains that transactions are organised as a Merkle tree, with the Merkle root used in constructing the block hash.</p>
 <h2>3.1 What is a Merkle tree?</h2>
 <p>A Merkle tree is a tree-shaped data structure in which leaf nodes contain hashes of individual data items, and parent nodes contain hashes derived from their children's hashes.</p>
 <p>In Bitcoin, the leaves represent transaction hashes, and the hashes are combined upward until one hash remains: the Merkle root.</p>
@@ -1590,7 +1590,7 @@ Changing any single character in Tx 2 changes H(Tx 2) → H_0 → H_root, instan
 <h1>Topic 4: Bitcoin's Peer-to-Peer Network</h1>
 <h2>4.1 What is the Bitcoin P2P network?</h2>
 <p>A peer-to-peer network is a network in which participating computers communicate directly with one another rather than relying on a single central server to relay every message.</p>
-<p><span class="ref-pill">📄 Slides Reference: <span class="ref-pill">📄 Slides Reference: Transaction and mining in bitcoin.pptx</span></span> describes Bitcoin's network as an ad hoc network with a random topology, running over TCP, where nodes are treated as peers. It also explains that new nodes can join and non-responding peers may be removed from a node's peer list.</p>
+<p><span class="ref-pill">📄 Slides Reference: Transaction and mining in bitcoin.pptx</span> describes Bitcoin's network as an ad hoc network with a random topology, running over TCP, where nodes are treated as peers. It also explains that new nodes can join and non-responding peers may be removed from a node's peer list.</p>
 <h2>4.2 How does a node join the network?</h2>
 <p>The PPT presents a simplified joining process:</p>
 <ol>
@@ -1723,7 +1723,7 @@ Changing any single character in Tx 2 changes H(Tx 2) → H_0 → H_root, instan
 <li>It helps produce new blocks and secure the transaction history.</li>
 <li>It provides the mechanism through which new bitcoins are issued according to the protocol's block-subsidy schedule.</li>
 </ol>
-<p><span class="ref-pill">📄 Slides Reference: <span class="ref-pill">📄 Slides Reference: All topics of bitcoin.pptx</span></span> lists synchronising with the network, transaction validation, block validation, creating a new block, performing PoW and obtaining the reward as miners' tasks.</p>
+<p><span class="ref-pill">📄 Slides Reference: All topics of bitcoin.pptx</span> lists synchronising with the network, transaction validation, block validation, creating a new block, performing PoW and obtaining the reward as miners' tasks.</p>
 <h2>6.2 Step-by-step mining process</h2>
 <h3>Step 1 — Synchronise with the network</h3>
 <p>The miner obtains the relevant blockchain information and learns about recent transactions and blocks.</p>
@@ -1878,7 +1878,7 @@ Asymmetric complexity: Finding the nonce takes billions of trillions of hashes (
 <h1>Topic 8: Forks in the Bitcoin Blockchain</h1>
 <h2>8.1 What is a fork?</h2>
 <p>A fork occurs when the blockchain has two or more competing branches, or when protocol rules change in a way that creates different views of the chain.</p>
-<p><span class="ref-pill">📄 Slides Reference: <span class="ref-pill">📄 Slides Reference: Transaction and mining in bitcoin.pptx</span></span> distinguishes accidental forks from intentional forks, including hard forks and soft forks.</p>
+<p><span class="ref-pill">📄 Slides Reference: Transaction and mining in bitcoin.pptx</span> distinguishes accidental forks from intentional forks, including hard forks and soft forks.</p>
 <h2>8.2 Accidental fork</h2>
 <p>An accidental fork can happen when two miners find valid blocks at nearly the same time.</p>
 <p>For example:</p>

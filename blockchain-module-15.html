@@ -13,8 +13,9 @@
     <script>
     MathJax = {
         tex: {
-            inlineMath: [['\\(', '\\)']],
-            displayMath: [['$$', '$$']],
+            inlineMath: [['\\(', '\\)'], ['$', '$']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true
         },
         options: {
             skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
@@ -802,8 +803,8 @@ th {
     </div>
     
 <p>Here:</p>
-<p>\<div class="math-display">$$\text{Inputs}=\text{Outputs}+\text{Fee} \$$</div></p>
-<p>\<div class="math-display">$$1.2=0.5+0.698+0.002 \$$</div></p>
+<div class="math-display">\[\text{Inputs}=\text{Outputs}+\text{Fee}\]</div>
+<div class="math-display">\[1.2=0.5+0.698+0.002\]</div>
 <p>Aman sends 0.5 BTC to the recipient, receives 0.698 BTC as change, and pays 0.002 BTC as the transaction fee.</p>
 <p>The original UTXOs are spent, and new UTXOs are created.</p>
 <p><strong>Remember:</strong> the wallet calculates the balance by examining the UTXOs associated with the keys or scripts it manages.</p>
@@ -1644,7 +1645,7 @@ th {
 <li>The seed is used to derive wallet keys.</li>
 </ol>
 <p>The important relationship is:</p>
-<p>\<div class="math-display">$$\text{Mnemonic phrase} \rightarrow \text{Seed} \rightarrow \text{Wallet keys} \$$</div></p>
+<div class="math-display">\[\text{Mnemonic phrase} \rightarrow \text{Seed} \rightarrow \text{Wallet keys}\]</div>
 <h2><strong>7.4 What is BIP39?</strong></h2>
 <p><strong>BIP39 is a Bitcoin Improvement Proposal that defines a method for representing wallet recovery information as mnemonic words and deriving seed material from those words.</strong></p>
 <h3><strong>Advantages of mnemonic phrases</strong></h3>

@@ -13,8 +13,9 @@
     <script>
     MathJax = {
         tex: {
-            inlineMath: [['\\(', '\\)']],
-            displayMath: [['$$', '$$']],
+            inlineMath: [['\\(', '\\)'], ['$', '$']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true
         },
         options: {
             skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
@@ -1257,13 +1258,13 @@ th {
 <h3><strong>The most important message sequences</strong></h3>
 <p>Remember these three sequences:</p>
 <p><strong>1. Connection establishment</strong></p>
-<p>\<div class="math-display">$$\text{Version}\rightarrow\text{Verack} \$$</div></p>
+<div class="math-display">\[\text{Version}\rightarrow\text{Verack}\]</div>
 <p>Both peers exchange version information and acknowledge the connection.</p>
 <p><strong>2. Transaction or block exchange</strong></p>
-<p>\<div class="math-display">$$\text{Inv}\rightarrow\text{Getdata}\rightarrow\text{Tx/Block} \$$</div></p>
+<div class="math-display">\[\text{Inv}\rightarrow\text{Getdata}\rightarrow\text{Tx/Block}\]</div>
 <p>A node advertises information, another node requests the data, and the data is transferred.</p>
 <p><strong>3. Peer discovery</strong></p>
-<p>\<div class="math-display">$$\text{Getaddr}\rightarrow\text{Addr} \$$</div></p>
+<div class="math-display">\[\text{Getaddr}\rightarrow\text{Addr}\]</div>
 <p>A node requests information about peers and receives peer addresses.</p>
 <h1><strong>Topic 7: How Do Two Bitcoin Nodes Establish a Connection?</strong></h1>
 <p>Now let's combine the protocol messages into a real communication process.</p>
@@ -1645,7 +1646,7 @@ th {
     </div>
     
 <p><strong>Remember this sequence for the exam:</strong></p>
-<p>\<div class="math-display">$$\text{getheaders} \rightarrow \text{headers} \rightarrow \text{getdata} \rightarrow \text{block} \$$</div></p>
+<div class="math-display">\[\text{getheaders} \rightarrow \text{headers} \rightarrow \text{getdata} \rightarrow \text{block}\]</div>
 <p>This is the essential message flow to remember for headers-first synchronisation.</p>
 <h1><strong>Topic 11: Stratum Protocol</strong></h1>
 

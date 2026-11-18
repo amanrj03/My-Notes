@@ -457,22 +457,25 @@ def process_raw_notes_for_module(mod_num):
     elif mod_num == 18:
         body_raw = inject_module_18_tokens(body_raw)
 
-    # Protect MathJax display math \\[ ... \\] and inline math \\( ... \\)
+    # Protect MathJax display math \\[ ... \\], \[ ... \], $$ ... $$
     math_display = []
     def rep_disp(m):
         idx = len(math_display)
-        content = m.group(1).replace('₹', r'\text{₹}')
+        content = m.group(1).strip()
+        content = content.replace('₹', r'\text{₹}')
         math_display.append(content)
-        return f"TOKEN_MATH_DISP_{idx}"
-    body_raw = re.sub(r'\\\[(.*?)\\\]', rep_disp, body_raw, flags=re.DOTALL)
+        return f"\n\nTOKEN_MATH_DISP_{idx}\n\n"
+    body_raw = re.sub(r'\\+\[(.*?)\\+\]', rep_disp, body_raw, flags=re.DOTALL)
+    body_raw = re.sub(r'\$\$(.*?)\$\$', rep_disp, body_raw, flags=re.DOTALL)
 
     math_inline = []
     def rep_inline(m):
         idx = len(math_inline)
-        content = m.group(1).replace('₹', r'\text{₹}')
+        content = m.group(1).strip()
+        content = content.replace('₹', r'\text{₹}')
         math_inline.append(content)
         return f"TOKEN_MATH_INL_{idx}"
-    body_raw = re.sub(r'\\\((.*?)\\\)', rep_inline, body_raw)
+    body_raw = re.sub(r'\\+\((.*?)\\+\)', rep_inline, body_raw)
 
     # Convert markdown to HTML
     body_html = markdown.markdown(body_raw, extensions=['tables', 'fenced_code', 'nl2br'])
@@ -482,11 +485,17 @@ def process_raw_notes_for_module(mod_num):
 
     # Restore MathJax
     for idx, content in enumerate(math_display):
-        body_html = body_html.replace(f"<p>TOKEN_MATH_DISP_{idx}</p>", f'<div class="math-display">$${content.strip()}$$</div>')
-        body_html = body_html.replace(f"TOKEN_MATH_DISP_{idx}", f'<div class="math-display">$${content.strip()}$$</div>')
+        body_html = body_html.replace(f"<p>TOKEN_MATH_DISP_{idx}</p>", f'<div class="math-display">\\[{content}\\]</div>')
+        body_html = body_html.replace(f"TOKEN_MATH_DISP_{idx}", f'<div class="math-display">\\[{content}\\]</div>')
 
     for idx, content in enumerate(math_inline):
-        body_html = body_html.replace(f"TOKEN_MATH_INL_{idx}", f'<span class="math-inline">\\({content.strip()}\\)</span>')
+        body_html = body_html.replace(f"<p>TOKEN_MATH_INL_{idx}</p>", f'<span class="math-inline">\\({content}\\)</span>')
+        body_html = body_html.replace(f"TOKEN_MATH_INL_{idx}", f'<span class="math-inline">\\({content}\\)</span>')
+
+    # Safety cleanups: remove any empty or stray paragraph backslashes
+    body_html = re.sub(r'<p>\s*\\+\s*</p>', '', body_html)
+    body_html = re.sub(r'<p>\s*\\+<div', '<div', body_html)
+    body_html = re.sub(r'</div>\s*\\+</p>', '</div>', body_html)
 
     # Enhance Exam Headers and Callouts
     body_html = re.sub(r'<h([1-3])>(Exam-ready[^\n<]*|Likely 5-mark[^\n<]*|Likely 10-mark[^\n<]*|Important 5-mark[^\n<]*|Important 10-mark[^\n<]*|Important definitions[^\n<]*)</h\1>',
@@ -553,8 +562,9 @@ def generate_module_page(mod_num):
     <script>
     MathJax = {{
         tex: {{
-            inlineMath: [['\\\\(', '\\\\)']],
-            displayMath: [['$$', '$$']],
+            inlineMath: [['\\\\(', '\\\\)'], ['$', '$']],
+            displayMath: [['$$', '$$'], ['\\\\[', '\\\\]']],
+            processEscapes: true
         }},
         options: {{
             skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']

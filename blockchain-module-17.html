@@ -13,8 +13,9 @@
     <script>
     MathJax = {
         tex: {
-            inlineMath: [['\\(', '\\)']],
-            displayMath: [['$$', '$$']],
+            inlineMath: [['\\(', '\\)'], ['$', '$']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true
         },
         options: {
             skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
@@ -1022,7 +1023,7 @@ th {
 <p>Before SegWit, block size was limited to 1 MB.</p>
 <p>SegWit introduced a new concept called <strong>block weight</strong>.</p>
 <p>The textbook gives the following transaction-weight formula:</p>
-<p>\<div class="math-display">$$\text{Weight} = 3 \times \text{Base size} + \text{Total size} \$$</div></p>
+<div class="math-display">\[\text{Weight} = 3 \times \text{Base size} + \text{Total size}\]</div>
 <p>Here:</p>
 <ul>
 <li>Base size = Transaction size without witness data.</li>
@@ -1035,9 +1036,9 @@ th {
 <li>Total size = 150 bytes.</li>
 </ul>
 <p>Then:</p>
-<p>\<div class="math-display">$$\text{Weight}=3(100)+150 \$$</div></p>
-<p>\<div class="math-display">$$=300+150 \$$</div></p>
-<p>\<div class="math-display">$$\boxed{450\text{ weight units}} \$$</div></p>
+<div class="math-display">\[\text{Weight}=3(100)+150\]</div>
+<div class="math-display">\[=300+150\]</div>
+<div class="math-display">\[\boxed{450\text{ weight units}}\]</div>
 <p>Your textbook states that blocks can have a maximum of 4 million weight units.</p>
 <p>This mechanism allows witness data to have a lower weight than ordinary transaction data.</p>
 <h2><strong>5.6 Types of SegWit transactions</strong></h2>
@@ -1374,7 +1375,7 @@ th {
 </tbody>
 </table>
 <p>The remaining balance is:</p>
-<p>\<div class="math-display">$$0.01-0.007=0.003\ BTC \$$</div></p>
+<div class="math-display">\[0.01-0.007=0.003\ BTC\]</div>
 <p>Aman has made four payments through the channel.</p>
 <p>Instead of putting every individual payment on the Bitcoin blockchain, the channel keeps track of the updated balance.</p>
 <p>When the channel is closed, the final settlement is recorded on the Bitcoin blockchain.</p>
