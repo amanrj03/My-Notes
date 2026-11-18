@@ -20,12 +20,32 @@ def test_modules():
         if f"Module {m}:" not in html:
             errors.append(f"{fname}: Title tag missing Module {m}")
 
-        # Check diagrams
-        diagram_count = len(re.findall(r'<div class="diagram-box">', html))
-        if diagram_count < 3:
-            errors.append(f"{fname}: Expected at least 3 diagrams, found {diagram_count}")
+        # Check unresolved tokens
+        unresolved = re.findall(r'TOKEN_MOD[A-Z0-9_]+', html)
+        if unresolved:
+            errors.append(f"{fname}: Unresolved tokens found: {unresolved}")
         else:
-            print(f"✓ {fname}: Found {diagram_count} embedded visual diagrams.")
+            print(f"✓ {fname}: Zero unresolved diagram tokens.")
+
+        # Check broken links
+        broken_openai = re.findall(r'images\.openai\.com', html)
+        if broken_openai:
+            errors.append(f"{fname}: Broken images.openai.com links found: {len(broken_openai)}")
+        else:
+            print(f"✓ {fname}: Zero broken image links.")
+
+        # Check diagrams
+        diagram_matches = re.findall(r'<div class="diagram-box">', html)
+        diagram_count = len(diagram_matches)
+        titles = re.findall(r'<h4 class="diagram-title">([^<]+)</h4>', html)
+        
+        min_expected = 10 if m in [14, 15] else 3
+        if diagram_count < min_expected:
+            errors.append(f"{fname}: Expected at least {min_expected} diagrams, found {diagram_count}")
+        else:
+            print(f"✓ {fname}: Found {diagram_count} embedded visual diagrams:")
+            for t in titles:
+                print(f"    - {t}")
 
         # Check quiz
         quiz_matches = re.findall(r'handleQuizClick\(\s*(\d+),\s*(\d+),\s*(\d+),\s*(\d+)\s*\)', html)
@@ -89,6 +109,9 @@ def test_modules():
     else:
         print("\n🎉 ALL 18 MODULES AND HUBS VALIDATED WITH 100% SUCCESS!")
         return True
+
+if __name__ == "__main__":
+    test_modules()
 
 if __name__ == "__main__":
     test_modules()

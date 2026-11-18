@@ -409,8 +409,6 @@ th {
 <h1><strong>Topic 1: What is a Bitcoin Wallet?</strong></h1>
 <h2><strong>1.1 First, understand a normal wallet</strong></h2>
 <p>Imagine you have a physical wallet.</p>
-<p><a href="https://images.openai.com/static-rsc-4/vwJ0II-K4x4VH4D7ehR4fLjpkTgYPtRBt3OuHVwVm25HQDj52iI5wcocnms6ejXC84jVDSW_CPkmszNKsgrs_ihVNQ5G-EzQpyG2atuutNimJNT60RlUCATU4bNjLwE2lhMsZtG0dDrH3nAQHjDN8DlLVpDEU42P3mU6aPv9Sy0?purpose=inline">Best Leather Wallets for Men 2026: Slim, RFID &amp; Handcrafted | CalfNero</a></p>
-<p><a href="https://calfnero.in/blogs/news/best-leather-wallets-for-men-2026-slim-rfid-handcrafted-calfnero?utm_source=chatgpt.com">calfnero.in</a></p>
 <p>You keep:</p>
 <ul>
 <li>Money</li>
@@ -422,6 +420,46 @@ th {
 <p>You cannot physically keep Bitcoin inside your mobile phone or computer. Bitcoin exists as transaction records on the blockchain.</p>
 <p>So, what does a Bitcoin wallet do?</p>
 <p>It manages the cryptographic keys that allow you to access and spend the Bitcoin associated with your wallet.</p>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Core Concept: Where are Bitcoins Stored?</h4>
+            <div class="diagram-subtitle">Demystifying the common misconception: Bitcoins live on the blockchain ledger, not inside the wallet!</div>
+        </div>
+        <div class="diagram-nodes-row" style="gap: 20px;">
+            <div class="diagram-node" style="flex: 1; text-align: left; background: rgba(2, 132, 199, 0.05); border-color: #0284c7;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                    <svg class="diagram-node-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+  <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+  <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+</svg>
+                    <span style="font-weight: 700; color: #38bdf8; font-size: 15px;">Bitcoin Blockchain (Public Ledger)</span>
+                </div>
+                <ul style="margin: 0; padding-left: 18px; font-size: 13px; color: #cbd5e1; line-height: 1.6;">
+                    <li><strong>Stores All Coins:</strong> Bitcoins exist solely as Unspent Transaction Outputs (UTXOs).</li>
+                    <li><strong>Decentralised:</strong> Synchronised across thousands of computers worldwide.</li>
+                    <li><strong>Immutability:</strong> Records which public key/script currently locks the funds.</li>
+                </ul>
+            </div>
+            <div class="diagram-node" style="flex: 1; text-align: left; background: rgba(16, 185, 129, 0.05); border-color: #10b981;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                    <svg class="diagram-node-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path>
+  <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path>
+  <path d="M18 12a2 2 0 0 0 0 4h4v-4z"></path>
+</svg>
+                    <span style="font-weight: 700; color: #34d399; font-size: 15px;">Bitcoin Wallet (Key Keychain)</span>
+                </div>
+                <ul style="margin: 0; padding-left: 18px; font-size: 13px; color: #cbd5e1; line-height: 1.6;">
+                    <li><strong>Stores Private Keys:</strong> Secret mathematical credentials needed to sign transactions.</li>
+                    <li><strong>Signs Spending Scripts:</strong> Unlocks UTXOs to transfer value to new addresses.</li>
+                    <li><strong>Analogy:</strong> Like a debit card / signature key giving access to a bank account.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
 <h2><strong>1.2 Definition of a Bitcoin wallet</strong></h2>
 <p><strong>A Bitcoin wallet is a software application or physical device used to generate, store and manage cryptographic keys, allowing users to send, receive and manage Bitcoin transactions.</strong></p>
 <p>Your teacher's PPT specifically lists these wallet functions:</p>
@@ -502,46 +540,7 @@ th {
 <p>Example from your teacher's Bitcoin material.</p>
 <p>A Bitcoin address is not the private key. It is an identifier used in the transaction's spending conditions.</p>
 <h2><strong>2.4 Relationship between private key, public key and address</strong></h2>
-
-    <div class="diagram-box">
-        <div class="diagram-header">
-            <h4 class="diagram-title">Bitcoin Key &amp; Address Derivation Pipeline</h4>
-            <div class="diagram-subtitle">From a 256-bit private key to a Base58Check legacy P2PKH address</div>
-        </div>
-        <div class="diagram-flow-row" style="flex-wrap: wrap;">
-            <div class="flow-step-card" style="min-width: 170px;">
-                <div class="flow-step-num">Step 1</div>
-                <div class="flow-step-title">Private Key ($k$)</div>
-                <div class="flow-step-desc">256-bit cryptographically secure random integer</div>
-            </div>
-            <div class="flow-arrow">&rarr;</div>
-            <div class="flow-step-card" style="min-width: 170px;">
-                <div class="flow-step-num">Step 2: ECDSA</div>
-                <div class="flow-step-title">Public Key ($K$)</div>
-                <div class="flow-step-desc">Elliptic Curve point multiplication: K = k &times; G (secp256k1)</div>
-            </div>
-            <div class="flow-arrow">&rarr;</div>
-            <div class="flow-step-card" style="min-width: 170px;">
-                <div class="flow-step-num">Step 3: Hash160</div>
-                <div class="flow-step-title">Public Key Hash</div>
-                <div class="flow-step-desc">RIPEMD160(SHA256(K)) produces 160-bit fingerprint</div>
-            </div>
-            <div class="flow-arrow">&rarr;</div>
-            <div class="flow-step-card" style="min-width: 170px;">
-                <div class="flow-step-num">Step 4: Base58Check</div>
-                <div class="flow-step-title">Bitcoin Address</div>
-                <div class="flow-step-desc">Prefix <code>0x00</code> + 4-byte SHA256 checksum &rarr; <code>1A1z...</code></div>
-            </div>
-        </div>
-    </div>
-    
 <p>Let's understand their relationship.</p>
-<h2><strong>Private key</strong></h2>
-<p>Secret number generated by wallet</p>
-<h2><strong>Public key</strong></h2>
-<p>Derived using elliptic curve cryptography</p>
-<h2><strong>Bitcoin address</strong></h2>
-<p>Derived from public-key or script-related data, depending on address type</p>
 <p>Remember:</p>
 <ul>
 <li>Private key → used to sign.</li>
@@ -559,14 +558,45 @@ th {
 <p><strong>Step 6:</strong> Calculate a checksum using double SHA-256.</p>
 <p><strong>Step 7:</strong> Encode the result using Base58Check.</p>
 <p>The result is a traditional Bitcoin address such as a P2PKH address.</p>
-<p><strong>Private key</strong></p>
-<p><strong>Public key</strong></p>
-<p><strong>SHA-256</strong></p>
-<p><strong>RIPEMD-160</strong></p>
-<p><strong>Add version information</strong></p>
-<p><strong>Double SHA-256 checksum</strong></p>
-<p><strong>Base58Check encoding</strong></p>
-<h2><strong>Bitcoin address</strong></h2>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Complete 7-Step Bitcoin Address Generation Pipeline</h4>
+            <div class="diagram-subtitle">From a 256-bit random private key to an encoded Base58Check legacy P2PKH address</div>
+        </div>
+        <div class="diagram-flow-row" style="flex-wrap: wrap;">
+            <div class="flow-step-card" style="min-width: 150px;">
+                <div class="flow-step-num">Step 1</div>
+                <div class="flow-step-title">Private Key ($k$)</div>
+                <div class="flow-step-desc">256-bit secure random integer</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step-card" style="min-width: 150px;">
+                <div class="flow-step-num">Step 2: ECDSA</div>
+                <div class="flow-step-title">Public Key ($K$)</div>
+                <div class="flow-step-desc">K = k &times; G on curve secp256k1</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step-card" style="min-width: 150px;">
+                <div class="flow-step-num">Step 3 &amp; 4: Hash160</div>
+                <div class="flow-step-title">Public Key Hash</div>
+                <div class="flow-step-desc">RIPEMD160(SHA256(K)) (160 bits)</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step-card" style="min-width: 150px;">
+                <div class="flow-step-num">Step 5 &amp; 6</div>
+                <div class="flow-step-title">Version + Checksum</div>
+                <div class="flow-step-desc">Prefix 0x00 + first 4B of double SHA256</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step-card" style="min-width: 150px;">
+                <div class="flow-step-num">Step 7</div>
+                <div class="flow-step-title">Base58Check</div>
+                <div class="flow-step-desc">Legacy Address: <code>1ANAguGG8bik...</code></div>
+            </div>
+        </div>
+    </div>
+    
 <h3><strong>What is Base58Check?</strong></h3>
 <p>Base58Check is an encoding method used to represent Bitcoin data in a human-readable format, with a checksum to help detect typing errors.</p>
 <p>Your teacher's PPT mentions that traditional addresses can begin with:</p>
@@ -590,11 +620,39 @@ th {
 <li>Once included in an accepted block, the payment is recorded on the blockchain.</li>
 <li>Rahul's wallet detects the relevant transaction and updates its displayed balance.</li>
 </ol>
-<p><strong>Rahul opens wallet</strong></p>
-<p><strong>Wallet generates or displays receiving address</strong></p>
-<p><strong>Rahul shares address with Aman</strong></p>
-<p><strong>Aman sends Bitcoin</strong></p>
-<p><strong>Transaction is confirmed and Rahul's wallet recognises the payment</strong></p>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">End-to-End Bitcoin Wallet Transaction Creation &amp; Signing Flow</h4>
+            <div class="diagram-subtitle">How a wallet turns user payment intent into an autonomous, cryptographically verified broadcast</div>
+        </div>
+        <div class="diagram-flow-row">
+            <div class="flow-step-card">
+                <div class="flow-step-num">Stage 1</div>
+                <div class="flow-step-title">UTXO Selection</div>
+                <div class="flow-step-desc">Wallet scans blockchain state; selects unspent outputs whose sum exceeds payment + estimated miner fee.</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step-card">
+                <div class="flow-step-num">Stage 2</div>
+                <div class="flow-step-title">Draft Outputs</div>
+                <div class="flow-step-desc">Creates recipient output (exact payment amount) and generates a fresh internal change address for excess funds.</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step-card">
+                <div class="flow-step-num">Stage 3</div>
+                <div class="flow-step-title">ECDSA Signing</div>
+                <div class="flow-step-desc">Wallet accesses private key; signs each input unlocking script proving legal ownership of the UTXOs.</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step-card">
+                <div class="flow-step-num">Stage 4</div>
+                <div class="flow-step-title">P2P Broadcast</div>
+                <div class="flow-step-desc">Constructs raw serialized transaction; floods into the Bitcoin P2P network mempools via <code>inv</code> message!</div>
+            </div>
+        </div>
+    </div>
+    
 <h2><strong>3.2 Sending Bitcoin</strong></h2>
 <p>Now suppose Aman wants to send 0.5 BTC to Rahul.</p>
 <p>The process is:</p>
@@ -611,6 +669,17 @@ th {
 </ol>
 <p><strong>Important:</strong> A wallet does not send a private key to Rahul or to the Bitcoin network. It uses the key locally to produce the required signature.</p>
 <h2><strong>3.3 What is a UTXO?</strong></h2>
+<p>UTXO stands for <strong>Unspent Transaction Output</strong>.</p>
+<p>Bitcoin uses the UTXO model instead of maintaining a simple account balance in the way many traditional banking systems do.</p>
+<p>Let's understand with an example.</p>
+<p>Suppose Aman receives:</p>
+<ul>
+<li>0.4 BTC from Rahul.</li>
+<li>0.8 BTC from Priya.</li>
+</ul>
+<p>Aman now controls UTXOs totalling 1.2 BTC.</p>
+<p>He wants to send 0.5 BTC to someone.</p>
+<p>His wallet might construct a transaction like this:</p>
 
     <div class="diagram-box">
         <div class="diagram-header">
@@ -651,26 +720,6 @@ th {
         </div>
     </div>
     
-<p>UTXO stands for <strong>Unspent Transaction Output</strong>.</p>
-<p>Bitcoin uses the UTXO model instead of maintaining a simple account balance in the way many traditional banking systems do.</p>
-<p>Let's understand with an example.</p>
-<p>Suppose Aman receives:</p>
-<ul>
-<li>0.4 BTC from Rahul.</li>
-<li>0.8 BTC from Priya.</li>
-</ul>
-<p>Aman now controls UTXOs totalling 1.2 BTC.</p>
-<p>He wants to send 0.5 BTC to someone.</p>
-<p>His wallet might construct a transaction like this:</p>
-<p><strong>Transaction example</strong></p>
-<p><strong>Inputs</strong></p>
-<h1><strong>1.2 BTC</strong></h1>
-<p>0.4 + 0.8 BTC</p>
-<p><strong>Outputs</strong></p>
-<h1><strong>1.198 BTC</strong></h1>
-<p>0.5 BTC payment + 0.698 BTC change</p>
-<p><strong>Transaction fee</strong></p>
-<h2><strong>0.002 BTC</strong></h2>
 <p>Here:</p>
 <p>\<div class="math-display">$$\text{Inputs}=\text{Outputs}+\text{Fee} \$$</div></p>
 <p>\<div class="math-display">$$1.2=0.5+0.698+0.002 \$$</div></p>
@@ -766,6 +815,22 @@ th {
 <p>If you safely preserve the master key, you can regenerate the other keys.</p>
 <p>That is the basic idea behind a deterministic wallet.</p>
 <h2><strong>4.3 Hierarchical Deterministic (HD) wallet</strong></h2>
+<p>Important 5-mark and 10-mark topic</p>
+<h3><strong>Definition</strong></h3>
+<p>A <strong>Hierarchical Deterministic (HD) wallet is a type of deterministic wallet in which keys are organised in a hierarchical tree structure, with master, parent, child and further descendant keys derived from a seed.</strong></p>
+<p>Your teacher's PPT specifically mentions BIP32 and BIP44 in connection with HD wallets.</p>
+<h3><strong>First understand the word hierarchical</strong></h3>
+<p>Hierarchical means organised in levels.</p>
+<p>For example, consider a university:</p>
+<p><strong>University</strong></p>
+<p>School A</p>
+<p>School B</p>
+<p>Dept A1</p>
+<p>Dept A2</p>
+<p>Dept B1</p>
+<p>Dept B2</p>
+<p>The university is at the top, schools are below it, and departments are further down.</p>
+<p>An HD wallet follows a similar hierarchy for keys.</p>
 
     <div class="diagram-box">
         <div class="diagram-header">
@@ -796,36 +861,63 @@ th {
         </div>
     </div>
     
-<p>Important 5-mark and 10-mark topic</p>
-<h3><strong>Definition</strong></h3>
-<p>A <strong>Hierarchical Deterministic (HD) wallet is a type of deterministic wallet in which keys are organised in a hierarchical tree structure, with master, parent, child and further descendant keys derived from a seed.</strong></p>
-<p>Your teacher's PPT specifically mentions BIP32 and BIP44 in connection with HD wallets.</p>
-<h3><strong>First understand the word hierarchical</strong></h3>
-<p>Hierarchical means organised in levels.</p>
-<p>For example, consider a university:</p>
-<p><strong>University</strong></p>
-<p>School A</p>
-<p>School B</p>
-<p>Dept A1</p>
-<p>Dept A2</p>
-<p>Dept B1</p>
-<p>Dept B2</p>
-<p>The university is at the top, schools are below it, and departments are further down.</p>
-<p>An HD wallet follows a similar hierarchy for keys.</p>
 <h3><strong>How does an HD wallet work?</strong></h3>
 <p><strong>Step 1:</strong> A random seed is generated.</p>
 <p><strong>Step 2:</strong> The seed is used to generate a master key.</p>
 <p><strong>Step 3:</strong> The master key is used to derive child keys.</p>
 <p><strong>Step 4:</strong> Child keys can derive further child keys.</p>
 <p><strong>Step 5:</strong> The wallet can organise keys into multiple branches.</p>
-<p><strong>Seed</strong></p>
-<p><strong>Master key</strong></p>
-<p>Child key A</p>
-<p>Child key B</p>
-<p>Child A1</p>
-<p>Child A2</p>
-<p>Child B1</p>
-<p>Child B2</p>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">BIP44 Multi-Account Hierarchical Derivation Tree</h4>
+            <div class="diagram-subtitle">Standardized path: m / purpose' / coin_type' / account' / change / address_index</div>
+        </div>
+        <div style="max-width: 700px; margin: 0 auto; text-align: left; background: #090d16; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); padding: 18px;">
+            <div style="text-align: center; margin-bottom: 16px;">
+                <span style="background: linear-gradient(135deg, #0284c7, #1e3a8a); color: #fff; font-weight: 800; font-size: 13px; padding: 6px 16px; border-radius: 20px;">
+                    Master Root Key (m) &bull; Derived from 512-bit Seed
+                </span>
+            </div>
+            <div style="display: flex; justify-content: center; font-size: 20px; color: #64748b; margin-bottom: 8px;">&darr;</div>
+            <div style="text-align: center; margin-bottom: 14px;">
+                <span style="background: rgba(168, 85, 247, 0.15); border: 1px solid #9333ea; color: #c084fc; font-weight: bold; font-size: 12.5px; padding: 4px 12px; border-radius: 8px;">
+                    m / 44' (Purpose: BIP44 Specification)
+                </span>
+            </div>
+            <div style="display: flex; justify-content: center; font-size: 20px; color: #64748b; margin-bottom: 8px;">&darr;</div>
+            <div style="text-align: center; margin-bottom: 14px;">
+                <span style="background: rgba(234, 179, 8, 0.15); border: 1px solid #ca8a04; color: #facc15; font-weight: bold; font-size: 12.5px; padding: 4px 12px; border-radius: 8px;">
+                    m / 44' / 0' (Coin Type: 0' for Bitcoin Mainnet, 1' for Testnet)
+                </span>
+            </div>
+            <div style="display: flex; justify-content: center; font-size: 20px; color: #64748b; margin-bottom: 8px;">&darr;</div>
+            <div style="text-align: center; margin-bottom: 14px;">
+                <span style="background: rgba(56, 189, 248, 0.15); border: 1px solid #0284c7; color: #38bdf8; font-weight: bold; font-size: 12.5px; padding: 4px 12px; border-radius: 8px;">
+                    m / 44' / 0' / 0' (Account 0: Primary User Account)
+                </span>
+            </div>
+            <div style="display: flex; gap: 16px; margin-top: 14px;">
+                <div style="flex: 1; background: rgba(16, 185, 129, 0.08); border: 1px solid #10b981; border-radius: 8px; padding: 12px;">
+                    <div style="font-weight: bold; color: #34d399; font-size: 12.5px; margin-bottom: 6px;">External Receiving Chain (change = 0)</div>
+                    <div style="font-family: monospace; font-size: 11.5px; color: #cbd5e1; line-height: 1.6;">
+                        m/44'/0'/0'/0/0 &rarr; Address 0 (Receive)<br>
+                        m/44'/0'/0'/0/1 &rarr; Address 1 (Receive)<br>
+                        m/44'/0'/0'/0/2 &rarr; Address 2 (Receive)
+                    </div>
+                </div>
+                <div style="flex: 1; background: rgba(239, 68, 68, 0.08); border: 1px solid #ef4444; border-radius: 8px; padding: 12px;">
+                    <div style="font-weight: bold; color: #f87171; font-size: 12.5px; margin-bottom: 6px;">Internal Change Chain (change = 1)</div>
+                    <div style="font-family: monospace; font-size: 11.5px; color: #cbd5e1; line-height: 1.6;">
+                        m/44'/0'/0'/1/0 &rarr; Change Address 0<br>
+                        m/44'/0'/0'/1/1 &rarr; Change Address 1<br>
+                        m/44'/0'/0'/1/2 &rarr; Change Address 2
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 <h3><strong>Important characteristics</strong></h3>
 <ol>
 <li>Keys are derived from a common seed.</li>
@@ -898,10 +990,38 @@ th {
 <h2><strong>4.5 Paper wallet</strong></h2>
 <h3><strong>Definition</strong></h3>
 <p>A <strong>paper wallet is a physical paper document containing Bitcoin key information, usually a private key and corresponding address, sometimes represented using QR codes.</strong></p>
-<p><a href="https://images.openai.com/static-rsc-4/VI8tt_T2Z0-aEBNJ5vyn-bmHmUN7w3kKotUyPVa2lJJhkPlky2DXNSUcxQF1g4dXfSRT2eFqdcf2sL9OH_P3sUVp35uGULM6-j_6DpX-CMNu02Jd5x9GRuVPIkD1zr1iHpSiujBPwofZru5jFCQhU5uD4d3UA8u1W8mq0SMM0X8?purpose=inline">Secure Bitcoin Cold Wallet &amp; Personalized Crypto Gift Cards</a></p>
-<p><a href="https://images.openai.com/static-rsc-4/H5Sh7vZgt92PmidjWka2-u1heSQv_TzEi4X5-2JYe8I2e4ALevYUR-xqP6Z9Vls4Lphc48kCWqpX0vNs_oCF8FN4pMJJN7CUkLt2Bb4WXo4GhQfU0_w9UzhF899m3_ou9nB0hvcC4b5ar1z6WJDPSQkT2yjjsnYoxR8LsldW22A?purpose=inline">Pros and Cons of Bitcoin Paper Wallet</a></p>
-<p><a href="https://images.openai.com/static-rsc-4/Njk73HTJYMkd4dph32tVecS0CsmTyCKgDRaS7qjY2oO7fBV-U6yhpbJQI0-BLbrcTl_czoiq9wNNNjI2FUFWbUFEWYtPSNsFbcXmmspabzdDTZhQGNu6lUepktiYnEX-T8QSg_eBAgARuveEsDdlVWq00eiRFTe_k0H38Cxj9vs?purpose=inline">Wallets | Crypto UX Handbook</a></p>
-<p>6</p>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Anatomy of a Physical Paper Wallet</h4>
+            <div class="diagram-subtitle">Offline cold storage with distinct public receiving and private spending credentials</div>
+        </div>
+        <div style="max-width: 600px; margin: 0 auto; background: #f8fafc; color: #0f172a; border: 2px solid #cbd5e1; border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #0284c7; padding-bottom: 8px; margin-bottom: 16px;">
+                <span style="font-weight: 800; font-size: 16px; color: #0f172a; display: flex; align-items: center; gap: 6px;">
+                    ₿ BITCOIN COLD STORAGE PAPER WALLET
+                </span>
+                <span style="font-size: 11px; background: #0284c7; color: #fff; padding: 2px 8px; border-radius: 10px; font-weight: bold;">OFFLINE</span>
+            </div>
+            <div style="display: flex; gap: 16px; justify-content: space-between;">
+                <div style="flex: 1; text-align: left; background: #f0fdf4; border: 1.5px solid #10b981; border-radius: 8px; padding: 12px;">
+                    <div style="font-size: 11px; font-weight: 800; color: #059669; text-transform: uppercase;">1. Public Bitcoin Address (SHARE)</div>
+                    <div style="background: #fff; border: 1px dashed #10b981; padding: 8px; margin: 8px 0; text-align: center; border-radius: 4px;">
+                        <span style="font-family: monospace; font-size: 10.5px; color: #0f172a; word-break: break-all;">1ANAguGG8bikEv2fYsTBnRUmx7QUcK58wt</span>
+                    </div>
+                    <div style="font-size: 11px; color: #475569;">Scan or share to deposit Bitcoin safely anytime.</div>
+                </div>
+                <div style="flex: 1; text-align: left; background: #fef2f2; border: 1.5px solid #ef4444; border-radius: 8px; padding: 12px;">
+                    <div style="font-size: 11px; font-weight: 800; color: #dc2626; text-transform: uppercase;">2. Private Key WIF (SECRET / DO NOT SHARE)</div>
+                    <div style="background: #fff; border: 1px dashed #ef4444; padding: 8px; margin: 8px 0; text-align: center; border-radius: 4px;">
+                        <span style="font-family: monospace; font-size: 10.5px; color: #dc2626; word-break: break-all;">5HueCGU8rMjxEXxiPuD5BDku4MkFqeZ...</span>
+                    </div>
+                    <div style="font-size: 11px; color: #475569;">Keep hidden! Needed only when spending / sweeping funds.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 <h3><strong>How does it work?</strong></h3>
 <ol>
 <li>A Bitcoin key pair is generated.</li>
@@ -932,10 +1052,43 @@ th {
 <p>Important wallet type</p>
 <h3><strong>Definition</strong></h3>
 <p>A <strong>hardware wallet is a dedicated physical device designed to store and protect private keys and help authorise cryptocurrency transactions securely.</strong></p>
-<p><a href="https://images.openai.com/static-rsc-4/SMcL2fiErFgWEv3TLb48rYYkelmXVa9nGQO9qFgAugpiAMTg8Alyp_PRwpUlAI1Yqm7-3hX4OSU4P-1b1RonO8dZ1VVu4sd3GHSAWDa4e61dtlyoH-j4xWZk5Od9xjxkugQuPciM45tqAOLEp1Yc6CuuMknqNmcXReT7BJNtcsM?purpose=inline">Ledger Adds Orchid’s Digital Currency (OXT)</a></p>
-<p><a href="https://images.openai.com/static-rsc-4/tisvqrLHp53qD4Xd4EhSj4tQrWmYkIGTQtCRt29bhWIKeTfTJD7qhcWeCpK30zJxQZfaqUz-F97ePoK9_QHGu-__F9ZikgOj3ySKzKc7Idc18ZPfqAfdOMas56_9LeJAE-30HLk0bjiNAi3lTuWbXqAAQeGdv0GvgU2HVnr4TJk?purpose=inline">Yellow.com</a></p>
-<p><a href="https://images.openai.com/static-rsc-4/3AZXekCwouUWsR7EZBpwTVBWSenG9WFZ4mw5TtOfDS3LavOyl05vIlMNqxEm_CMlbHKgMEEmb9rXNVPUQwtaXGxMymg9XSf551UqFnfEBHgNVltnfR6PZtISgH1elYFXAMQC7jPrqUybsvIQuEy-zI6nUlRnNJ8dwwcrJxeq7FE?purpose=inline">KaBuM  Aperte o K e evolua em Tecnologia e Games</a></p>
-<p>6</p>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Hardware Wallet Isolated Signing Architecture</h4>
+            <div class="diagram-subtitle">Cryptographic private keys remain strictly isolated within the Secure Element chip</div>
+        </div>
+        <div class="diagram-nodes-row" style="justify-content: space-around; align-items: center; gap: 16px;">
+            <div class="diagram-node" style="flex: 1; max-width: 250px; text-align: left; background: rgba(239, 68, 68, 0.05); border-color: rgba(239, 68, 68, 0.3);">
+                <div style="font-weight: 700; color: #f87171; margin-bottom: 8px;">Host Computer (Online)</div>
+                <div style="font-size: 12.5px; color: #cbd5e1; line-height: 1.55;">
+                    • Connects to internet.<br>
+                    • Constructs unsigned transaction.<br>
+                    • ⚠️ May harbor malware or keyloggers!
+                </div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                <span style="font-size: 11px; font-family: monospace; color: #38bdf8;">Unsigned Tx &rarr;</span>
+                <span style="font-size: 20px; color: #64748b;">USB / BLE</span>
+                <span style="font-size: 11px; font-family: monospace; color: #34d399;">&larr; Signed Tx</span>
+            </div>
+            <div class="diagram-node primary" style="flex: 1; max-width: 280px; text-align: left;">
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                    <svg class="diagram-node-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+</svg>
+                    <span style="font-weight: 700; color: #38bdf8;">Hardware Wallet (Trezor/Ledger)</span>
+                </div>
+                <div style="font-size: 12.5px; color: #cbd5e1; line-height: 1.55;">
+                    • Dedicated <strong>Secure Element</strong> microcontroller.<br>
+                    • Private key NEVER leaves physical device.<br>
+                    • User verifies amount &amp; clicks physical button to sign.
+                </div>
+            </div>
+        </div>
+    </div>
+    
 <p>Examples mentioned in your teacher's PPT and textbook:</p>
 <ul>
 <li>Ledger</li>
@@ -977,8 +1130,6 @@ th {
 <h2><strong>4.7 Online wallet</strong></h2>
 <h3><strong>Definition</strong></h3>
 <p>An <strong>online wallet is a wallet provided through an internet-based service, usually through a website or cloud-based platform, that allows users to manage Bitcoin transactions.</strong></p>
-<p><a href="https://images.openai.com/static-rsc-4/feG6Myr_b9sOndi2cI-YlZRY69a2lkb3Siu-4hPJXQtLlISPUlqqYJnWDedHw0fPtE7x5D0UdqGSYbR_fKdgyhuV5F4qPENPNOmCfU5OuleytCzeiKCNfwcdQPN9kmsMCBMz3XCRCOYBLBb3hnelXTzr4T-QPISX7g4iL49VPS0?purpose=inline">Software Development Services by Freelance Programmers | Fiverr</a></p>
-<p><a href="https://www.fiverr.com/qputctri/setup-profitable-miner-software-miner-app-crypto-app-miner-software?utm_source=chatgpt.com">fiverr.com</a></p>
 <h3><strong>How does it work?</strong></h3>
 <ol>
 <li>A user accesses the wallet service through a website.</li>
@@ -1007,10 +1158,6 @@ th {
 <h2><strong>4.8 Mobile wallet</strong></h2>
 <h3><strong>Definition</strong></h3>
 <p>A <strong>mobile wallet is a Bitcoin wallet application installed on a smartphone or mobile device that allows users to manage keys and send or receive Bitcoin.</strong></p>
-<p><a href="https://images.openai.com/static-rsc-4/Rpu4Ijs_jeEouWV4te5RZ3yocl01VfbI830ovt5aiD67mst2xyHoo9TQ0IAWccA_1hKxi_FFWlC-PtqoHXkKjV4ktqommv7-DZ6KuVoGdhjp2vmNE6-eCYmF08XXOfGnJv4113lNC60MkhXBPScbuvNL1r0ZchO70UoWaImTd94?purpose=inline">Low Fees</a></p>
-<p><a href="https://images.openai.com/static-rsc-4/JYzoYqRO8fxOJsZe0oykDf7iSkbLmsE_GWGavkt-JDrwbwidgL_7dM9zp9zLlLzLdPxnS8WRzRwH9Q6nq0TLNnLnGRwku-jZZRJyKuRa5_fGpy1SGURtQLIXzQtu5skW2CQTLaaPrFyJk8dVgmGcSOSehU_0I9tOXubZPnH0wjg?purpose=inline">Secure Bitcoin Wallet - Begin Wallet</a></p>
-<p><a href="https://images.openai.com/static-rsc-4/p8PrGYR9Cl4UnyDuSjge4ybct_n3kStM-aCqYhrr8K_myEV0JYhXFiqrq_q6XWqgFScG_Wg8n710dzkbAl86btEDaJqe0U4GIOlwc17652PrzIMspIDhsS70h5VEPF92q2Xbo9hY7xr2Sng4kPbD7l_z-CvfJsOUJZ4DrJTX5cU?purpose=inline">NBCBANQ - Digital Banking &amp; Crypto Wallet | Web3 Mastercard</a></p>
-<p>9</p>
 <h3><strong>How does it work?</strong></h3>
 <ol>
 <li>The user installs a Bitcoin wallet application.</li>
@@ -1132,12 +1279,39 @@ th {
 </tr>
 </tbody>
 </table>
-<p><a href="https://images.openai.com/static-rsc-4/6tZepMQXIsjXtmOE6XZrVVm2yeEdwn3U9hl9h3mHsqZTV0wKviaMCcz00MaHAcCj8LT5EBRotmsJmKTwjzz-yiHx6zOO_PnTGdecn3T5f9NColb8j8s3XTEGodHoW8ctTI1JkejEfKKiZJT38h9Ty1Pv7ptvEr5qLyAGq1wvrAk?purpose=inline">Pocket miner: how to mine cryptocurrency with a smartphone  | Prague Blockchain Conf</a></p>
-<p><strong>Hot wallet</strong></p>
-<p>Convenient for everyday use.</p>
-<p><a href="https://images.openai.com/static-rsc-4/zXz95IvA-rEVcTh8uxvkEQ3otDT2G1T-vfbFd-LWQthqoHq2Mve-MaHkWQ6eul6zIcV53U_NYHG9-OX32Y7QqwnLhYLmsAA9cviWi4U-IJeCCqriLOFi_T8wuADKvZlcFqUSiGZWYQxfpH5erAJCbkzdowjotwyyOsOw_FUMvjg?purpose=inline">How do you secure your cryptocurrencies? - Crypto wallet at Safebox24 safe deposit box</a></p>
-<p><strong>Cold wallet</strong></p>
-<p>Better suited to offline key storage.</p>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Bitcoin Wallet Security vs. Convenience Spectrum</h4>
+            <div class="diagram-subtitle">From high-frequency online hot wallets to impenetrable offline cold vaults</div>
+        </div>
+        <div style="max-width: 750px; margin: 0 auto; background: #090d16; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); padding: 18px;">
+            <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 12.5px; margin-bottom: 12px;">
+                <span style="color: #f87171;">⚡ High Convenience / Online Risk (Hot)</span>
+                <span style="color: #34d399;">🛡️ Maximum Security / Offline Isolation (Cold)</span>
+            </div>
+            <div style="height: 10px; width: 100%; border-radius: 10px; background: linear-gradient(90deg, #ef4444 0%, #f59e0b 50%, #10b981 100%); margin-bottom: 18px;"></div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; font-size: 12px; text-align: left;">
+                <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 6px; padding: 10px;">
+                    <div style="font-weight: bold; color: #f87171;">Web / Exchange</div>
+                    <div style="color: #94a3b8; margin-top: 4px;">Custodial, instant trading, vulnerable to platform insolvency.</div>
+                </div>
+                <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 6px; padding: 10px;">
+                    <div style="font-weight: bold; color: #fbbf24;">Mobile / Desktop</div>
+                    <div style="color: #94a3b8; margin-top: 4px;">Non-custodial, convenient for daily shopping, device malware risk.</div>
+                </div>
+                <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 6px; padding: 10px;">
+                    <div style="font-weight: bold; color: #34d399;">Hardware Wallet</div>
+                    <div style="color: #94a3b8; margin-top: 4px;">Isolated secure element chip, protected from malware, ideal holding.</div>
+                </div>
+                <div style="background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 6px; padding: 10px;">
+                    <div style="font-weight: bold; color: #38bdf8;">Paper / Steel Vault</div>
+                    <div style="color: #94a3b8; margin-top: 4px;">100% air-gapped, fireproof, zero electronics, generational storage.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 <p><strong>Exam tip:</strong> Do not write that a hardware wallet is automatically safe just because it is a hardware device. Its security also depends on secure setup, recovery-phrase protection and careful transaction verification.</p>
 <h1><strong>Topic 6: Wallet Backup and Recovery</strong></h1>
 <p>Now suppose Aman has 5 BTC in his wallet.</p>
@@ -1181,31 +1355,80 @@ th {
 <h2><strong>7.2 What is a mnemonic phrase?</strong></h2>
 <p>A <strong>mnemonic phrase is a sequence of human-readable words used to represent recovery information for a wallet.</strong></p>
 <p>For example, a wallet might provide a 12-word or 24-word recovery phrase.</p>
-<p><strong>Illustrative recovery phrase format</strong></p>
-<p>Word 1</p>
-<p>••••••</p>
-<p>Word 2</p>
-<p>••••••</p>
-<p>Word 3</p>
-<p>••••••</p>
-<p>Word 4</p>
-<p>••••••</p>
-<p>Word 5</p>
-<p>••••••</p>
-<p>Word 6</p>
-<p>••••••</p>
-<p>Word 7</p>
-<p>••••••</p>
-<p>Word 8</p>
-<p>••••••</p>
-<p>Word 9</p>
-<p>••••••</p>
-<p>Word 10</p>
-<p>••••••</p>
-<p>Word 11</p>
-<p>••••••</p>
-<p>Word 12</p>
-<p>••••••</p>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">BIP39 Standard 12-Word Recovery Vault Card</h4>
+            <div class="diagram-subtitle">Standardized mnemonic phrase structure encoding 128-bit entropy + 4-bit checksum</div>
+        </div>
+        <div style="max-width: 620px; margin: 0 auto; background: #0f172a; border: 1.5px solid #0284c7; border-radius: 12px; padding: 20px; box-shadow: 0 4px 20px rgba(2, 132, 199, 0.15);">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 16px;">
+                <span style="font-weight: 700; color: #f8fafc; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                    <svg class="diagram-node-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="7.5" cy="15.5" r="5.5"></circle>
+  <path d="m21 2-9.6 9.6"></path>
+  <path d="m15.5 7.5 3 3L22 7l-3-3"></path>
+</svg> SECRET RECOVERY SEED PHRASE
+                </span>
+                <span style="font-size: 11px; color: #38bdf8; font-weight: bold;">12 WORDS &bull; 128-BIT SECURITY</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px;">
+                
+        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 11px; color: #64748b; font-weight: bold;">#01</span>
+            <span style="font-family: monospace; font-size: 13.5px; font-weight: bold; color: #38bdf8;">abandon</span>
+        </div>
+        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 11px; color: #64748b; font-weight: bold;">#02</span>
+            <span style="font-family: monospace; font-size: 13.5px; font-weight: bold; color: #38bdf8;">ability</span>
+        </div>
+        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 11px; color: #64748b; font-weight: bold;">#03</span>
+            <span style="font-family: monospace; font-size: 13.5px; font-weight: bold; color: #38bdf8;">able</span>
+        </div>
+        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 11px; color: #64748b; font-weight: bold;">#04</span>
+            <span style="font-family: monospace; font-size: 13.5px; font-weight: bold; color: #38bdf8;">about</span>
+        </div>
+        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 11px; color: #64748b; font-weight: bold;">#05</span>
+            <span style="font-family: monospace; font-size: 13.5px; font-weight: bold; color: #38bdf8;">above</span>
+        </div>
+        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 11px; color: #64748b; font-weight: bold;">#06</span>
+            <span style="font-family: monospace; font-size: 13.5px; font-weight: bold; color: #38bdf8;">absent</span>
+        </div>
+        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 11px; color: #64748b; font-weight: bold;">#07</span>
+            <span style="font-family: monospace; font-size: 13.5px; font-weight: bold; color: #38bdf8;">absorb</span>
+        </div>
+        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 11px; color: #64748b; font-weight: bold;">#08</span>
+            <span style="font-family: monospace; font-size: 13.5px; font-weight: bold; color: #38bdf8;">abstract</span>
+        </div>
+        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 11px; color: #64748b; font-weight: bold;">#09</span>
+            <span style="font-family: monospace; font-size: 13.5px; font-weight: bold; color: #38bdf8;">absurd</span>
+        </div>
+        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 11px; color: #64748b; font-weight: bold;">#10</span>
+            <span style="font-family: monospace; font-size: 13.5px; font-weight: bold; color: #38bdf8;">abuse</span>
+        </div>
+        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 11px; color: #64748b; font-weight: bold;">#11</span>
+            <span style="font-family: monospace; font-size: 13.5px; font-weight: bold; color: #38bdf8;">access</span>
+        </div>
+        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 11px; color: #64748b; font-weight: bold;">#12</span>
+            <span style="font-family: monospace; font-size: 13.5px; font-weight: bold; color: #38bdf8;">accident</span>
+        </div>
+            </div>
+            <div style="font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 10px;">
+                ⚠️ <strong>Never share your recovery phrase!</strong> Anyone possessing these 12 words can reconstruct your entire master private key tree.
+            </div>
+        </div>
+    </div>
+    
 <p>This is only a format illustration, not a usable recovery phrase.</p>
 <p>Your textbook explains that BIP39 defines mnemonic code words used in deterministic wallet recovery.</p>
 <h2><strong>7.3 How does a mnemonic phrase work?</strong></h2>

@@ -163,21 +163,98 @@ def format_module_18_markdown(text):
     return "\n".join(formatted)
 
 def inject_module_14_tokens(text):
-    text = re.sub(r'(##\s+\*\*Bitcoin node connection handshake\*\*.*?\n)', r'\1\n\nTOKEN_MOD14_HANDSHAKE\n\n', text, count=1)
+    # 1. Centralized vs P2P (Topic 2)
+    text = re.sub(r'\*\*Central server\*\*.*?(?=Every employee)', '', text, flags=re.DOTALL)
+    text = re.sub(r'Peer A\n+Peer B\n+Peer C\n+Peer D\n+Peer E\n+Peer F\n+Illustrative peers communicating directly through network connections\.', '', text)
+    text = re.sub(r'(Bitcoin uses this second architecture\.)', r'\1\n\nTOKEN_MOD14_TOPO\n\n', text)
+
+    # 2. Node Functions Matrix (Topic 3.3)
+    text = re.sub(r'(The functions depend on the type of node and its software configuration\.)', r'\1\n\nTOKEN_MOD14_MATRIX\n\n', text)
+
+    # 3. SPV Merkle Verification (Topic 4.2 - replace raw text lines 402-415)
+    text = re.sub(r'##\s+\*\*SPV verification\*\*.*?(?=###\s+\*\*Advantages of SPV nodes\*\*)', 'TOKEN_MOD14_SPV_MERKLE\n\n', text, flags=re.DOTALL)
+
+    # 4. Full Node vs SPV Node (Topic 4.3)
     text = re.sub(r'(##\s+\*\*4\.3 Full node vs SPV node\*\*.*?\n)', r'\1\n\nTOKEN_MOD14_FULL_SPV\n\n', text, count=1)
+
+    # 5. Packet Structure (Topic 5.3)
+    text = re.sub(r'(\*\*Remember:\*\* mainnet is the real Bitcoin network, while testnet is used for testing\.)', r'\1\n\nTOKEN_MOD14_PACKET\n\n', text)
+
+    # 6. Inventory Propagation (Topic 6)
     text = re.sub(r'(#\s+\*\*Topic 6: Important Bitcoin Protocol Messages\*\*.*?\n)', r'\1\n\nTOKEN_MOD14_INV\n\n', text, count=1)
+
+    # 7. Handshake (Topic 7 - replace raw lines 737-760)
+    text = re.sub(r'##\s+\*\*Bitcoin node connection handshake\*\*.*?(?=\*\*Connection established\*\*)', 'TOKEN_MOD14_HANDSHAKE\n\n', text, flags=re.DOTALL)
+    text = text.replace('**Connection established**\n\nPeer discovery and blockchain synchronisation can proceed.', 'Peer discovery and blockchain synchronisation can proceed.')
+
+    # 8. Node Discovery Flow (Topic 8.2)
+    text = re.sub(r'(6\. Once connected, it can discover additional peers through the network\.)', r'\1\n\nTOKEN_MOD14_DISCOVERY\n\n', text)
+
+    # 9. IBD Comparison (Topic 10)
     text = re.sub(r'(#\s+\*\*Topic 10: Blocks-First vs Headers-First Synchronisation\*\*.*?\n)', r'\1\n\nTOKEN_MOD14_IBD\n\n', text, count=1)
+
+    # 10. Headers-first flow (Topic 10.5 - replace raw lines 955-972)
+    text = re.sub(r'##\s+\*\*10\.5 Headers-first synchronisation diagram\*\*.*?(?=\*\*Remember this sequence for the exam:\*\*)', '## **10.5 Headers-first synchronisation diagram**\n\nTOKEN_MOD14_HEADERS_FLOW\n\n', text, flags=re.DOTALL)
+
+    # 11. Stratum Protocol (Topic 11)
     text = re.sub(r'(#\s+\*\*Topic 11: Stratum Protocol\*\*.*?\n)', r'\1\n\nTOKEN_MOD14_STRATUM\n\n', text, count=1)
     return text
 
 def inject_module_15_tokens(text):
-    text = re.sub(r'(##\s+\*\*2\.4 Relationship between private key, public key and address\*\*.*?\n)', r'\1\n\nTOKEN_MOD15_PIPELINE\n\n', text, count=1)
-    text = re.sub(r'(##\s+\*\*4\.3 Hierarchical Deterministic \(HD\) wallet\*\*.*?\n)', r'\1\n\nTOKEN_MOD15_JBOK_HD\n\n', text, count=1)
-    text = re.sub(r'(##\s+\*\*7\.3 How does a mnemonic phrase work\?\*\*.*?\n)', r'\1\n\nTOKEN_MOD15_BIP39\n\n', text, count=1)
-    text = re.sub(r'(##\s+\*\*3\.3 What is a UTXO\?\*\*.*?\n)', r'\1\n\nTOKEN_MOD15_UTXO\n\n', text, count=1)
+    # 1. Clean broken external image links and stray footnote numbers
+    text = re.sub(r'\[.*?\]\(https?://[^\)]+\)', '', text)
+    text = re.sub(r'\n[0-9]\n', '\n', text)
+
+    # 2. Misconception diagram (Topic 1.1 / 1.3)
+    text = re.sub(r'(So, what does a Bitcoin wallet do\?\n\nIt manages the cryptographic keys that allow you to access and spend the Bitcoin associated with your wallet\.)',
+                  r'\1\n\nTOKEN_MOD15_MISCONCEPTION\n\n', text)
+
+    # 3. Key & Address Generation Pipeline (Topic 2.4 / 2.5)
+    text = re.sub(r'##\s+\*\*Private key\*\*.*?##\s+\*\*Bitcoin address\*\*\n\nDerived from public-key or script-related data, depending on address type',
+                  '', text, flags=re.DOTALL)
+    text = re.sub(r'\*\*Private key\*\*.*?(?=###\s+\*\*What is Base58Check\?\*\*)',
+                  'TOKEN_MOD15_PIPELINE\n\n', text, flags=re.DOTALL)
+
+    # 4. Transaction Lifecycle (Topic 3.1 / 3.2)
+    text = re.sub(r'\*\*Rahul opens wallet\*\*.*?(?=##\s+\*\*3\.2 Sending Bitcoin\*\*)',
+                  'TOKEN_MOD15_LIFECYCLE\n\n', text, flags=re.DOTALL)
+
+    # 5. UTXO Change Diagram (Topic 3.3)
+    text = re.sub(r'\*\*Transaction example\*\*.*?(?=Here:)',
+                  'TOKEN_MOD15_UTXO\n\n', text, flags=re.DOTALL)
+
+    # 6. JBOK vs HD (Topic 4.3 Definition)
+    text = re.sub(r'(An HD wallet follows a similar hierarchy for keys\.)',
+                  r'\1\n\nTOKEN_MOD15_JBOK_HD\n\n', text)
+
+    # 7. BIP44 Tree (Topic 4.3)
+    text = re.sub(r'\*\*Seed\*\*.*?(?=###\s+\*\*Important characteristics\*\*)',
+                  'TOKEN_MOD15_BIP44_TREE\n\n', text, flags=re.DOTALL)
+
+    # 8. Paper Wallet (Topic 4.5)
+    text = re.sub(r'(A \*\*paper wallet is a physical paper document.*?\.\*\*\n)',
+                  r'\1\n\nTOKEN_MOD15_PAPER\n\n', text)
+
+    # 9. Hardware Wallet (Topic 4.6)
+    text = re.sub(r'(A \*\*hardware wallet is a dedicated physical device.*?\.\*\*\n)',
+                  r'\1\n\nTOKEN_MOD15_HARDWARE\n\n', text)
+
+    # 10. Hot vs Cold Spectrum (Topic 5)
+    text = re.sub(r'(\*\*Hot wallet\*\*.*?offline key storage\.)',
+                  r'TOKEN_MOD15_SPECTRUM\n\n', text, flags=re.DOTALL)
+
+    # 11. BIP39 Mnemonic Card (Topic 7.2)
+    text = re.sub(r'\*\*Illustrative recovery phrase format\*\*.*?(?=This is only a format illustration)',
+                  'TOKEN_MOD15_CARD\n\n', text, flags=re.DOTALL)
+
+    # 12. BIP39 Seed Derivation Pipeline (Topic 7.3)
+    text = re.sub(r'(##\s+\*\*7\.3 How does a mnemonic phrase work\?\*\*.*?\n)',
+                  r'\1\n\nTOKEN_MOD15_BIP39\n\n', text, count=1)
     return text
 
 def inject_module_16_tokens(text):
+    text = re.sub(r'\[.*?\]\(https?://[^\)]+\)', '', text)
+    text = re.sub(r'\n[0-9]\n', '\n', text)
     text = re.sub(r'(\*\*5\.4 Diagram of Bitcoin POS working\*\*.*?\n\n).*?(?=##\s+\*\*5\.5 Advantages)', r'\1\n\nTOKEN_MOD16_POS_QR\n\n', text, count=1, flags=re.DOTALL)
     text = re.sub(r'(##\s+\*\*6\.4 Working of a Bitcoin payment processor\*\*.*?\n)', r'\1\n\nTOKEN_MOD16_PROCESSOR\n\n', text, count=1)
     text = re.sub(r'(##\s+\*\*7\.4 Complete working of BIP70\*\*.*?\n)', r'\1\n\nTOKEN_MOD16_BIP70\n\n', text, count=1)
@@ -185,6 +262,8 @@ def inject_module_16_tokens(text):
     return text
 
 def inject_module_17_tokens(text):
+    text = re.sub(r'\[.*?\]\(https?://[^\)]+\)', '', text)
+    text = re.sub(r'\n[0-9]\n', '\n', text)
     text = re.sub(r'(\*\*3\.4 Diagram: Soft fork vs Hard fork\*\*.*?\n\n).*?(?=##\s+\*\*3\.5 Difference)', r'\1\n\nTOKEN_MOD17_FORK\n\n', text, count=1, flags=re.DOTALL)
     text = re.sub(r'(##\s+\*\*5\.3 Main idea behind SegWit\*\*.*?\n)', r'\1\n\nTOKEN_MOD17_SEGWIT\n\n', text, count=1)
     text = re.sub(r'(\*\*9\.6 Diagram: Working of the Lightning Network\*\*.*?\n\n).*?(?=##\s+\*\*9\.7 Advantages)', r'\1\n\nTOKEN_MOD17_LIGHTNING\n\n', text, count=1, flags=re.DOTALL)
@@ -200,17 +279,30 @@ def inject_module_18_tokens(text):
 def replace_diagram_tokens(html, mod_num):
     diagram_map = {
         14: {
-            "TOKEN_MOD14_HANDSHAKE": diag.diagram_p2p_handshake(),
+            "TOKEN_MOD14_TOPO": diag.diagram_centralized_vs_p2p(),
+            "TOKEN_MOD14_MATRIX": diag.diagram_node_functions_matrix(),
+            "TOKEN_MOD14_SPV_MERKLE": diag.diagram_spv_merkle_verification(),
             "TOKEN_MOD14_FULL_SPV": diag.diagram_full_vs_spv(),
+            "TOKEN_MOD14_PACKET": diag.diagram_p2p_packet_structure(),
             "TOKEN_MOD14_INV": diag.diagram_inv_propagation(),
+            "TOKEN_MOD14_HANDSHAKE": diag.diagram_p2p_handshake(),
+            "TOKEN_MOD14_DISCOVERY": diag.diagram_node_discovery_flow(),
             "TOKEN_MOD14_IBD": diag.diagram_ibd_comparison(),
+            "TOKEN_MOD14_HEADERS_FLOW": diag.diagram_headers_first_flow(),
             "TOKEN_MOD14_STRATUM": diag.diagram_stratum_pool()
         },
         15: {
+            "TOKEN_MOD15_MISCONCEPTION": diag.diagram_wallet_misconception(),
             "TOKEN_MOD15_PIPELINE": diag.diagram_key_address_pipeline(),
+            "TOKEN_MOD15_LIFECYCLE": diag.diagram_wallet_transaction_lifecycle(),
+            "TOKEN_MOD15_UTXO": diag.diagram_utxo_change(),
             "TOKEN_MOD15_JBOK_HD": diag.diagram_jbok_vs_hd(),
-            "TOKEN_MOD15_BIP39": diag.diagram_bip39_seed(),
-            "TOKEN_MOD15_UTXO": diag.diagram_utxo_change()
+            "TOKEN_MOD15_BIP44_TREE": diag.diagram_bip44_derivation_tree(),
+            "TOKEN_MOD15_PAPER": diag.diagram_paper_wallet(),
+            "TOKEN_MOD15_HARDWARE": diag.diagram_hardware_wallet(),
+            "TOKEN_MOD15_SPECTRUM": diag.diagram_hot_vs_cold_spectrum(),
+            "TOKEN_MOD15_CARD": diag.diagram_bip39_mnemonic_card(),
+            "TOKEN_MOD15_BIP39": diag.diagram_bip39_seed()
         },
         16: {
             "TOKEN_MOD16_POS_QR": diag.diagram_pos_qr_flow(),
