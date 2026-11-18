@@ -1291,3 +1291,531 @@ def diagram_order_types():
         </div>
     </div>
     '''
+
+
+# ==============================================================================
+# MODULE 16 DIAGRAMS (BITCOIN PAYMENTS)
+# ==============================================================================
+
+def diagram_payment_methods_overview():
+    return f'''
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Omnichannel Bitcoin Payment Methods Overview</h4>
+            <div class="diagram-subtitle">How merchants and consumers accept and settle Bitcoin across retail, web, and B2B channels</div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 10px;">
+            <div style="background: #090d16; border: 1px solid #0284c7; border-radius: 8px; padding: 14px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <span style="font-size: 20px;">🏪</span>
+                    <strong style="color: #38bdf8; font-size: 14px;">In-Store POS Terminal</strong>
+                </div>
+                <div style="font-size: 12px; color: #cbd5e1; line-height: 1.55;">
+                    • <strong>Channel:</strong> Physical retail storefronts &amp; cafes<br>
+                    • <strong>Mechanism:</strong> Dynamic QR code on terminal screen<br>
+                    • <strong>Speed:</strong> Instant zero-conf or 1-conf display<br>
+                    • <strong>Example:</strong> Square Terminal, 34 Bytes POS
+                </div>
+            </div>
+            <div style="background: #090d16; border: 1px solid #10b981; border-radius: 8px; padding: 14px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <span style="font-size: 20px;">🌐</span>
+                    <strong style="color: #34d399; font-size: 14px;">E-Commerce Checkout</strong>
+                </div>
+                <div style="font-size: 12px; color: #cbd5e1; line-height: 1.55;">
+                    • <strong>Channel:</strong> Online stores &amp; digital downloads<br>
+                    • <strong>Mechanism:</strong> BIP21 click-to-pay URI or web gateway<br>
+                    • <strong>Speed:</strong> 15-minute rate-locking window<br>
+                    • <strong>Example:</strong> BitPay, BTCPay Server plugin
+                </div>
+            </div>
+            <div style="background: #090d16; border: 1px solid #a855f7; border-radius: 8px; padding: 14px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <span style="font-size: 20px;">📱</span>
+                    <strong style="color: #c084fc; font-size: 14px;">Direct P2P Mobile</strong>
+                </div>
+                <div style="font-size: 12px; color: #cbd5e1; line-height: 1.55;">
+                    • <strong>Channel:</strong> Peer-to-peer split bills &amp; local trade<br>
+                    • <strong>Mechanism:</strong> Phone-to-phone static or dynamic QR scan<br>
+                    • <strong>Speed:</strong> Direct peer broadcast to mempool<br>
+                    • <strong>Example:</strong> BlueWallet, Electrum Mobile
+                </div>
+            </div>
+            <div style="background: #090d16; border: 1px solid #f59e0b; border-radius: 8px; padding: 14px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <span style="font-size: 20px;">📜</span>
+                    <strong style="color: #fbbf24; font-size: 14px;">B2B Cryptographic Invoice</strong>
+                </div>
+                <div style="font-size: 12px; color: #cbd5e1; line-height: 1.55;">
+                    • <strong>Channel:</strong> Corporate billing &amp; large enterprise transfers<br>
+                    • <strong>Mechanism:</strong> BIP70 X.509 authenticated PaymentRequest<br>
+                    • <strong>Speed:</strong> 3 to 6 network confirmations<br>
+                    • <strong>Example:</strong> Verified enterprise invoices with refund output
+                </div>
+            </div>
+        </div>
+    </div>
+    '''
+
+def diagram_bitcoin_payment_flow():
+    return f'''
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">End-to-End Bitcoin Payment Process &amp; Confirmation Flow</h4>
+            <div class="diagram-subtitle">Complete 7-stage lifecycle of a commercial Bitcoin transaction from bill generation to blockchain settlement</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px; max-width: 820px; margin: 0 auto;">
+            <div style="display: flex; align-items: center; gap: 12px; background: #090d16; border-left: 4px solid #38bdf8; border-radius: 6px; padding: 10px 14px;">
+                <div style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; font-weight: 800; font-size: 13px; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">1</div>
+                <div style="flex: 1;">
+                    <strong style="color: #e2e8f0; font-size: 13.5px;">Order Calculation &amp; Exchange Rate Lock</strong>
+                    <div style="font-size: 12px; color: #94a3b8;">Merchant POS calculates product price (e.g. ₹2,000 &approx; 0.00035 BTC) and locks the exchange rate for 15 minutes.</div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; background: #090d16; border-left: 4px solid #0284c7; border-radius: 6px; padding: 10px 14px;">
+                <div style="background: rgba(2, 132, 199, 0.15); color: #0284c7; font-weight: 800; font-size: 13px; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">2</div>
+                <div style="flex: 1;">
+                    <strong style="color: #e2e8f0; font-size: 13.5px;">Invoice Presentation (BIP21 QR Code)</strong>
+                    <div style="font-size: 12px; color: #94a3b8;">Terminal renders standard BIP21 QR code encoding destination Bitcoin address, exact amount, and order memo.</div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; background: #090d16; border-left: 4px solid #a855f7; border-radius: 6px; padding: 10px 14px;">
+                <div style="background: rgba(168, 85, 247, 0.15); color: #a855f7; font-weight: 800; font-size: 13px; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">3</div>
+                <div style="flex: 1;">
+                    <strong style="color: #e2e8f0; font-size: 13.5px;">Customer Wallet Scan &amp; Verification</strong>
+                    <div style="font-size: 12px; color: #94a3b8;">Customer scans QR code using a mobile wallet. Wallet auto-fills recipient address, amount, and calculates recommended miner fee.</div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; background: #090d16; border-left: 4px solid #ec4899; border-radius: 6px; padding: 10px 14px;">
+                <div style="background: rgba(236, 72, 153, 0.15); color: #ec4899; font-weight: 800; font-size: 13px; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">4</div>
+                <div style="flex: 1;">
+                    <strong style="color: #e2e8f0; font-size: 13.5px;">Cryptographic Signing (ECDSA / Schnorr)</strong>
+                    <div style="font-size: 12px; color: #94a3b8;">Customer approves payment. Wallet accesses private key to sign UTXO inputs; private key never leaves the secure device.</div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; background: #090d16; border-left: 4px solid #f59e0b; border-radius: 6px; padding: 10px 14px;">
+                <div style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; font-weight: 800; font-size: 13px; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">5</div>
+                <div style="flex: 1;">
+                    <strong style="color: #e2e8f0; font-size: 13.5px;">P2P Broadcast to Network Mempools</strong>
+                    <div style="font-size: 12px; color: #94a3b8;">Signed transaction is broadcast via <code>inv</code> &rarr; <code>tx</code> messages across peer nodes and enters global mempools.</div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; background: #090d16; border-left: 4px solid #10b981; border-radius: 6px; padding: 10px 14px;">
+                <div style="background: rgba(16, 185, 129, 0.15); color: #10b981; font-weight: 800; font-size: 13px; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">6</div>
+                <div style="flex: 1;">
+                    <strong style="color: #e2e8f0; font-size: 13.5px;">Miner Inclusion &amp; 1st Block Confirmation</strong>
+                    <div style="font-size: 12px; color: #94a3b8;">Miners validate signatures and include the transaction in a newly mined PoW block. 1st confirmation achieved.</div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; background: #090d16; border-left: 4px solid #22c55e; border-radius: 6px; padding: 10px 14px;">
+                <div style="background: rgba(34, 197, 94, 0.15); color: #22c55e; font-weight: 800; font-size: 13px; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">7</div>
+                <div style="flex: 1;">
+                    <strong style="color: #e2e8f0; font-size: 13.5px;">Merchant Settlement &amp; Order Dispatch</strong>
+                    <div style="font-size: 12px; color: #94a3b8;">Merchant node detects confirmation, prints final receipt, and releases goods. Irreversible finality increases with each block.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    '''
+
+def diagram_bip21_uri_anatomy():
+    return f'''
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">BIP21 URI Anatomical Breakdown &amp; QR Code Format</h4>
+            <div class="diagram-subtitle">Deconstructing the standard Bitcoin payment URI: <code>bitcoin:&lt;address&gt;?amount=&lt;btc&gt;&amp;label=&lt;name&gt;&amp;message=&lt;memo&gt;</code></div>
+        </div>
+        <div style="max-width: 780px; margin: 0 auto; background: #090d16; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 18px;">
+            <div style="font-family: monospace; font-size: 13px; background: #020617; padding: 12px 16px; border-radius: 6px; border: 1px solid #1e293b; overflow-x: auto; white-space: nowrap; margin-bottom: 16px; text-align: center;">
+                <span style="color: #38bdf8; font-weight: bold;">bitcoin:</span><span style="color: #34d399; font-weight: bold;">1BoatSLRHtKNngkdXEeobR76b53LETtpyT</span><span style="color: #f59e0b; font-weight: bold;">?</span><span style="color: #c084fc; font-weight: bold;">amount=0.01</span><span style="color: #f59e0b; font-weight: bold;">&amp;</span><span style="color: #fb7185; font-weight: bold;">label=CoffeeShop</span><span style="color: #f59e0b; font-weight: bold;">&amp;</span><span style="color: #38bdf8; font-weight: bold;">message=Order123</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px;">
+                <div style="background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 6px; padding: 10px;">
+                    <div style="font-size: 11px; text-transform: uppercase; color: #38bdf8; font-weight: 700;">Scheme Prefix</div>
+                    <div style="font-family: monospace; font-size: 13px; color: #f1f5f9; font-weight: bold;">bitcoin:</div>
+                    <div style="font-size: 11.5px; color: #94a3b8; margin-top: 3px;">Registered URI scheme; prompts OS to launch default crypto wallet.</div>
+                </div>
+                <div style="background: rgba(52, 211, 153, 0.08); border: 1px solid rgba(52, 211, 153, 0.25); border-radius: 6px; padding: 10px;">
+                    <div style="font-size: 11px; text-transform: uppercase; color: #34d399; font-weight: 700;">Destination Address</div>
+                    <div style="font-family: monospace; font-size: 13px; color: #f1f5f9; font-weight: bold;">1BoatSLR...</div>
+                    <div style="font-size: 11.5px; color: #94a3b8; margin-top: 3px;">Mandatory Base58Check or Bech32 recipient address.</div>
+                </div>
+                <div style="background: rgba(192, 132, 252, 0.08); border: 1px solid rgba(192, 132, 252, 0.25); border-radius: 6px; padding: 10px;">
+                    <div style="font-size: 11px; text-transform: uppercase; color: #c084fc; font-weight: 700;">Payment Amount</div>
+                    <div style="font-family: monospace; font-size: 13px; color: #f1f5f9; font-weight: bold;">amount=0.01</div>
+                    <div style="font-size: 11.5px; color: #94a3b8; margin-top: 3px;">Denominated in BTC decimal notation (0.01 BTC = 1,000,000 satoshis).</div>
+                </div>
+                <div style="background: rgba(251, 113, 133, 0.08); border: 1px solid rgba(251, 113, 133, 0.25); border-radius: 6px; padding: 10px;">
+                    <div style="font-size: 11px; text-transform: uppercase; color: #fb7185; font-weight: 700;">Metadata Parameters</div>
+                    <div style="font-family: monospace; font-size: 13px; color: #f1f5f9; font-weight: bold;">label &amp; message</div>
+                    <div style="font-size: 11.5px; color: #94a3b8; margin-top: 3px;">Human-readable recipient identity and transaction reference memo.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    '''
+
+def diagram_bip_standards_stack():
+    return f'''
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Bitcoin Payment Standards Ecosystem Stack (BIP21 &rarr; BIP70/71/72)</h4>
+            <div class="diagram-subtitle">Layered evolution from simple static URIs to authenticated enterprise payment protocols</div>
+        </div>
+        <div style="max-width: 750px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px;">
+            <div style="background: rgba(168, 85, 247, 0.12); border: 1.5px solid #a855f7; border-radius: 8px; padding: 14px 18px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <strong style="color: #c084fc; font-size: 14px;">Layer 3: BIP70 — Secure Payment Protocol</strong>
+                    <span class="diagram-badge" style="background: #a855f7; color: #fff;">PKI &amp; Security</span>
+                </div>
+                <div style="font-size: 12.5px; color: #cbd5e1; line-height: 1.5;">
+                    Defines Protobuf messages (<code>PaymentRequest</code>, <code>Payment</code>, <code>PaymentACK</code>) secured by X.509 digital certificates to eliminate MITM address spoofing and provide cryptographic payment receipts.
+                </div>
+            </div>
+            <div style="background: rgba(56, 189, 248, 0.12); border: 1.5px solid #0284c7; border-radius: 8px; padding: 14px 18px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <strong style="color: #38bdf8; font-size: 14px;">Layer 2B: BIP71 — Payment Protocol MIME Types</strong>
+                    <span class="diagram-badge" style="background: #0284c7; color: #fff;">Content Framing</span>
+                </div>
+                <div style="font-size: 12.5px; color: #cbd5e1; line-height: 1.5;">
+                    Standardises HTTP Content-Types (e.g. <code>application/bitcoin-paymentrequest</code>) so operating systems and web browsers cleanly dispatch payment data to wallet handlers.
+                </div>
+            </div>
+            <div style="background: rgba(234, 179, 8, 0.12); border: 1.5px solid #ca8a04; border-radius: 8px; padding: 14px 18px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <strong style="color: #facc15; font-size: 14px;">Layer 2A: BIP72 — Payment Protocol URI Extensions</strong>
+                    <span class="diagram-badge" style="background: #ca8a04; color: #fff;">Link Extension</span>
+                </div>
+                <div style="font-size: 12.5px; color: #cbd5e1; line-height: 1.5;">
+                    Extends BIP21 with the <code>r=https://...</code> parameter, enabling a Bitcoin URI to dynamically fetch an authenticated BIP70 PaymentRequest via HTTPS.
+                </div>
+            </div>
+            <div style="background: rgba(16, 185, 129, 0.12); border: 1.5px solid #10b981; border-radius: 8px; padding: 14px 18px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <strong style="color: #34d399; font-size: 14px;">Layer 1: BIP21 — Base Bitcoin Payment URI</strong>
+                    <span class="diagram-badge" style="background: #10b981; color: #fff;">Base Format</span>
+                </div>
+                <div style="font-size: 12.5px; color: #cbd5e1; line-height: 1.5;">
+                    Foundational URI scheme (<code>bitcoin:&lt;address&gt;?amount=...</code>) used across all mobile QR code scanning and direct link payments.
+                </div>
+            </div>
+        </div>
+    </div>
+    '''
+
+# ==============================================================================
+# MODULE 17 DIAGRAMS (ADVANCED PROTOCOLS & INNOVATIONS)
+# ==============================================================================
+
+def diagram_bip_lifecycle():
+    return f'''
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Bitcoin Improvement Proposal (BIP) Governance Lifecycle</h4>
+            <div class="diagram-subtitle">How technical enhancements progress from community draft to network-wide consensus activation</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px; max-width: 820px; margin: 0 auto;">
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+                <div style="flex: 1; min-width: 150px; background: #090d16; border: 1px solid #38bdf8; border-radius: 8px; padding: 12px; text-align: center;">
+                    <div style="color: #38bdf8; font-weight: 800; font-size: 12px; text-transform: uppercase;">1. Idea / RFC</div>
+                    <div style="font-size: 11.5px; color: #94a3b8; margin-top: 4px;">Public debate on Bitcoin-dev mailing list &amp; GitHub discussions.</div>
+                </div>
+                <div style="display: flex; align-items: center; color: #64748b; font-size: 16px;">&rarr;</div>
+                <div style="flex: 1; min-width: 150px; background: #090d16; border: 1px solid #a855f7; border-radius: 8px; padding: 12px; text-align: center;">
+                    <div style="color: #c084fc; font-weight: 800; font-size: 12px; text-transform: uppercase;">2. Draft Status</div>
+                    <div style="font-size: 11.5px; color: #94a3b8; margin-top: 4px;">BIP Editor assigns formal proposal number (e.g. BIP141).</div>
+                </div>
+                <div style="display: flex; align-items: center; color: #64748b; font-size: 16px;">&rarr;</div>
+                <div style="flex: 1; min-width: 150px; background: #090d16; border: 1px solid #f59e0b; border-radius: 8px; padding: 12px; text-align: center;">
+                    <div style="color: #fbbf24; font-weight: 800; font-size: 12px; text-transform: uppercase;">3. Proposed</div>
+                    <div style="font-size: 11.5px; color: #94a3b8; margin-top: 4px;">Working code written &amp; rigorously battle-tested on Testnet.</div>
+                </div>
+                <div style="display: flex; align-items: center; color: #64748b; font-size: 16px;">&rarr;</div>
+                <div style="flex: 1; min-width: 150px; background: #090d16; border: 1px solid #10b981; border-radius: 8px; padding: 12px; text-align: center;">
+                    <div style="color: #34d399; font-weight: 800; font-size: 12px; text-transform: uppercase;">4. Final / Active</div>
+                    <div style="font-size: 11.5px; color: #94a3b8; margin-top: 4px;">95% miner signalling (BIP9) or node consensus locks in upgrade.</div>
+                </div>
+            </div>
+            <div style="background: #020617; border: 1px solid #1e293b; border-radius: 8px; padding: 12px 16px; margin-top: 6px; display: flex; justify-content: space-around; flex-wrap: wrap; gap: 10px;">
+                <div style="font-size: 12px; color: #cbd5e1;"><span style="color: #38bdf8; font-weight: bold;">● Standards Track:</span> Affects consensus rules, network protocol, or validation rules.</div>
+                <div style="font-size: 12px; color: #cbd5e1;"><span style="color: #c084fc; font-weight: bold;">● Informational Track:</span> Design guidelines and general ecosystem recommendations.</div>
+                <div style="font-size: 12px; color: #cbd5e1;"><span style="color: #fbbf24; font-weight: bold;">● Process Track:</span> Proposes changes to development workflow outside core protocol.</div>
+            </div>
+        </div>
+    </div>
+    '''
+
+def diagram_tx_malleability_fix():
+    return f'''
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Transaction Malleability Attack &amp; SegWit Fix Architecture</h4>
+            <div class="diagram-subtitle">How Segregated Witness (BIP141) made Bitcoin Transaction IDs permanently immutable</div>
+        </div>
+        <div class="diagram-nodes-row" style="gap: 16px;">
+            <div class="diagram-node" style="flex: 1; text-align: left; background: #090d16; border-color: #ef4444;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <strong style="color: #f87171; font-size: 14px;">⚠️ Legacy TXID (Vulnerable)</strong>
+                    <span class="diagram-badge" style="background: rgba(239,68,68,0.2); color: #f87171; border: 1px solid #ef4444;">Pre-SegWit</span>
+                </div>
+                <div style="background: #020617; padding: 8px 10px; border-radius: 6px; font-family: monospace; font-size: 11px; color: #94a3b8; margin-bottom: 8px;">
+                    TXID = SHA256(SHA256(Inputs + Outputs + <span style="color: #f87171; font-weight: bold;">ScriptSig</span>))
+                </div>
+                <div style="font-size: 12px; color: #cbd5e1; line-height: 1.5;">
+                    • <strong>Attack:</strong> An attacker intercepts unconfirmed tx and changes the signature representation (e.g. ECDSA <code>(r, s)</code> to <code>(r, -s mod n)</code>).<br>
+                    • <strong>Consequence:</strong> The signature remains valid, but the TXID changes from <code>TXID_A</code> to <code>TXID_B</code> before block inclusion!<br>
+                    • <strong>Fatal Flaw:</strong> Breaks dependent unconfirmed transactions (ruined Layer-2 channels).
+                </div>
+            </div>
+            <div class="diagram-node" style="flex: 1; text-align: left; background: #090d16; border-color: #10b981;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <strong style="color: #34d399; font-size: 14px;">✅ SegWit TXID (Immutable)</strong>
+                    <span class="diagram-badge" style="background: rgba(16,185,129,0.2); color: #34d399; border: 1px solid #10b981;">BIP141 Fix</span>
+                </div>
+                <div style="background: #020617; padding: 8px 10px; border-radius: 6px; font-family: monospace; font-size: 11px; color: #94a3b8; margin-bottom: 8px;">
+                    TXID = SHA256(SHA256(<span style="color: #34d399; font-weight: bold;">Inputs + Outputs</span>)) [Witness Detached]
+                </div>
+                <div style="font-size: 12px; color: #cbd5e1; line-height: 1.5;">
+                    • <strong>Solution:</strong> Witness (signature) data is detached from the base serialization and placed in a dedicated witness structure.<br>
+                    • <strong>Consequence:</strong> TXID is computed <em>strictly</em> over inputs and outputs. Signatures can never alter the TXID.<br>
+                    • <strong>Enables:</strong> Fully trustless Lightning Network payment channels!
+                </div>
+            </div>
+        </div>
+    </div>
+    '''
+
+def diagram_xthin_blocks():
+    return f'''
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Extremely Thin Blocks (Xthin) vs. Traditional Block Relay</h4>
+            <div class="diagram-subtitle">Bandwidth optimization in Bitcoin Unlimited: eliminating duplicate transaction transmission</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 14px; max-width: 800px; margin: 0 auto;">
+            <div style="background: #090d16; border: 1px solid #ef4444; border-radius: 8px; padding: 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <strong style="color: #f87171; font-size: 13.5px;">1. Standard Full Block Relay (Bandwidth Inefficient)</strong>
+                    <span style="font-size: 11px; background: rgba(239,68,68,0.2); color: #f87171; padding: 2px 8px; border-radius: 12px;">~1 to 2 MB Transfer</span>
+                </div>
+                <div style="font-size: 12px; color: #cbd5e1; line-height: 1.5;">
+                    Miner transmits the entire block with all 2,500 transactions across the network &mdash; even though 98% of those transactions already sit idle in the receiving node's local mempool!
+                </div>
+            </div>
+            <div style="background: #090d16; border: 1px solid #10b981; border-radius: 8px; padding: 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <strong style="color: #34d399; font-size: 13.5px;">2. Xthin Block Relay (Bloom Filter Assisted)</strong>
+                    <span style="font-size: 11px; background: rgba(16,185,129,0.2); color: #34d399; padding: 2px 8px; border-radius: 12px;">~15 to 30 KB Transfer (95% Savings)</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 12px; color: #cbd5e1; flex-wrap: wrap;">
+                    <span style="background: #020617; border: 1px solid #0284c7; padding: 6px 10px; border-radius: 4px; color: #38bdf8;">80-Byte Header</span>
+                    <span>+</span>
+                    <span style="background: #020617; border: 1px solid #a855f7; padding: 6px 10px; border-radius: 4px; color: #c084fc;">64-bit Short TX IDs</span>
+                    <span>+</span>
+                    <span style="background: #020617; border: 1px solid #10b981; padding: 6px 10px; border-radius: 4px; color: #34d399;">Only Missing TXs</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    '''
+
+def diagram_bitcoin_scaling_landscape():
+    return f'''
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Bitcoin Scalability &amp; Protocol Evolution Matrix</h4>
+            <div class="diagram-subtitle">Comparing major architectural upgrade proposals across Unit IV</div>
+        </div>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 12.5px; text-align: left; background: #090d16; border-radius: 8px; overflow: hidden;">
+                <thead>
+                    <tr style="background: #0f172a; border-bottom: 1.5px solid rgba(255,255,255,0.15);">
+                        <th style="padding: 10px 14px; color: #38bdf8;">Proposal</th>
+                        <th style="padding: 10px 14px; color: #cbd5e1;">Target Problem</th>
+                        <th style="padding: 10px 14px; color: #cbd5e1;">Mechanism</th>
+                        <th style="padding: 10px 14px; color: #cbd5e1;">Fork Type</th>
+                        <th style="padding: 10px 14px; color: #34d399;">Key Benefit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 10px 14px; font-weight: bold; color: #38bdf8;">SegWit (BIP141)</td>
+                        <td style="padding: 10px 14px; color: #cbd5e1;">Malleability &amp; 1MB Cap</td>
+                        <td style="padding: 10px 14px; color: #cbd5e1;">Detached witness data, 4MWU weight</td>
+                        <td style="padding: 10px 14px; color: #facc15;">Soft Fork</td>
+                        <td style="padding: 10px 14px; color: #34d399;">Backward-compatible; enabled Layer 2</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 10px 14px; font-weight: bold; color: #f59e0b;">Bitcoin Cash (BCH)</td>
+                        <td style="padding: 10px 14px; color: #cbd5e1;">On-chain transaction limit</td>
+                        <td style="padding: 10px 14px; color: #cbd5e1;">Increased block size to 8MB &rarr; 32MB</td>
+                        <td style="padding: 10px 14px; color: #f87171;">Hard Fork</td>
+                        <td style="padding: 10px 14px; color: #34d399;">Higher raw on-chain throughput</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 10px 14px; font-weight: bold; color: #a855f7;">Bitcoin Unlimited</td>
+                        <td style="padding: 10px 14px; color: #cbd5e1;">Rigid consensus block limits</td>
+                        <td style="padding: 10px 14px; color: #cbd5e1;">Miner emergent consensus &amp; Xthin blocks</td>
+                        <td style="padding: 10px 14px; color: #c084fc;">Alternative Client</td>
+                        <td style="padding: 10px 14px; color: #34d399;">Dynamic scaling without hard limits</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 10px 14px; font-weight: bold; color: #fbbf24;">Bitcoin Gold (BTG)</td>
+                        <td style="padding: 10px 14px; color: #cbd5e1;">ASIC mining centralization</td>
+                        <td style="padding: 10px 14px; color: #cbd5e1;">Equihash memory-hard PoW algorithm</td>
+                        <td style="padding: 10px 14px; color: #f87171;">Hard Fork</td>
+                        <td style="padding: 10px 14px; color: #34d399;">Democratized consumer GPU mining</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px 14px; font-weight: bold; color: #34d399;">Lightning Network</td>
+                        <td style="padding: 10px 14px; color: #cbd5e1;">Low TPS &amp; high fee scaling</td>
+                        <td style="padding: 10px 14px; color: #cbd5e1;">Bidirectional off-chain channels (HTLCs)</td>
+                        <td style="padding: 10px 14px; color: #38bdf8;">Layer 2 Protocol</td>
+                        <td style="padding: 10px 14px; color: #34d399;">Millions of instant, sub-penny microtransactions</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    '''
+
+# ==============================================================================
+# MODULE 18 DIAGRAMS (INVESTMENT, TRADING & EXCHANGES)
+# ==============================================================================
+
+def diagram_cex_trading_lifecycle():
+    return f'''
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Centralized Exchange (CEX) Onboarding &amp; Trading Lifecycle</h4>
+            <div class="diagram-subtitle">The 5-stage workflow from fiat bank deposit to off-chain order matching and cold custody</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px; max-width: 820px; margin: 0 auto;">
+            <div style="display: flex; align-items: center; gap: 12px; background: #090d16; border-left: 4px solid #38bdf8; border-radius: 6px; padding: 10px 14px;">
+                <div style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; font-weight: 800; font-size: 13px; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">1</div>
+                <div style="flex: 1;">
+                    <strong style="color: #e2e8f0; font-size: 13.5px;">User Registration &amp; KYC/AML Verification</strong>
+                    <div style="font-size: 12px; color: #94a3b8;">User creates an exchange account, provides government ID verification (Aadhaar / Passport) to comply with regulatory standards.</div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; background: #090d16; border-left: 4px solid #0284c7; border-radius: 6px; padding: 10px 14px;">
+                <div style="background: rgba(2, 132, 199, 0.15); color: #0284c7; font-weight: 800; font-size: 13px; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">2</div>
+                <div style="flex: 1;">
+                    <strong style="color: #e2e8f0; font-size: 13.5px;">Fiat Currency Deposit (On-Ramp)</strong>
+                    <div style="font-size: 12px; color: #94a3b8;">Trader transfers fiat currency (INR/USD via Bank Wire, IMPS, or UPI) into the custodial bank account of the exchange.</div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; background: #090d16; border-left: 4px solid #a855f7; border-radius: 6px; padding: 10px 14px;">
+                <div style="background: rgba(168, 85, 247, 0.15); color: #a855f7; font-weight: 800; font-size: 13px; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">3</div>
+                <div style="flex: 1;">
+                    <strong style="color: #e2e8f0; font-size: 13.5px;">In-Memory Order Matching Engine</strong>
+                    <div style="font-size: 12px; color: #94a3b8;">Trader places a Limit or Market order. The exchange's high-speed matching engine matches Bid and Ask orders in microseconds off-chain.</div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; background: #090d16; border-left: 4px solid #10b981; border-radius: 6px; padding: 10px 14px;">
+                <div style="background: rgba(168, 85, 247, 0.15); color: #10b981; font-weight: 800; font-size: 13px; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">4</div>
+                <div style="flex: 1;">
+                    <strong style="color: #e2e8f0; font-size: 13.5px;">Custodial Ledger Update</strong>
+                    <div style="font-size: 12px; color: #94a3b8;">Exchange adjusts internal SQL balance database: decrements fiat balance and credits Bitcoin balance. (Zero on-chain gas fees).</div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; background: #090d16; border-left: 4px solid #22c55e; border-radius: 6px; padding: 10px 14px;">
+                <div style="background: rgba(34, 197, 94, 0.15); color: #22c55e; font-weight: 800; font-size: 13px; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">5</div>
+                <div style="flex: 1;">
+                    <strong style="color: #e2e8f0; font-size: 13.5px;">Cold Storage Self-Custody Withdrawal</strong>
+                    <div style="font-size: 12px; color: #94a3b8;">Trader requests an on-chain withdrawal to a personal hardware wallet ("Not your keys, not your coins"), securing real Bitcoin assets.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    '''
+
+def diagram_derivatives_matrix():
+    return f'''
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Bitcoin Trading Instruments: Spot vs. Margin vs. CFDs vs. Spread Betting</h4>
+            <div class="diagram-subtitle">Comparing underlying ownership, leverage risk, and liquidation mechanics across trading choices</div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px;">
+            <div style="background: #090d16; border: 1.5px solid #10b981; border-radius: 8px; padding: 14px;">
+                <div style="color: #34d399; font-weight: 800; font-size: 14px; margin-bottom: 6px;">🪙 Spot Trading</div>
+                <div style="font-size: 12px; color: #cbd5e1; line-height: 1.55;">
+                    • <strong>Asset Ownership:</strong> Yes, actual BTC is purchased.<br>
+                    • <strong>Leverage:</strong> 1x (No borrowed capital).<br>
+                    • <strong>Profit Direction:</strong> Profit when price rises (Long).<br>
+                    • <strong>Liquidation Risk:</strong> Zero. Even in a 90% crash, you retain your BTC.
+                </div>
+            </div>
+            <div style="background: #090d16; border: 1.5px solid #f59e0b; border-radius: 8px; padding: 14px;">
+                <div style="color: #fbbf24; font-weight: 800; font-size: 14px; margin-bottom: 6px;">📈 Margin Trading</div>
+                <div style="font-size: 12px; color: #cbd5e1; line-height: 1.55;">
+                    • <strong>Asset Ownership:</strong> Yes, but funded via loan from exchange.<br>
+                    • <strong>Leverage:</strong> 2x to 20x (Trader deposits collateral margin).<br>
+                    • <strong>Profit Direction:</strong> Can trade Long or Short.<br>
+                    • <strong>Liquidation Risk:</strong> ⚠️ High! If losses wipe out margin, position is liquidated.
+                </div>
+            </div>
+            <div style="background: #090d16; border: 1.5px solid #a855f7; border-radius: 8px; padding: 14px;">
+                <div style="color: #c084fc; font-weight: 800; font-size: 14px; margin-bottom: 6px;">📑 CFDs (Contract for Differences)</div>
+                <div style="font-size: 12px; color: #cbd5e1; line-height: 1.55;">
+                    • <strong>Asset Ownership:</strong> No, derivative contract only.<br>
+                    • <strong>Leverage:</strong> High leverage offered by CFD broker.<br>
+                    • <strong>Profit Direction:</strong> Settles difference between entry &amp; exit price.<br>
+                    • <strong>Counterparty Risk:</strong> Dependent on the financial solvency of the broker.
+                </div>
+            </div>
+            <div style="background: #090d16; border: 1.5px solid #ec4899; border-radius: 8px; padding: 14px;">
+                <div style="color: #f472b6; font-weight: 800; font-size: 14px; margin-bottom: 6px;">🎲 Spread Betting</div>
+                <div style="font-size: 12px; color: #cbd5e1; line-height: 1.55;">
+                    • <strong>Asset Ownership:</strong> No asset held or delivered.<br>
+                    • <strong>Leverage:</strong> Bet amount pledged per point/dollar of price shift.<br>
+                    • <strong>Profit Direction:</strong> Profit or loss per movement unit.<br>
+                    • <strong>Regulation:</strong> Regulated as gambling/speculation in some jurisdictions.
+                </div>
+            </div>
+        </div>
+    </div>
+    '''
+
+def diagram_investment_lifecycle():
+    return f'''
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Complete Bitcoin Investment &amp; Wealth Preservation Cycle</h4>
+            <div class="diagram-subtitle">From strategic fiat capital allocation to cold custody and disciplined profit harvesting</div>
+        </div>
+        <div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; gap: 12px; background: #090d16; border-left: 4px solid #38bdf8; border-radius: 6px; padding: 12px 16px;">
+                <div style="font-weight: 800; color: #38bdf8; font-size: 15px;">Stage 1</div>
+                <div style="flex: 1; font-size: 12.5px; color: #cbd5e1;">
+                    <strong style="color: #f1f5f9;">Capital Allocation &amp; Strategy:</strong> Choose investment framework (Dollar-Cost Averaging (DCA) over time to smooth market volatility vs. Lump-Sum investment).
+                </div>
+            </div>
+            <div style="display: flex; gap: 12px; background: #090d16; border-left: 4px solid #a855f7; border-radius: 6px; padding: 12px 16px;">
+                <div style="font-weight: 800; color: #a855f7; font-size: 15px;">Stage 2</div>
+                <div style="flex: 1; font-size: 12.5px; color: #cbd5e1;">
+                    <strong style="color: #f1f5f9;">Disciplined Exchange Execution:</strong> Use Limit Orders to buy at target support levels, avoiding the high slippage and fees of market orders.
+                </div>
+            </div>
+            <div style="display: flex; gap: 12px; background: #090d16; border-left: 4px solid #10b981; border-radius: 6px; padding: 12px 16px;">
+                <div style="font-weight: 800; color: #10b981; font-size: 15px;">Stage 3</div>
+                <div style="flex: 1; font-size: 12.5px; color: #cbd5e1;">
+                    <strong style="color: #f1f5f9;">Cold Storage Self-Custody:</strong> Never leave long-term holdings on centralized exchanges. Withdraw coins to a hardware or paper cold wallet protected by offline BIP39 seeds.
+                </div>
+            </div>
+            <div style="display: flex; gap: 12px; background: #090d16; border-left: 4px solid #f59e0b; border-radius: 6px; padding: 12px 16px;">
+                <div style="font-weight: 800; color: #f59e0b; font-size: 15px;">Stage 4</div>
+                <div style="flex: 1; font-size: 12.5px; color: #cbd5e1;">
+                    <strong style="color: #f1f5f9;">Multi-Year Holding &amp; Rebalancing:</strong> Ignore daily market noise. Review long-term thesis through 4-year halving cycles without panic selling.
+                </div>
+            </div>
+            <div style="display: flex; gap: 12px; background: #090d16; border-left: 4px solid #22c55e; border-radius: 6px; padding: 12px 16px;">
+                <div style="font-weight: 800; color: #22c55e; font-size: 15px;">Stage 5</div>
+                <div style="flex: 1; font-size: 12.5px; color: #cbd5e1;">
+                    <strong style="color: #f1f5f9;">Planned Exit Strategy &amp; Fiat Off-Ramp:</strong> When financial goals are met, transfer required portions back to an exchange, execute Limit Sell orders, and withdraw fiat currency.
+                </div>
+            </div>
+        </div>
+    </div>
+    '''

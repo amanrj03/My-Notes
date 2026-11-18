@@ -436,6 +436,64 @@ th {
 </ol>
 <p><strong>Important distinction:</strong> Accepting Bitcoin as a payment method does not necessarily mean a country recognises Bitcoin as legal tender.</p>
 <h2><strong>1.3 Where can Bitcoin payments be used?</strong></h2>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Omnichannel Bitcoin Payment Methods Overview</h4>
+            <div class="diagram-subtitle">How merchants and consumers accept and settle Bitcoin across retail, web, and B2B channels</div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 10px;">
+            <div style="background: #090d16; border: 1px solid #0284c7; border-radius: 8px; padding: 14px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <span style="font-size: 20px;">🏪</span>
+                    <strong style="color: #38bdf8; font-size: 14px;">In-Store POS Terminal</strong>
+                </div>
+                <div style="font-size: 12px; color: #cbd5e1; line-height: 1.55;">
+                    • <strong>Channel:</strong> Physical retail storefronts &amp; cafes<br>
+                    • <strong>Mechanism:</strong> Dynamic QR code on terminal screen<br>
+                    • <strong>Speed:</strong> Instant zero-conf or 1-conf display<br>
+                    • <strong>Example:</strong> Square Terminal, 34 Bytes POS
+                </div>
+            </div>
+            <div style="background: #090d16; border: 1px solid #10b981; border-radius: 8px; padding: 14px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <span style="font-size: 20px;">🌐</span>
+                    <strong style="color: #34d399; font-size: 14px;">E-Commerce Checkout</strong>
+                </div>
+                <div style="font-size: 12px; color: #cbd5e1; line-height: 1.55;">
+                    • <strong>Channel:</strong> Online stores &amp; digital downloads<br>
+                    • <strong>Mechanism:</strong> BIP21 click-to-pay URI or web gateway<br>
+                    • <strong>Speed:</strong> 15-minute rate-locking window<br>
+                    • <strong>Example:</strong> BitPay, BTCPay Server plugin
+                </div>
+            </div>
+            <div style="background: #090d16; border: 1px solid #a855f7; border-radius: 8px; padding: 14px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <span style="font-size: 20px;">📱</span>
+                    <strong style="color: #c084fc; font-size: 14px;">Direct P2P Mobile</strong>
+                </div>
+                <div style="font-size: 12px; color: #cbd5e1; line-height: 1.55;">
+                    • <strong>Channel:</strong> Peer-to-peer split bills &amp; local trade<br>
+                    • <strong>Mechanism:</strong> Phone-to-phone static or dynamic QR scan<br>
+                    • <strong>Speed:</strong> Direct peer broadcast to mempool<br>
+                    • <strong>Example:</strong> BlueWallet, Electrum Mobile
+                </div>
+            </div>
+            <div style="background: #090d16; border: 1px solid #f59e0b; border-radius: 8px; padding: 14px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <span style="font-size: 20px;">📜</span>
+                    <strong style="color: #fbbf24; font-size: 14px;">B2B Cryptographic Invoice</strong>
+                </div>
+                <div style="font-size: 12px; color: #cbd5e1; line-height: 1.55;">
+                    • <strong>Channel:</strong> Corporate billing &amp; large enterprise transfers<br>
+                    • <strong>Mechanism:</strong> BIP70 X.509 authenticated PaymentRequest<br>
+                    • <strong>Speed:</strong> 3 to 6 network confirmations<br>
+                    • <strong>Example:</strong> Verified enterprise invoices with refund output
+                </div>
+            </div>
+        </div>
+    </div>
+    
 <p>There are two major environments:</p>
 <p><strong>1. Online businesses</strong></p>
 <p>E-commerce websites can integrate Bitcoin merchant solutions and allow customers to pay during online checkout.</p>
@@ -464,15 +522,65 @@ th {
 <p>Miners may include the transaction in a block. Once included in an accepted block, it receives its first confirmation.</p>
 <p><strong>Step 9: Merchant receives payment</strong></p>
 <p>The merchant monitors the payment and updates the order status according to its confirmation policy.</p>
-<h2><strong>Diagram: Bitcoin payment process</strong></h2>
-<p><strong>Customer selects a product</strong></p>
-<p>Example: T-shirt worth ₹2,000</p>
-<p><strong>Merchant provides Bitcoin address / QR code</strong></p>
-<p><strong>Customer scans QR code using wallet</strong></p>
-<p><strong>Wallet creates and signs transaction</strong></p>
-<p><strong>Transaction broadcast to Bitcoin network</strong></p>
-<p><strong>Miner includes transaction in a block</strong></p>
-<p><strong>Merchant detects payment and processes order</strong></p>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">End-to-End Bitcoin Payment Process &amp; Confirmation Flow</h4>
+            <div class="diagram-subtitle">Complete 7-stage lifecycle of a commercial Bitcoin transaction from bill generation to blockchain settlement</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px; max-width: 820px; margin: 0 auto;">
+            <div style="display: flex; align-items: center; gap: 12px; background: #090d16; border-left: 4px solid #38bdf8; border-radius: 6px; padding: 10px 14px;">
+                <div style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; font-weight: 800; font-size: 13px; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">1</div>
+                <div style="flex: 1;">
+                    <strong style="color: #e2e8f0; font-size: 13.5px;">Order Calculation &amp; Exchange Rate Lock</strong>
+                    <div style="font-size: 12px; color: #94a3b8;">Merchant POS calculates product price (e.g. ₹2,000 &approx; 0.00035 BTC) and locks the exchange rate for 15 minutes.</div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; background: #090d16; border-left: 4px solid #0284c7; border-radius: 6px; padding: 10px 14px;">
+                <div style="background: rgba(2, 132, 199, 0.15); color: #0284c7; font-weight: 800; font-size: 13px; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">2</div>
+                <div style="flex: 1;">
+                    <strong style="color: #e2e8f0; font-size: 13.5px;">Invoice Presentation (BIP21 QR Code)</strong>
+                    <div style="font-size: 12px; color: #94a3b8;">Terminal renders standard BIP21 QR code encoding destination Bitcoin address, exact amount, and order memo.</div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; background: #090d16; border-left: 4px solid #a855f7; border-radius: 6px; padding: 10px 14px;">
+                <div style="background: rgba(168, 85, 247, 0.15); color: #a855f7; font-weight: 800; font-size: 13px; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">3</div>
+                <div style="flex: 1;">
+                    <strong style="color: #e2e8f0; font-size: 13.5px;">Customer Wallet Scan &amp; Verification</strong>
+                    <div style="font-size: 12px; color: #94a3b8;">Customer scans QR code using a mobile wallet. Wallet auto-fills recipient address, amount, and calculates recommended miner fee.</div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; background: #090d16; border-left: 4px solid #ec4899; border-radius: 6px; padding: 10px 14px;">
+                <div style="background: rgba(236, 72, 153, 0.15); color: #ec4899; font-weight: 800; font-size: 13px; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">4</div>
+                <div style="flex: 1;">
+                    <strong style="color: #e2e8f0; font-size: 13.5px;">Cryptographic Signing (ECDSA / Schnorr)</strong>
+                    <div style="font-size: 12px; color: #94a3b8;">Customer approves payment. Wallet accesses private key to sign UTXO inputs; private key never leaves the secure device.</div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; background: #090d16; border-left: 4px solid #f59e0b; border-radius: 6px; padding: 10px 14px;">
+                <div style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; font-weight: 800; font-size: 13px; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">5</div>
+                <div style="flex: 1;">
+                    <strong style="color: #e2e8f0; font-size: 13.5px;">P2P Broadcast to Network Mempools</strong>
+                    <div style="font-size: 12px; color: #94a3b8;">Signed transaction is broadcast via <code>inv</code> &rarr; <code>tx</code> messages across peer nodes and enters global mempools.</div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; background: #090d16; border-left: 4px solid #10b981; border-radius: 6px; padding: 10px 14px;">
+                <div style="background: rgba(16, 185, 129, 0.15); color: #10b981; font-weight: 800; font-size: 13px; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">6</div>
+                <div style="flex: 1;">
+                    <strong style="color: #e2e8f0; font-size: 13.5px;">Miner Inclusion &amp; 1st Block Confirmation</strong>
+                    <div style="font-size: 12px; color: #94a3b8;">Miners validate signatures and include the transaction in a newly mined PoW block. 1st confirmation achieved.</div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; background: #090d16; border-left: 4px solid #22c55e; border-radius: 6px; padding: 10px 14px;">
+                <div style="background: rgba(34, 197, 94, 0.15); color: #22c55e; font-weight: 800; font-size: 13px; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">7</div>
+                <div style="flex: 1;">
+                    <strong style="color: #e2e8f0; font-size: 13.5px;">Merchant Settlement &amp; Order Dispatch</strong>
+                    <div style="font-size: 12px; color: #94a3b8;">Merchant node detects confirmation, prints final receipt, and releases goods. Irreversible finality increases with each block.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 <h3><strong>Important point: Is a transaction confirmed immediately?</strong></h3>
 <p>No.</p>
 <p>Broadcasting a transaction and confirming a transaction are two different things.</p>
@@ -607,11 +715,41 @@ th {
 <li>Message contains Order123.</li>
 </ul>
 <h2><strong>4.5 Working of BIP21</strong></h2>
-<p><strong>Merchant creates Bitcoin URI</strong></p>
-<p><strong>URI is converted into QR code or shared as a link</strong></p>
-<p><strong>Customer scans or clicks it</strong></p>
-<p><strong>Bitcoin wallet reads payment details</strong></p>
-<p><strong>Customer verifies and sends payment</strong></p>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">BIP21 URI Anatomical Breakdown &amp; QR Code Format</h4>
+            <div class="diagram-subtitle">Deconstructing the standard Bitcoin payment URI: <code>bitcoin:&lt;address&gt;?amount=&lt;btc&gt;&amp;label=&lt;name&gt;&amp;message=&lt;memo&gt;</code></div>
+        </div>
+        <div style="max-width: 780px; margin: 0 auto; background: #090d16; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 18px;">
+            <div style="font-family: monospace; font-size: 13px; background: #020617; padding: 12px 16px; border-radius: 6px; border: 1px solid #1e293b; overflow-x: auto; white-space: nowrap; margin-bottom: 16px; text-align: center;">
+                <span style="color: #38bdf8; font-weight: bold;">bitcoin:</span><span style="color: #34d399; font-weight: bold;">1BoatSLRHtKNngkdXEeobR76b53LETtpyT</span><span style="color: #f59e0b; font-weight: bold;">?</span><span style="color: #c084fc; font-weight: bold;">amount=0.01</span><span style="color: #f59e0b; font-weight: bold;">&amp;</span><span style="color: #fb7185; font-weight: bold;">label=CoffeeShop</span><span style="color: #f59e0b; font-weight: bold;">&amp;</span><span style="color: #38bdf8; font-weight: bold;">message=Order123</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px;">
+                <div style="background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 6px; padding: 10px;">
+                    <div style="font-size: 11px; text-transform: uppercase; color: #38bdf8; font-weight: 700;">Scheme Prefix</div>
+                    <div style="font-family: monospace; font-size: 13px; color: #f1f5f9; font-weight: bold;">bitcoin:</div>
+                    <div style="font-size: 11.5px; color: #94a3b8; margin-top: 3px;">Registered URI scheme; prompts OS to launch default crypto wallet.</div>
+                </div>
+                <div style="background: rgba(52, 211, 153, 0.08); border: 1px solid rgba(52, 211, 153, 0.25); border-radius: 6px; padding: 10px;">
+                    <div style="font-size: 11px; text-transform: uppercase; color: #34d399; font-weight: 700;">Destination Address</div>
+                    <div style="font-family: monospace; font-size: 13px; color: #f1f5f9; font-weight: bold;">1BoatSLR...</div>
+                    <div style="font-size: 11.5px; color: #94a3b8; margin-top: 3px;">Mandatory Base58Check or Bech32 recipient address.</div>
+                </div>
+                <div style="background: rgba(192, 132, 252, 0.08); border: 1px solid rgba(192, 132, 252, 0.25); border-radius: 6px; padding: 10px;">
+                    <div style="font-size: 11px; text-transform: uppercase; color: #c084fc; font-weight: 700;">Payment Amount</div>
+                    <div style="font-family: monospace; font-size: 13px; color: #f1f5f9; font-weight: bold;">amount=0.01</div>
+                    <div style="font-size: 11.5px; color: #94a3b8; margin-top: 3px;">Denominated in BTC decimal notation (0.01 BTC = 1,000,000 satoshis).</div>
+                </div>
+                <div style="background: rgba(251, 113, 133, 0.08); border: 1px solid rgba(251, 113, 133, 0.25); border-radius: 6px; padding: 10px;">
+                    <div style="font-size: 11px; text-transform: uppercase; color: #fb7185; font-weight: 700;">Metadata Parameters</div>
+                    <div style="font-family: monospace; font-size: 13px; color: #f1f5f9; font-weight: bold;">label &amp; message</div>
+                    <div style="font-size: 11.5px; color: #94a3b8; margin-top: 3px;">Human-readable recipient identity and transaction reference memo.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 <h3><strong>Advantages of BIP21</strong></h3>
 <ol>
 <li>Standardises Bitcoin payment links.</li>
@@ -1081,6 +1219,52 @@ th {
 <p>BIP72 extends the URI mechanism to support BIP70 payment requests.</p>
 <p>This allows a payment URI to refer to a payment-request resource rather than simply containing an ordinary payment address and amount.</p>
 <h2><strong>9.3 Difference between BIP21, BIP70, BIP71 and BIP72</strong></h2>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Bitcoin Payment Standards Ecosystem Stack (BIP21 &rarr; BIP70/71/72)</h4>
+            <div class="diagram-subtitle">Layered evolution from simple static URIs to authenticated enterprise payment protocols</div>
+        </div>
+        <div style="max-width: 750px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px;">
+            <div style="background: rgba(168, 85, 247, 0.12); border: 1.5px solid #a855f7; border-radius: 8px; padding: 14px 18px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <strong style="color: #c084fc; font-size: 14px;">Layer 3: BIP70 — Secure Payment Protocol</strong>
+                    <span class="diagram-badge" style="background: #a855f7; color: #fff;">PKI &amp; Security</span>
+                </div>
+                <div style="font-size: 12.5px; color: #cbd5e1; line-height: 1.5;">
+                    Defines Protobuf messages (<code>PaymentRequest</code>, <code>Payment</code>, <code>PaymentACK</code>) secured by X.509 digital certificates to eliminate MITM address spoofing and provide cryptographic payment receipts.
+                </div>
+            </div>
+            <div style="background: rgba(56, 189, 248, 0.12); border: 1.5px solid #0284c7; border-radius: 8px; padding: 14px 18px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <strong style="color: #38bdf8; font-size: 14px;">Layer 2B: BIP71 — Payment Protocol MIME Types</strong>
+                    <span class="diagram-badge" style="background: #0284c7; color: #fff;">Content Framing</span>
+                </div>
+                <div style="font-size: 12.5px; color: #cbd5e1; line-height: 1.5;">
+                    Standardises HTTP Content-Types (e.g. <code>application/bitcoin-paymentrequest</code>) so operating systems and web browsers cleanly dispatch payment data to wallet handlers.
+                </div>
+            </div>
+            <div style="background: rgba(234, 179, 8, 0.12); border: 1.5px solid #ca8a04; border-radius: 8px; padding: 14px 18px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <strong style="color: #facc15; font-size: 14px;">Layer 2A: BIP72 — Payment Protocol URI Extensions</strong>
+                    <span class="diagram-badge" style="background: #ca8a04; color: #fff;">Link Extension</span>
+                </div>
+                <div style="font-size: 12.5px; color: #cbd5e1; line-height: 1.5;">
+                    Extends BIP21 with the <code>r=https://...</code> parameter, enabling a Bitcoin URI to dynamically fetch an authenticated BIP70 PaymentRequest via HTTPS.
+                </div>
+            </div>
+            <div style="background: rgba(16, 185, 129, 0.12); border: 1.5px solid #10b981; border-radius: 8px; padding: 14px 18px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <strong style="color: #34d399; font-size: 14px;">Layer 1: BIP21 — Base Bitcoin Payment URI</strong>
+                    <span class="diagram-badge" style="background: #10b981; color: #fff;">Base Format</span>
+                </div>
+                <div style="font-size: 12.5px; color: #cbd5e1; line-height: 1.5;">
+                    Foundational URI scheme (<code>bitcoin:&lt;address&gt;?amount=...</code>) used across all mobile QR code scanning and direct link payments.
+                </div>
+            </div>
+        </div>
+    </div>
+    
 <table>
 <thead>
 <tr>

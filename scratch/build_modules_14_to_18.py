@@ -255,25 +255,61 @@ def inject_module_15_tokens(text):
 def inject_module_16_tokens(text):
     text = re.sub(r'\[.*?\]\(https?://[^\)]+\)', '', text)
     text = re.sub(r'\n[0-9]\n', '\n', text)
+    # 1. Methods overview (Topic 1.3)
+    text = re.sub(r'(##\s+\*\*1\.3 Where can Bitcoin payments be used\?\*\*.*?\n)', r'\1\n\nTOKEN_MOD16_METHODS\n\n', text, count=1)
+    # 2. Bitcoin payment flow (Topic 2 - replace raw text lines 142-159)
+    text = re.sub(r'##\s+\*\*Diagram: Bitcoin payment process\*\*.*?(?=###\s+\*\*Important point: Is a transaction confirmed immediately\?\*\*)',
+                  'TOKEN_MOD16_FLOW\n\n', text, flags=re.DOTALL)
+    # 3. BIP21 URI Anatomy (Topic 4.5 - replace raw text lines 302-313)
+    text = re.sub(r'##\s+\*\*4\.5 Working of BIP21\*\*.*?(?=###\s+\*\*Advantages of BIP21\*\*)',
+                  '## **4.5 Working of BIP21**\n\nTOKEN_MOD16_BIP21\n\n', text, flags=re.DOTALL)
+    # 4. POS QR (Topic 5.4)
     text = re.sub(r'(\*\*5\.4 Diagram of Bitcoin POS working\*\*.*?\n\n).*?(?=##\s+\*\*5\.5 Advantages)', r'\1\n\nTOKEN_MOD16_POS_QR\n\n', text, count=1, flags=re.DOTALL)
+    # 5. Payment processor (Topic 6.4)
     text = re.sub(r'(##\s+\*\*6\.4 Working of a Bitcoin payment processor\*\*.*?\n)', r'\1\n\nTOKEN_MOD16_PROCESSOR\n\n', text, count=1)
+    # 6. BIP70 protocol (Topic 7.4)
     text = re.sub(r'(##\s+\*\*7\.4 Complete working of BIP70\*\*.*?\n)', r'\1\n\nTOKEN_MOD16_BIP70\n\n', text, count=1)
+    # 7. MITM attack prevention (Topic 8.3)
     text = re.sub(r'(##\s+\*\*8\.3 How does BIP70 help prevent this attack\?\*\*.*?\n)', r'\1\n\nTOKEN_MOD16_MITM\n\n', text, count=1)
+    # 8. BIP standards stack (Topic 9.3)
+    text = re.sub(r'(##\s+\*\*9\.3 Difference between BIP21, BIP70, BIP71 and BIP72\*\*.*?\n)', r'\1\n\nTOKEN_MOD16_STACK\n\n', text, count=1)
     return text
 
 def inject_module_17_tokens(text):
     text = re.sub(r'\[.*?\]\(https?://[^\)]+\)', '', text)
     text = re.sub(r'\n[0-9]\n', '\n', text)
+    # 1. BIP Lifecycle (Topic 2.5)
+    text = re.sub(r'(##\s+\*\*2\.5 How does a BIP help Bitcoin improve\?\*\*.*?\n)', r'\1\n\nTOKEN_MOD17_BIP_LIFECYCLE\n\n', text, count=1)
+    # 2. Soft vs Hard fork (Topic 3.4)
     text = re.sub(r'(\*\*3\.4 Diagram: Soft fork vs Hard fork\*\*.*?\n\n).*?(?=##\s+\*\*3\.5 Difference)', r'\1\n\nTOKEN_MOD17_FORK\n\n', text, count=1, flags=re.DOTALL)
+    # 3. Malleability fix (Topic 4.2)
+    text = re.sub(r'(This helped address the transaction malleability problem\.)', r'\1\n\nTOKEN_MOD17_MALLEABILITY\n\n', text, count=1)
+    # 4. SegWit block (Topic 5.3)
     text = re.sub(r'(##\s+\*\*5\.3 Main idea behind SegWit\*\*.*?\n)', r'\1\n\nTOKEN_MOD17_SEGWIT\n\n', text, count=1)
+    # 5. Extremely Thin Blocks (Topic 7.3 - replace raw text lines 764-776)
+    text = re.sub(r'\*\*Example of thin block communication\*\*.*?(?=###\s+\*\*3\. Parallel validation\*\*)',
+                  'TOKEN_MOD17_XTHIN\n\n', text, flags=re.DOTALL)
+    # 6. Lightning lifecycle (Topic 9.6)
     text = re.sub(r'(\*\*9\.6 Diagram: Working of the Lightning Network\*\*.*?\n\n).*?(?=##\s+\*\*9\.7 Advantages)', r'\1\n\nTOKEN_MOD17_LIGHTNING\n\n', text, count=1, flags=re.DOTALL)
+    # 7. Protocol scaling matrix (Topic 10)
+    text = re.sub(r'(#\s+\*\*Topic 10: Comparison of Bitcoin Advanced Protocols\*\*.*?\n)', r'\1\n\nTOKEN_MOD17_SCALING\n\n', text, count=1)
     return text
 
 def inject_module_18_tokens(text):
+    # 1. CEX Onboarding Lifecycle (Topic 2 / Step 7)
+    text = re.sub(r'(Step 7: Bitcoin is credited.*?\n)', r'\1\n\nTOKEN_MOD18_ONBOARDING\n\n', text, count=1)
+    # 2. CEX vs DEX (Topic 2.5)
     text = re.sub(r'(##\s+\*\*2\.5 Types of Bitcoin exchanges\*\*.*?\n)', r'\1\n\nTOKEN_MOD18_CEX_DEX\n\n', text, count=1)
+    # 3. Long vs Short (Topic 4)
     text = re.sub(r'(#\s+\*\*Topic 4: Bitcoin Trading — Long and Short Positions\*\*.*?\n)', r'\1\n\nTOKEN_MOD18_LONG_SHORT\n\n', text, count=1)
+    # 4. Derivatives Matrix (Topic 5)
+    text = re.sub(r'(#\s+\*\*Topic 5: Other Bitcoin Trading Choices\*\*.*?\n)', r'\1\n\nTOKEN_MOD18_DERIVATIVES\n\n', text, count=1)
+    # 5. Order Book (Topic 6.3)
     text = re.sub(r'(##\s+\*\*6\.3 Example of a Bitcoin order book\*\*.*?\n)', r'\1\n\nTOKEN_MOD18_ORDER_BOOK\n\n', text, count=1)
+    # 6. Order Types (Topic 8)
     text = re.sub(r'(#\s+\*\*Topic 8: Types of Bitcoin Orders\*\*.*?\n)', r'\1\n\nTOKEN_MOD18_ORDER_TYPES\n\n', text, count=1)
+    # 7. Investment Lifecycle (Topic 9)
+    text = re.sub(r'(#\s+\*\*Topic 9: Complete Working — From Buying Bitcoin to Selling Bitcoin\*\*.*?\n)', r'\1\n\nTOKEN_MOD18_LIFECYCLE\n\n', text, count=1)
     return text
 
 def replace_diagram_tokens(html, mod_num):
@@ -305,21 +341,32 @@ def replace_diagram_tokens(html, mod_num):
             "TOKEN_MOD15_BIP39": diag.diagram_bip39_seed()
         },
         16: {
+            "TOKEN_MOD16_METHODS": diag.diagram_payment_methods_overview(),
+            "TOKEN_MOD16_FLOW": diag.diagram_bitcoin_payment_flow(),
+            "TOKEN_MOD16_BIP21": diag.diagram_bip21_uri_anatomy(),
             "TOKEN_MOD16_POS_QR": diag.diagram_pos_qr_flow(),
             "TOKEN_MOD16_PROCESSOR": diag.diagram_payment_processor(),
             "TOKEN_MOD16_BIP70": diag.diagram_bip70_protocol(),
-            "TOKEN_MOD16_MITM": diag.diagram_mitm_prevention()
+            "TOKEN_MOD16_MITM": diag.diagram_mitm_prevention(),
+            "TOKEN_MOD16_STACK": diag.diagram_bip_standards_stack()
         },
         17: {
+            "TOKEN_MOD17_BIP_LIFECYCLE": diag.diagram_bip_lifecycle(),
             "TOKEN_MOD17_FORK": diag.diagram_soft_vs_hard_fork(),
+            "TOKEN_MOD17_MALLEABILITY": diag.diagram_tx_malleability_fix(),
             "TOKEN_MOD17_SEGWIT": diag.diagram_segwit_block(),
-            "TOKEN_MOD17_LIGHTNING": diag.diagram_lightning_lifecycle()
+            "TOKEN_MOD17_XTHIN": diag.diagram_xthin_blocks(),
+            "TOKEN_MOD17_LIGHTNING": diag.diagram_lightning_lifecycle(),
+            "TOKEN_MOD17_SCALING": diag.diagram_bitcoin_scaling_landscape()
         },
         18: {
+            "TOKEN_MOD18_ONBOARDING": diag.diagram_cex_trading_lifecycle(),
             "TOKEN_MOD18_CEX_DEX": diag.diagram_cex_vs_dex(),
             "TOKEN_MOD18_LONG_SHORT": diag.diagram_long_vs_short(),
+            "TOKEN_MOD18_DERIVATIVES": diag.diagram_derivatives_matrix(),
             "TOKEN_MOD18_ORDER_BOOK": diag.diagram_order_book(),
-            "TOKEN_MOD18_ORDER_TYPES": diag.diagram_order_types()
+            "TOKEN_MOD18_ORDER_TYPES": diag.diagram_order_types(),
+            "TOKEN_MOD18_LIFECYCLE": diag.diagram_investment_lifecycle()
         }
     }
     tokens = diagram_map.get(mod_num, {})

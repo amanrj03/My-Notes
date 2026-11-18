@@ -542,6 +542,42 @@ th {
 </tbody>
 </table>
 <h2><strong>2.5 How does a BIP help Bitcoin improve?</strong></h2>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Bitcoin Improvement Proposal (BIP) Governance Lifecycle</h4>
+            <div class="diagram-subtitle">How technical enhancements progress from community draft to network-wide consensus activation</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px; max-width: 820px; margin: 0 auto;">
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+                <div style="flex: 1; min-width: 150px; background: #090d16; border: 1px solid #38bdf8; border-radius: 8px; padding: 12px; text-align: center;">
+                    <div style="color: #38bdf8; font-weight: 800; font-size: 12px; text-transform: uppercase;">1. Idea / RFC</div>
+                    <div style="font-size: 11.5px; color: #94a3b8; margin-top: 4px;">Public debate on Bitcoin-dev mailing list &amp; GitHub discussions.</div>
+                </div>
+                <div style="display: flex; align-items: center; color: #64748b; font-size: 16px;">&rarr;</div>
+                <div style="flex: 1; min-width: 150px; background: #090d16; border: 1px solid #a855f7; border-radius: 8px; padding: 12px; text-align: center;">
+                    <div style="color: #c084fc; font-weight: 800; font-size: 12px; text-transform: uppercase;">2. Draft Status</div>
+                    <div style="font-size: 11.5px; color: #94a3b8; margin-top: 4px;">BIP Editor assigns formal proposal number (e.g. BIP141).</div>
+                </div>
+                <div style="display: flex; align-items: center; color: #64748b; font-size: 16px;">&rarr;</div>
+                <div style="flex: 1; min-width: 150px; background: #090d16; border: 1px solid #f59e0b; border-radius: 8px; padding: 12px; text-align: center;">
+                    <div style="color: #fbbf24; font-weight: 800; font-size: 12px; text-transform: uppercase;">3. Proposed</div>
+                    <div style="font-size: 11.5px; color: #94a3b8; margin-top: 4px;">Working code written &amp; rigorously battle-tested on Testnet.</div>
+                </div>
+                <div style="display: flex; align-items: center; color: #64748b; font-size: 16px;">&rarr;</div>
+                <div style="flex: 1; min-width: 150px; background: #090d16; border: 1px solid #10b981; border-radius: 8px; padding: 12px; text-align: center;">
+                    <div style="color: #34d399; font-weight: 800; font-size: 12px; text-transform: uppercase;">4. Final / Active</div>
+                    <div style="font-size: 11.5px; color: #94a3b8; margin-top: 4px;">95% miner signalling (BIP9) or node consensus locks in upgrade.</div>
+                </div>
+            </div>
+            <div style="background: #020617; border: 1px solid #1e293b; border-radius: 8px; padding: 12px 16px; margin-top: 6px; display: flex; justify-content: space-around; flex-wrap: wrap; gap: 10px;">
+                <div style="font-size: 12px; color: #cbd5e1;"><span style="color: #38bdf8; font-weight: bold;">● Standards Track:</span> Affects consensus rules, network protocol, or validation rules.</div>
+                <div style="font-size: 12px; color: #cbd5e1;"><span style="color: #c084fc; font-weight: bold;">● Informational Track:</span> Design guidelines and general ecosystem recommendations.</div>
+                <div style="font-size: 12px; color: #cbd5e1;"><span style="color: #fbbf24; font-weight: bold;">● Process Track:</span> Proposes changes to development workflow outside core protocol.</div>
+            </div>
+        </div>
+    </div>
+    
 <p>Understand this example:</p>
 <p>Suppose developers identify a security problem in Bitcoin.</p>
 <ol>
@@ -804,6 +840,44 @@ th {
 <h3><strong>How did SegWit help?</strong></h3>
 <p>SegWit separated signature data (witness data) from the transaction data used to calculate the traditional TXID.</p>
 <p>This helped address the transaction malleability problem.</p>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Transaction Malleability Attack &amp; SegWit Fix Architecture</h4>
+            <div class="diagram-subtitle">How Segregated Witness (BIP141) made Bitcoin Transaction IDs permanently immutable</div>
+        </div>
+        <div class="diagram-nodes-row" style="gap: 16px;">
+            <div class="diagram-node" style="flex: 1; text-align: left; background: #090d16; border-color: #ef4444;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <strong style="color: #f87171; font-size: 14px;">⚠️ Legacy TXID (Vulnerable)</strong>
+                    <span class="diagram-badge" style="background: rgba(239,68,68,0.2); color: #f87171; border: 1px solid #ef4444;">Pre-SegWit</span>
+                </div>
+                <div style="background: #020617; padding: 8px 10px; border-radius: 6px; font-family: monospace; font-size: 11px; color: #94a3b8; margin-bottom: 8px;">
+                    TXID = SHA256(SHA256(Inputs + Outputs + <span style="color: #f87171; font-weight: bold;">ScriptSig</span>))
+                </div>
+                <div style="font-size: 12px; color: #cbd5e1; line-height: 1.5;">
+                    • <strong>Attack:</strong> An attacker intercepts unconfirmed tx and changes the signature representation (e.g. ECDSA <code>(r, s)</code> to <code>(r, -s mod n)</code>).<br>
+                    • <strong>Consequence:</strong> The signature remains valid, but the TXID changes from <code>TXID_A</code> to <code>TXID_B</code> before block inclusion!<br>
+                    • <strong>Fatal Flaw:</strong> Breaks dependent unconfirmed transactions (ruined Layer-2 channels).
+                </div>
+            </div>
+            <div class="diagram-node" style="flex: 1; text-align: left; background: #090d16; border-color: #10b981;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <strong style="color: #34d399; font-size: 14px;">✅ SegWit TXID (Immutable)</strong>
+                    <span class="diagram-badge" style="background: rgba(16,185,129,0.2); color: #34d399; border: 1px solid #10b981;">BIP141 Fix</span>
+                </div>
+                <div style="background: #020617; padding: 8px 10px; border-radius: 6px; font-family: monospace; font-size: 11px; color: #94a3b8; margin-bottom: 8px;">
+                    TXID = SHA256(SHA256(<span style="color: #34d399; font-weight: bold;">Inputs + Outputs</span>)) [Witness Detached]
+                </div>
+                <div style="font-size: 12px; color: #cbd5e1; line-height: 1.5;">
+                    • <strong>Solution:</strong> Witness (signature) data is detached from the base serialization and placed in a dedicated witness structure.<br>
+                    • <strong>Consequence:</strong> TXID is computed <em>strictly</em> over inputs and outputs. Signatures can never alter the TXID.<br>
+                    • <strong>Enables:</strong> Fully trustless Lightning Network payment channels!
+                </div>
+            </div>
+        </div>
+    </div>
+    
 <h1><strong>Topic 5: Segregated Witness (SegWit)</strong></h1>
 <p>Very important 10-mark question</p>
 <h2><strong>5.1 What is SegWit?</strong></h2>
@@ -1059,13 +1133,38 @@ th {
 <p><strong>Extremely thin blocks</strong> aim to reduce this duplication.</p>
 <p>The requesting node sends a <code>getdata</code> request along with a Bloom filter that identifies transactions it already has.</p>
 <p>The other node sends only the missing transactions in the thin block.</p>
-<p><strong>Example of thin block communication</strong></p>
-<p><strong>Requesting node already has</strong></p>
-<p>TX1, TX2, TX3, TX4</p>
-<p><strong>Miner's block contains</strong></p>
-<p>TX1, TX2, TX3, TX4, TX5, TX6</p>
-<p><strong>Thin block sends only</strong></p>
-<p>TX5 and TX6</p>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Extremely Thin Blocks (Xthin) vs. Traditional Block Relay</h4>
+            <div class="diagram-subtitle">Bandwidth optimization in Bitcoin Unlimited: eliminating duplicate transaction transmission</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 14px; max-width: 800px; margin: 0 auto;">
+            <div style="background: #090d16; border: 1px solid #ef4444; border-radius: 8px; padding: 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <strong style="color: #f87171; font-size: 13.5px;">1. Standard Full Block Relay (Bandwidth Inefficient)</strong>
+                    <span style="font-size: 11px; background: rgba(239,68,68,0.2); color: #f87171; padding: 2px 8px; border-radius: 12px;">~1 to 2 MB Transfer</span>
+                </div>
+                <div style="font-size: 12px; color: #cbd5e1; line-height: 1.5;">
+                    Miner transmits the entire block with all 2,500 transactions across the network &mdash; even though 98% of those transactions already sit idle in the receiving node's local mempool!
+                </div>
+            </div>
+            <div style="background: #090d16; border: 1px solid #10b981; border-radius: 8px; padding: 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <strong style="color: #34d399; font-size: 13.5px;">2. Xthin Block Relay (Bloom Filter Assisted)</strong>
+                    <span style="font-size: 11px; background: rgba(16,185,129,0.2); color: #34d399; padding: 2px 8px; border-radius: 12px;">~15 to 30 KB Transfer (95% Savings)</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 12px; color: #cbd5e1; flex-wrap: wrap;">
+                    <span style="background: #020617; border: 1px solid #0284c7; padding: 6px 10px; border-radius: 4px; color: #38bdf8;">80-Byte Header</span>
+                    <span>+</span>
+                    <span style="background: #020617; border: 1px solid #a855f7; padding: 6px 10px; border-radius: 4px; color: #c084fc;">64-bit Short TX IDs</span>
+                    <span>+</span>
+                    <span style="background: #020617; border: 1px solid #10b981; padding: 6px 10px; border-radius: 4px; color: #34d399;">Only Missing TXs</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 <h3><strong>3. Parallel validation</strong></h3>
 <p>In traditional sequential validation, a node processes a new block and completes its validation before moving on to certain other validation and relay tasks.</p>
 <p>Bitcoin Unlimited proposed parallel validation.</p>
@@ -1315,6 +1414,64 @@ th {
 <h3><strong>Important exam conclusion</strong></h3>
 <p>The Lightning Network improves Bitcoin scalability by enabling multiple off-chain payments through payment channels. Only the channel opening and final settlement need to be recorded on the main blockchain, reducing the need for every payment to consume on-chain block space.</p>
 <h1><strong>Topic 10: Comparison of Bitcoin Advanced Protocols</strong></h1>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Bitcoin Scalability &amp; Protocol Evolution Matrix</h4>
+            <div class="diagram-subtitle">Comparing major architectural upgrade proposals across Unit IV</div>
+        </div>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 12.5px; text-align: left; background: #090d16; border-radius: 8px; overflow: hidden;">
+                <thead>
+                    <tr style="background: #0f172a; border-bottom: 1.5px solid rgba(255,255,255,0.15);">
+                        <th style="padding: 10px 14px; color: #38bdf8;">Proposal</th>
+                        <th style="padding: 10px 14px; color: #cbd5e1;">Target Problem</th>
+                        <th style="padding: 10px 14px; color: #cbd5e1;">Mechanism</th>
+                        <th style="padding: 10px 14px; color: #cbd5e1;">Fork Type</th>
+                        <th style="padding: 10px 14px; color: #34d399;">Key Benefit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 10px 14px; font-weight: bold; color: #38bdf8;">SegWit (BIP141)</td>
+                        <td style="padding: 10px 14px; color: #cbd5e1;">Malleability &amp; 1MB Cap</td>
+                        <td style="padding: 10px 14px; color: #cbd5e1;">Detached witness data, 4MWU weight</td>
+                        <td style="padding: 10px 14px; color: #facc15;">Soft Fork</td>
+                        <td style="padding: 10px 14px; color: #34d399;">Backward-compatible; enabled Layer 2</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 10px 14px; font-weight: bold; color: #f59e0b;">Bitcoin Cash (BCH)</td>
+                        <td style="padding: 10px 14px; color: #cbd5e1;">On-chain transaction limit</td>
+                        <td style="padding: 10px 14px; color: #cbd5e1;">Increased block size to 8MB &rarr; 32MB</td>
+                        <td style="padding: 10px 14px; color: #f87171;">Hard Fork</td>
+                        <td style="padding: 10px 14px; color: #34d399;">Higher raw on-chain throughput</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 10px 14px; font-weight: bold; color: #a855f7;">Bitcoin Unlimited</td>
+                        <td style="padding: 10px 14px; color: #cbd5e1;">Rigid consensus block limits</td>
+                        <td style="padding: 10px 14px; color: #cbd5e1;">Miner emergent consensus &amp; Xthin blocks</td>
+                        <td style="padding: 10px 14px; color: #c084fc;">Alternative Client</td>
+                        <td style="padding: 10px 14px; color: #34d399;">Dynamic scaling without hard limits</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <td style="padding: 10px 14px; font-weight: bold; color: #fbbf24;">Bitcoin Gold (BTG)</td>
+                        <td style="padding: 10px 14px; color: #cbd5e1;">ASIC mining centralization</td>
+                        <td style="padding: 10px 14px; color: #cbd5e1;">Equihash memory-hard PoW algorithm</td>
+                        <td style="padding: 10px 14px; color: #f87171;">Hard Fork</td>
+                        <td style="padding: 10px 14px; color: #34d399;">Democratized consumer GPU mining</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px 14px; font-weight: bold; color: #34d399;">Lightning Network</td>
+                        <td style="padding: 10px 14px; color: #cbd5e1;">Low TPS &amp; high fee scaling</td>
+                        <td style="padding: 10px 14px; color: #cbd5e1;">Bidirectional off-chain channels (HTLCs)</td>
+                        <td style="padding: 10px 14px; color: #38bdf8;">Layer 2 Protocol</td>
+                        <td style="padding: 10px 14px; color: #34d399;">Millions of instant, sub-penny microtransactions</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
 <p>This table is extremely useful for revision and 10-mark comparison questions.</p>
 <table>
 <thead>

@@ -39,7 +39,7 @@ def test_modules():
         diagram_count = len(diagram_matches)
         titles = re.findall(r'<h4 class="diagram-title">([^<]+)</h4>', html)
         
-        min_expected = 10 if m in [14, 15] else 3
+        min_expected = {14: 11, 15: 11, 16: 8, 17: 7, 18: 7}[m]
         if diagram_count < min_expected:
             errors.append(f"{fname}: Expected at least {min_expected} diagrams, found {diagram_count}")
         else:
