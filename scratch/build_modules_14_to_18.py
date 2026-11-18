@@ -12,6 +12,7 @@ import markdown
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from render_unit4_quiz import render_quiz_html
 import render_unit4_diagrams as diag
+import render_chatgpt_cards as cards
 
 RAW_DIR = r"raw_notes/blockchain"
 OUT_DIR = r"."
@@ -163,91 +164,82 @@ def format_module_18_markdown(text):
     return "\n".join(formatted)
 
 def inject_module_14_tokens(text):
-    # 1. Centralized vs P2P (Topic 2)
-    text = re.sub(r'\*\*Central server\*\*.*?(?=Every employee)', '', text, flags=re.DOTALL)
-    text = re.sub(r'Peer A\n+Peer B\n+Peer C\n+Peer D\n+Peer E\n+Peer F\n+Illustrative peers communicating directly through network connections\.', '', text)
+    # 1. Example network (Topic 1.2)
+    text = re.sub(r'\*\*Example:\s*Bitcoin network\*\*.*?(?=##\s+\*\*1\.3)', 'TOKEN_MOD14_EXAMPLE_NET\n\n', text, flags=re.DOTALL)
+    # 2. Centralized server & P2P (Topic 2.1 - User Image 1)
+    text = re.sub(r'\*\*Central server\*\*.*?(?=Every employee depends)', 'TOKEN_MOD14_CENTRAL_SERVER\n\n', text, flags=re.DOTALL)
+    text = text.replace('Every employee depends on the central server.\n\nIf the central server fails, communication may be interrupted.', '')
+    text = re.sub(r'Peer A\n+Peer B\n+Peer C\n+Peer D\n+Peer E\n+Peer F\n+Illustrative peers communicating directly through network connections\.', 'TOKEN_MOD14_P2P_MESH\n\n', text)
     text = re.sub(r'(Bitcoin uses this second architecture\.)', r'\1\n\nTOKEN_MOD14_TOPO\n\n', text)
-
-    # 2. Node Functions Matrix (Topic 3.3)
+    # 3. Node Functions Matrix (Topic 3.3)
     text = re.sub(r'(The functions depend on the type of node and its software configuration\.)', r'\1\n\nTOKEN_MOD14_MATRIX\n\n', text)
-
-    # 3. SPV Merkle Verification (Topic 4.2 - replace raw text lines 402-415)
-    text = re.sub(r'##\s+\*\*SPV verification\*\*.*?(?=###\s+\*\*Advantages of SPV nodes\*\*)', 'TOKEN_MOD14_SPV_MERKLE\n\n', text, flags=re.DOTALL)
-
-    # 4. Full Node vs SPV Node (Topic 4.3)
+    # 4. Full node card (Topic 4.1 - User Image 3)
+    text = re.sub(r'##\s+\*\*Full node\*\*.*?Peer communication\n', 'TOKEN_MOD14_FULL_NODE\n\n', text, flags=re.DOTALL)
+    # 5. SPV verification card (Topic 4.2 - User Image 2)
+    text = re.sub(r'##\s+\*\*SPV verification\*\*.*?(?=###\s+\*\*Advantages of SPV nodes\*\*)', 'TOKEN_MOD14_SPV_VERIF\n\n', text, flags=re.DOTALL)
+    # 6. Full Node vs SPV Node (Topic 4.3)
     text = re.sub(r'(##\s+\*\*4\.3 Full node vs SPV node\*\*.*?\n)', r'\1\n\nTOKEN_MOD14_FULL_SPV\n\n', text, count=1)
-
-    # 5. Packet Structure (Topic 5.3)
+    # 7. Packet Structure (Topic 5.3)
     text = re.sub(r'(\*\*Remember:\*\* mainnet is the real Bitcoin network, while testnet is used for testing\.)', r'\1\n\nTOKEN_MOD14_PACKET\n\n', text)
-
-    # 6. Inventory Propagation (Topic 6)
+    # 8. Inventory Propagation (Topic 6)
     text = re.sub(r'(#\s+\*\*Topic 6: Important Bitcoin Protocol Messages\*\*.*?\n)', r'\1\n\nTOKEN_MOD14_INV\n\n', text, count=1)
-
-    # 7. Handshake (Topic 7 - replace raw lines 737-760)
-    text = re.sub(r'##\s+\*\*Bitcoin node connection handshake\*\*.*?(?=\*\*Connection established\*\*)', 'TOKEN_MOD14_HANDSHAKE\n\n', text, flags=re.DOTALL)
-    text = text.replace('**Connection established**\n\nPeer discovery and blockchain synchronisation can proceed.', 'Peer discovery and blockchain synchronisation can proceed.')
-
-    # 8. Node Discovery Flow (Topic 8.2)
+    # 9. Handshake cards and flow (Topic 7)
+    text = re.sub(r'##\s+\*\*Bitcoin node connection handshake\*\*.*?(?=\*\*Exam tip:\*\*)', 'TOKEN_MOD14_HANDSHAKE_CARD\n\nTOKEN_MOD14_HANDSHAKE\n\n', text, flags=re.DOTALL)
+    # 10. Node Discovery Flow (Topic 8.2)
     text = re.sub(r'(6\. Once connected, it can discover additional peers through the network\.)', r'\1\n\nTOKEN_MOD14_DISCOVERY\n\n', text)
-
-    # 9. IBD Comparison (Topic 10)
+    # 11. IBD Comparison (Topic 10)
     text = re.sub(r'(#\s+\*\*Topic 10: Blocks-First vs Headers-First Synchronisation\*\*.*?\n)', r'\1\n\nTOKEN_MOD14_IBD\n\n', text, count=1)
-
-    # 10. Headers-first flow (Topic 10.5 - replace raw lines 955-972)
-    text = re.sub(r'##\s+\*\*10\.5 Headers-first synchronisation diagram\*\*.*?(?=\*\*Remember this sequence for the exam:\*\*)', '## **10.5 Headers-first synchronisation diagram**\n\nTOKEN_MOD14_HEADERS_FLOW\n\n', text, flags=re.DOTALL)
-
-    # 11. Stratum Protocol (Topic 11)
+    # 12. Headers-first flow (Topic 10.5)
+    text = re.sub(r'##\s+\*\*10\.5 Headers-first synchronisation diagram\*\*.*?(?=\*\*Remember this sequence for the exam:\*\*)', 'TOKEN_MOD14_HEADERS_FLOW\n\n', text, flags=re.DOTALL)
+    # 13. Stratum Protocol Card & Diagram (Topic 11)
+    text = re.sub(r'\*\*Mining pool server\*\*.*?(?=Miners receive work)', 'TOKEN_MOD14_STRATUM_CARD\n\n', text, flags=re.DOTALL)
     text = re.sub(r'(#\s+\*\*Topic 11: Stratum Protocol\*\*.*?\n)', r'\1\n\nTOKEN_MOD14_STRATUM\n\n', text, count=1)
     return text
 
 def inject_module_15_tokens(text):
-    # 1. Clean broken external image links and stray footnote numbers
     text = re.sub(r'\[.*?\]\(https?://[^\)]+\)', '', text)
     text = re.sub(r'\n[0-9]\n', '\n', text)
-
-    # 2. Misconception diagram (Topic 1.1 / 1.3)
+    # 1. Misconception diagram (Topic 1.1 / 1.3)
     text = re.sub(r'(So, what does a Bitcoin wallet do\?\n\nIt manages the cryptographic keys that allow you to access and spend the Bitcoin associated with your wallet\.)',
                   r'\1\n\nTOKEN_MOD15_MISCONCEPTION\n\n', text)
-
-    # 3. Key & Address Generation Pipeline (Topic 2.4 / 2.5)
+    # 2. Key relationship card (Topic 2.4)
     text = re.sub(r'##\s+\*\*Private key\*\*.*?##\s+\*\*Bitcoin address\*\*\n\nDerived from public-key or script-related data, depending on address type',
-                  '', text, flags=re.DOTALL)
+                  'TOKEN_MOD15_KEYS_CARD\n\n', text, flags=re.DOTALL)
+    # 3. Address generation card & pipeline (Topic 2.5)
     text = re.sub(r'\*\*Private key\*\*.*?(?=###\s+\*\*What is Base58Check\?\*\*)',
-                  'TOKEN_MOD15_PIPELINE\n\n', text, flags=re.DOTALL)
-
-    # 4. Transaction Lifecycle (Topic 3.1 / 3.2)
+                  'TOKEN_MOD15_ADDR_GEN_CARD\n\nTOKEN_MOD15_PIPELINE\n\n', text, flags=re.DOTALL)
+    # 4. Receiving flow & lifecycle (Topic 3.1 / 3.2)
     text = re.sub(r'\*\*Rahul opens wallet\*\*.*?(?=##\s+\*\*3\.2 Sending Bitcoin\*\*)',
-                  'TOKEN_MOD15_LIFECYCLE\n\n', text, flags=re.DOTALL)
-
-    # 5. UTXO Change Diagram (Topic 3.3)
+                  'TOKEN_MOD15_RECEIVING_CARD\n\nTOKEN_MOD15_LIFECYCLE\n\n', text, flags=re.DOTALL)
+    # 5. UTXO card & diagram (Topic 3.3)
     text = re.sub(r'\*\*Transaction example\*\*.*?(?=Here:)',
-                  'TOKEN_MOD15_UTXO\n\n', text, flags=re.DOTALL)
-
-    # 6. JBOK vs HD (Topic 4.3 Definition)
+                  'TOKEN_MOD15_UTXO_CARD\n\nTOKEN_MOD15_UTXO\n\n', text, flags=re.DOTALL)
+    # 6. JBOK wallet card (Topic 4.1)
+    text = re.sub(r'\*\*Non-deterministic wallet\*\*.*?(?=Each private key is generated independently\.)',
+                  'TOKEN_MOD15_JBOK_CARD\n\n', text, flags=re.DOTALL)
+    # 7. Deterministic wallet card (Topic 4.2)
+    text = re.sub(r'\*\*Random seed\*\*.*?(?=The same seed and derivation procedure)',
+                  'TOKEN_MOD15_DETERM_CARD\n\n', text, flags=re.DOTALL)
+    # 8. University hierarchy card (Topic 4.3)
+    text = re.sub(r'\*\*University\*\*.*?(?=The university is at the top)',
+                  'TOKEN_MOD15_UNIV_CARD\n\n', text, flags=re.DOTALL)
+    # 9. HD tree card & BIP44 tree (Topic 4.3)
+    text = re.sub(r'\*\*Seed\*\*.*?(?=###\s+\*\*Important characteristics\*\*)',
+                  'TOKEN_MOD15_HD_CARD\n\nTOKEN_MOD15_BIP44_TREE\n\n', text, flags=re.DOTALL)
     text = re.sub(r'(An HD wallet follows a similar hierarchy for keys\.)',
                   r'\1\n\nTOKEN_MOD15_JBOK_HD\n\n', text)
-
-    # 7. BIP44 Tree (Topic 4.3)
-    text = re.sub(r'\*\*Seed\*\*.*?(?=###\s+\*\*Important characteristics\*\*)',
-                  'TOKEN_MOD15_BIP44_TREE\n\n', text, flags=re.DOTALL)
-
-    # 8. Paper Wallet (Topic 4.5)
+    # 10. Paper Wallet (Topic 4.5)
     text = re.sub(r'(A \*\*paper wallet is a physical paper document.*?\.\*\*\n)',
                   r'\1\n\nTOKEN_MOD15_PAPER\n\n', text)
-
-    # 9. Hardware Wallet (Topic 4.6)
+    # 11. Hardware Wallet (Topic 4.6)
     text = re.sub(r'(A \*\*hardware wallet is a dedicated physical device.*?\.\*\*\n)',
                   r'\1\n\nTOKEN_MOD15_HARDWARE\n\n', text)
-
-    # 10. Hot vs Cold Spectrum (Topic 5)
+    # 12. Hot vs Cold Spectrum (Topic 5)
     text = re.sub(r'(\*\*Hot wallet\*\*.*?offline key storage\.)',
                   r'TOKEN_MOD15_SPECTRUM\n\n', text, flags=re.DOTALL)
-
-    # 11. BIP39 Mnemonic Card (Topic 7.2)
+    # 13. BIP39 Mnemonic recovery card & vault card (Topic 7.2 / 7.3)
     text = re.sub(r'\*\*Illustrative recovery phrase format\*\*.*?(?=This is only a format illustration)',
-                  'TOKEN_MOD15_CARD\n\n', text, flags=re.DOTALL)
-
-    # 12. BIP39 Seed Derivation Pipeline (Topic 7.3)
+                  'TOKEN_MOD15_RECOVERY_CARD\n\nTOKEN_MOD15_CARD\n\n', text, flags=re.DOTALL)
     text = re.sub(r'(##\s+\*\*7\.3 How does a mnemonic phrase work\?\*\*.*?\n)',
                   r'\1\n\nTOKEN_MOD15_BIP39\n\n', text, count=1)
     return text
@@ -257,19 +249,24 @@ def inject_module_16_tokens(text):
     text = re.sub(r'\n[0-9]\n', '\n', text)
     # 1. Methods overview (Topic 1.3)
     text = re.sub(r'(##\s+\*\*1\.3 Where can Bitcoin payments be used\?\*\*.*?\n)', r'\1\n\nTOKEN_MOD16_METHODS\n\n', text, count=1)
-    # 2. Bitcoin payment flow (Topic 2 - replace raw text lines 142-159)
+    # 2. Bitcoin payment process card & lifecycle flow (Topic 2)
     text = re.sub(r'##\s+\*\*Diagram: Bitcoin payment process\*\*.*?(?=###\s+\*\*Important point: Is a transaction confirmed immediately\?\*\*)',
-                  'TOKEN_MOD16_FLOW\n\n', text, flags=re.DOTALL)
-    # 3. BIP21 URI Anatomy (Topic 4.5 - replace raw text lines 302-313)
+                  'TOKEN_MOD16_PROCESS_CARD\n\nTOKEN_MOD16_FLOW\n\n', text, flags=re.DOTALL)
+    # 3. BIP21 URI working card & anatomy (Topic 4.5)
     text = re.sub(r'##\s+\*\*4\.5 Working of BIP21\*\*.*?(?=###\s+\*\*Advantages of BIP21\*\*)',
-                  '## **4.5 Working of BIP21**\n\nTOKEN_MOD16_BIP21\n\n', text, flags=re.DOTALL)
-    # 4. POS QR (Topic 5.4)
-    text = re.sub(r'(\*\*5\.4 Diagram of Bitcoin POS working\*\*.*?\n\n).*?(?=##\s+\*\*5\.5 Advantages)', r'\1\n\nTOKEN_MOD16_POS_QR\n\n', text, count=1, flags=re.DOTALL)
+                  'TOKEN_MOD16_BIP21_CARD\n\nTOKEN_MOD16_BIP21\n\n', text, flags=re.DOTALL)
+    # 4. POS working card & QR flow (Topic 5.4)
+    text = re.sub(r'(\*\*5\.4 Diagram of Bitcoin POS working\*\*.*?\n\n).*?(?=##\s+\*\*5\.5 Advantages)',
+                  'TOKEN_MOD16_POS_CARD\n\nTOKEN_MOD16_POS_QR\n\n', text, count=1, flags=re.DOTALL)
     # 5. Payment processor (Topic 6.4)
     text = re.sub(r'(##\s+\*\*6\.4 Working of a Bitcoin payment processor\*\*.*?\n)', r'\1\n\nTOKEN_MOD16_PROCESSOR\n\n', text, count=1)
-    # 6. BIP70 protocol (Topic 7.4)
+    # 6. BIP70 flow card & 3-step architecture (Topic 7.4)
+    text = re.sub(r'\*\*Customer wallet\*\*.*?(?=###\s+\*\*Step-by-step explanation\*\*)',
+                  'TOKEN_MOD16_BIP70_CARD\n\n', text, flags=re.DOTALL)
     text = re.sub(r'(##\s+\*\*7\.4 Complete working of BIP70\*\*.*?\n)', r'\1\n\nTOKEN_MOD16_BIP70\n\n', text, count=1)
-    # 7. MITM attack prevention (Topic 8.3)
+    # 7. MITM attack card & prevention diagram (Topic 8.2 / 8.3)
+    text = re.sub(r'##\s+\*\*8\.2 How does MITM happen in Bitcoin payments\?\*\*.*?(?=##\s+\*\*8\.3 How does BIP70 help prevent this attack\?\*\*)',
+                  'TOKEN_MOD16_MITM_CARD\n\n', text, flags=re.DOTALL)
     text = re.sub(r'(##\s+\*\*8\.3 How does BIP70 help prevent this attack\?\*\*.*?\n)', r'\1\n\nTOKEN_MOD16_MITM\n\n', text, count=1)
     # 8. BIP standards stack (Topic 9.3)
     text = re.sub(r'(##\s+\*\*9\.3 Difference between BIP21, BIP70, BIP71 and BIP72\*\*.*?\n)', r'\1\n\nTOKEN_MOD16_STACK\n\n', text, count=1)
@@ -278,94 +275,134 @@ def inject_module_16_tokens(text):
 def inject_module_17_tokens(text):
     text = re.sub(r'\[.*?\]\(https?://[^\)]+\)', '', text)
     text = re.sub(r'\n[0-9]\n', '\n', text)
-    # 1. BIP Lifecycle (Topic 2.5)
+    # 1. BIP process card & lifecycle (Topic 2.5)
+    text = re.sub(r'\*\*Problem identified\*\*.*?(?=###\s+\*\*Advantages of BIPs\*\*)',
+                  'TOKEN_MOD17_BIP_PROCESS_CARD\n\n', text, flags=re.DOTALL)
     text = re.sub(r'(##\s+\*\*2\.5 How does a BIP help Bitcoin improve\?\*\*.*?\n)', r'\1\n\nTOKEN_MOD17_BIP_LIFECYCLE\n\n', text, count=1)
-    # 2. Soft vs Hard fork (Topic 3.4)
-    text = re.sub(r'(\*\*3\.4 Diagram: Soft fork vs Hard fork\*\*.*?\n\n).*?(?=##\s+\*\*3\.5 Difference)', r'\1\n\nTOKEN_MOD17_FORK\n\n', text, count=1, flags=re.DOTALL)
+    # 2. Fork card & compatibility diagram (Topic 3.4)
+    text = re.sub(r'##\s+\*\*3\.4 Diagram: Soft fork vs Hard fork\*\*.*?(?=##\s+\*\*3\.5 Difference)',
+                  'TOKEN_MOD17_FORK_CARD\n\nTOKEN_MOD17_FORK\n\n', text, flags=re.DOTALL)
     # 3. Malleability fix (Topic 4.2)
     text = re.sub(r'(This helped address the transaction malleability problem\.)', r'\1\n\nTOKEN_MOD17_MALLEABILITY\n\n', text, count=1)
     # 4. SegWit block (Topic 5.3)
     text = re.sub(r'(##\s+\*\*5\.3 Main idea behind SegWit\*\*.*?\n)', r'\1\n\nTOKEN_MOD17_SEGWIT\n\n', text, count=1)
-    # 5. Extremely Thin Blocks (Topic 7.3 - replace raw text lines 764-776)
+    # 5. Xthin communication card & diagram (Topic 7.3)
     text = re.sub(r'\*\*Example of thin block communication\*\*.*?(?=###\s+\*\*3\. Parallel validation\*\*)',
-                  'TOKEN_MOD17_XTHIN\n\n', text, flags=re.DOTALL)
-    # 6. Lightning lifecycle (Topic 9.6)
-    text = re.sub(r'(\*\*9\.6 Diagram: Working of the Lightning Network\*\*.*?\n\n).*?(?=##\s+\*\*9\.7 Advantages)', r'\1\n\nTOKEN_MOD17_LIGHTNING\n\n', text, count=1, flags=re.DOTALL)
+                  'TOKEN_MOD17_XTHIN_CARD\n\nTOKEN_MOD17_XTHIN\n\n', text, flags=re.DOTALL)
+    # 6. Lightning flow card & lifecycle (Topic 9.6)
+    text = re.sub(r'##\s+\*\*9\.6 Diagram: Working of the Lightning Network\*\*.*?(?=##\s+\*\*9\.7 Advantages)',
+                  'TOKEN_MOD17_LIGHTNING_CARD\n\nTOKEN_MOD17_LIGHTNING\n\n', text, flags=re.DOTALL)
     # 7. Protocol scaling matrix (Topic 10)
     text = re.sub(r'(#\s+\*\*Topic 10: Comparison of Bitcoin Advanced Protocols\*\*.*?\n)', r'\1\n\nTOKEN_MOD17_SCALING\n\n', text, count=1)
     return text
 
 def inject_module_18_tokens(text):
-    # 1. CEX Onboarding Lifecycle (Topic 2 / Step 7)
-    text = re.sub(r'(Step 7: Bitcoin is credited.*?\n)', r'\1\n\nTOKEN_MOD18_ONBOARDING\n\n', text, count=1)
+    # 1. CEX steps card & onboarding lifecycle (Topic 2.4)
+    text = re.sub(r'1\.\s+User creates an exchange account.*?(?=2\.5 Types of Bitcoin exchanges)',
+                  'TOKEN_MOD18_CEX_STEPS_CARD\n\nTOKEN_MOD18_ONBOARDING\n\n', text, flags=re.DOTALL)
     # 2. CEX vs DEX (Topic 2.5)
     text = re.sub(r'(##\s+\*\*2\.5 Types of Bitcoin exchanges\*\*.*?\n)', r'\1\n\nTOKEN_MOD18_CEX_DEX\n\n', text, count=1)
-    # 3. Long vs Short (Topic 4)
+    # 3. Long vs Short cards & diagram (Topic 4)
+    text = re.sub(r'Long position\nBuying price₹50 L.*?Price decreases → Profit',
+                  'TOKEN_MOD18_POSITIONS_CARD\n\n', text, flags=re.DOTALL)
     text = re.sub(r'(#\s+\*\*Topic 4: Bitcoin Trading — Long and Short Positions\*\*.*?\n)', r'\1\n\nTOKEN_MOD18_LONG_SHORT\n\n', text, count=1)
     # 4. Derivatives Matrix (Topic 5)
     text = re.sub(r'(#\s+\*\*Topic 5: Other Bitcoin Trading Choices\*\*.*?\n)', r'\1\n\nTOKEN_MOD18_DERIVATIVES\n\n', text, count=1)
-    # 5. Order Book (Topic 6.3)
-    text = re.sub(r'(##\s+\*\*6\.3 Example of a Bitcoin order book\*\*.*?\n)', r'\1\n\nTOKEN_MOD18_ORDER_BOOK\n\n', text, count=1)
-    # 6. Order Types (Topic 8)
+    # 5. Order book card & diagram (Topic 6.3)
+    text = re.sub(r'BTC/INR order book — illustrative example.*?(?=6\.4 How does an order book work\?)',
+                  'TOKEN_MOD18_ORDER_BOOK_CARD\n\nTOKEN_MOD18_ORDER_BOOK\n\n', text, flags=re.DOTALL)
+    # 6. Market order example card & order types diagram (Topic 8)
+    text = re.sub(r'Suppose Bitcoin\'s order book looks like this:.*?(?=Important features)',
+                  'TOKEN_MOD18_MARKET_ORDER_CARD\n\n', text, flags=re.DOTALL)
     text = re.sub(r'(#\s+\*\*Topic 8: Types of Bitcoin Orders\*\*.*?\n)', r'\1\n\nTOKEN_MOD18_ORDER_TYPES\n\n', text, count=1)
-    # 7. Investment Lifecycle (Topic 9)
-    text = re.sub(r'(#\s+\*\*Topic 9: Complete Working — From Buying Bitcoin to Selling Bitcoin\*\*.*?\n)', r'\1\n\nTOKEN_MOD18_LIFECYCLE\n\n', text, count=1)
+    # 7. Workflow card & investment lifecycle (Topic 9)
+    text = re.sub(r'Topic 9: Complete Working — From Buying Bitcoin to Selling Bitcoin.*?(?=Topic 10: Advantages and Risks)',
+                  'TOKEN_MOD18_WORKFLOW_CARD\n\nTOKEN_MOD18_LIFECYCLE\n\n', text, flags=re.DOTALL)
     return text
 
 def replace_diagram_tokens(html, mod_num):
     diagram_map = {
         14: {
+            "TOKEN_MOD14_EXAMPLE_NET": cards.card_mod14_example_network(),
+            "TOKEN_MOD14_CENTRAL_SERVER": cards.card_mod14_centralized_server(),
+            "TOKEN_MOD14_P2P_MESH": cards.card_mod14_p2p_mesh(),
             "TOKEN_MOD14_TOPO": diag.diagram_centralized_vs_p2p(),
             "TOKEN_MOD14_MATRIX": diag.diagram_node_functions_matrix(),
-            "TOKEN_MOD14_SPV_MERKLE": diag.diagram_spv_merkle_verification(),
+            "TOKEN_MOD14_FULL_NODE": cards.card_mod14_full_node(),
+            "TOKEN_MOD14_SPV_VERIF": cards.card_mod14_spv_verification(),
             "TOKEN_MOD14_FULL_SPV": diag.diagram_full_vs_spv(),
             "TOKEN_MOD14_PACKET": diag.diagram_p2p_packet_structure(),
             "TOKEN_MOD14_INV": diag.diagram_inv_propagation(),
+            "TOKEN_MOD14_HANDSHAKE_CARD": cards.card_mod14_handshake(),
             "TOKEN_MOD14_HANDSHAKE": diag.diagram_p2p_handshake(),
             "TOKEN_MOD14_DISCOVERY": diag.diagram_node_discovery_flow(),
             "TOKEN_MOD14_IBD": diag.diagram_ibd_comparison(),
-            "TOKEN_MOD14_HEADERS_FLOW": diag.diagram_headers_first_flow(),
+            "TOKEN_MOD14_HEADERS_FLOW": cards.card_mod14_headers_first_flow(),
+            "TOKEN_MOD14_STRATUM_CARD": cards.card_mod14_stratum_pool(),
             "TOKEN_MOD14_STRATUM": diag.diagram_stratum_pool()
         },
         15: {
             "TOKEN_MOD15_MISCONCEPTION": diag.diagram_wallet_misconception(),
+            "TOKEN_MOD15_KEYS_CARD": cards.card_mod15_key_relationship(),
+            "TOKEN_MOD15_ADDR_GEN_CARD": cards.card_mod15_address_generation(),
             "TOKEN_MOD15_PIPELINE": diag.diagram_key_address_pipeline(),
+            "TOKEN_MOD15_RECEIVING_CARD": cards.card_mod15_receiving_flow(),
             "TOKEN_MOD15_LIFECYCLE": diag.diagram_wallet_transaction_lifecycle(),
+            "TOKEN_MOD15_UTXO_CARD": cards.card_mod15_utxo_example(),
             "TOKEN_MOD15_UTXO": diag.diagram_utxo_change(),
+            "TOKEN_MOD15_JBOK_CARD": cards.card_mod15_jbok_wallet(),
+            "TOKEN_MOD15_DETERM_CARD": cards.card_mod15_deterministic_wallet(),
+            "TOKEN_MOD15_UNIV_CARD": cards.card_mod15_university_hierarchy(),
+            "TOKEN_MOD15_HD_CARD": cards.card_mod15_hd_tree(),
             "TOKEN_MOD15_JBOK_HD": diag.diagram_jbok_vs_hd(),
             "TOKEN_MOD15_BIP44_TREE": diag.diagram_bip44_derivation_tree(),
             "TOKEN_MOD15_PAPER": diag.diagram_paper_wallet(),
             "TOKEN_MOD15_HARDWARE": diag.diagram_hardware_wallet(),
             "TOKEN_MOD15_SPECTRUM": diag.diagram_hot_vs_cold_spectrum(),
+            "TOKEN_MOD15_RECOVERY_CARD": cards.card_mod15_recovery_phrase(),
             "TOKEN_MOD15_CARD": diag.diagram_bip39_mnemonic_card(),
             "TOKEN_MOD15_BIP39": diag.diagram_bip39_seed()
         },
         16: {
             "TOKEN_MOD16_METHODS": diag.diagram_payment_methods_overview(),
+            "TOKEN_MOD16_PROCESS_CARD": cards.card_mod16_payment_process(),
             "TOKEN_MOD16_FLOW": diag.diagram_bitcoin_payment_flow(),
+            "TOKEN_MOD16_BIP21_CARD": cards.card_mod16_bip21_working(),
             "TOKEN_MOD16_BIP21": diag.diagram_bip21_uri_anatomy(),
+            "TOKEN_MOD16_POS_CARD": cards.card_mod16_pos_working(),
             "TOKEN_MOD16_POS_QR": diag.diagram_pos_qr_flow(),
             "TOKEN_MOD16_PROCESSOR": diag.diagram_payment_processor(),
+            "TOKEN_MOD16_BIP70_CARD": cards.card_mod16_bip70_flow(),
             "TOKEN_MOD16_BIP70": diag.diagram_bip70_protocol(),
+            "TOKEN_MOD16_MITM_CARD": cards.card_mod16_mitm_attack(),
             "TOKEN_MOD16_MITM": diag.diagram_mitm_prevention(),
             "TOKEN_MOD16_STACK": diag.diagram_bip_standards_stack()
         },
         17: {
+            "TOKEN_MOD17_BIP_PROCESS_CARD": cards.card_mod17_bip_process(),
             "TOKEN_MOD17_BIP_LIFECYCLE": diag.diagram_bip_lifecycle(),
+            "TOKEN_MOD17_FORK_CARD": cards.card_mod17_fork_diagram(),
             "TOKEN_MOD17_FORK": diag.diagram_soft_vs_hard_fork(),
             "TOKEN_MOD17_MALLEABILITY": diag.diagram_tx_malleability_fix(),
             "TOKEN_MOD17_SEGWIT": diag.diagram_segwit_block(),
+            "TOKEN_MOD17_XTHIN_CARD": cards.card_mod17_xthin_communication(),
             "TOKEN_MOD17_XTHIN": diag.diagram_xthin_blocks(),
+            "TOKEN_MOD17_LIGHTNING_CARD": cards.card_mod17_lightning_diagram(),
             "TOKEN_MOD17_LIGHTNING": diag.diagram_lightning_lifecycle(),
             "TOKEN_MOD17_SCALING": diag.diagram_bitcoin_scaling_landscape()
         },
         18: {
+            "TOKEN_MOD18_CEX_STEPS_CARD": cards.card_mod18_cex_steps(),
             "TOKEN_MOD18_ONBOARDING": diag.diagram_cex_trading_lifecycle(),
             "TOKEN_MOD18_CEX_DEX": diag.diagram_cex_vs_dex(),
+            "TOKEN_MOD18_POSITIONS_CARD": cards.card_mod18_long_short_cards(),
             "TOKEN_MOD18_LONG_SHORT": diag.diagram_long_vs_short(),
             "TOKEN_MOD18_DERIVATIVES": diag.diagram_derivatives_matrix(),
+            "TOKEN_MOD18_ORDER_BOOK_CARD": cards.card_mod18_order_book_example(),
             "TOKEN_MOD18_ORDER_BOOK": diag.diagram_order_book(),
+            "TOKEN_MOD18_MARKET_ORDER_CARD": cards.card_mod18_market_order_example(),
             "TOKEN_MOD18_ORDER_TYPES": diag.diagram_order_types(),
+            "TOKEN_MOD18_WORKFLOW_CARD": cards.card_mod18_complete_working(),
             "TOKEN_MOD18_LIFECYCLE": diag.diagram_investment_lifecycle()
         }
     }

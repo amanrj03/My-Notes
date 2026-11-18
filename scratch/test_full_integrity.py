@@ -34,18 +34,30 @@ def test_modules():
         else:
             print(f"✓ {fname}: Zero broken image links.")
 
-        # Check diagrams
+        # Check diagrams and ChatGPT cards
         diagram_matches = re.findall(r'<div class="diagram-box">', html)
+        card_matches = re.findall(r'<div class="chatgpt-card-box">', html)
         diagram_count = len(diagram_matches)
+        card_count = len(card_matches)
         titles = re.findall(r'<h4 class="diagram-title">([^<]+)</h4>', html)
+        card_titles = re.findall(r'<div class="chatgpt-card-header">([^<]+)</div>', html)
         
-        min_expected = {14: 11, 15: 11, 16: 8, 17: 7, 18: 7}[m]
-        if diagram_count < min_expected:
-            errors.append(f"{fname}: Expected at least {min_expected} diagrams, found {diagram_count}")
+        expected_svgs = {14: 9, 15: 11, 16: 8, 17: 7, 18: 6}[m]
+        expected_cards = {14: 8, 15: 9, 16: 5, 17: 4, 18: 5}[m]
+        
+        if diagram_count < expected_svgs:
+            errors.append(f"{fname}: Expected at least {expected_svgs} SVG diagrams, found {diagram_count}")
         else:
-            print(f"✓ {fname}: Found {diagram_count} embedded visual diagrams:")
+            print(f"✓ {fname}: Found {diagram_count} embedded SVG visual diagrams:")
             for t in titles:
                 print(f"    - {t}")
+
+        if card_count < expected_cards:
+            errors.append(f"{fname}: Expected at least {expected_cards} ChatGPT canvas cards, found {card_count}")
+        else:
+            print(f"✓ {fname}: Found {card_count} ChatGPT canvas cards (total visuals = {diagram_count + card_count}):")
+            for ct in card_titles:
+                print(f"    * [Card] {ct}")
 
         # Check quiz
         quiz_matches = re.findall(r'handleQuizClick\(\s*(\d+),\s*(\d+),\s*(\d+),\s*(\d+)\s*\)', html)

@@ -588,12 +588,24 @@ th {
 <li>The proposal is reviewed and improved.</li>
 <li>If accepted and adopted, the change can be implemented.</li>
 </ol>
-<p><strong>Problem identified</strong></p>
-<p><strong>Improvement proposed</strong></p>
-<p><strong>BIP document prepared</strong></p>
-<p><strong>Community discussion and review</strong></p>
-<p><strong>Proposal accepted and adopted</strong></p>
-<p><strong>Implementation of improvement</strong></p>
+
+    <div class="chatgpt-card-box">
+        <div class="chatgpt-card-header">BIP Progression Lifecycle</div>
+        <div style="max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px;">
+            <div class="chatgpt-card-pill"><strong>Problem identified</strong></div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill"><strong>Improvement proposed</strong></div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill"><strong>BIP document prepared</strong></div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill"><strong>Community discussion and review</strong></div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill"><strong>Proposal accepted and adopted</strong></div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill filled"><strong style="color: #34d399;">Implementation of improvement</strong></div>
+        </div>
+    </div>
+    
 <h3><strong>Advantages of BIPs</strong></h3>
 <ol>
 <li>Provide a structured way to propose improvements.</li>
@@ -664,7 +676,33 @@ th {
 <li>Can result in two separate blockchain networks.</li>
 <li>Can result in a new cryptocurrency.</li>
 </ol>
-<h2><strong>3.4 Diagram: Soft fork vs Hard fork</strong></h2>
+
+    <div class="chatgpt-card-box">
+        <div class="chatgpt-card-header left">3.4 Diagram: Soft fork vs Hard fork</div>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; max-width: 780px; margin: 0 auto;">
+            <div style="border: 1px solid #10b981; border-radius: 8px; padding: 14px; background: rgba(16,185,129,0.04);">
+                <div style="color: #34d399; font-weight: 700; margin-bottom: 8px;">Soft fork</div>
+                <div style="font-size: 12.5px; color: #cbd5e1; line-height: 1.6;">
+                    Original blockchain<br>
+                    &darr;<br>
+                    New, more restrictive rules<br>
+                    &darr;<br>
+                    <strong style="color: #34d399;">One continuing blockchain</strong> (Backward-compatible)
+                </div>
+            </div>
+            <div style="border: 1px solid #ef4444; border-radius: 8px; padding: 14px; background: rgba(239,68,68,0.04);">
+                <div style="color: #f87171; font-weight: 700; margin-bottom: 8px;">Hard fork</div>
+                <div style="font-size: 12.5px; color: #cbd5e1; line-height: 1.6;">
+                    Original blockchain<br>
+                    &darr;<br>
+                    Incompatible protocol rules<br>
+                    &darr;<br>
+                    <span style="color: #94a3b8;">Old chain (Old rules)</span> &bull; <span style="color: #f87171; font-weight: bold;">New chain (New rules)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 
     <div class="diagram-box">
         <div class="diagram-header">
@@ -1134,6 +1172,40 @@ th {
 <p>The requesting node sends a <code>getdata</code> request along with a Bloom filter that identifies transactions it already has.</p>
 <p>The other node sends only the missing transactions in the thin block.</p>
 
+    <div class="chatgpt-card-box">
+        <div class="chatgpt-card-header left">Example of thin block communication</div>
+        <div style="max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px;">
+            <div style="background: #090d16; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 12px;">
+                <div style="font-size: 11px; text-transform: uppercase; color: #94a3b8; font-weight: 700;">Requesting node already has</div>
+                <div style="display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap;">
+                    <span class="chatgpt-card-pill" style="padding: 4px 10px; font-size: 12px;">TX1</span>
+                    <span class="chatgpt-card-pill" style="padding: 4px 10px; font-size: 12px;">TX2</span>
+                    <span class="chatgpt-card-pill" style="padding: 4px 10px; font-size: 12px;">TX3</span>
+                    <span class="chatgpt-card-pill" style="padding: 4px 10px; font-size: 12px;">TX4</span>
+                </div>
+            </div>
+            <div style="background: #090d16; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 12px;">
+                <div style="font-size: 11px; text-transform: uppercase; color: #94a3b8; font-weight: 700;">Miner's block contains</div>
+                <div style="display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap;">
+                    <span class="chatgpt-card-pill" style="padding: 4px 10px; font-size: 12px;">TX1</span>
+                    <span class="chatgpt-card-pill" style="padding: 4px 10px; font-size: 12px;">TX2</span>
+                    <span class="chatgpt-card-pill" style="padding: 4px 10px; font-size: 12px;">TX3</span>
+                    <span class="chatgpt-card-pill" style="padding: 4px 10px; font-size: 12px;">TX4</span>
+                    <span class="chatgpt-card-pill" style="padding: 4px 10px; font-size: 12px; border-color: #10b981; color: #34d399;">TX5</span>
+                    <span class="chatgpt-card-pill" style="padding: 4px 10px; font-size: 12px; border-color: #10b981; color: #34d399;">TX6</span>
+                </div>
+            </div>
+            <div style="background: #18202f; border: 1px solid #0284c7; border-radius: 6px; padding: 12px;">
+                <div style="font-size: 11px; text-transform: uppercase; color: #38bdf8; font-weight: 700;">Thin block sends only</div>
+                <div style="display: flex; gap: 8px; margin-top: 6px;">
+                    <span class="chatgpt-card-pill success" style="padding: 6px 14px; font-size: 13px;">TX5</span>
+                    <span class="chatgpt-card-pill success" style="padding: 6px 14px; font-size: 13px;">TX6</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
     <div class="diagram-box">
         <div class="diagram-header">
             <h4 class="diagram-title">Extremely Thin Blocks (Xthin) vs. Traditional Block Relay</h4>
@@ -1317,7 +1389,31 @@ th {
 <h3><strong>Stage 3: Closing the payment channel</strong></h3>
 <p>When Aman and the coffee shop finish using the channel, they close it.</p>
 <p>The final balance is settled through an on-chain Bitcoin transaction.</p>
-<h2><strong>9.6 Diagram: Working of the Lightning Network</strong></h2>
+
+    <div class="chatgpt-card-box">
+        <div class="chatgpt-card-header left">9.6 Diagram: Working of the Lightning Network</div>
+        <div style="max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px;">
+            <div class="chatgpt-card-pill highlight">
+                <strong>Bitcoin main blockchain</strong>
+                <div class="chatgpt-card-sub">Layer 1 Base Settlement</div>
+            </div>
+            <div class="chatgpt-card-arrow">&darr; (Open payment channel &bull; On-chain funding transaction)</div>
+            <div style="border: 1px solid #a855f7; border-radius: 8px; padding: 14px; background: rgba(168,85,247,0.06);">
+                <div style="color: #c084fc; font-weight: 700; text-align: center; margin-bottom: 8px;">Lightning payment channel (Layer 2)</div>
+                <div style="font-size: 11.5px; color: #94a3b8; text-align: center; margin-bottom: 10px;">Multiple instant off-chain payments</div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                    <div class="chatgpt-card-pill">Payment 1</div>
+                    <div class="chatgpt-card-pill">Payment 2</div>
+                    <div class="chatgpt-card-pill">Payment 3</div>
+                </div>
+            </div>
+            <div class="chatgpt-card-arrow">&darr; (Close payment channel &bull; Final settlement transaction)</div>
+            <div class="chatgpt-card-pill filled">
+                <strong style="color: #34d399;">Final balance recorded on Bitcoin blockchain</strong>
+            </div>
+        </div>
+    </div>
+    
 
     <div class="diagram-box">
         <div class="diagram-header">

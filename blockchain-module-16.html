@@ -523,6 +523,29 @@ th {
 <p><strong>Step 9: Merchant receives payment</strong></p>
 <p>The merchant monitors the payment and updates the order status according to its confirmation policy.</p>
 
+    <div class="chatgpt-card-box">
+        <div class="chatgpt-card-header">Diagram: Bitcoin payment process</div>
+        <div style="max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px;">
+            <div class="chatgpt-card-pill">
+                <strong>Customer selects a product</strong>
+                <div class="chatgpt-card-sub">Example: T-shirt worth ₹2,000</div>
+            </div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill"><strong>Merchant provides Bitcoin address / QR code</strong></div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill"><strong>Customer scans QR code using wallet</strong></div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill"><strong>Wallet creates and signs transaction</strong></div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill"><strong>Transaction broadcast to Bitcoin network</strong></div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill"><strong>Miner includes transaction in a block</strong></div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill filled"><strong style="color: #34d399;">Merchant detects payment and processes order</strong></div>
+        </div>
+    </div>
+    
+
     <div class="diagram-box">
         <div class="diagram-header">
             <h4 class="diagram-title">End-to-End Bitcoin Payment Process &amp; Confirmation Flow</h4>
@@ -714,7 +737,22 @@ th {
 <li>Label displays CoffeeShop.</li>
 <li>Message contains Order123.</li>
 </ul>
-<h2><strong>4.5 Working of BIP21</strong></h2>
+
+    <div class="chatgpt-card-box">
+        <div class="chatgpt-card-header">4.5 Working of BIP21</div>
+        <div style="max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px;">
+            <div class="chatgpt-card-pill"><strong>Merchant creates Bitcoin URI</strong></div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill"><strong>URI is converted into QR code or shared as a link</strong></div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill"><strong>Customer scans or clicks it</strong></div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill"><strong>Bitcoin wallet reads payment details</strong></div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill filled"><strong style="color: #34d399;">Customer verifies and sends payment</strong></div>
+        </div>
+    </div>
+    
 
     <div class="diagram-box">
         <div class="diagram-header">
@@ -796,7 +834,27 @@ th {
 <p>The POS solution checks the payment at the designated Bitcoin address.</p>
 <p><strong>Step 7: Receipt is generated</strong></p>
 <p>Once the payment is received according to the merchant's acceptance policy, the system can print a receipt as physical evidence of the sale.</p>
-<h2><strong>5.4 Diagram of Bitcoin POS working</strong></h2>
+<h2>
+    <div class="chatgpt-card-box">
+        <div class="chatgpt-card-header left">5.4 Diagram of Bitcoin POS working</div>
+        <div style="max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px;">
+            <div class="chatgpt-card-pill highlight">
+                <div style="font-size: 18px; font-weight: 800; color: #38bdf8;">₹500</div>
+                <div class="chatgpt-card-sub">Coffee bill at a restaurant</div>
+            </div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill"><strong>POS terminal calculates Bitcoin amount</strong></div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill"><strong>POS generates receipt and QR code</strong></div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill"><strong>Customer scans QR code using wallet</strong></div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill"><strong>Customer sends Bitcoin payment</strong></div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill filled"><strong style="color: #34d399;">Payment detected and receipt issued</strong></div>
+        </div>
+    </div>
+    </h2>
 
     <div class="diagram-box">
         <div class="diagram-header">
@@ -1113,16 +1171,29 @@ th {
     
 <p>Let's understand the complete process with a diagram.</p>
 <p><strong>Merchant</strong></p>
-<p><strong>Customer wallet</strong></p>
-<p><strong>1. PaymentRequest</strong></p>
-<p>Payment details and certificate information</p>
-<p>Receives and verifies request</p>
-<p>Receives payment message</p>
-<p><strong>2. Payment</strong></p>
-<p>Transaction information</p>
-<p><strong>3. PaymentACK</strong></p>
-<p>Acknowledgement</p>
-<p>Receives acknowledgement</p>
+
+    <div class="chatgpt-card-box">
+        <div class="chatgpt-card-header">BIP70 Payment Protocol Complete Flow</div>
+        <div style="max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; justify-content: space-between; font-weight: 700; color: #a855f7; padding: 4px 10px;">
+                <span>Merchant</span>
+                <span>Customer wallet</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; background: #0b0f17; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 10px 14px;">
+                <span style="color: #c084fc; font-weight: 600;">1. PaymentRequest &rarr;</span>
+                <span style="color: #94a3b8; font-size: 12px;">Payment details and certificate information</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; background: #0b0f17; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 10px 14px;">
+                <span style="color: #94a3b8; font-size: 12px;">Receives payment message</span>
+                <span style="color: #38bdf8; font-weight: 600;">&larr; 2. Payment</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; background: #0b0f17; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 10px 14px;">
+                <span style="color: #34d399; font-weight: 600;">3. PaymentACK &rarr;</span>
+                <span style="color: #94a3b8; font-size: 12px;">Acknowledgement &amp; memo receipt</span>
+            </div>
+        </div>
+    </div>
+    
 <h3><strong>Step-by-step explanation</strong></h3>
 <p><strong>Step 1: Merchant creates PaymentRequest</strong></p>
 <p>The merchant prepares the payment request containing the amount, payment details and certificate information.</p>
@@ -1148,16 +1219,26 @@ th {
 <p>An attacker intercepts the communication and replaces the shop's Bitcoin address with the attacker's address.</p>
 <p>Aman thinks he is paying the shop, but he is actually sending Bitcoin to the attacker.</p>
 <p>This is a Man-in-the-Middle attack.</p>
-<h2><strong>8.2 How does MITM happen in Bitcoin payments?</strong></h2>
-<p><strong>Merchant</strong></p>
-<p><strong>Attacker</strong></p>
-<p><strong>Customer</strong></p>
-<p>Genuine payment details</p>
-<p>Intercepted</p>
-<p>Attacker replaces merchant address</p>
-<p>False payment details</p>
-<p>Customer pays</p>
-<p>Illustration of an address-substitution attack. The customer mistakenly believes the attacker-controlled address belongs to the merchant.</p>
+
+    <div class="chatgpt-card-box">
+        <div class="chatgpt-card-header left">8.2 Man-in-the-Middle (MITM) Address Substitution Attack</div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 750px; margin: 0 auto;">
+            <div class="chatgpt-card-pill">
+                <strong style="color: #38bdf8;">Merchant</strong>
+                <div class="chatgpt-card-sub">Genuine payment details</div>
+            </div>
+            <div class="chatgpt-card-pill" style="border-color: #ef4444; background: rgba(239,68,68,0.08);">
+                <strong style="color: #f87171;">Attacker (MITM)</strong>
+                <div class="chatgpt-card-sub">Intercepts &amp; replaces merchant address</div>
+            </div>
+            <div class="chatgpt-card-pill">
+                <strong style="color: #fbbf24;">Customer</strong>
+                <div class="chatgpt-card-sub">Receives false payment address</div>
+            </div>
+        </div>
+        <div class="chatgpt-card-caption">Illustration of an address-substitution attack. The customer mistakenly believes the attacker-controlled address belongs to the merchant.</div>
+    </div>
+    
 <h2><strong>8.3 How does BIP70 help prevent this attack?</strong></h2>
 
     <div class="diagram-box">

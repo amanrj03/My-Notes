@@ -440,17 +440,31 @@ th {
 </ol>
 <p>Notice something important: there is no single central bank server that must approve and record this payment.</p>
 <p>Instead, participating nodes communicate and independently apply Bitcoin's rules.</p>
-<p><strong>Example: Bitcoin network</strong></p>
-<p><strong>Aman's computer</strong></p>
-<p>Creates a Bitcoin transaction</p>
-<p><strong>Node A</strong></p>
-<p><strong>Node B</strong></p>
-<p><strong>Node C</strong></p>
-<p><strong>Node D</strong></p>
-<p>Verifies and relays</p>
-<p><strong>Miner node</strong></p>
-<p>Can produce blocks</p>
-<p>Illustrative network: real Bitcoin nodes have many connections, not necessarily this exact arrangement.</p>
+
+    <div class="chatgpt-card-box">
+        <div class="chatgpt-card-header">Example: Bitcoin network</div>
+        <div style="max-width: 650px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px;">
+            <div class="chatgpt-card-pill highlight">
+                <strong>Aman's computer</strong>
+                <div class="chatgpt-card-sub">Creates a Bitcoin transaction</div>
+            </div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+                <div class="chatgpt-card-pill">Node A</div>
+                <div class="chatgpt-card-pill">Node B</div>
+                <div class="chatgpt-card-pill">Node C</div>
+                <div class="chatgpt-card-pill">Node D</div>
+            </div>
+            <div class="chatgpt-card-caption" style="margin-top: 4px;">Verifies and relays across peers</div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill success">
+                <strong>Miner node</strong>
+                <div class="chatgpt-card-sub">Can produce and broadcast valid blocks</div>
+            </div>
+        </div>
+        <div class="chatgpt-card-caption">Illustrative network: real Bitcoin nodes have many connections, not necessarily this exact arrangement.</div>
+    </div>
+    
 <h2><strong>1.3 Why does Bitcoin need a network?</strong></h2>
 <p>Imagine Bitcoin had only one computer maintaining all transactions.</p>
 <p>If that computer stopped working, the whole system could become unavailable. If someone controlled that computer, they could potentially control the recordkeeping process.</p>
@@ -533,10 +547,32 @@ th {
 <p>Let's understand it through two examples.</p>
 <h3><strong>Example A: Centralised network</strong></h3>
 <p>Imagine a company where all employees must send files through one central server.</p>
-<p>Every employee depends on the central server.</p>
-<p>If the central server fails, communication may be interrupted.</p>
+
+    <div class="chatgpt-card-box">
+        <div class="chatgpt-card-header">Central server</div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 700px; margin: 0 auto;">
+            <div class="chatgpt-card-pill">Employee A</div>
+            <div class="chatgpt-card-pill">Employee B</div>
+            <div class="chatgpt-card-pill">Employee C</div>
+        </div>
+        <div class="chatgpt-card-caption">Every employee depends on the central server.</div>
+    </div>
+    
 <h3><strong>Example B: Peer-to-peer network</strong></h3>
 <p>Now imagine that employees can communicate directly with one another.</p>
+
+    <div class="chatgpt-card-box">
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 700px; margin: 0 auto;">
+            <div class="chatgpt-card-pill"><strong>Peer A</strong></div>
+            <div class="chatgpt-card-pill"><strong>Peer B</strong></div>
+            <div class="chatgpt-card-pill"><strong>Peer C</strong></div>
+            <div class="chatgpt-card-pill"><strong>Peer D</strong></div>
+            <div class="chatgpt-card-pill"><strong>Peer E</strong></div>
+            <div class="chatgpt-card-pill"><strong>Peer F</strong></div>
+        </div>
+        <div class="chatgpt-card-caption">Illustrative peers communicating directly through network connections.</div>
+    </div>
+    
 <p>There is no single central computer that must handle every communication.</p>
 <p>Bitcoin uses this second architecture.</p>
 
@@ -772,12 +808,18 @@ th {
 <li>Can support wallet functionality.</li>
 <li>May also be configured to mine, although mining is not required to be a full node.</li>
 </ul>
-<h2><strong>Full node</strong></h2>
-<p><strong>Bitcoin Core software</strong></p>
-<p>Blockchain validation</p>
-<p>Blockchain storage</p>
-<p>Transaction relay</p>
-<p>Peer communication</p>
+
+    <div class="chatgpt-card-box">
+        <div class="chatgpt-card-header left">Full node</div>
+        <div class="chatgpt-card-subhead">Bitcoin Core software</div>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 750px; margin: 0 auto;">
+            <div class="chatgpt-card-pill">Blockchain validation</div>
+            <div class="chatgpt-card-pill">Blockchain storage</div>
+            <div class="chatgpt-card-pill">Transaction relay</div>
+            <div class="chatgpt-card-pill">Peer communication</div>
+        </div>
+    </div>
+    
 <h2><strong>4.2 SPV node — Simple Payment Verification</strong></h2>
 <p><strong>An SPV node is a lightweight Bitcoin client that verifies whether a transaction is included in a block without downloading and independently validating the entire blockchain.</strong></p>
 <p>This is a very important concept.</p>
@@ -798,40 +840,25 @@ th {
 <p>An SPV client does not need to download all 1,000 transactions merely to check whether one particular transaction is included.</p>
 <p>Instead, it can obtain the relevant transaction and its Merkle proof.</p>
 
-    <div class="diagram-box">
-        <div class="diagram-header">
-            <h4 class="diagram-title">SPV Merkle Branch Verification Flow (Proof of Inclusion)</h4>
-            <div class="diagram-subtitle">Verifying transaction membership in O(log N) time without downloading the 500+ MB block body</div>
-        </div>
-        <div class="diagram-nodes-row" style="justify-content: space-around; align-items: center; gap: 16px;">
-            <div class="diagram-node primary" style="flex: 1; max-width: 240px;">
-                <svg class="diagram-node-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-  <circle cx="12" cy="7" r="4"></circle>
-</svg>
-                <div class="diagram-node-title">Lightweight SPV Client</div>
-                <div class="diagram-node-desc">Stores 80-byte header with Merkle Root: <code>H_root</code></div>
+    <div class="chatgpt-card-box">
+        <div class="chatgpt-card-header left">SPV verification</div>
+        <div style="max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px;">
+            <div class="chatgpt-card-pill">
+                <strong>SPV wallet</strong>
+                <div class="chatgpt-card-sub">Requests proof of a transaction</div>
             </div>
-            <div style="flex: 2; padding: 0 10px; display: flex; flex-direction: column; gap: 10px;">
-                <div style="background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px; padding: 8px 12px; font-size: 12px; color: #cbd5e1;">
-                    <span style="color: #38bdf8; font-weight: bold;">1. Query:</span> Does block #850,000 contain my transaction $T_3$?
-                </div>
-                <div style="background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 8px; padding: 8px 12px; font-size: 12px; color: #cbd5e1;">
-                    <span style="color: #c084fc; font-weight: bold;">2. Full Node replies:</span> Returns $T_3$ + Merkle Path hashes: $[H_4, H_{12}, H_{5678}]$
-                </div>
-                <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 8px; padding: 8px 12px; font-size: 12px; color: #cbd5e1;">
-                    <span style="color: #34d399; font-weight: bold;">3. Verification:</span> SPV computes: $H_{34} = \text{Hash}(H(T_3), H_4) \to H_{1234} = \text{Hash}(H_{12}, H_{34}) \to \text{Root} \equiv H_{root}$!
-                </div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill">
+                <strong>Full node</strong>
+                <div class="chatgpt-card-sub">Provides transaction data and Merkle proof</div>
             </div>
-            <div class="diagram-node success" style="flex: 1; max-width: 240px;">
-                <svg class="diagram-node-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
-  <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
-  <line x1="6" y1="6" x2="6.01" y2="6"></line>
-  <line x1="6" y1="18" x2="6.01" y2="18"></line>
-</svg>
-                <div class="diagram-node-title">Full Node Peer</div>
-                <div class="diagram-node-desc">Stores complete block &amp; extracts Merkle branch</div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill">
+                <strong>SPV client checks the Merkle proof</strong>
+            </div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill filled">
+                <strong>Checks inclusion against the block header's Merkle root</strong>
             </div>
         </div>
     </div>
@@ -1257,6 +1284,37 @@ th {
 <p>If they are synchronised, they can listen for new block announcements.</p>
 <p>If one node is behind, it requests the missing blockchain information.</p>
 
+    <div class="chatgpt-card-box">
+        <div class="chatgpt-card-header">Bitcoin node connection handshake</div>
+        <div style="max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; justify-content: space-between; font-weight: 700; color: #38bdf8; padding: 4px 10px;">
+                <span>Node A</span>
+                <span>Node B</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; background: #0b0f17; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 10px 14px;">
+                <span style="color: #38bdf8; font-weight: 600;">version &rarr;</span>
+                <span style="color: #94a3b8; font-size: 12px;">Receives version</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; background: #0b0f17; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 10px 14px;">
+                <span style="color: #94a3b8; font-size: 12px;">Receives version</span>
+                <span style="color: #38bdf8; font-weight: 600;">&larr; version</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; background: #0b0f17; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 10px 14px;">
+                <span style="color: #34d399; font-weight: 600;">verack &rarr;</span>
+                <span style="color: #94a3b8; font-size: 12px;">Acknowledges</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; background: #0b0f17; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 10px 14px;">
+                <span style="color: #94a3b8; font-size: 12px;">Acknowledges</span>
+                <span style="color: #34d399; font-weight: 600;">&larr; verack</span>
+            </div>
+            <div class="chatgpt-card-pill filled" style="margin-top: 8px;">
+                <strong style="color: #34d399;">Connection established</strong>
+            </div>
+        </div>
+        <div class="chatgpt-card-caption">Peer discovery and blockchain synchronisation can proceed.</div>
+    </div>
+    
+
     <div class="diagram-box">
         <div class="diagram-header">
             <h4 class="diagram-title">Bitcoin P2P Handshake Protocol Flow</h4>
@@ -1307,7 +1365,6 @@ th {
         </div>
     </div>
     
-<p>Peer discovery and blockchain synchronisation can proceed.</p>
 <p><strong>Exam tip:</strong> If the question asks how two Bitcoin nodes establish a connection, explain the version and verack handshake first. Then explain getaddr and addr, followed by blockchain synchronisation.</p>
 <h1><strong>Topic 8: Node Discovery</strong></h1>
 <h2><strong>8.1 What is node discovery?</strong></h2>
@@ -1564,37 +1621,26 @@ th {
 </tr>
 </tbody>
 </table>
-<h2><strong>10.5 Headers-first synchronisation diagram</strong></h2>
 
-    <div class="diagram-box">
-        <div class="diagram-header">
-            <h4 class="diagram-title">Headers-First Synchronisation Protocol Sequence</h4>
-            <div class="diagram-subtitle">4-stage message flow: getheaders &rarr; headers &rarr; getdata &rarr; block</div>
-        </div>
-        <div class="diagram-flow-row">
-            <div class="flow-step-card">
-                <div class="flow-step-num">Stage 1</div>
-                <div class="flow-step-title">getheaders</div>
-                <div class="flow-step-desc">Node sends block locator hashes to sync peer, asking for missing block headers.</div>
+    <div class="chatgpt-card-box">
+        <div class="chatgpt-card-header left">10.5 Headers-first synchronisation diagram</div>
+        <div style="max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px;">
+            <div class="chatgpt-card-pill">
+                <strong>New node starts</strong>
+                <div class="chatgpt-card-sub">Needs blockchain synchronisation</div>
             </div>
-            <div class="flow-arrow">&rarr;</div>
-            <div class="flow-step-card">
-                <div class="flow-step-num">Stage 2</div>
-                <div class="flow-step-title">headers (Up to 2,000)</div>
-                <div class="flow-step-desc">Peer returns up to 2,000 80-byte headers; node verifies Proof of Work chain.</div>
-            </div>
-            <div class="flow-arrow">&rarr;</div>
-            <div class="flow-step-card">
-                <div class="flow-step-num">Stage 3</div>
-                <div class="flow-step-title">Parallel getdata</div>
-                <div class="flow-step-desc">Node splits the validated header list across multiple peers and requests full blocks.</div>
-            </div>
-            <div class="flow-arrow">&rarr;</div>
-            <div class="flow-step-card">
-                <div class="flow-step-num">Stage 4</div>
-                <div class="flow-step-title">block &amp; Validation</div>
-                <div class="flow-step-desc">Peers stream full blocks; node verifies transactions, UTXOs, and updates local state!</div>
-            </div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill"><strong>Connect to existing peers</strong></div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill"><strong>Send getheaders message</strong></div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill"><strong>Receive headers message</strong></div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill"><strong>Validate block headers</strong></div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill"><strong>Request full blocks using getdata</strong></div>
+            <div class="chatgpt-card-arrow">&darr;</div>
+            <div class="chatgpt-card-pill filled"><strong>Download and validate blocks</strong></div>
         </div>
     </div>
     
@@ -1682,14 +1728,28 @@ th {
 <li>It is commonly used for communication between miners and mining-pool servers.</li>
 </ol>
 <h3><strong>Simple example</strong></h3>
-<p><strong>Mining pool server</strong></p>
-<p>Coordinates mining work</p>
-<p>Miner 1</p>
-<p>Stratum client</p>
-<p>Miner 2</p>
-<p>Stratum client</p>
-<p>Miner 3</p>
-<p>Stratum client</p>
+
+    <div class="chatgpt-card-box">
+        <div class="chatgpt-card-header">Mining pool server</div>
+        <div class="chatgpt-card-subhead">Coordinates mining work</div>
+        <div class="chatgpt-card-arrow">&darr;</div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 720px; margin: 0 auto;">
+            <div class="chatgpt-card-pill">
+                <strong>Miner 1</strong>
+                <div class="chatgpt-card-sub">Stratum client</div>
+            </div>
+            <div class="chatgpt-card-pill">
+                <strong>Miner 2</strong>
+                <div class="chatgpt-card-sub">Stratum client</div>
+            </div>
+            <div class="chatgpt-card-pill">
+                <strong>Miner 3</strong>
+                <div class="chatgpt-card-sub">Stratum client</div>
+            </div>
+        </div>
+        <div class="chatgpt-card-caption">Miners receive work and submit their results through the Stratum mining-pool protocol.</div>
+    </div>
+    
 <p>Miners receive work and submit their results through the mining-pool communication protocol.</p>
 <p><strong>Important difference:</strong> Bitcoin's regular P2P protocol is used for communication between Bitcoin nodes, while Stratum is commonly used for communication between mining-pool servers and miners.</p>
 <h1><strong>Module 1 — Exam Preparation</strong></h1>
