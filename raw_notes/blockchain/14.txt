@@ -1,0 +1,1219 @@
+# **Unit IV — Module 1: The Bitcoin Network**
+
+
+
+Starting Module 1
+
+Beginner level
+
+
+
+In this module, we'll understand how Bitcoin computers communicate with each other, how a new computer joins the network, how nodes exchange information, and how a new node downloads the blockchain.
+
+**Primary sources:** Your teacher's *Bitcoin client and payment.pptx* and the Unit IV syllabus.\
+**Supporting textbook:** *Mastering Blockchain, Third Edition*, Chapter 7 — The Bitcoin Network and Payments.
+
+The textbook's Chapter 7 begins with the Bitcoin P2P network, node types, network messages, node discovery and blockchain synchronisation. We'll follow that same progression.
+
+## **Module 1 roadmap**
+
+1. Introduction to the Bitcoin network
+2. Peer-to-peer network architecture
+3. Bitcoin nodes and their functions
+4. Types of Bitcoin nodes
+5. Full nodes vs SPV nodes
+6. Bitcoin network protocol
+7. Important Bitcoin protocol messages
+8. How two Bitcoin nodes establish a connection
+9. Node discovery
+10. Blockchain synchronisation
+11. Initial Block Download (IBD)
+12. Blocks-first vs headers-first synchronisation
+13. Stratum protocol and mining-pool communication
+14. Exam preparation and revision
+
+# **Topic 1: Introduction to the Bitcoin Network**
+
+## **1.1 First, what is a network?**
+
+Before understanding the Bitcoin network, let's understand the meaning of a computer network.
+
+A **computer network is a collection of computers and devices connected to each other so that they can exchange information and resources.**
+
+For example, suppose you and your friend are connected to the same Wi-Fi network.
+
+- Your computer can communicate with another computer.
+- You can send files.
+- You can share information.
+- You can access shared resources.
+
+The internet is a much larger network connecting computers around the world.
+
+Bitcoin also uses the internet to connect computers, but its purpose is different: these computers cooperate to maintain and use the Bitcoin system.
+
+## **1.2 What is the Bitcoin network?**
+
+**The Bitcoin network is a peer-to-peer (P2P) network in which participating computers, called nodes, communicate with each other to exchange, verify and propagate Bitcoin transactions and blocks.**
+
+Your teacher's PPT gives three main activities performed by Bitcoin nodes:
+
+1. Performing transactions.
+2. Verifying and propagating transactions and blocks.
+3. Producing blocks through mining (for nodes that perform mining).
+
+The textbook also describes the Bitcoin network as a P2P network in which nodes verify and propagate transactions and blocks, while miners produce blocks.
+
+Let's understand this with a simple example.
+
+### **Example: Aman sends Bitcoin to Rahul**
+
+Suppose Aman wants to send 0.5 BTC to Rahul.
+
+What happens?
+
+1. Aman's wallet creates a transaction.
+2. The transaction is sent to a Bitcoin node.
+3. That node checks whether the transaction follows Bitcoin's rules.
+4. The node shares the transaction with its connected peers.
+5. Other nodes receive and relay it.
+6. Miners may select the transaction and include it in a block.
+7. The new block is shared with the network.
+8. Other nodes verify the block.
+
+Notice something important: there is no single central bank server that must approve and record this payment.
+
+Instead, participating nodes communicate and independently apply Bitcoin's rules.
+
+**Example: Bitcoin network**
+
+**Aman's computer**
+
+Creates a Bitcoin transaction
+
+**Node A**
+
+**Node B**
+
+**Node C**
+
+**Node D**
+
+Verifies and relays
+
+**Miner node**
+
+Can produce blocks
+
+Illustrative network: real Bitcoin nodes have many connections, not necessarily this exact arrangement.
+
+## **1.3 Why does Bitcoin need a network?**
+
+Imagine Bitcoin had only one computer maintaining all transactions.
+
+If that computer stopped working, the whole system could become unavailable. If someone controlled that computer, they could potentially control the recordkeeping process.
+
+Bitcoin uses a distributed P2P network to avoid relying on one central computer.
+
+The network provides:
+
+| Purpose                  | Explanation                                                                      |
+| ------------------------ | -------------------------------------------------------------------------------- |
+| Transaction propagation  | Shares transactions with other nodes.                                            |
+| Transaction verification | Checks whether transactions follow protocol rules.                               |
+| Block propagation        | Shares newly created blocks.                                                     |
+| Block verification       | Checks whether blocks are valid.                                                 |
+| Decentralisation         | Avoids dependence on a single central server.                                    |
+| Network availability     | Other participating nodes can continue communicating when some nodes disconnect. |
+
+## **1.4 Important: Bitcoin network vs Bitcoin blockchain**
+
+These two terms are related but are not the same.
+
+| Bitcoin network                                        | Bitcoin blockchain                                |
+| ------------------------------------------------------ | ------------------------------------------------- |
+| A communication system connecting Bitcoin nodes.       | The ordered ledger of Bitcoin blocks.             |
+| Allows nodes to exchange transactions and blocks.      | Stores the accepted transaction history.          |
+| Includes nodes, peer connections and network messages. | Includes blocks, headers and transactions.        |
+| Helps distribute information.                          | Records the history according to consensus rules. |
+
+**Easy example to remember:**
+
+Think of a classroom.
+
+- The students communicating with each other represent the Bitcoin network.
+- The official record book maintained according to the classroom rules represents the blockchain.
+
+The network helps distribute information; the blockchain records the accepted history.
+
+# **Topic 2: Peer-to-Peer (P2P) Network Architecture**
+
+This is one of the most important foundations of the Bitcoin network.
+
+## **2.1 What is a peer-to-peer network?**
+
+**A peer-to-peer network is a network architecture in which computers, called peers, communicate directly with one another and share information without depending on a central server for every communication.**
+
+A computer participating in this network is called a **peer** or **node**.
+
+Let's understand it through two examples.
+
+### **Example A: Centralised network**
+
+Imagine a company where all employees must send files through one central server.
+
+**Central server**
+
+Employee A
+
+Employee B
+
+Employee C
+
+Every employee depends on the central server.
+
+If the central server fails, communication may be interrupted.
+
+### **Example B: Peer-to-peer network**
+
+Now imagine that employees can communicate directly with one another.
+
+Peer A
+
+Peer B
+
+Peer C
+
+Peer D
+
+Peer E
+
+Peer F
+
+Illustrative peers communicating directly through network connections.
+
+There is no single central computer that must handle every communication.
+
+Bitcoin uses this second architecture.
+
+## **2.2 How does P2P communication work in Bitcoin?**
+
+Suppose Node A receives a new Bitcoin transaction.
+
+1. Node A checks the transaction.
+2. Node A announces information about it to connected peers.
+3. Interested peers request the transaction data if they do not already have it.
+4. Those peers can relay the transaction to their own peers.
+5. The transaction spreads across the network.
+
+This is commonly described as **gossip-style propagation**.
+
+In simple language, information spreads from one computer to its connected computers, which then share it further.
+
+## **2.3 Important characteristics of Bitcoin's P2P network**
+
+### **1. Decentralised communication**
+
+No single central server is required to relay all Bitcoin transactions and blocks.
+
+### **2. Distributed participation**
+
+Many computers participate in maintaining and using the network.
+
+### **3. Direct peer communication**
+
+Nodes establish connections with other nodes and exchange protocol messages.
+
+### **4. Dynamic network**
+
+Nodes can join, leave or become temporarily unavailable.
+
+### **5. Information propagation**
+
+Transactions and blocks are relayed through connected peers.
+
+### **6. Fault tolerance**
+
+The network does not depend on one particular node remaining online.
+
+## **2.4 What is gossip protocol?**
+
+A gossip protocol is a method of distributing information through a network by sharing it with selected peers, who then share it with their peers.
+
+Think of a college announcement.
+
+- A teacher tells five students.
+- Those students tell other students.
+- The announcement spreads throughout the college.
+
+Bitcoin uses peer-to-peer information propagation mechanisms to distribute transactions and blocks.
+
+**Important distinction:** gossip is a general description of propagation behaviour, not the name of a single Bitcoin transaction message.
+
+# **Topic 3: What is a Bitcoin Node?**
+
+## **3.1 Definition of a node**
+
+A **Bitcoin node is a computer running Bitcoin software that participates in the Bitcoin network by communicating with other nodes and performing one or more Bitcoin-related functions.**
+
+In simple language, any computer running Bitcoin software and participating in the network can be called a Bitcoin node.
+
+For example:
+
+- A computer that stores and verifies the blockchain.
+- A computer that receives and relays transactions.
+- A computer that downloads blockchain headers.
+- A computer that performs mining.
+
+These are different kinds of participation.
+
+## **3.2 Main functions of Bitcoin nodes**
+
+Your teacher's PPT and textbook identify the following major functions.
+
+| Function           | Explanation                                                   |
+| ------------------ | ------------------------------------------------------------- |
+| Wallet             | Manages keys and helps users create and receive transactions. |
+| Miner              | Produces candidate blocks and performs Proof of Work.         |
+| Blockchain storage | Stores blockchain data.                                       |
+| Network routing    | Communicates with peers and relays transactions and blocks.   |
+
+The textbook explains that a full Bitcoin node can perform these four functions. However, not every node needs to perform all of them.
+
+Let's understand them individually.
+
+### **1. Wallet function**
+
+A wallet helps a user manage Bitcoin keys and create transactions.
+
+Example: Aman uses a wallet to send 0.1 BTC to Rahul.
+
+### **2. Mining function**
+
+A mining node constructs candidate blocks and performs Proof of Work.
+
+Example: A miner searches for a block hash satisfying the current difficulty target.
+
+### **3. Blockchain storage function**
+
+A node stores blockchain data so it can validate and access the transaction history.
+
+Example: A full node downloads and verifies blocks.
+
+### **4. Network routing function**
+
+A node communicates with other peers and relays transactions and blocks.
+
+Example: Node A receives a transaction and forwards it to Node B.
+
+## **3.3 Does every Bitcoin node perform all four functions?**
+
+No.
+
+This is a very important point.
+
+A Bitcoin network contains different kinds of nodes. Some store the entire blockchain, some operate lightweight wallets, and some perform mining.
+
+The functions depend on the type of node and its software configuration.
+
+# **Topic 4: Types of Bitcoin Nodes**
+
+Your teacher's PPT highlights two main types:
+
+1. Full nodes
+2. Simple Payment Verification (SPV) nodes
+
+The textbook also discusses solo miners, mining nodes and mining-pool protocol servers.
+
+Let's understand all of them.
+
+## **4.1 Full node**
+
+A **full node is a Bitcoin node that independently validates blocks and transactions according to Bitcoin's consensus rules.**
+
+A full node downloads and maintains the blockchain data necessary for its operation.
+
+It checks whether transactions and blocks follow the Bitcoin protocol.
+
+### **Example**
+
+Suppose Aman runs Bitcoin Core on his computer.
+
+His node:
+
+1. Connects to other Bitcoin peers.
+2. Downloads blockchain data.
+3. Verifies blocks and transactions.
+4. Maintains its blockchain state.
+5. Relays valid transactions and blocks.
+
+This is an example of a full-node setup.
+
+### **Functions of a full node**
+
+- Maintains blockchain data.
+- Independently verifies blocks and transactions.
+- Communicates with other nodes.
+- Relays transactions and blocks.
+- Can support wallet functionality.
+- May also be configured to mine, although mining is not required to be a full node.
+
+## **Full node**
+
+**Bitcoin Core software**
+
+Blockchain validation
+
+Blockchain storage
+
+Transaction relay
+
+Peer communication
+
+## **4.2 SPV node — Simple Payment Verification**
+
+**An SPV node is a lightweight Bitcoin client that verifies whether a transaction is included in a block without downloading and independently validating the entire blockchain.**
+
+This is a very important concept.
+
+Imagine that you want to use Bitcoin on your mobile phone.
+
+Downloading and storing the entire blockchain may be inconvenient because it requires storage, bandwidth and processing resources.
+
+An SPV wallet reduces these requirements.
+
+### **How does an SPV node work?**
+
+1. It connects to full nodes.
+2. It downloads block headers instead of the complete blockchain.
+3. When it needs to check a transaction, it requests the relevant transaction information.
+4. It receives a Merkle proof.
+5. It checks whether the transaction is included in a block by verifying the Merkle proof against that block's Merkle root.
+
+Let's understand this with an example.
+
+Suppose a block contains 1,000 transactions.
+
+A full node downloads and validates the block's transactions.
+
+An SPV client does not need to download all 1,000 transactions merely to check whether one particular transaction is included.
+
+Instead, it can obtain the relevant transaction and its Merkle proof.
+
+## **SPV verification**
+
+**SPV wallet**
+
+Requests proof of a transaction
+
+**Full node**
+
+Provides transaction data and Merkle proof
+
+**SPV client checks the Merkle proof**
+
+**Checks inclusion against the block header's Merkle root**
+
+### **Advantages of SPV nodes**
+
+1. Require less storage.
+2. Use less bandwidth than downloading the entire blockchain.
+3. Are suitable for mobile devices.
+4. Allow lightweight transaction-inclusion verification.
+
+### **Limitations of SPV nodes**
+
+1. Do not independently validate every transaction and block.
+2. Depend on full nodes for some transaction information.
+3. Provide less independent verification than a fully validating node.
+4. Can have privacy limitations because requests to peers may reveal which transactions or addresses a user is interested in.
+
+**Very important exam point:** SPV verifies transaction inclusion using Merkle proofs and block headers. It does not provide the same independent validation as a full node.
+
+## **4.3 Full node vs SPV node**
+
+This comparison is highly suitable for a 5-mark question.
+
+| Basis                    | Full node                                                | SPV node                                         |
+| ------------------------ | -------------------------------------------------------- | ------------------------------------------------ |
+| Meaning                  | Independently validates Bitcoin blocks and transactions  | Lightweight verification client                  |
+| Blockchain data          | Maintains the blockchain data needed for full validation | Downloads block headers                          |
+| Transaction verification | Independently checks consensus rules                     | Checks transaction inclusion using Merkle proofs |
+| Storage                  | Higher                                                   | Lower                                            |
+| Bandwidth                | Generally higher                                         | Generally lower                                  |
+| Security model           | Strong independent validation                            | Relies on full nodes for some information        |
+| Usage                    | Independent network participation                        | Lightweight wallets, especially mobile           |
+
+## **4.4 Solo mining node**
+
+A solo mining node is a node that performs mining independently rather than participating in a mining pool.
+
+It can maintain blockchain data, communicate with peers and produce candidate blocks.
+
+The miner receives the block reward if its block is accepted, subject to the protocol rules.
+
+## **4.5 Mining node**
+
+A mining node is a node that performs mining-related functions.
+
+Some mining setups focus mainly on computing hashes and may rely on other software or services for blockchain and network functions.
+
+## **4.6 Mining-pool protocol server**
+
+The textbook also discusses mining-pool protocol servers.
+
+These servers coordinate mining-pool work using protocols such as **Stratum**.
+
+A mining pool combines the computational efforts of multiple miners. The server distributes work and receives the miners' submitted results.
+
+We'll understand Stratum more clearly later in this module.
+
+# **Topic 5: Bitcoin Network Protocol**
+
+Now that we understand nodes, the next question is:
+
+**How do these computers communicate with each other?**
+
+They need a common set of communication rules.
+
+That set of rules is called a network protocol.
+
+## **5.1 What is a network protocol?**
+
+A **network protocol is a set of rules that defines how computers communicate and exchange information over a network.**
+
+For example, imagine two people speaking different languages.
+
+One speaks only Hindi, and the other understands only English.
+
+Communication becomes difficult.
+
+Similarly, computers need agreed formats, commands and rules to exchange information.
+
+Bitcoin uses its own P2P protocol to define how nodes communicate.
+
+## **5.2 Bitcoin P2P protocol**
+
+The Bitcoin P2P protocol defines:
+
+- How nodes establish connections.
+- How nodes introduce themselves.
+- How peers discover other peers.
+- How transactions are announced and requested.
+- How blocks are announced and requested.
+- How blockchain data is synchronised.
+- How connections are checked and maintained.
+
+Your teacher's PPT lists 27 types of protocol messages in its material. The exact set of supported messages can change with protocol versions and software updates.
+
+The important exam task is to understand the purpose of the main messages.
+
+## **5.3 What is a magic value?**
+
+The textbook explains that a Bitcoin network is identified by a **magic value**.
+
+A magic value is a special identifier in the message structure that helps a node identify which Bitcoin network a message belongs to.
+
+The textbook lists these examples:
+
+| Network      | Magic value (hexadecimal) |
+| ------------ | ------------------------- |
+| Main network | `0xD9B4BEF9`              |
+| Testnet      | `0xDAB5BFFA`              |
+| Testnet3     | `0x0709110B`              |
+
+Why is this needed?
+
+Imagine a node accidentally receives a message belonging to another Bitcoin network.
+
+The magic value helps identify the message's intended network.
+
+**Remember:** mainnet is the real Bitcoin network, while testnet is used for testing.
+
+# **Topic 6: Important Bitcoin Protocol Messages**
+
+This is one of the most important parts of your teacher's PPT.
+
+A Bitcoin node uses different messages to communicate with other nodes.
+
+Let's understand the important messages one by one, with simple examples.
+
+## **6.1 Version message**
+
+The `version` message is used when one node introduces itself to another node.
+
+It provides information such as:
+
+- Protocol version
+- Services supported by the node
+- Timestamp
+- Network address information
+- Other connection-related information
+
+**Example:**
+
+Node A sends Node B a message:
+
+"Hello! I am a Bitcoin node. This is my protocol version and information about my capabilities."
+
+This is the beginning of the connection handshake.
+
+## **6.2 Verack message**
+
+`verack` stands for **version acknowledgement**.
+
+It is sent to acknowledge the version message and complete the initial handshake.
+
+**Example:**
+
+Node A: "Here is my version information."
+
+Node B: "Here is my version information."
+
+Node A and Node B exchange `verack` messages to acknowledge the handshake.
+
+## **6.3 Inv message**
+
+`inv` stands for **inventory**.
+
+It is used by a node to announce that it knows about certain transactions or blocks.
+
+It generally advertises identifiers or hashes, rather than sending the complete transaction or block data.
+
+**Example:**
+
+Node A tells Node B:
+
+"I know about a new transaction. Here is its transaction ID."
+
+## **6.4 Getdata message**
+
+`getdata` is used to request actual transaction or block data that was previously advertised.
+
+**Example:**
+
+Node B receives an `inv` message from Node A.
+
+Node B responds:
+
+"Please send me the actual transaction."
+
+It sends a `getdata` message requesting the transaction.
+
+## **6.5 Getblocks message**
+
+`getblocks` is used in the older blocks-first synchronisation approach to request block inventory information.
+
+It helps a node discover which blocks are available after a particular known block.
+
+Your teacher's PPT describes it as requesting information about blocks after the last known hash, with a maximum inventory response of 500 blocks in the older method.
+
+## **6.6 Getheaders message**
+
+`getheaders` requests block headers from another node.
+
+Instead of requesting complete blocks immediately, a node can first obtain the headers.
+
+This is particularly important for headers-first synchronisation.
+
+## **6.7 Tx message**
+
+`tx` is used to transmit transaction data.
+
+For example, when a node requests a transaction using `getdata`, the other node can respond with a `tx` message.
+
+## **6.8 Block message**
+
+`block` is used to transmit complete block data.
+
+For example, when a node requests a particular block using `getdata`, the other node can respond with a `block` message.
+
+## **6.9 Headers message**
+
+`headers` is used to send requested block headers in response to a `getheaders` request.
+
+The textbook describes a response containing up to 2,000 block headers.
+
+## **6.10 Getaddr message**
+
+`getaddr` requests information about other known peers.
+
+A node uses it to discover additional nodes in the network.
+
+## **6.11 Addr message**
+
+`addr` provides information about known network peers, such as their IP addresses and port numbers.
+
+It can help a node establish additional peer connections.
+
+## **6.12 Ping and Pong messages**
+
+These messages are used to check whether a peer connection is responsive.
+
+- `ping`: asks whether the other node is active.
+- `pong`: responds to the ping.
+
+**Example:**
+
+Node A: "Are you still connected?"
+
+Node B: "Yes, I am here."
+
+## **6.13 Important messages — revision table**
+
+| Message      | Purpose                          | Easy way to remember      |
+| ------------ | -------------------------------- | ------------------------- |
+| `version`    | Introduces a node                | My introduction           |
+| `verack`     | Acknowledges version             | Introduction accepted     |
+| `inv`        | Announces blocks or transactions | I have something          |
+| `getdata`    | Requests actual data             | Send it to me             |
+| `getblocks`  | Requests block inventory         | Which blocks do you have? |
+| `getheaders` | Requests block headers           | Send me headers           |
+| `tx`         | Sends transaction data           | Here is the transaction   |
+| `block`      | Sends complete block data        | Here is the block         |
+| `headers`    | Sends block headers              | Here are the headers      |
+| `getaddr`    | Requests peer addresses          | Tell me other nodes       |
+| `addr`       | Shares peer addresses            | Here are other nodes      |
+| `ping`       | Checks peer responsiveness       | Are you there?            |
+| `pong`       | Responds to ping                 | Yes, I am here            |
+
+### **The most important message sequences**
+
+Remember these three sequences:
+
+**1. Connection establishment**
+
+\\[ \text{Version}\rightarrow\text{Verack} \\]
+
+Both peers exchange version information and acknowledge the connection.
+
+**2. Transaction or block exchange**
+
+\\[ \text{Inv}\rightarrow\text{Getdata}\rightarrow\text{Tx/Block} \\]
+
+A node advertises information, another node requests the data, and the data is transferred.
+
+**3. Peer discovery**
+
+\\[ \text{Getaddr}\rightarrow\text{Addr} \\]
+
+A node requests information about peers and receives peer addresses.
+
+# **Topic 7: How Do Two Bitcoin Nodes Establish a Connection?**
+
+Now let's combine the protocol messages into a real communication process.
+
+Suppose Node A wants to connect with Node B.
+
+What happens?
+
+## **Step-by-step connection process**
+
+### **Step 1: Node A sends a version message**
+
+Node A introduces itself to Node B.
+
+It shares its protocol version and other connection information.
+
+### **Step 2: Node B sends its version message**
+
+Node B responds with its own version information.
+
+### **Step 3: Both nodes exchange verack messages**
+
+They acknowledge the version exchange.
+
+The initial connection handshake is now complete.
+
+### **Step 4: Nodes exchange getaddr and addr messages**
+
+They can request and share information about other known peers.
+
+### **Step 5: Nodes begin exchanging blockchain information**
+
+If they are synchronised, they can listen for new block announcements.
+
+If one node is behind, it requests the missing blockchain information.
+
+## **Bitcoin node connection handshake**
+
+**Node A**
+
+**Node B**
+
+version
+
+Receives version
+
+Receives version
+
+version
+
+verack
+
+Acknowledges
+
+Acknowledges
+
+verack
+
+**Connection established**
+
+Peer discovery and blockchain synchronisation can proceed.
+
+**Exam tip:** If the question asks how two Bitcoin nodes establish a connection, explain the version and verack handshake first. Then explain getaddr and addr, followed by blockchain synchronisation.
+
+# **Topic 8: Node Discovery**
+
+## **8.1 What is node discovery?**
+
+**Node discovery is the process through which a Bitcoin node finds other nodes on the network so that it can establish peer connections.**
+
+Think about buying a new phone.
+
+Before you can call someone, you need their phone number.
+
+Similarly, a new Bitcoin node needs information about other available Bitcoin nodes before it can connect to them.
+
+## **8.2 How does Bitcoin discover nodes?**
+
+The textbook explains that Bitcoin Core can discover peers using **DNS seeds**.
+
+DNS stands for Domain Name System.
+
+DNS is a system that helps translate domain names into network addresses.
+
+In Bitcoin, DNS seeds are services that help a newly started node obtain addresses of available Bitcoin peers.
+
+### **Example**
+
+Suppose Aman starts a new Bitcoin node.
+
+1. The node starts its Bitcoin software.
+2. It contacts DNS seed services configured by the software.
+3. The DNS seed returns information about available peers.
+4. The node obtains peer addresses.
+5. It attempts to establish connections with those peers.
+6. Once connected, it can discover additional peers through the network.
+
+## **8.3 What is a DNS seed?**
+
+A **DNS seed is a service that helps Bitcoin nodes discover other available Bitcoin nodes by providing peer-address information.**
+
+Remember that DNS seeds do not control Bitcoin transactions, mining or consensus.
+
+They help with initial peer discovery.
+
+## **8.4 Default Bitcoin network port**
+
+The textbook gives these default TCP port examples:
+
+| Bitcoin network | Default TCP port |
+| --------------- | ---------------- |
+| Mainnet         | 8333             |
+| Testnet         | 18333            |
+
+A port helps identify the application or service to which network traffic should be delivered.
+
+A node may use different port settings depending on its configuration.
+
+## **8.5 Why is node discovery important?**
+
+1. Allows new nodes to join the Bitcoin network.
+2. Helps nodes find other peers.
+3. Supports transaction propagation.
+4. Supports block propagation.
+5. Helps blockchain synchronisation.
+
+# **Topic 9: Blockchain Synchronisation**
+
+This is another very important topic from your teacher's PPT and the textbook.
+
+## **9.1 What is blockchain synchronisation?**
+
+**Blockchain synchronisation is the process through which a Bitcoin node obtains the blockchain information it is missing and updates its local copy to follow the valid chain.**
+
+Let's understand it with an example.
+
+Suppose Aman installs Bitcoin software on a new computer.
+
+His computer has no previous Bitcoin blockchain data.
+
+But the Bitcoin network has already been operating for many years.
+
+How will Aman's computer obtain the blockchain?
+
+It connects to existing Bitcoin nodes and downloads the required blockchain information.
+
+This process is called blockchain synchronisation.
+
+## **9.2 Why is synchronisation required?**
+
+A new node needs blockchain information to:
+
+1. Understand the history of transactions.
+2. Verify blocks and transactions.
+3. Identify the current chain.
+4. Check whether transactions spend valid unspent outputs.
+5. Participate correctly in the Bitcoin network.
+
+Without synchronisation, a new full node cannot independently validate the complete historical chain from its starting point.
+
+## **9.3 What is Initial Block Download (IBD)?**
+
+**Initial Block Download (IBD) is the process through which a newly started or significantly unsynchronised Bitcoin node downloads and validates the blockchain data needed to catch up with the network.**
+
+Let's take a simple example.
+
+Aman starts a new full node.
+
+- His computer has no recent blockchain data.
+- It connects to existing Bitcoin peers.
+- It requests blockchain information.
+- It downloads block headers and blocks.
+- It validates the data according to Bitcoin's rules.
+- It catches up with the chain it considers valid.
+
+This initial catch-up process is called IBD.
+
+### **Important terms**
+
+| Term         | Meaning                                                            |
+| ------------ | ------------------------------------------------------------------ |
+| IBD node     | The node requesting blockchain information to catch up             |
+| Sync node    | A peer from which the IBD node requests blockchain information     |
+| Block header | The header information of a block, without the complete block body |
+| Block        | The complete block data, including its transactions                |
+
+Your teacher's PPT uses the terms IBD node and sync node to explain the synchronisation process.
+
+# **Topic 10: Blocks-First vs Headers-First Synchronisation**
+
+Your textbook explains two approaches to blockchain synchronisation:
+
+1. Blocks-first approach
+2. Headers-first approach
+
+This is a very important comparison for the examination.
+
+## **10.1 Blocks-first approach**
+
+In the blocks-first approach, a node requests block information and downloads blocks as part of its synchronisation process.
+
+The older process used inventory announcements and block requests.
+
+### **Working**
+
+1. A new node connects to an existing peer.
+2. It requests block inventory information using `getblocks`.
+3. The peer responds with an `inv` message.
+4. The new node requests blocks using `getdata`.
+5. The peer sends the requested blocks.
+6. The new node processes the received blockchain data.
+
+Your textbook describes this as the older and slower method.
+
+## **10.2 Headers-first approach**
+
+The headers-first approach improves synchronisation by downloading block headers first.
+
+Instead of downloading complete blocks immediately, the node first obtains the chain's header information.
+
+### **Working**
+
+1. A new node connects to existing peers.
+2. It sends a `getheaders` message.
+3. The peer responds with a `headers` message.
+4. The new node validates the received headers.
+5. It obtains the chain structure through the header chain.
+6. It then requests the required full blocks using `getdata`.
+7. Blocks can be downloaded from multiple available peers.
+8. The node validates the received blocks and catches up with the network.
+
+## **10.3 Why is headers-first better?**
+
+Imagine downloading a large book.
+
+**Blocks-first:** You start downloading the complete pages directly.
+
+**Headers-first:** You first obtain the table of contents and chapter structure, and then download the required complete pages.
+
+The second approach helps the node establish the chain of block headers before downloading all the block data.
+
+The textbook explains that headers-first synchronisation was introduced in Bitcoin Core 0.10.0 and improved the synchronisation process compared with the older blocks-first approach.
+
+## **10.4 Comparison table**
+
+| Basis                        | Blocks-first                              | Headers-first                                       |
+| ---------------------------- | ----------------------------------------- | --------------------------------------------------- |
+| Starting point               | Requests block inventory and blocks       | Requests block headers first                        |
+| Main messages                | `getblocks`, `inv`, `getdata`             | `getheaders`, `headers`, `getdata`                  |
+| First downloaded information | Block inventory and full blocks           | Block headers                                       |
+| Chain structure              | Learned through block downloads           | Header chain is established first                   |
+| Downloading blocks           | Older sequential inventory-based approach | Can download required blocks in parallel from peers |
+| Performance                  | Older, slower approach                    | Improved synchronisation efficiency                 |
+
+## **10.5 Headers-first synchronisation diagram**
+
+**New node starts**
+
+Needs blockchain synchronisation
+
+**Connect to existing peers**
+
+**Send getheaders message**
+
+**Receive headers message**
+
+**Validate block headers**
+
+**Request full blocks using getdata**
+
+**Download and validate blocks**
+
+**Remember this sequence for the exam:**
+
+\\[ \text{getheaders} \rightarrow \text{headers} \rightarrow \text{getdata} \rightarrow \text{block} \\]
+
+This is the essential message flow to remember for headers-first synchronisation.
+
+# **Topic 11: Stratum Protocol**
+
+Your textbook also discusses the Stratum protocol in the Bitcoin network chapter.
+
+## **11.1 What is Stratum?**
+
+**Stratum is a communication protocol commonly used to connect miners to mining pools.**
+
+Before understanding Stratum, let's understand why mining pools are needed.
+
+### **What is a mining pool?**
+
+A mining pool is a group of miners who combine their computational resources to work toward finding valid blocks.
+
+Instead of mining completely independently, multiple miners work under the coordination of a pool.
+
+If the pool successfully finds a block, the reward is distributed among participants according to the pool's payment rules.
+
+### **Why do miners use Stratum?**
+
+Suppose 100 miners are participating in a mining pool.
+
+They need a way to:
+
+- Receive mining work.
+- Submit their computed results.
+- Communicate with the mining-pool server.
+- Receive updated work when necessary.
+
+Stratum provides a communication mechanism for these tasks.
+
+## **11.2 Characteristics of Stratum**
+
+According to your textbook:
+
+1. It is a line-based protocol.
+2. It uses TCP sockets.
+3. It uses human-readable JSON-RPC messages.
+4. It is commonly used for communication between miners and mining-pool servers.
+
+### **Simple example**
+
+**Mining pool server**
+
+Coordinates mining work
+
+Miner 1
+
+Stratum client
+
+Miner 2
+
+Stratum client
+
+Miner 3
+
+Stratum client
+
+Miners receive work and submit their results through the mining-pool communication protocol.
+
+**Important difference:** Bitcoin's regular P2P protocol is used for communication between Bitcoin nodes, while Stratum is commonly used for communication between mining-pool servers and miners.
+
+# **Module 1 — Exam Preparation**
+
+Now let's prepare the important questions from this module.
+
+## **A. Important 5-mark questions**
+
+1. Define the Bitcoin network and explain its main functions.
+2. What is a peer-to-peer network? Explain its characteristics.
+3. What is a Bitcoin node? Explain its major functions.
+4. Differentiate between full nodes and SPV nodes.
+5. Explain Simple Payment Verification with an example.
+6. What is the Bitcoin P2P protocol?
+7. Explain any five Bitcoin protocol messages.
+8. Explain the process of establishing a connection between two Bitcoin nodes.
+9. What is node discovery? Explain the role of DNS seeds.
+10. What is Initial Block Download (IBD)?
+11. Differentiate between blocks-first and headers-first synchronisation.
+12. Explain the Stratum protocol.
+
+## **B. Important 10-mark questions**
+
+1. Explain the Bitcoin P2P network architecture and the functions of different nodes.
+2. Explain different types of Bitcoin nodes and compare full nodes with SPV nodes.
+3. Explain important Bitcoin network protocol messages with examples.
+4. Explain the complete process of node discovery and connection establishment.
+5. Explain blockchain synchronisation and compare blocks-first with headers-first synchronisation.
+6. Explain the working of the Bitcoin network with a suitable diagram.
+7. Explain the Stratum protocol and its role in mining pools.
+
+## **C. Exam-ready 10-mark answer: Explain the Bitcoin P2P network**
+
+**Introduction:**
+
+The Bitcoin network is a decentralised peer-to-peer network in which computers called nodes communicate directly with each other. Nodes verify and propagate transactions and blocks, while mining nodes also produce blocks.
+
+**Architecture and working:**
+
+1. Bitcoin uses a P2P architecture without depending on a single central server.
+2. Nodes connect to other peers using the Bitcoin network protocol.
+3. Full nodes independently validate transactions and blocks.
+4. SPV nodes download block headers and use Merkle proofs for transaction-inclusion verification.
+5. Nodes exchange messages such as version, verack, inv and getdata.
+6. New nodes discover peers using mechanisms such as DNS seeds.
+7. Nodes synchronise blockchain data through methods such as headers-first synchronisation.
+8. Transactions are propagated between connected peers.
+9. Miners construct candidate blocks and perform Proof of Work.
+10. Valid blocks are independently checked and propagated by other nodes.
+
+**Advantages:**
+
+- Decentralised communication.
+- No single central server dependency.
+- Fault tolerance.
+- Distributed transaction and block propagation.
+- Open participation.
+
+**Conclusion:**
+
+The Bitcoin P2P network provides the communication infrastructure required for transaction exchange, block propagation, verification and decentralised operation.
+
+## **D. Important comparison tables**
+
+### **Full node vs SPV node**
+
+| Full node                               | SPV node                                              |
+| --------------------------------------- | ----------------------------------------------------- |
+| Independently validates consensus rules | Does not independently validate the entire blockchain |
+| Maintains blockchain data               | Downloads block headers                               |
+| Higher storage requirements             | Lower storage requirements                            |
+| Greater independent verification        | Relies on full nodes for some information             |
+| Suitable for independent validation     | Suitable for lightweight wallets                      |
+
+### **Blocks-first vs headers-first**
+
+| Blocks-first                           | Headers-first                                     |
+| -------------------------------------- | ------------------------------------------------- |
+| Older method                           | Improved method                                   |
+| Requests block inventories and blocks  | Downloads headers first                           |
+| Uses `getblocks` and `inv`             | Uses `getheaders` and `headers`                   |
+| Slower synchronisation approach        | More efficient synchronisation                    |
+| Block information is obtained directly | Establishes header chain before requesting blocks |
+
+# **E. Quick revision sheet**
+
+**Remember these important facts**
+
+- Bitcoin network = Peer-to-peer network.
+- Node = Computer participating in Bitcoin.
+- Full node = Independently validates blockchain rules.
+- SPV = Lightweight verification using block headers and Merkle proofs.
+- DNS seed = Helps discover Bitcoin peers.
+- `version` = Introduces a node.
+- `verack` = Acknowledges the handshake.
+- `inv` = Announces transaction/block inventory.
+- `getdata` = Requests actual data.
+- `getheaders` = Requests block headers.
+- `tx` = Sends transaction data.
+- `block` = Sends complete block data.
+- IBD = Initial Block Download.
+- Headers-first = Headers before full blocks.
+- Stratum = Commonly used in mining pools.
+
+## **F. Test your understanding**
+
+Try these questions without looking at the notes.
+
+**1. Which node independently validates Bitcoin's consensus rules?**
+
+SPV node
+
+Full node
+
+Wallet only
+
+DNS seed
+
+**2. Which message announces knowledge of a transaction or block?**
+
+getdata
+
+verack
+
+inv
+
+pong
+
+**3. What does an SPV client download?**
+
+Every complete block
+
+Only private keys
+
+Block headers
+
+Only mining rewards
+
+**4. Which service helps a new Bitcoin node discover peers?**
+
+DNS seeds
+
+Coinbase transaction
+
+Merkle root
+
+Nonce
+
+**5. Which approach downloads block headers before full blocks?**
+
+Blocks-first
+
+Headers-first
+
+Mining-first
+
+Wallet-first
+
+**6. Which protocol is commonly used in mining pools?**
+
+HTTP
+
+SMTP
+
+Stratum
+
+FTP
+
+**0/6 answered**
+
+Reset
+
+Module 1 complete
+
+We've covered the first major part of Unit IV: the Bitcoin network and its communication system.
+
+**Next: Module 2 — Bitcoin Wallets**
+
+We'll start from the absolute basics: what a wallet actually stores, how public and private keys work inside it, how wallets generate addresses, and then hot wallets, cold wallets, HD wallets, brain wallets, paper wallets and hardware wallets. We'll also cover seed phrases, backups and wallet security in detail.
+
+Say **NEXT** when you're ready.

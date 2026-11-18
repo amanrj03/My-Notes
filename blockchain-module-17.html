@@ -1,0 +1,2074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 17: Innovation in Bitcoin and Advanced Protocols — Blockchain Study Guide</title>
+    <meta name="description" content="Blockchain &amp; Cryptography study guide — Unit IV — Module 17 of 18 — Innovation in Bitcoin and Advanced Protocols: Bitcoin Improvement Proposals (BIP standards, informational, process), soft forks vs hard forks, scalability, transaction malleability, Segregated Witness (SegWit BIP141, 4M weight units, bc1 Bech32), Bitcoin Cash (BCH 8MB), Bitcoin Unlimited, Bitcoin Gold (Equihash), and the Lightning Network Layer-2 3-stage payment lifecycle.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+
+    <!-- MathJax for LaTeX rendering -->
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['\\(', '\\)']],
+            displayMath: [['$$', '$$']],
+        },
+        options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+@page { size: A4; margin: 15mm; }
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text-body, #2d3748);
+    margin: 0; padding: 0;
+    background-color: var(--bg-body, #f3f5f8);
+}
+
+.page-container {
+    max-width: 1100px;
+    margin: 25px auto 40px;
+    padding: 40px 55px;
+    background-color: var(--bg-page, #ffffff);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+}
+
+.module-banner {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0284c7 100%);
+    border-radius: 10px;
+    padding: 28px 32px;
+    margin-bottom: 28px;
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(2, 132, 199, 0.2);
+}
+.module-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    font-size: 12px; font-weight: 700;
+    padding: 4px 16px; border-radius: 20px;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    border: 1px solid rgba(255,255,255,0.25);
+    margin-bottom: 10px;
+}
+.module-banner-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 26px; font-weight: 700; line-height: 1.3;
+    margin: 0; color: #fff !important; border: none !important; padding: 0 !important;
+}
+
+.nav-toggle { margin-bottom: 24px; }
+.nav-toggle-btn {
+    display: inline-block;
+    background: #0284c7;
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+.nav-toggle-btn:hover { background: #0369a1; }
+
+.nav-panel {
+    display: none;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 8px;
+    column-count: 2;
+    column-gap: 24px;
+}
+.nav-panel.open { display: block !important; }
+
+.nav-item {
+    display: block;
+    padding: 6px 10px;
+    font-size: 13px;
+    color: var(--link-color, #0284c7);
+    text-decoration: none;
+    border-radius: 4px;
+    break-inside: avoid;
+    transition: all 0.15s;
+}
+.nav-item:hover { background: rgba(2, 132, 199, 0.1); color: #0284c7; }
+.nav-item.current {
+    background: #0284c7;
+    color: #fff !important;
+    font-weight: 600;
+}
+
+h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    color: var(--heading-color, #0f172a);
+    border-bottom: 2px solid #0284c7;
+    padding-bottom: 8px;
+    margin-top: 36px; margin-bottom: 18px;
+    line-height: 1.3;
+}
+h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 20px;
+    color: var(--heading-h2, #0369a1);
+    border-left: 5px solid #0284c7;
+    padding-left: 12px;
+    margin-top: 30px; margin-bottom: 14px;
+    line-height: 1.35;
+}
+h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 17px;
+    color: var(--heading-h3, #075985);
+    margin-top: 22px; margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+p { margin-top: 0; margin-bottom: 14px; overflow-wrap: break-word; }
+ul, ol { margin-top: 0; margin-bottom: 16px; padding-left: 28px; }
+li { margin-bottom: 6px; }
+hr { border: none; border-top: 1px solid var(--border-color, #e2e8f0); margin: 28px 0; }
+
+code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13.5px;
+    background: var(--code-bg, #f1f5f9);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color, #e2e8f0);
+}
+
+pre {
+    background: #0f172a;
+    color: #f8fafc;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 13.5px;
+}
+pre code { background: transparent; border: none; color: inherit; padding: 0; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid var(--border-color, #cbd5e1);
+    padding: 10px 14px;
+    text-align: left;
+}
+th {
+    background: var(--table-th-bg, #f1f5f9);
+    font-weight: 700;
+    color: var(--text-heading, #0f172a);
+}
+
+.ref-pill {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(2, 132, 199, 0.08);
+    color: #0284c7;
+    border: 1px solid rgba(2, 132, 199, 0.2);
+    border-radius: 16px;
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 4px 4px 4px 0;
+}
+
+.exam-header-banner {
+    background: linear-gradient(135deg, #1e3a8a, #0284c7);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    margin: 28px 0 16px 0;
+}
+
+.memory-trick-banner {
+    background: linear-gradient(135deg, #065f46, #10b981);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    margin: 24px 0 14px 0;
+}
+
+.math-display {
+    margin: 18px 0;
+    overflow-x: auto;
+    text-align: center;
+}
+
+.prev-next {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-color, #e2e8f0);
+}
+
+.pn-btn {
+    display: inline-block;
+    background: #0284c7;
+    color: #fff;
+    padding: 10px 22px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background 0.2s, transform 0.15s;
+}
+.pn-btn:hover { background: #0369a1; transform: translateY(-1px); }
+
+.pn-reader {
+    color: #64748b;
+    font-size: 13.5px;
+    text-decoration: none;
+    font-weight: 500;
+}
+.pn-reader:hover { color: #0284c7; }
+
+/* Dark mode overrides */
+[data-theme="dark"] .page-container {
+    background-color: var(--bg-page, #0b1120);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+[data-theme="dark"] code {
+    background: #1e293b;
+    border-color: #334155;
+    color: #38bdf8;
+}
+[data-theme="dark"] th {
+    background: #1e293b;
+    color: #f8fafc;
+}
+[data-theme="dark"] .nav-panel {
+    background: #0f172a;
+    border-color: #1e293b;
+}
+
+@media (max-width: 768px) {
+    .page-container { padding: 24px 18px; margin: 15px auto; }
+    .module-banner { padding: 20px; }
+    .module-banner-title { font-size: 20px; }
+    .nav-panel { column-count: 1; }
+}
+</style>
+</head>
+<body>
+
+<!-- GLOBAL NAVIGATION HEADER -->
+<header class="global-navbar">
+    <div class="nav-container">
+        <a href="index.html" class="nav-brand">
+            <span class="nav-brand-icon">⚡</span>
+            <span class="nav-brand-text">OmniCourse<span class="nav-brand-accent">.Hub</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link"><span class="icon">🏠</span> All Subjects</a>
+            <div class="nav-dropdown">
+    <button class="nav-dropdown-btn active"><span class="icon">⛓️</span> Blockchain (18) ▾</button>
+    <div class="nav-dropdown-menu">
+        <a href="blockchain.html" class="nav-dropdown-header">📋 Blockchain Syllabus Hub (All 18)</a>
+        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit I (Mods 1–4)</div>
+        <a href="blockchain-module-1.html">Module 1: Growth, History of Blockchain & Bitcoin</a>
+        <a href="blockchain-module-2.html">Module 2: Distributed Systems & Blockchain</a>
+        <a href="blockchain-module-3.html">Module 3: Consensus Protocols</a>
+        <a href="blockchain-module-4.html">Module 4: Decentralization</a>
+        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit II (Mods 5–8)</div>
+        <a href="blockchain-module-5.html">Module 5: Symmetric Cryptography</a>
+        <a href="blockchain-module-6.html">Module 6: Public Key Cryptography</a>
+        <a href="blockchain-module-7.html">Module 7: Digital Signatures + Cryptographic Constructs</a>
+        <a href="blockchain-module-8.html">Module 8: SHA & Cryptographic Hash Functions</a>
+        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit III (Mods 9–13)</div>
+        <a href="blockchain-module-9.html">Module 9: Consensus Problem, Analysis & Design</a>
+        <a href="blockchain-module-10.html">Module 10: Classification & Traditional Consensus (Paxos, Raft, PBFT)</a>
+        <a href="blockchain-module-11.html">Module 11: Blockchain Consensus (PoW, PoS, DPoS) & Selection</a>
+        <a href="blockchain-module-12.html">Module 12: Bitcoin Architecture, Keys & Transactions</a>
+        <a href="blockchain-module-13.html">Module 13: Bitcoin Blockchain, Network, Mining & Forks</a>
+        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit IV (Mods 14–18)</div>
+        <a href="blockchain-module-14.html">Module 14: The Bitcoin Network</a>
+        <a href="blockchain-module-15.html">Module 15: Bitcoin Wallets</a>
+        <a href="blockchain-module-16.html">Module 16: Bitcoin Payments</a>
+        <a href="blockchain-module-17.html">Module 17: Innovation in Bitcoin and Advanced Protocols</a>
+        <a href="blockchain-module-18.html">Module 18: Bitcoin Investment, Buying and Selling Bitcoin</a>
+        <a href="blockchain_guide.html" class="nav-dropdown-special">📖 Full 8-Module Reader</a>
+    </div>
+</div>
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-btn"><span class="icon">🐍</span> Django Course (45) ▾</button>
+                <div class="nav-dropdown-menu">
+                    <a href="django.html" class="nav-dropdown-header">📋 Django Syllabus Hub</a>
+                    <a href="module-1.html">Module 1: Introduction to Web &amp; Django</a>
+                    <a href="module-2.html">Module 2: Project Architecture</a>
+                    <a href="django_guide.html" class="nav-dropdown-special">📖 Full 45-Module Reader</a>
+                </div>
+            </div>
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-btn"><span class="icon">📐</span> Mathematics (17) ▾</button>
+                <div class="nav-dropdown-menu">
+                    <a href="maths.html" class="nav-dropdown-header">📋 Number Theory Hub (All 17)</a>
+                    <a href="maths-module-1.html">Module 1: Divisibility Algorithm</a>
+                    <a href="maths-module-2.html">Module 2: Modular Arithmetic</a>
+                </div>
+            </div>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
+                <span class="theme-toggle-icon">🌙</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<div class="page-container">
+
+    <div class="module-banner">
+        <div class="module-badge">Unit IV — Module 17 of 18 — Innovation in Bitcoin and Advanced Protocols</div>
+        <h1 class="module-banner-title">Innovation in Bitcoin and Advanced Protocols</h1>
+    </div>
+
+    <div class="nav-toggle">
+        <button class="nav-toggle-btn" onclick="document.getElementById('bcNavPanel').classList.toggle('open')">
+            📚 All 18 Blockchain Modules ▾
+        </button>
+        <div class="nav-panel" id="bcNavPanel">
+<div class="nav-unit-header" style="font-weight: 800; font-size: 11.5px; text-transform: uppercase; color: #0284c7; margin: 12px 0 6px 4px; letter-spacing: 0.5px; break-inside: avoid;">Unit I: Blockchain Fundamentals</div>
+<a class="nav-item" href="blockchain-module-1.html">1. Growth, History of Blockchain & Bitcoin</a>
+<a class="nav-item" href="blockchain-module-2.html">2. Distributed Systems & Blockchain</a>
+<a class="nav-item" href="blockchain-module-3.html">3. Consensus Protocols</a>
+<a class="nav-item" href="blockchain-module-4.html">4. Decentralization</a>
+<div class="nav-unit-header" style="font-weight: 800; font-size: 11.5px; text-transform: uppercase; color: #0284c7; margin: 12px 0 6px 4px; letter-spacing: 0.5px; break-inside: avoid;">Unit II: Cryptographic Primitives</div>
+<a class="nav-item" href="blockchain-module-5.html">5. Symmetric Cryptography</a>
+<a class="nav-item" href="blockchain-module-6.html">6. Public Key Cryptography</a>
+<a class="nav-item" href="blockchain-module-7.html">7. Digital Signatures + Cryptographic Constructs</a>
+<a class="nav-item" href="blockchain-module-8.html">8. SHA & Cryptographic Hash Functions</a>
+<div class="nav-unit-header" style="font-weight: 800; font-size: 11.5px; text-transform: uppercase; color: #0284c7; margin: 12px 0 6px 4px; letter-spacing: 0.5px; break-inside: avoid;">Unit III: Consensus & Bitcoin Core</div>
+<a class="nav-item" href="blockchain-module-9.html">9. Consensus Problem, Analysis & Design</a>
+<a class="nav-item" href="blockchain-module-10.html">10. Classification & Traditional Consensus (Paxos, Raft, PBFT)</a>
+<a class="nav-item" href="blockchain-module-11.html">11. Blockchain Consensus (PoW, PoS, DPoS) & Selection</a>
+<a class="nav-item" href="blockchain-module-12.html">12. Bitcoin Architecture, Keys & Transactions</a>
+<a class="nav-item" href="blockchain-module-13.html">13. Bitcoin Blockchain, Network, Mining & Forks</a>
+<div class="nav-unit-header" style="font-weight: 800; font-size: 11.5px; text-transform: uppercase; color: #0284c7; margin: 12px 0 6px 4px; letter-spacing: 0.5px; break-inside: avoid;">Unit IV: Bitcoin Network, Wallets, Payments & Economics</div>
+<a class="nav-item" href="blockchain-module-14.html">14. The Bitcoin Network</a>
+<a class="nav-item" href="blockchain-module-15.html">15. Bitcoin Wallets</a>
+<a class="nav-item" href="blockchain-module-16.html">16. Bitcoin Payments</a>
+<span class="nav-item current">17. Innovation in Bitcoin and Advanced Protocols</span>
+<a class="nav-item" href="blockchain-module-18.html">18. Bitcoin Investment, Buying and Selling Bitcoin</a>
+        </div>
+    </div>
+
+    <div class="module-content">
+<p>Module 4</p>
+<p>Important for 5-mark and 10-mark questions</p>
+<p>In the previous module, we studied how Bitcoin payments work. Now we will understand how Bitcoin has been improved over time to solve its limitations.</p>
+<p>Before starting, one important source note: your uploaded <em><span class="ref-pill">📄 Slides Reference: All topics of bitcoin.pptx</span></em> covers Bitcoin fundamentals, transactions, scripts, blockchain and mining, but it does not contain detailed slides on the innovations in this module. Therefore, for this particular syllabus section, I'll follow the relevant chapter of your textbook, <em>Mastering Blockchain, Third Edition</em>, especially pages 243–247, and explain the concepts from the basics.</p>
+<h2><strong>Module 4 roadmap</strong></h2>
+<ol>
+<li>Introduction to Bitcoin innovation</li>
+<li>Bitcoin Improvement Proposals (BIPs)</li>
+<li>Soft fork vs hard fork</li>
+<li>Limitations of the original Bitcoin protocol</li>
+<li>Segregated Witness (SegWit)</li>
+<li>Bitcoin Cash (BCH)</li>
+<li>Bitcoin Unlimited</li>
+<li>Bitcoin Gold (BTG)</li>
+<li>Lightning Network</li>
+<li>Comparison of advanced Bitcoin protocols</li>
+<li>Important 5-mark and 10-mark exam questions</li>
+</ol>
+<h1><strong>Topic 1: Introduction to Bitcoin Innovation</strong></h1>
+<h2><strong>1.1 Why does Bitcoin need innovation?</strong></h2>
+<p>First, let's understand one simple thing.</p>
+<p>When Bitcoin was introduced, it provided a decentralised digital payment system. People could transfer Bitcoin without depending on a central bank or payment intermediary.</p>
+<p>However, as more people started using Bitcoin, some limitations became visible.</p>
+<p>Imagine a road with only one lane.</p>
+<p>Initially, only 10 cars use that road, so there is no problem.</p>
+<p>But later, 10,000 cars start using the same road. Traffic increases, and vehicles must wait.</p>
+<p>A similar problem can happen in Bitcoin.</p>
+<p>When more people want to make transactions, the network has limited capacity to process them.</p>
+<p>This creates problems such as:</p>
+<ol>
+<li>Limited transaction throughput.</li>
+<li>Delays in transaction confirmation during busy periods.</li>
+<li>Higher transaction fees when block space is in high demand.</li>
+<li>Security issues, such as transaction malleability.</li>
+<li>Limitations in the original protocol that require improvements.</li>
+</ol>
+<p>Therefore, developers and researchers have proposed different improvements to Bitcoin.</p>
+<h2><strong>1.2 What is Bitcoin innovation?</strong></h2>
+<p><strong>Bitcoin innovation refers to the development of improvements, upgrades and new protocols designed to address limitations in the Bitcoin system and improve its performance, security, scalability and functionality.</strong></p>
+<p>According to your textbook, these improvements generally take two forms:</p>
+<ul>
+<li>Bitcoin Improvement Proposals (BIPs).</li>
+<li>New versions or implementations of Bitcoin protocols, sometimes resulting in separate networks and currencies.</li>
+</ul>
+<p>Some improvements can be implemented through a soft fork, while others require a hard fork.</p>
+<p>We will understand both shortly.</p>
+<h2><strong>1.3 Main objectives of Bitcoin innovation</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Objective</th>
+<th>Simple explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scalability</td>
+<td>Handle more transactions</td>
+</tr>
+<tr>
+<td>Speed</td>
+<td>Improve transaction processing</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>Fix vulnerabilities and weaknesses</td>
+</tr>
+<tr>
+<td>Efficiency</td>
+<td>Reduce unnecessary data and processing</td>
+</tr>
+<tr>
+<td>Compatibility</td>
+<td>Support upgrades while considering existing users</td>
+</tr>
+<tr>
+<td>Functionality</td>
+<td>Introduce new capabilities</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Remember:</strong> Bitcoin innovation mainly tries to make the system more scalable, secure, efficient and useful.</p>
+<h1><strong>Topic 2: Bitcoin Improvement Proposals (BIPs)</strong></h1>
+<p>Very important 5-mark question</p>
+<h2><strong>2.1 First understand what a proposal means</strong></h2>
+<p>Suppose your college has a rule that students can borrow only two books from the library.</p>
+<p>Some students believe that the limit should be increased to four books.</p>
+<p>They prepare a written proposal explaining:</p>
+<ul>
+<li>What the current problem is.</li>
+<li>What change is needed.</li>
+<li>Why the change is useful.</li>
+<li>How the change should be implemented.</li>
+</ul>
+<p>The proposal is discussed and evaluated before a decision is made.</p>
+<p>A similar idea is used in Bitcoin.</p>
+<p>Bitcoin is maintained by a community of developers, users, miners and other participants. When someone wants to suggest an improvement, the suggestion can be documented through a Bitcoin Improvement Proposal.</p>
+<h2><strong>2.2 What is a BIP?</strong></h2>
+<p><strong>BIP stands for Bitcoin Improvement Proposal. It is a formal document used to propose improvements, describe design issues or communicate information related to the Bitcoin ecosystem.</strong></p>
+<p>BIPs help the Bitcoin community discuss and evaluate proposed changes in a structured way.</p>
+<p>They are not automatically accepted just because someone writes a proposal. A proposal needs appropriate review, discussion and adoption.</p>
+<h2><strong>2.3 Types of BIPs</strong></h2>
+<p>According to your textbook, there are three types of BIPs:</p>
+<p><strong>1. Standard BIP</strong></p>
+<p>Protocol changes</p>
+<p>Used to describe major changes that affect the Bitcoin system.</p>
+<p>Examples:</p>
+<ul>
+<li>Block-size changes.</li>
+<li>Network protocol changes.</li>
+<li>Transaction verification changes.</li>
+</ul>
+<p><strong>2. Process BIP</strong></p>
+<p>Process changes</p>
+<p>Used to propose changes in processes outside the core Bitcoin protocol.</p>
+<p>According to the textbook, these are implemented only after consensus among Bitcoin users.</p>
+<p><strong>3. Informational BIP</strong></p>
+<p>Information and guidance</p>
+<p>Used to advise or record information about the Bitcoin ecosystem.</p>
+<p>Examples:</p>
+<ul>
+<li>Design issues.</li>
+<li>General information.</li>
+<li>Recommendations and guidance.</li>
+</ul>
+<h2><strong>2.4 Difference between the three types of BIPs</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Basis</th>
+<th>Standard BIP</th>
+<th>Process BIP</th>
+<th>Informational BIP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Purpose</td>
+<td>Changes to Bitcoin protocol</td>
+<td>Changes to processes</td>
+<td>Provides information</td>
+</tr>
+<tr>
+<td>Focus</td>
+<td>Technical protocol</td>
+<td>Community or development process</td>
+<td>Guidance and advice</td>
+</tr>
+<tr>
+<td>Example</td>
+<td>Transaction verification change</td>
+<td>Change in a development process</td>
+<td>Documentation of a design issue</td>
+</tr>
+<tr>
+<td>Main impact</td>
+<td>Can affect Bitcoin software and network rules</td>
+<td>Affects how a process is carried out</td>
+<td>Primarily communicates information</td>
+</tr>
+</tbody>
+</table>
+<h2><strong>2.5 How does a BIP help Bitcoin improve?</strong></h2>
+<p>Understand this example:</p>
+<p>Suppose developers identify a security problem in Bitcoin.</p>
+<ol>
+<li>The problem is identified.</li>
+<li>A proposed solution is documented.</li>
+<li>The proposal is submitted as a BIP.</li>
+<li>Developers and community members discuss the proposal.</li>
+<li>The proposal is reviewed and improved.</li>
+<li>If accepted and adopted, the change can be implemented.</li>
+</ol>
+<p><strong>Problem identified</strong></p>
+<p><strong>Improvement proposed</strong></p>
+<p><strong>BIP document prepared</strong></p>
+<p><strong>Community discussion and review</strong></p>
+<p><strong>Proposal accepted and adopted</strong></p>
+<p><strong>Implementation of improvement</strong></p>
+<h3><strong>Advantages of BIPs</strong></h3>
+<ol>
+<li>Provide a structured way to propose improvements.</li>
+<li>Encourage community participation.</li>
+<li>Help document technical changes.</li>
+<li>Improve transparency in the development process.</li>
+<li>Help Bitcoin evolve over time.</li>
+</ol>
+<h3><strong>Exam memory trick</strong></h3>
+<p><strong>BIP = A formal proposal for improving Bitcoin.</strong></p>
+<p>Remember the three types:</p>
+<ul>
+<li>Standard = Technical changes.</li>
+<li>Process = Process changes.</li>
+<li>Informational = Information and guidance.</li>
+</ul>
+<h1><strong>Topic 3: Soft Fork and Hard Fork</strong></h1>
+<p>Very important — prepare the comparison for 10 marks</p>
+<p>Before studying SegWit, Bitcoin Cash and Bitcoin Gold, you must understand forks.</p>
+<h2><strong>3.1 What is a fork?</strong></h2>
+<p>Imagine a road that divides into two different roads.</p>
+<p>Both roads started from the same point, but after the division, they follow different paths.</p>
+<p>A similar situation can occur in a blockchain.</p>
+<p><strong>A fork is a situation in which the blockchain or its protocol rules diverge, resulting in different versions or branches of the chain.</strong></p>
+<p>Your teacher's Bitcoin PPT also introduces three types of blockchain forks:</p>
+<ol>
+<li>Temporary fork.</li>
+<li>Soft fork.</li>
+<li>Hard fork.</li>
+</ol>
+<p>In this module, we mainly need to understand soft forks and hard forks.</p>
+<h2><strong>3.2 What is a soft fork?</strong></h2>
+<p><strong>A soft fork is a backward-compatible change to blockchain protocol rules in which the new rules are more restrictive than the old rules.</strong></p>
+<p>In simple words:</p>
+<p>A soft fork introduces new rules without requiring all existing nodes to upgrade immediately.</p>
+<p>Older nodes can continue to recognise blocks produced under the new rules as valid under their older rule set, although they may not enforce all the new restrictions.</p>
+<h3><strong>Simple example</strong></h3>
+<p>Imagine a college allows students to submit assignments with a maximum of 20 pages.</p>
+<p>Now the college introduces a new rule:</p>
+<p>"Students can submit assignments with a maximum of 15 pages."</p>
+<p>The new rule is stricter.</p>
+<p>An old system that accepts assignments up to 20 pages can still accept a 15-page assignment.</p>
+<p>Similarly, a soft fork makes the protocol rules more restrictive while maintaining backward compatibility.</p>
+<h3><strong>Important features</strong></h3>
+<ol>
+<li>Backward-compatible protocol upgrade.</li>
+<li>New rules are more restrictive.</li>
+<li>Does not necessarily create a new cryptocurrency.</li>
+<li>Old nodes can continue operating, but may not enforce the new rules.</li>
+<li>Requires sufficient adoption to enforce the upgraded rules effectively.</li>
+</ol>
+<h2><strong>3.3 What is a hard fork?</strong></h2>
+<p><strong>A hard fork is a non-backward-compatible change in blockchain protocol rules that can cause the blockchain to split into two separate chains when participants do not all adopt the new rules.</strong></p>
+<p>In simple words:</p>
+<p>A hard fork introduces changes that older software does not recognise as valid.</p>
+<h3><strong>Simple example</strong></h3>
+<p>Imagine a college changes its assignment rule from a maximum of 20 pages to a maximum of 30 pages.</p>
+<p>The old system rejects assignments above 20 pages.</p>
+<p>The new system accepts assignments up to 30 pages.</p>
+<p>Now both systems follow different rules.</p>
+<p>If some students and teachers continue using the old system while others use the new one, the systems can become incompatible.</p>
+<p>A similar situation can happen in a blockchain hard fork.</p>
+<h3><strong>Important features</strong></h3>
+<ol>
+<li>Non-backward-compatible change.</li>
+<li>Old nodes may reject blocks created under the new rules.</li>
+<li>Requires participants to upgrade if they want to follow the new rules.</li>
+<li>Can result in two separate blockchain networks.</li>
+<li>Can result in a new cryptocurrency.</li>
+</ol>
+<h2><strong>3.4 Diagram: Soft fork vs Hard fork</strong></h2>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Soft Fork vs. Hard Fork Compatibility Diagram</h4>
+            <div class="diagram-subtitle">Comparing rule restrictions (backward-compatible) vs rule expansions (network split risk)</div>
+        </div>
+        <div class="diagram-nodes-row" style="gap: 20px;">
+            <div class="diagram-node" style="flex: 1; text-align: left; background: #0f172a; border-color: #10b981;">
+                <div style="font-weight: 700; color: #34d399; font-size: 15px; margin-bottom: 8px;">
+                    Soft Fork (Forward &amp; Backward Compatible)
+                </div>
+                <div style="font-size: 13px; color: #cbd5e1; line-height: 1.55;">
+                    • <strong>Tightens / Restricts Rules:</strong> The set of valid blocks shrinks.<br>
+                    • Unupgraded legacy nodes still accept new blocks as valid.<br>
+                    • No network split occurs as long as majority hash power upgrades.<br>
+                    • Examples: P2SH (BIP16), SegWit (BIP141), Taproot (BIP341).
+                </div>
+            </div>
+            <div class="diagram-node" style="flex: 1; text-align: left; background: #0f172a; border-color: #ef4444;">
+                <div style="font-weight: 700; color: #f87171; font-size: 15px; margin-bottom: 8px;">
+                    Hard Fork (Backward Incompatible)
+                </div>
+                <div style="font-size: 13px; color: #cbd5e1; line-height: 1.55;">
+                    • <strong>Loosens / Alters Rules:</strong> Previously invalid blocks become valid.<br>
+                    • Unupgraded legacy nodes reject the new blocks as invalid.<br>
+                    • Creates a permanent chain split unless 100% of nodes upgrade.<br>
+                    • Examples: Bitcoin Cash (8MB limit), Bitcoin Gold (Equihash).
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<h2><strong>3.5 Difference between soft fork and hard fork</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Basis</th>
+<th>Soft fork</th>
+<th>Hard fork</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Compatibility</td>
+<td>Backward-compatible</td>
+<td>Not backward-compatible</td>
+</tr>
+<tr>
+<td>Rule change</td>
+<td>More restrictive rules</td>
+<td>Incompatible rule changes</td>
+</tr>
+<tr>
+<td>Old nodes</td>
+<td>Can still recognise new blocks as valid</td>
+<td>May reject blocks under new rules</td>
+</tr>
+<tr>
+<td>Upgrade</td>
+<td>Not every node must upgrade immediately</td>
+<td>Nodes must upgrade to follow the new rules</td>
+</tr>
+<tr>
+<td>Chain split</td>
+<td>Usually avoids a permanent split</td>
+<td>Can create two separate chains</td>
+</tr>
+<tr>
+<td>New currency</td>
+<td>Not necessarily</td>
+<td>Can result in a new currency</td>
+</tr>
+</tbody>
+</table>
+<h2><strong>3.6 Real Bitcoin examples</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Upgrade or project</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Segregated Witness (SegWit)</td>
+<td>Soft fork</td>
+</tr>
+<tr>
+<td>Bitcoin Cash</td>
+<td>Hard fork</td>
+</tr>
+<tr>
+<td>Bitcoin Gold</td>
+<td>Hard fork</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exam tip:</strong> If a question asks you to differentiate between soft fork and hard fork, always include the backward-compatibility point. It is the most important distinction.</p>
+<h1><strong>Topic 4: Why Did Bitcoin Need Advanced Protocols?</strong></h1>
+<p>Before understanding the individual protocols, let's understand the two major problems discussed in your textbook.</p>
+<h2><strong>4.1 Problem 1: Low transaction throughput</strong></h2>
+<p>What is transaction throughput?</p>
+<p><strong>Transaction throughput is the number of transactions a network can process in a given period of time.</strong></p>
+<p>It is generally measured in transactions per second (TPS).</p>
+<p>For example:</p>
+<ul>
+<li>A network processing 5 transactions per second has a throughput of 5 TPS.</li>
+<li>A network processing 1,000 transactions per second has a throughput of 1,000 TPS.</li>
+</ul>
+<p>Your textbook gives an approximate historical comparison:</p>
+<table>
+<thead>
+<tr>
+<th>Network</th>
+<th>Approximate throughput quoted in the textbook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bitcoin</td>
+<td>3–7 TPS</td>
+</tr>
+<tr>
+<td>Visa</td>
+<td>24,000 TPS</td>
+</tr>
+<tr>
+<td>PayPal</td>
+<td>200 TPS</td>
+</tr>
+<tr>
+<td>Ethereum</td>
+<td>20 TPS</td>
+</tr>
+</tbody>
+</table>
+<p>These are the historical illustrative figures in the textbook, not guaranteed current performance measurements.</p>
+<h3><strong>Why is low throughput a problem?</strong></h3>
+<p>Suppose 1,000 people want to send Bitcoin at approximately the same time.</p>
+<p>But the network has limited space in its blocks.</p>
+<p>Not every transaction can be included in the next block.</p>
+<p>As a result:</p>
+<ol>
+<li>Some transactions remain unconfirmed.</li>
+<li>Users may have to wait longer.</li>
+<li>Users may increase their transaction fees to attract miners.</li>
+<li>The network can become congested.</li>
+</ol>
+<p>This is called the <strong>scalability problem</strong>.</p>
+<h2><strong>4.2 Problem 2: Transaction malleability</strong></h2>
+<p>This is another important technical problem.</p>
+<p>First understand the transaction ID.</p>
+<p>When a Bitcoin transaction is created, it has a unique identifier called a transaction ID (TXID).</p>
+<p>A simplified explanation is that the TXID is calculated using a cryptographic hash of the transaction data.</p>
+<h3><strong>What is transaction malleability?</strong></h3>
+<p><strong>Transaction malleability is the possibility of modifying certain parts of a transaction's representation, particularly its signature data, without changing the underlying transaction's intended economic effect, which could result in a different transaction ID.</strong></p>
+<p>Let's understand with an example.</p>
+<p>Suppose Aman sends 0.01 BTC to Rahul.</p>
+<p>The transaction has a TXID:</p>
+<p><code>TXID-A</code></p>
+<p>An attacker modifies the signature representation without changing the actual payment conditions.</p>
+<p>The modified transaction may have:</p>
+<p><code>TXID-B</code></p>
+<p>Both transaction representations can refer to the same intended payment.</p>
+<p>This creates confusion for systems that depend on the original transaction ID.</p>
+<h3><strong>Why is it a problem?</strong></h3>
+<ol>
+<li>Transaction identifiers may change.</li>
+<li>Applications tracking transactions by TXID may become confused.</li>
+<li>It can create complications in payment protocols.</li>
+<li>It was a security concern for systems built on top of Bitcoin.</li>
+</ol>
+<h3><strong>How did SegWit help?</strong></h3>
+<p>SegWit separated signature data (witness data) from the transaction data used to calculate the traditional TXID.</p>
+<p>This helped address the transaction malleability problem.</p>
+<h1><strong>Topic 5: Segregated Witness (SegWit)</strong></h1>
+<p>Very important 10-mark question</p>
+<h2><strong>5.1 What is SegWit?</strong></h2>
+<p>SegWit stands for <strong>Segregated Witness</strong>.</p>
+<p>Let's understand the two words:</p>
+<ul>
+<li>Segregated = Separated.</li>
+<li>Witness = Signature and related unlocking information used to prove that a transaction is authorised.</li>
+</ul>
+<p><strong>Segregated Witness (SegWit) is a Bitcoin protocol upgrade implemented through a soft fork that separates signature-related witness data from the traditional transaction data structure.</strong></p>
+<p>It was designed to improve Bitcoin's security, efficiency and transaction capacity.</p>
+<p>Your textbook identifies SegWit as a soft fork-based upgrade.</p>
+<h2><strong>5.2 Why was SegWit introduced?</strong></h2>
+<p>SegWit was introduced to address several limitations:</p>
+<ol>
+<li>Transaction malleability.</li>
+<li>Limited transaction capacity.</li>
+<li>Inefficient bandwidth usage.</li>
+<li>Transaction signing and verification efficiency.</li>
+<li>Difficulty in upgrading Bitcoin's scripting system.</li>
+</ol>
+<h2><strong>5.3 Main idea behind SegWit</strong></h2>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Segregated Witness (SegWit BIP141) Architecture</h4>
+            <div class="diagram-subtitle">Separating witness data from the transaction tree eliminates malleability and expands capacity</div>
+        </div>
+        <div class="diagram-nodes-row" style="gap: 20px;">
+            <div class="diagram-node" style="flex: 1; text-align: left; background: #0f172a; border-color: #64748b;">
+                <div style="font-weight: 700; color: #94a3b8; font-size: 15px; margin-bottom: 8px;">
+                    Legacy Bitcoin Block (1 MB Limit)
+                </div>
+                <div style="background: rgba(255,255,255,0.05); border-radius: 6px; padding: 10px; margin-bottom: 8px; font-size: 12px; font-family: monospace;">
+                    [Tx Data + ScriptSig (Signatures) Inseparably Mixed]<br>
+                    &bull; Max Block Size: 1,000,000 bytes<br>
+                    &bull; TxID calculated over ScriptSig &rarr; Malleable!
+                </div>
+            </div>
+            <div class="diagram-node" style="flex: 1; text-align: left; background: #0f172a; border-color: #0284c7;">
+                <div style="font-weight: 700; color: #38bdf8; font-size: 15px; margin-bottom: 8px;">
+                    SegWit Block (4 Million Weight Units Limit)
+                </div>
+                <div style="background: rgba(2, 132, 199, 0.1); border: 1px solid rgba(2, 132, 199, 0.3); border-radius: 6px; padding: 10px; margin-bottom: 8px; font-size: 12px; font-family: monospace;">
+                    [Base Transaction Data] (4 WU / byte)<br>
+                    [Detached Witness Structure] (1 WU / byte)<br>
+                    &bull; Non-malleable TxIDs &bull; Enables Lightning &bull; bc1 Bech32
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<p>Before SegWit, signature information was included within the traditional transaction structure.</p>
+<p>After SegWit, the signature-related information was separated into a separate structure called the <strong>witness</strong>.</p>
+<p>Let's understand with a simplified diagram.</p>
+<p><strong>Before SegWit — Traditional transaction</strong></p>
+<p><strong>Transaction data</strong></p>
+<p><strong>Signature data</strong></p>
+<p>Signature information is included in the traditional transaction representation.</p>
+<p><strong>After SegWit — Witness separated</strong></p>
+<p><strong>Base transaction data</strong></p>
+<p>Inputs, outputs and other transaction fields</p>
+<p><strong>Witness data</strong></p>
+<p>Signatures and related witness information</p>
+<p>The witness is stored separately from the base transaction data.</p>
+<p>This separation is the central concept behind SegWit.</p>
+<h2><strong>5.4 Important improvements of SegWit</strong></h2>
+<p>Your textbook describes the following improvements.</p>
+<h3><strong>1. Fix for transaction malleability</strong></h3>
+<p>This is one of the most important advantages.</p>
+<p>SegWit separates signature data from the transaction data used to calculate the traditional TXID.</p>
+<p>Therefore, changing witness data does not change the TXID in the same way that changing the signature representation could affect the traditional transaction ID before SegWit.</p>
+<p><strong>Result:</strong> It helps solve the transaction malleability problem.</p>
+<h3><strong>2. Better bandwidth efficiency</strong></h3>
+<p>Lightweight clients do not always need to download all signature information when requesting transaction data for certain verification purposes.</p>
+<p>Separating witness information can reduce the amount of data that needs to be transferred in those situations.</p>
+<p><strong>Result:</strong> Improved bandwidth efficiency.</p>
+<h3><strong>3. Faster transaction verification</strong></h3>
+<p>SegWit introduced improvements to transaction signature hashing and verification.</p>
+<p>Your textbook discusses BIP143, which introduced a new signature-hashing algorithm for SegWit transactions.</p>
+<p>The improvement reduces unnecessary repeated work during signature verification.</p>
+<p><strong>Result:</strong> More efficient transaction signing and verification.</p>
+<h3><strong>4. Script versioning</strong></h3>
+<p>SegWit introduced script versioning capability.</p>
+<p>This means that different versions of scripts can be supported.</p>
+<p>It makes future improvements to Bitcoin's scripting system easier.</p>
+<h3><strong>5. Increased block capacity</strong></h3>
+<p>Before SegWit, Bitcoin used a block-size limit of 1 MB.</p>
+<p>SegWit introduced a block weight limit instead of relying only on the traditional block-size limit.</p>
+<p>This allows more transaction data to fit into a block, depending on the proportion of witness data.</p>
+<h3><strong>6. Improved address format</strong></h3>
+<p>SegWit introduced an improved address format called <strong>Bech32</strong>.</p>
+<p>These addresses generally begin with:</p>
+<p><code>bc1</code></p>
+<p>Advantages include:</p>
+<ul>
+<li>Better error detection.</li>
+<li>Easier readability.</li>
+<li>Lowercase character representation.</li>
+<li>Clear distinction from legacy address formats.</li>
+</ul>
+<p><a href="https://images.openai.com/static-rsc-4/zhqHHDzCcsjC9UKZTA6cY1GsF3iG55oVHL41qtjYe7G6SksYpjlHWs_PUxF5OH8jLpjnt1aPKxeo2ORm0Ex9y_9zLNzSX3Z_cv9_0IxwM49ifDA3LwPx_f1SiBajbppspPg32WG9wMVNd_VzZSiV-lVYOIKhhAY8D2M0n2qfDkU?purpose=inline">Bitcoin - Native SegWit vs Taproot: A Comprehensive Guide for Beginners | Trust</a></p>
+<p><a href="https://trustwallet.com/blog/guides/bitcoin-native-segwit-vs-taproot-a-comprehensive-guide-for-beginners?utm_source=chatgpt.com">trustwallet.com</a></p>
+<h2><strong>5.5 Block weight in SegWit</strong></h2>
+<p>This is a technical concept that can be asked in a 10-mark question.</p>
+<p>Before SegWit, block size was limited to 1 MB.</p>
+<p>SegWit introduced a new concept called <strong>block weight</strong>.</p>
+<p>The textbook gives the following transaction-weight formula:</p>
+<p>\<div class="math-display">$$\text{Weight} = 3 \times \text{Base size} + \text{Total size} \$$</div></p>
+<p>Here:</p>
+<ul>
+<li>Base size = Transaction size without witness data.</li>
+<li>Total size = Transaction size including witness data.</li>
+</ul>
+<h3><strong>Example</strong></h3>
+<p>Suppose a transaction has:</p>
+<ul>
+<li>Base size = 100 bytes.</li>
+<li>Total size = 150 bytes.</li>
+</ul>
+<p>Then:</p>
+<p>\<div class="math-display">$$\text{Weight}=3(100)+150 \$$</div></p>
+<p>\<div class="math-display">$$=300+150 \$$</div></p>
+<p>\<div class="math-display">$$\boxed{450\text{ weight units}} \$$</div></p>
+<p>Your textbook states that blocks can have a maximum of 4 million weight units.</p>
+<p>This mechanism allows witness data to have a lower weight than ordinary transaction data.</p>
+<h2><strong>5.6 Types of SegWit transactions</strong></h2>
+<p>Your textbook discusses four types.</p>
+<p>Let's understand their names first.</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Full form</th>
+<th>Basic meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P2WPKH</td>
+<td>Pay to Witness Public Key Hash</td>
+<td>Witness-based payment to a public-key hash</td>
+</tr>
+<tr>
+<td>P2SH-P2WPKH</td>
+<td>Pay to Script Hash — Pay to Witness Public Key Hash</td>
+<td>Nested SegWit for backward compatibility</td>
+</tr>
+<tr>
+<td>P2WSH</td>
+<td>Pay to Witness Script Hash</td>
+<td>Witness-based payment to a script hash</td>
+</tr>
+<tr>
+<td>P2SH-P2WSH</td>
+<td>Pay to Script Hash — Pay to Witness Script Hash</td>
+<td>Nested SegWit script-hash payment</td>
+</tr>
+</tbody>
+</table>
+<h3><strong>1. P2WPKH</strong></h3>
+<p>It is similar to the traditional P2PKH transaction.</p>
+<p>The major difference is that the signature and public key are moved from the traditional ScriptSig field into the witness field.</p>
+<p>Its simplified locking script is:</p>
+<pre><code>OP_0 &lt;pubKeyHash&gt;
+</code></pre>
+<h3><strong>2. P2SH-P2WPKH</strong></h3>
+<p>This is a nested SegWit transaction.</p>
+<p>It places a P2WPKH structure inside the traditional P2SH mechanism.</p>
+<p>Its purpose is to provide backward compatibility with older Bitcoin software.</p>
+<h3><strong>3. P2WSH</strong></h3>
+<p>It is a witness-based script-hash transaction.</p>
+<p>The signature and redeem script information are moved into the witness structure.</p>
+<p>It uses a 32-byte SHA-256 script hash.</p>
+<h3><strong>4. P2SH-P2WSH</strong></h3>
+<p>This is another nested SegWit format.</p>
+<p>It places P2WSH inside P2SH to provide backward compatibility.</p>
+<p><strong>Exam tip:</strong> You should remember the full forms of all four types. If a 10-mark question asks about SegWit, include at least a brief explanation of these transaction types.</p>
+<h2><strong>5.7 Important facts about SegWit</strong></h2>
+<ul>
+<li>Proposed through BIP141, BIP143, BIP144 and BIP145.</li>
+<li>Activated on Bitcoin's main network on 24 August 2017.</li>
+<li>Activation occurred at block 481824.</li>
+<li>Implemented as a soft fork.</li>
+<li>Uses witness data separately from base transaction data.</li>
+<li>Introduced block weight.</li>
+<li>Supports Bech32 addresses.</li>
+</ul>
+<h3><strong>Exam-ready conclusion</strong></h3>
+<p>Segregated Witness is an important Bitcoin protocol upgrade that improves transaction malleability protection, transaction capacity, bandwidth efficiency and script upgradeability. It was implemented through a soft fork and introduced the witness structure and block-weight mechanism.</p>
+<h1><strong>Topic 6: Bitcoin Cash (BCH)</strong></h1>
+<p>Important 5-mark question</p>
+<h2><strong>6.1 What is Bitcoin Cash?</strong></h2>
+<p>First, understand why Bitcoin Cash was created.</p>
+<p>Some members of the Bitcoin community believed that increasing the block-size limit was necessary to support more transactions.</p>
+<p>They disagreed with the approach taken by the Bitcoin network.</p>
+<p>As a result, a separate blockchain was created through a hard fork.</p>
+<p><strong>Bitcoin Cash (BCH) is a cryptocurrency that originated as a hard fork of Bitcoin, with the objective of increasing transaction capacity by allowing larger blocks.</strong></p>
+<h2><strong>6.2 Why was Bitcoin Cash introduced?</strong></h2>
+<p>The main objective was to improve transaction capacity.</p>
+<p>The original Bitcoin block-size limit was 1 MB.</p>
+<p>Bitcoin Cash increased the block-size limit, allowing more transactions to be included in a block.</p>
+<h2><strong>6.3 Important features mentioned in your textbook</strong></h2>
+<p>According to <em>Mastering Blockchain, Third Edition</em>:</p>
+<ol>
+<li>Bitcoin Cash increased the block limit to 8 MB in the version described in the book.</li>
+<li>It uses Proof of Work (PoW).</li>
+<li>It uses ASIC-based mining hardware.</li>
+<li>It introduced replay protection.</li>
+<li>It introduced wipe-out protection.</li>
+<li>It uses transaction-signature differences to distinguish its transactions from Bitcoin.</li>
+</ol>
+<p><a href="https://images.openai.com/static-rsc-4/dFax84OOIqRjd4CsT5sTgDamEZrN4QqdrN1Hi2Y7TKVB6FUvE0jSaEAK7kLnnEGykJGTwdkceH_vNoFJ8FEhlKiswXrt4S3Cg1jaN5gIo1jW_DpxtsuwtrMhjOHYlB4zA3eXAZL4zoorCYn7IX71ysZJDaskd7Z0_dQKzIBMDFs?purpose=inline">Bitcoin Cash (BCH) Logo - Crypto Logos</a></p>
+<p><a href="https://cryptologos.cc/coin/bitcoin-cash/?utm_source=chatgpt.com">cryptologos.cc</a></p>
+<h3><strong>What is replay protection?</strong></h3>
+<p>Imagine Aman has Bitcoin on two chains after a fork.</p>
+<p>He creates a transaction on one chain.</p>
+<p>Without appropriate protection, a similar transaction could potentially be replayed on the other chain.</p>
+<p>Replay protection uses mechanisms that help prevent transactions intended for one chain from being accepted and replayed on the other.</p>
+<h3><strong>What is wipe-out protection?</strong></h3>
+<p>Wipe-out protection is designed to reduce the risk of one chain being overwhelmed or replaced by the other chain during a contentious fork situation.</p>
+<h2><strong>6.4 Advantages of Bitcoin Cash</strong></h2>
+<ol>
+<li>Larger blocks can accommodate more transactions.</li>
+<li>Aims to improve transaction capacity.</li>
+<li>Uses the familiar Proof of Work model.</li>
+<li>Provides replay protection.</li>
+<li>Developed as an alternative approach to Bitcoin scalability.</li>
+</ol>
+<h2><strong>6.5 Limitations</strong></h2>
+<ol>
+<li>Larger blocks can increase storage and bandwidth requirements for nodes.</li>
+<li>It creates a separate cryptocurrency and blockchain.</li>
+<li>It has its own network adoption and security considerations.</li>
+<li>Increasing block size alone does not solve every scalability problem.</li>
+</ol>
+<h1><strong>Topic 7: Bitcoin Unlimited</strong></h1>
+<h2><strong>7.1 What is Bitcoin Unlimited?</strong></h2>
+<p>Bitcoin Unlimited is an alternative Bitcoin implementation that proposed a different approach to the block-size debate.</p>
+<p><strong>Bitcoin Unlimited is a Bitcoin protocol implementation that allows miners to reach agreement on the block-size limit instead of imposing one fixed hard limit in the manner described by the textbook.</strong></p>
+<p>In simple words:</p>
+<p>In traditional Bitcoin, the protocol specifies a block capacity limit.</p>
+<p>Bitcoin Unlimited proposed that miners could decide the acceptable block-size cap through consensus.</p>
+<h2><strong>7.2 Why was Bitcoin Unlimited proposed?</strong></h2>
+<p>The objective was to provide more flexibility in block-size management.</p>
+<p>Supporters believed that miners should have a greater role in deciding how large blocks could become.</p>
+<h2><strong>7.3 Important features</strong></h2>
+<p>Your textbook discusses three important concepts:</p>
+<h3><strong>1. Miner-selected block-size limit</strong></h3>
+<p>Instead of a fixed hard limit, miners can reach consensus on the block-size cap over time.</p>
+<h3><strong>2. Extremely Thin Blocks</strong></h3>
+<p>First understand the problem.</p>
+<p>Suppose a node already has 90 transactions in its mempool.</p>
+<p>A miner creates a block containing those 90 transactions plus 10 new transactions.</p>
+<p>If the miner sends the complete block to that node, the node receives the same 90 transactions again.</p>
+<p>This creates unnecessary data transfer.</p>
+<p><strong>Extremely thin blocks</strong> aim to reduce this duplication.</p>
+<p>The requesting node sends a <code>getdata</code> request along with a Bloom filter that identifies transactions it already has.</p>
+<p>The other node sends only the missing transactions in the thin block.</p>
+<p><strong>Example of thin block communication</strong></p>
+<p><strong>Requesting node already has</strong></p>
+<p>TX1, TX2, TX3, TX4</p>
+<p><strong>Miner's block contains</strong></p>
+<p>TX1, TX2, TX3, TX4, TX5, TX6</p>
+<p><strong>Thin block sends only</strong></p>
+<p>TX5 and TX6</p>
+<h3><strong>3. Parallel validation</strong></h3>
+<p>In traditional sequential validation, a node processes a new block and completes its validation before moving on to certain other validation and relay tasks.</p>
+<p>Bitcoin Unlimited proposed parallel validation.</p>
+<p>This allows nodes to validate more than one block and process incoming transactions in parallel.</p>
+<p><strong>Result:</strong> Improved processing efficiency.</p>
+<h2><strong>7.4 Advantages of Bitcoin Unlimited</strong></h2>
+<ol>
+<li>Flexible block-size management.</li>
+<li>Reduced duplicate transaction transmission through thin blocks.</li>
+<li>Improved efficiency through parallel validation.</li>
+<li>Aims to increase network capacity.</li>
+</ol>
+<h2><strong>7.5 Limitations</strong></h2>
+<ol>
+<li>Larger blocks can increase hardware and network requirements.</li>
+<li>Reaching agreement on block-size limits can be difficult.</li>
+<li>More powerful hardware may be needed to process larger blocks.</li>
+<li>Different preferences among miners and nodes can lead to disagreements.</li>
+</ol>
+<h1><strong>Topic 8: Bitcoin Gold (BTG)</strong></h1>
+<p>Important 5-mark question</p>
+<h2><strong>8.1 First understand the mining centralisation problem</strong></h2>
+<p>Remember that Bitcoin uses Proof of Work.</p>
+<p>Miners compete to solve a mathematical puzzle using computing power.</p>
+<p>The miner who successfully mines a block receives the block reward and transaction fees.</p>
+<p>Initially, Bitcoin mining could be performed using ordinary computers.</p>
+<p>However, as mining became more competitive, specialised hardware called ASICs became increasingly important.</p>
+<h3><strong>What is an ASIC?</strong></h3>
+<p>ASIC stands for <strong>Application-Specific Integrated Circuit</strong>.</p>
+<p>It is a specialised computer chip designed to perform a particular task efficiently.</p>
+<p>In Bitcoin, ASICs are designed specifically for Bitcoin mining.</p>
+<p>The problem is that ASIC mining equipment can be expensive.</p>
+<p>Therefore, miners who can afford more powerful and expensive equipment may gain a significant advantage.</p>
+<p>This can contribute to mining centralisation.</p>
+<h2><strong>8.2 What is Bitcoin Gold?</strong></h2>
+<p><strong>Bitcoin Gold (BTG) is a cryptocurrency created through a hard fork of the original Bitcoin blockchain, with the objective of reducing mining centralisation and making mining more accessible through GPU-based mining.</strong></p>
+<p><a href="https://images.openai.com/static-rsc-4/_qX0IIdYt9ZCfE8fFaaTW2vbiYVM_hR91--Z__gvylz-ruFDTXi8ujR2q6wtekvOQQw2VyAoxVsyOUao3ljSGv8s1hsleFM8rkkeU2CGe1huon7rZn4ZNX9doKYsQCP-KgzRIFmP5yjIT1DubvUkC2S2tcUVHfgurnUhEtovqmQ?purpose=inline">Bitcoin Gold (BTG) Logo Vector Free Download | Logowik</a></p>
+<p><a href="https://logowik.com/bitcoin-gold-btg-logo-vector-svg-pdf-ai-eps-cdr-free-download-10151.html?utm_source=chatgpt.com">logowik.com</a></p>
+<h2><strong>8.3 Why was Bitcoin Gold introduced?</strong></h2>
+<p>The main objective was to address mining centralisation.</p>
+<p>Bitcoin Gold aimed to reduce the advantage of specialised ASIC mining hardware.</p>
+<p>It used the Equihash mining algorithm, which was designed to be more resistant to ASIC mining than Bitcoin's SHA-256 mining algorithm.</p>
+<p>This allowed GPU-based mining.</p>
+<h3><strong>What is GPU?</strong></h3>
+<p>GPU stands for <strong>Graphics Processing Unit</strong>.</p>
+<p>It is a processor commonly used for graphics processing and parallel computations.</p>
+<p>Unlike a specialised Bitcoin ASIC, a GPU can be used for many different computing tasks.</p>
+<h2><strong>8.4 Important features of Bitcoin Gold</strong></h2>
+<p>According to your textbook:</p>
+<ol>
+<li>It originated through a hard fork.</li>
+<li>It was implemented from block 491407 of the original Bitcoin blockchain.</li>
+<li>It aimed to address mining centralisation.</li>
+<li>It used Equihash as its mining algorithm.</li>
+<li>It was designed to be ASIC-resistant.</li>
+<li>It used GPUs for mining.</li>
+</ol>
+<h2><strong>8.5 Advantages of Bitcoin Gold</strong></h2>
+<ol>
+<li>Aimed to make mining more accessible.</li>
+<li>Reduced dependence on specialised Bitcoin ASIC hardware.</li>
+<li>Encouraged GPU-based mining.</li>
+<li>Attempted to reduce mining centralisation.</li>
+</ol>
+<h2><strong>8.6 Limitations</strong></h2>
+<ol>
+<li>ASIC resistance is not a permanent guarantee against specialised hardware development.</li>
+<li>GPU mining still requires investment in hardware and electricity.</li>
+<li>A separate blockchain needs its own network security and adoption.</li>
+<li>A hard fork creates a separate cryptocurrency ecosystem.</li>
+</ol>
+<h1><strong>Topic 9: Lightning Network</strong></h1>
+<p>Very important 10-mark question</p>
+<p>This is one of the most important innovations in Bitcoin because it attempts to solve the scalability and speed problems without recording every payment directly on the main blockchain.</p>
+<h2><strong>9.1 Why was the Lightning Network needed?</strong></h2>
+<p>Let's understand with a real-life example.</p>
+<p>Suppose Aman visits a coffee shop every day.</p>
+<p>Every day, he purchases coffee worth ₹100.</p>
+<p>If he pays using an ordinary Bitcoin on-chain transaction each time, every payment needs to be processed through the Bitcoin blockchain.</p>
+<p>This can create problems:</p>
+<ol>
+<li>More transactions need block space.</li>
+<li>Payments may wait for confirmation.</li>
+<li>Transaction fees may become expensive.</li>
+<li>Small everyday payments may become inconvenient.</li>
+</ol>
+<p>Now imagine Aman and the coffee shop could make multiple payments without recording every individual payment on the main blockchain.</p>
+<p>This is the basic idea behind the Lightning Network.</p>
+<h2><strong>9.2 What is the Lightning Network?</strong></h2>
+<p><strong>The Lightning Network is a Layer 2 payment protocol built on top of Bitcoin that enables fast, low-cost off-chain payments through payment channels.</strong></p>
+<p>Your textbook describes it as a solution for scalable, instant off-chain payments.</p>
+<p>It was introduced in early 2016.</p>
+<h3><strong>First understand Layer 1 and Layer 2</strong></h3>
+<p><strong>Layer 1:</strong> The original Bitcoin blockchain, where transactions are recorded and secured by the Bitcoin network.</p>
+<p><strong>Layer 2:</strong> An additional protocol built on top of the main blockchain to perform certain activities more efficiently.</p>
+<p>The Lightning Network operates as Layer 2.</p>
+<h2><strong>9.3 What is an off-chain transaction?</strong></h2>
+<p>An off-chain transaction is a transaction or payment update that takes place outside the main blockchain rather than being individually recorded as a separate on-chain transaction.</p>
+<p>For example:</p>
+<p>Aman and a coffee shop open a payment channel.</p>
+<p>They can make several payments through this channel.</p>
+<p>Instead of recording each payment separately on the Bitcoin blockchain, they update the channel's balance.</p>
+<p>The relevant channel-opening and closing transactions are recorded on the main blockchain.</p>
+<h2><strong>9.4 What is a payment channel?</strong></h2>
+<p><strong>A payment channel is a mechanism that allows two participants to exchange multiple payments off-chain while using the Bitcoin blockchain to establish and settle the channel.</strong></p>
+<p>Let's understand with an example.</p>
+<p>Aman opens a payment channel with a coffee shop and deposits 0.01 BTC into the channel.</p>
+<p>Now suppose he makes these payments:</p>
+<table>
+<thead>
+<tr>
+<th>Payment</th>
+<th>Amount</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>First coffee</td>
+<td>0.001 BTC</td>
+</tr>
+<tr>
+<td>Second coffee</td>
+<td>0.002 BTC</td>
+</tr>
+<tr>
+<td>Third coffee</td>
+<td>0.001 BTC</td>
+</tr>
+<tr>
+<td>Fourth coffee</td>
+<td>0.003 BTC</td>
+</tr>
+<tr>
+<td><strong>Total spent</strong></td>
+<td><strong>0.007 BTC</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The remaining balance is:</p>
+<p>\<div class="math-display">$$0.01-0.007=0.003\ BTC \$$</div></p>
+<p>Aman has made four payments through the channel.</p>
+<p>Instead of putting every individual payment on the Bitcoin blockchain, the channel keeps track of the updated balance.</p>
+<p>When the channel is closed, the final settlement is recorded on the Bitcoin blockchain.</p>
+<h2><strong>9.5 Working of the Lightning Network</strong></h2>
+<p>There are three main stages:</p>
+<h3><strong>Stage 1: Opening a payment channel</strong></h3>
+<p>Aman and the coffee shop create a payment channel.</p>
+<p>They use a Bitcoin on-chain transaction to establish the channel and lock funds into it.</p>
+<h3><strong>Stage 2: Making off-chain payments</strong></h3>
+<p>Aman makes multiple payments through the channel.</p>
+<p>The channel's balance is updated without requiring each payment to be separately recorded on the main blockchain.</p>
+<h3><strong>Stage 3: Closing the payment channel</strong></h3>
+<p>When Aman and the coffee shop finish using the channel, they close it.</p>
+<p>The final balance is settled through an on-chain Bitcoin transaction.</p>
+<h2><strong>9.6 Diagram: Working of the Lightning Network</strong></h2>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Lightning Network Layer-2: 3-Stage Payment Lifecycle</h4>
+            <div class="diagram-subtitle">High-speed, low-fee bidirectional payment channels anchored to the blockchain</div>
+        </div>
+        <div class="diagram-flow-row">
+            <div class="flow-step-card">
+                <div class="flow-step-num">Stage 1 (On-Chain)</div>
+                <div class="flow-step-title">Funding Transaction</div>
+                <div class="flow-step-desc">Alice &amp; Bob deposit funds into a 2-of-2 multisig channel address recorded on the main blockchain.</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step-card">
+                <div class="flow-step-num">Stage 2 (Off-Chain)</div>
+                <div class="flow-step-title">Instant Micropayments</div>
+                <div class="flow-step-desc">Peers exchange signed commitment transactions and HTLCs off-chain. Sub-second speed, zero network fees!</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step-card">
+                <div class="flow-step-num">Stage 3 (On-Chain)</div>
+                <div class="flow-step-title">Settlement Transaction</div>
+                <div class="flow-step-desc">When closing the channel, the single final net balance is published to Bitcoin blockchain, distributing funds.</div>
+            </div>
+        </div>
+    </div>
+    
+<h2><strong>9.7 Advantages of the Lightning Network</strong></h2>
+<p><strong>1. Faster payments</strong></p>
+<p>Payments can be completed without waiting for every individual payment to be included in a Bitcoin block.</p>
+<p><strong>2. Lower transaction costs</strong></p>
+<p>Multiple payments can take place without requiring an individual on-chain transaction for each payment.</p>
+<p><strong>3. Improved scalability</strong></p>
+<p>It reduces the need to record every small payment directly on the Bitcoin blockchain.</p>
+<p><strong>4. Suitable for micropayments</strong></p>
+<p>It supports small-value payments, such as buying coffee or making small online payments.</p>
+<p><strong>5. Supports frequent transactions</strong></p>
+<p>Participants can make multiple payments through an established channel.</p>
+<h2><strong>9.8 Limitations of the Lightning Network</strong></h2>
+<ol>
+<li>Requires payment-channel liquidity.</li>
+<li>Users need compatible Lightning wallets and infrastructure.</li>
+<li>Managing channels can be technically complex.</li>
+<li>Payments depend on suitable routes and available liquidity.</li>
+<li>Users must understand channel management and settlement.</li>
+</ol>
+<h2><strong>9.9 Bitcoin vs Lightning Network</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Basis</th>
+<th>Bitcoin main chain</th>
+<th>Lightning Network</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Layer</td>
+<td>Layer 1</td>
+<td>Layer 2</td>
+</tr>
+<tr>
+<td>Payment type</td>
+<td>On-chain</td>
+<td>Mostly off-chain</td>
+</tr>
+<tr>
+<td>Speed</td>
+<td>Depends on block confirmation</td>
+<td>Generally much faster</td>
+</tr>
+<tr>
+<td>Fees</td>
+<td>On-chain transaction fees</td>
+<td>Generally lower payment costs</td>
+</tr>
+<tr>
+<td>Record</td>
+<td>Transactions recorded on blockchain</td>
+<td>Channel updates happen off-chain</td>
+</tr>
+<tr>
+<td>Main purpose</td>
+<td>Decentralised settlement and security</td>
+<td>Faster, scalable payments</td>
+</tr>
+<tr>
+<td>Suitable for</td>
+<td>Main-chain settlement</td>
+<td>Frequent and smaller payments</td>
+</tr>
+</tbody>
+</table>
+<h3><strong>Important exam conclusion</strong></h3>
+<p>The Lightning Network improves Bitcoin scalability by enabling multiple off-chain payments through payment channels. Only the channel opening and final settlement need to be recorded on the main blockchain, reducing the need for every payment to consume on-chain block space.</p>
+<h1><strong>Topic 10: Comparison of Bitcoin Advanced Protocols</strong></h1>
+<p>This table is extremely useful for revision and 10-mark comparison questions.</p>
+<table>
+<thead>
+<tr>
+<th>Protocol</th>
+<th>Main problem addressed</th>
+<th>Main technique</th>
+<th>Fork type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SegWit</td>
+<td>Transaction malleability and limited capacity</td>
+<td>Separates witness data; introduces block weight</td>
+<td>Soft fork</td>
+</tr>
+<tr>
+<td>Bitcoin Cash</td>
+<td>Limited transaction capacity</td>
+<td>Larger block limit</td>
+<td>Hard fork</td>
+</tr>
+<tr>
+<td>Bitcoin Unlimited</td>
+<td>Block-size restrictions and block propagation efficiency</td>
+<td>Miner-selected block-size cap, thin blocks and parallel validation</td>
+<td>Alternative implementation</td>
+</tr>
+<tr>
+<td>Bitcoin Gold</td>
+<td>Mining centralisation</td>
+<td>Equihash and GPU mining</td>
+<td>Hard fork</td>
+</tr>
+<tr>
+<td>Lightning Network</td>
+<td>Scalability and slow on-chain payments</td>
+<td>Off-chain payment channels</td>
+<td>Layer 2 protocol</td>
+</tr>
+</tbody>
+</table>
+<h2><strong>Understand the differences through one-line explanations</strong></h2>
+<p><strong>SegWit:</strong> Separates signature data to improve transaction structure, security and capacity.</p>
+<p><strong>Bitcoin Cash:</strong> Increases block capacity to support more transactions per block.</p>
+<p><strong>Bitcoin Unlimited:</strong> Proposes flexible block-size limits and more efficient block propagation and validation.</p>
+<p><strong>Bitcoin Gold:</strong> Attempts to make mining more accessible by reducing dependence on ASIC hardware.</p>
+<p><strong>Lightning Network:</strong> Enables fast off-chain payments through payment channels.</p>
+<h1><strong>Module 4 — Exam Preparation</strong></h1>
+<h2><strong>A. Important 5-mark questions</strong></h2>
+<table>
+<thead>
+<tr>
+<th>No.</th>
+<th>Question</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>What are Bitcoin Improvement Proposals? Explain their types.</td>
+<td>Very high</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Differentiate between soft fork and hard fork.</td>
+<td>Very high</td>
+</tr>
+<tr>
+<td>3</td>
+<td>What is SegWit? Explain its advantages.</td>
+<td>Very high</td>
+</tr>
+<tr>
+<td>4</td>
+<td>What is Bitcoin Cash? Explain its features.</td>
+<td>High</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Explain Bitcoin Unlimited and its features.</td>
+<td>High</td>
+</tr>
+<tr>
+<td>6</td>
+<td>What is Bitcoin Gold? Why was it introduced?</td>
+<td>High</td>
+</tr>
+<tr>
+<td>7</td>
+<td>What is the Lightning Network? Explain payment channels.</td>
+<td>Very high</td>
+</tr>
+<tr>
+<td>8</td>
+<td>What is transaction malleability?</td>
+<td>High</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Explain the concept of block weight in SegWit.</td>
+<td>High</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Differentiate between on-chain and off-chain transactions.</td>
+<td>High</td>
+</tr>
+</tbody>
+</table>
+<h2><strong>B. Important 10-mark questions</strong></h2>
+<ol>
+<li>Explain Bitcoin Improvement Proposals and their different types with examples.</li>
+<li>Explain Segregated Witness (SegWit) in detail, including its working, advantages and transaction types.</li>
+<li>Explain Bitcoin Cash, Bitcoin Unlimited and Bitcoin Gold with their features and objectives.</li>
+<li>Explain the Lightning Network and its working with a suitable diagram.</li>
+<li>Differentiate between soft fork and hard fork with suitable examples.</li>
+<li>Explain the major innovations in Bitcoin and how they address the limitations of the original protocol.</li>
+</ol>
+<h2><strong>C. Exam-ready 10-mark answer: Explain SegWit</strong></h2>
+<p><strong>Introduction:</strong></p>
+<p>Segregated Witness (SegWit) is a Bitcoin protocol upgrade implemented through a soft fork. It was introduced to address transaction malleability, improve transaction capacity, increase bandwidth efficiency and improve transaction verification.</p>
+<p><strong>Working:</strong></p>
+<p>SegWit separates signature-related witness data from the traditional transaction data structure. Earlier, signature data was included within the traditional transaction structure. After SegWit, it is stored separately in a witness structure.</p>
+<p><strong>Features and advantages:</strong></p>
+<ol>
+<li><strong>Transaction malleability:</strong> Separates witness data from the data used to calculate the traditional transaction ID.</li>
+<li><strong>Bandwidth efficiency:</strong> Allows lightweight clients to avoid downloading unnecessary witness information in certain situations.</li>
+<li><strong>Faster verification:</strong> Introduces improvements in transaction signature hashing and verification through BIP143.</li>
+<li><strong>Script versioning:</strong> Supports easier upgrades to Bitcoin's scripting system.</li>
+<li><strong>Increased block capacity:</strong> Introduces a block-weight limit instead of relying only on the traditional 1 MB block-size limit.</li>
+<li><strong>Improved address format:</strong> Introduces Bech32 addresses, commonly beginning with <code>bc1</code>.</li>
+</ol>
+<p><strong>Types of SegWit transactions:</strong></p>
+<ul>
+<li>P2WPKH</li>
+<li>P2SH-P2WPKH</li>
+<li>P2WSH</li>
+<li>P2SH-P2WSH</li>
+</ul>
+<p><strong>Conclusion:</strong></p>
+<p>SegWit is an important Bitcoin upgrade that improves transaction malleability protection, capacity, efficiency and script upgradeability. It was activated on the Bitcoin main network on 24 August 2017.</p>
+<h2><strong>D. Exam-ready 10-mark answer: Explain Lightning Network</strong></h2>
+<p><strong>Introduction:</strong></p>
+<p>The Lightning Network is a Layer 2 payment protocol built on top of Bitcoin. It was introduced to improve Bitcoin's scalability by enabling fast and low-cost off-chain payments.</p>
+<p><strong>Working:</strong></p>
+<ol>
+<li><strong>Opening a payment channel:</strong> Two participants create a payment channel using an on-chain Bitcoin transaction.</li>
+<li><strong>Locking funds:</strong> Funds are committed to the channel.</li>
+<li><strong>Off-chain payments:</strong> Participants make multiple payments through the channel without recording every payment individually on the Bitcoin blockchain.</li>
+<li><strong>Updating balances:</strong> The channel maintains the latest payment balances.</li>
+<li><strong>Closing the channel:</strong> Participants close the payment channel.</li>
+<li><strong>Final settlement:</strong> The final balance is recorded on the Bitcoin blockchain.</li>
+</ol>
+<p><strong>Advantages:</strong></p>
+<ul>
+<li>Faster payments.</li>
+<li>Lower transaction costs.</li>
+<li>Improved scalability.</li>
+<li>Supports micropayments.</li>
+<li>Suitable for frequent transactions.</li>
+</ul>
+<p><strong>Limitations:</strong></p>
+<ul>
+<li>Requires channel liquidity.</li>
+<li>Channel management can be complex.</li>
+<li>Requires compatible infrastructure.</li>
+<li>Payment routing depends on available liquidity.</li>
+</ul>
+<p><strong>Conclusion:</strong></p>
+<p>The Lightning Network improves Bitcoin's scalability by moving frequent payments off-chain while using the main Bitcoin blockchain for channel establishment and final settlement.</p>
+<h2><strong>E. Quick revision sheet</strong></h2>
+<p><strong>Important facts to remember</strong></p>
+<ul>
+<li>BIP = Bitcoin Improvement Proposal.</li>
+<li>Standard BIP = Protocol changes.</li>
+<li>Process BIP = Process changes.</li>
+<li>Informational BIP = Information and guidance.</li>
+<li>Soft fork = Backward-compatible upgrade.</li>
+<li>Hard fork = Non-backward-compatible upgrade.</li>
+<li>SegWit = Segregated Witness.</li>
+<li>BIP141 = SegWit proposal.</li>
+<li>BIP143 = SegWit signature hashing.</li>
+<li>Bech32 = SegWit address encoding.</li>
+<li>Block weight = 4 million weight units maximum.</li>
+<li>Bitcoin Cash = Hard fork, larger block limit.</li>
+<li>Bitcoin Unlimited = Miner-selected block-size cap proposal.</li>
+<li>Extremely thin blocks = Send missing transactions.</li>
+<li>Parallel validation = Validate multiple items in parallel.</li>
+<li>Bitcoin Gold = Hard fork, Equihash, GPU mining.</li>
+<li>ASIC = Application-Specific Integrated Circuit.</li>
+<li>Lightning Network = Layer 2.</li>
+<li>Payment channel = Multiple off-chain payments.</li>
+<li>On-chain = Recorded on the main blockchain.</li>
+<li>Off-chain = Processed outside the main blockchain.</li>
+</ul>
+
+    <div class="quiz-section-wrap" id="module-quiz-section">
+        <div class="quiz-card-container">
+            <div class="quiz-main-header">
+                <div class="quiz-title-area">
+                    <h3 class="quiz-title">📝 Quick Self-Test &amp; Knowledge Check</h3>
+                    <p class="quiz-subtitle">Test your understanding of BIP types, soft vs hard forks, SegWit (BIP141), malleability, Bitcoin Cash, Bitcoin Gold, and the Lightning Network.</p>
+                </div>
+                <div class="quiz-action-bar">
+                    <span class="quiz-stat-pill" id="quiz-progress-text-17">0/10 Answered</span>
+                    <span class="quiz-score-pill" id="quiz-score-text-17">🏆 Score: 0/10</span>
+                    <button class="quiz-reset-btn" onclick="resetQuiz(17, 10)">
+                        🔄 Reset Quiz
+                    </button>
+                </div>
+            </div>
+
+            <div class="quiz-progress-track">
+                <div class="quiz-progress-fill" id="quiz-progress-fill-17"></div>
+            </div>
+
+            <div class="quiz-questions-list">
+                
+        <div class="quiz-question-box" id="qbox_17_1">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 1 of 10</span>
+                <span class="quiz-q-status" id="qstatus_17_1">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">1. What does BIP stand for?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_17_1_opt_0"
+                    onclick="handleQuizClick(17, 1, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">Bitcoin Internet Protocol</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_1_opt_1"
+                    onclick="handleQuizClick(17, 1, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Bitcoin Improvement Proposal</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_1_opt_2"
+                    onclick="handleQuizClick(17, 1, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Blockchain Integration Process</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_1_opt_3"
+                    onclick="handleQuizClick(17, 1, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Bitcoin Internal Payment</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_17_1">
+                <div class="exp-content" id="qexp_text_17_1"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_17_2">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 2 of 10</span>
+                <span class="quiz-q-status" id="qstatus_17_2">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">2. Which type of BIP deals with major protocol changes?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_17_2_opt_0"
+                    onclick="handleQuizClick(17, 2, 0, 0)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">Standard BIP</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_2_opt_1"
+                    onclick="handleQuizClick(17, 2, 1, 0)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Process BIP</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_2_opt_2"
+                    onclick="handleQuizClick(17, 2, 2, 0)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Informational BIP</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_2_opt_3"
+                    onclick="handleQuizClick(17, 2, 3, 0)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">None</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_17_2">
+                <div class="exp-content" id="qexp_text_17_2"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_17_3">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 3 of 10</span>
+                <span class="quiz-q-status" id="qstatus_17_3">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">3. Which fork is backward-compatible?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_17_3_opt_0"
+                    onclick="handleQuizClick(17, 3, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">Hard fork</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_3_opt_1"
+                    onclick="handleQuizClick(17, 3, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Soft fork</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_3_opt_2"
+                    onclick="handleQuizClick(17, 3, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Temporary fork only</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_3_opt_3"
+                    onclick="handleQuizClick(17, 3, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Neither</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_17_3">
+                <div class="exp-content" id="qexp_text_17_3"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_17_4">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 4 of 10</span>
+                <span class="quiz-q-status" id="qstatus_17_4">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">4. What was the main purpose of SegWit?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_17_4_opt_0"
+                    onclick="handleQuizClick(17, 4, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">Replace Bitcoin mining</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_4_opt_1"
+                    onclick="handleQuizClick(17, 4, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Separate witness data and improve Bitcoin transactions</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_4_opt_2"
+                    onclick="handleQuizClick(17, 4, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Create a new cryptocurrency</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_4_opt_3"
+                    onclick="handleQuizClick(17, 4, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Remove digital signatures</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_17_4">
+                <div class="exp-content" id="qexp_text_17_4"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_17_5">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 5 of 10</span>
+                <span class="quiz-q-status" id="qstatus_17_5">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">5. Which address format is associated with native SegWit?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_17_5_opt_0"
+                    onclick="handleQuizClick(17, 5, 0, 0)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">bc1</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_5_opt_1"
+                    onclick="handleQuizClick(17, 5, 1, 0)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">0x</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_5_opt_2"
+                    onclick="handleQuizClick(17, 5, 2, 0)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">LTC</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_5_opt_3"
+                    onclick="handleQuizClick(17, 5, 3, 0)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">ETH</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_17_5">
+                <div class="exp-content" id="qexp_text_17_5"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_17_6">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 6 of 10</span>
+                <span class="quiz-q-status" id="qstatus_17_6">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">6. What is the maximum block weight introduced by SegWit?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_17_6_opt_0"
+                    onclick="handleQuizClick(17, 6, 0, 2)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">1 million units</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_6_opt_1"
+                    onclick="handleQuizClick(17, 6, 1, 2)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">2 million units</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_6_opt_2"
+                    onclick="handleQuizClick(17, 6, 2, 2)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">4 million units</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_6_opt_3"
+                    onclick="handleQuizClick(17, 6, 3, 2)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">8 million units</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_17_6">
+                <div class="exp-content" id="qexp_text_17_6"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_17_7">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 7 of 10</span>
+                <span class="quiz-q-status" id="qstatus_17_7">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">7. Bitcoin Cash was created through which type of fork?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_17_7_opt_0"
+                    onclick="handleQuizClick(17, 7, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">Soft fork</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_7_opt_1"
+                    onclick="handleQuizClick(17, 7, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Hard fork</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_7_opt_2"
+                    onclick="handleQuizClick(17, 7, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">No fork</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_7_opt_3"
+                    onclick="handleQuizClick(17, 7, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Temporary fork</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_17_7">
+                <div class="exp-content" id="qexp_text_17_7"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_17_8">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 8 of 10</span>
+                <span class="quiz-q-status" id="qstatus_17_8">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">8. What is the main objective of Bitcoin Gold?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_17_8_opt_0"
+                    onclick="handleQuizClick(17, 8, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">Increase mining centralisation</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_8_opt_1"
+                    onclick="handleQuizClick(17, 8, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Reduce mining centralisation</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_8_opt_2"
+                    onclick="handleQuizClick(17, 8, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Remove PoW completely</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_8_opt_3"
+                    onclick="handleQuizClick(17, 8, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Eliminate wallets</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_17_8">
+                <div class="exp-content" id="qexp_text_17_8"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_17_9">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 9 of 10</span>
+                <span class="quiz-q-status" id="qstatus_17_9">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">9. Which algorithm is associated with Bitcoin Gold in the textbook?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_17_9_opt_0"
+                    onclick="handleQuizClick(17, 9, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">SHA-256</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_9_opt_1"
+                    onclick="handleQuizClick(17, 9, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Equihash</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_9_opt_2"
+                    onclick="handleQuizClick(17, 9, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">AES</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_9_opt_3"
+                    onclick="handleQuizClick(17, 9, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">RSA</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_17_9">
+                <div class="exp-content" id="qexp_text_17_9"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_17_10">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 10 of 10</span>
+                <span class="quiz-q-status" id="qstatus_17_10">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">10. What is the main purpose of the Lightning Network?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_17_10_opt_0"
+                    onclick="handleQuizClick(17, 10, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">Increase mining rewards</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_10_opt_1"
+                    onclick="handleQuizClick(17, 10, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Enable faster off-chain payments</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_10_opt_2"
+                    onclick="handleQuizClick(17, 10, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Replace public keys</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_17_10_opt_3"
+                    onclick="handleQuizClick(17, 10, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Increase block time</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_17_10">
+                <div class="exp-content" id="qexp_text_17_10"></div>
+            </div>
+        </div>
+            </div>
+
+            <div class="quiz-result-banner" id="quiz-result-banner-17">
+                <div class="res-title" id="quiz-res-title-17">🎉 Module Quiz Completed!</div>
+                <p class="res-score" id="quiz-res-score-17"></p>
+                <div class="res-actions">
+                    <button class="quiz-reset-btn" onclick="resetQuiz(17, 10)">Retake Quiz</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        const mod = 17;
+        const totalQ = 10;
+        const explanations = {"1": "BIP stands for Bitcoin Improvement Proposal. It is the standardized design document used by the community to propose new features, consensus changes, or process guidelines for Bitcoin.", "2": "Standards BIPs specify changes that affect the core Bitcoin protocol, network rules, consensus validation, or transaction and block formats.", "3": "A soft fork is backward-compatible because it tightens or restricts consensus rules. Blocks produced under the new rules are still recognized as valid by unupgraded nodes.", "4": "Segregated Witness (SegWit, BIP141) separated cryptographic signature scripts (witness data) from the base transaction tree. This solved transaction malleability, enabled Layer-2 networks (Lightning), and increased effective block capacity.", "5": "Native SegWit addresses use the Bech32 format defined in BIP173, which always starts with the prefix 'bc1' and uses lowercase alphanumeric characters without ambiguous glyphs.", "6": "SegWit replaced the legacy 1 MB block size limit with a 4,000,000 Block Weight Unit (WU) limit, where base transaction data counts as 4 WU per byte and witness data counts as 1 WU per byte.", "7": "Bitcoin Cash (BCH) split from the main Bitcoin chain in August 2017 via a hard fork by increasing the base block size limit from 1 MB to 8 MB and rejecting SegWit.", "8": "Bitcoin Gold (BTG) was created to democratize mining and resist hardware centralization by replacing SHA-256 with Equihash, allowing consumer GPUs to mine profitably again.", "9": "Bitcoin Gold adopted Equihash, a memory-hard Proof of Work algorithm designed to be resistant to ASIC optimization.", "10": "The Lightning Network is a Layer-2 payment channel protocol that executes millions of instant, low-fee micropayments off-chain while anchoring final settlement onto the Bitcoin blockchain."};
+        let userAnswers = {};
+        let score = 0;
+
+        window.handleQuizClick = function(m, qid, selectedIdx, correctIdx) {
+            if (m !== mod) return;
+            if (userAnswers[qid] !== undefined) return; // already answered
+
+            userAnswers[qid] = selectedIdx;
+            const isCorrect = (selectedIdx === correctIdx);
+            if (isCorrect) score++;
+
+            // Highlight buttons
+            for (let i = 0; i < 4; i++) {
+                const btn = document.getElementById(`q_${m}_${qid}_opt_${i}`);
+                if (btn) {
+                    btn.disabled = true;
+                    if (i === correctIdx) {
+                        btn.className = 'quiz-option-btn correct';
+                    } else if (i === selectedIdx && !isCorrect) {
+                        btn.className = 'quiz-option-btn incorrect';
+                    } else {
+                        btn.className = 'quiz-option-btn dim';
+                    }
+                }
+            }
+
+            // Update question status
+            const statusEl = document.getElementById(`qstatus_${m}_${qid}`);
+            if (statusEl) {
+                statusEl.textContent = isCorrect ? '✅ Correct' : '❌ Incorrect';
+                statusEl.className = isCorrect ? 'quiz-q-status correct' : 'quiz-q-status incorrect';
+            }
+
+            // Show explanation
+            const expBox = document.getElementById(`qexp_${m}_${qid}`);
+            const expText = document.getElementById(`qexp_text_${m}_${qid}`);
+            if (expBox && expText) {
+                const exp = explanations[qid] || '';
+                expText.innerHTML = (isCorrect ? '<strong>Right on target!</strong> ' : '<strong>Concept clarity:</strong> ') + exp;
+                expBox.className = 'quiz-explanation-box ' + (isCorrect ? 'correct' : 'incorrect');
+                expBox.style.display = 'block';
+            }
+
+            // Update stats
+            const answeredCount = Object.keys(userAnswers).length;
+            const progText = document.getElementById(`quiz-progress-text-${mod}`);
+            if (progText) progText.textContent = `${answeredCount}/${totalQ} Answered`;
+
+            const scoreText = document.getElementById(`quiz-score-text-${mod}`);
+            if (scoreText) scoreText.textContent = `🏆 Score: ${score}/${totalQ}`;
+
+            const progFill = document.getElementById(`quiz-progress-fill-${mod}`);
+            if (progFill) progFill.style.width = `${Math.round((answeredCount / totalQ) * 100)}%`;
+
+            // If complete, show banner
+            if (answeredCount === totalQ) {
+                const banner = document.getElementById(`quiz-result-banner-${mod}`);
+                const resTitle = document.getElementById(`quiz-res-title-${mod}`);
+                const resScore = document.getElementById(`quiz-res-score-${mod}`);
+                if (banner && resTitle && resScore) {
+                    banner.style.display = 'block';
+                    if (score === totalQ) {
+                        resTitle.innerHTML = '🏆 Perfect Score! Mastermind Level';
+                        resScore.innerHTML = `Incredible work! You answered all ${totalQ} questions correctly. You have mastered this module!`;
+                    } else if (score >= Math.ceil(totalQ * 0.6)) {
+                        resTitle.innerHTML = '🌟 Great Job! Concept Check Passed';
+                        resScore.innerHTML = `You scored ${score} out of ${totalQ} (${Math.round((score/totalQ)*100)}%). Review the explanations above for complete mastery.`;
+                    } else {
+                        resTitle.innerHTML = '📚 Good Effort! Keep Revising';
+                        resScore.innerHTML = `You scored ${score} out of ${totalQ}. Review the module summary above and retake the quiz to boost your score!`;
+                    }
+                }
+            }
+        };
+
+        window.resetQuiz = function(m, tQ) {
+            if (m !== mod) return;
+            userAnswers = {};
+            score = 0;
+
+            for (let qid = 1; qid <= tQ; qid++) {
+                for (let i = 0; i < 4; i++) {
+                    const btn = document.getElementById(`q_${m}_${qid}_opt_${i}`);
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.className = 'quiz-option-btn';
+                    }
+                }
+                const statusEl = document.getElementById(`qstatus_${m}_${qid}`);
+                if (statusEl) statusEl.textContent = '⏳ Not answered';
+
+                const expBox = document.getElementById(`qexp_${m}_${qid}`);
+                if (expBox) {
+                    expBox.style.display = 'none';
+                    expBox.className = 'quiz-explanation-box';
+                }
+            }
+
+            const progText = document.getElementById(`quiz-progress-text-${mod}`);
+            if (progText) progText.textContent = `0/${totalQ} Answered`;
+
+            const scoreText = document.getElementById(`quiz-score-text-${mod}`);
+            if (scoreText) scoreText.textContent = `🏆 Score: 0/${totalQ}`;
+
+            const progFill = document.getElementById(`quiz-progress-fill-${mod}`);
+            if (progFill) progFill.style.width = '0%';
+
+            const banner = document.getElementById(`quiz-result-banner-${mod}`);
+            if (banner) banner.style.display = 'none';
+        };
+    })();
+    </script>
+    
+
+        <div style="margin-top: 35px; padding: 20px 24px; background: rgba(2, 132, 199, 0.05); border: 1.5px solid rgba(2, 132, 199, 0.2); border-radius: 12px;">
+            <h4 style="margin: 0 0 8px 0; color: #0284c7; font-size: 16px;">🚀 Module 17 Completed!</h4>
+            <p style="margin: 0; font-size: 14px; color: var(--text-body); line-height: 1.6;">
+                Great progress! You have mastered <strong>Innovation in Bitcoin and Advanced Protocols</strong>. Continue to <strong>Module 18: Bitcoin Investment, Buying and Selling Bitcoin</strong> to advance through Unit IV!
+            </p>
+        </div>
+        
+    </div>
+
+    <div class="prev-next">
+        <a class="pn-btn" href="blockchain-module-16.html">&larr; Module 16</a>
+        <a class="pn-reader" href="blockchain.html">📋 Blockchain Hub</a>
+        <a class="pn-btn" href="blockchain-module-18.html">Module 18 &rarr;</a>
+    </div>
+
+</div>
+
+<script src="shared.js"></script>
+</body>
+</html>

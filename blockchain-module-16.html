@@ -1,0 +1,1878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 16: Bitcoin Payments — Blockchain Study Guide</title>
+    <meta name="description" content="Blockchain &amp; Cryptography study guide — Unit IV — Module 16 of 18 — Bitcoin Payments: Point-of-Sale (POS) Bitcoin payments, QR codes, BIP21 payment URIs, merchant payment processors, and the BIP70 Payment Protocol (PaymentRequest, Payment, PaymentACK) with X.509 certificate authentication to prevent Man-in-the-Middle attacks.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+
+    <!-- MathJax for LaTeX rendering -->
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['\\(', '\\)']],
+            displayMath: [['$$', '$$']],
+        },
+        options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+@page { size: A4; margin: 15mm; }
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text-body, #2d3748);
+    margin: 0; padding: 0;
+    background-color: var(--bg-body, #f3f5f8);
+}
+
+.page-container {
+    max-width: 1100px;
+    margin: 25px auto 40px;
+    padding: 40px 55px;
+    background-color: var(--bg-page, #ffffff);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+}
+
+.module-banner {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0284c7 100%);
+    border-radius: 10px;
+    padding: 28px 32px;
+    margin-bottom: 28px;
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(2, 132, 199, 0.2);
+}
+.module-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    font-size: 12px; font-weight: 700;
+    padding: 4px 16px; border-radius: 20px;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    border: 1px solid rgba(255,255,255,0.25);
+    margin-bottom: 10px;
+}
+.module-banner-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 26px; font-weight: 700; line-height: 1.3;
+    margin: 0; color: #fff !important; border: none !important; padding: 0 !important;
+}
+
+.nav-toggle { margin-bottom: 24px; }
+.nav-toggle-btn {
+    display: inline-block;
+    background: #0284c7;
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+.nav-toggle-btn:hover { background: #0369a1; }
+
+.nav-panel {
+    display: none;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 8px;
+    column-count: 2;
+    column-gap: 24px;
+}
+.nav-panel.open { display: block !important; }
+
+.nav-item {
+    display: block;
+    padding: 6px 10px;
+    font-size: 13px;
+    color: var(--link-color, #0284c7);
+    text-decoration: none;
+    border-radius: 4px;
+    break-inside: avoid;
+    transition: all 0.15s;
+}
+.nav-item:hover { background: rgba(2, 132, 199, 0.1); color: #0284c7; }
+.nav-item.current {
+    background: #0284c7;
+    color: #fff !important;
+    font-weight: 600;
+}
+
+h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    color: var(--heading-color, #0f172a);
+    border-bottom: 2px solid #0284c7;
+    padding-bottom: 8px;
+    margin-top: 36px; margin-bottom: 18px;
+    line-height: 1.3;
+}
+h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 20px;
+    color: var(--heading-h2, #0369a1);
+    border-left: 5px solid #0284c7;
+    padding-left: 12px;
+    margin-top: 30px; margin-bottom: 14px;
+    line-height: 1.35;
+}
+h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 17px;
+    color: var(--heading-h3, #075985);
+    margin-top: 22px; margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+p { margin-top: 0; margin-bottom: 14px; overflow-wrap: break-word; }
+ul, ol { margin-top: 0; margin-bottom: 16px; padding-left: 28px; }
+li { margin-bottom: 6px; }
+hr { border: none; border-top: 1px solid var(--border-color, #e2e8f0); margin: 28px 0; }
+
+code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13.5px;
+    background: var(--code-bg, #f1f5f9);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color, #e2e8f0);
+}
+
+pre {
+    background: #0f172a;
+    color: #f8fafc;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 13.5px;
+}
+pre code { background: transparent; border: none; color: inherit; padding: 0; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid var(--border-color, #cbd5e1);
+    padding: 10px 14px;
+    text-align: left;
+}
+th {
+    background: var(--table-th-bg, #f1f5f9);
+    font-weight: 700;
+    color: var(--text-heading, #0f172a);
+}
+
+.ref-pill {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(2, 132, 199, 0.08);
+    color: #0284c7;
+    border: 1px solid rgba(2, 132, 199, 0.2);
+    border-radius: 16px;
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 4px 4px 4px 0;
+}
+
+.exam-header-banner {
+    background: linear-gradient(135deg, #1e3a8a, #0284c7);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    margin: 28px 0 16px 0;
+}
+
+.memory-trick-banner {
+    background: linear-gradient(135deg, #065f46, #10b981);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    margin: 24px 0 14px 0;
+}
+
+.math-display {
+    margin: 18px 0;
+    overflow-x: auto;
+    text-align: center;
+}
+
+.prev-next {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-color, #e2e8f0);
+}
+
+.pn-btn {
+    display: inline-block;
+    background: #0284c7;
+    color: #fff;
+    padding: 10px 22px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background 0.2s, transform 0.15s;
+}
+.pn-btn:hover { background: #0369a1; transform: translateY(-1px); }
+
+.pn-reader {
+    color: #64748b;
+    font-size: 13.5px;
+    text-decoration: none;
+    font-weight: 500;
+}
+.pn-reader:hover { color: #0284c7; }
+
+/* Dark mode overrides */
+[data-theme="dark"] .page-container {
+    background-color: var(--bg-page, #0b1120);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+[data-theme="dark"] code {
+    background: #1e293b;
+    border-color: #334155;
+    color: #38bdf8;
+}
+[data-theme="dark"] th {
+    background: #1e293b;
+    color: #f8fafc;
+}
+[data-theme="dark"] .nav-panel {
+    background: #0f172a;
+    border-color: #1e293b;
+}
+
+@media (max-width: 768px) {
+    .page-container { padding: 24px 18px; margin: 15px auto; }
+    .module-banner { padding: 20px; }
+    .module-banner-title { font-size: 20px; }
+    .nav-panel { column-count: 1; }
+}
+</style>
+</head>
+<body>
+
+<!-- GLOBAL NAVIGATION HEADER -->
+<header class="global-navbar">
+    <div class="nav-container">
+        <a href="index.html" class="nav-brand">
+            <span class="nav-brand-icon">⚡</span>
+            <span class="nav-brand-text">OmniCourse<span class="nav-brand-accent">.Hub</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link"><span class="icon">🏠</span> All Subjects</a>
+            <div class="nav-dropdown">
+    <button class="nav-dropdown-btn active"><span class="icon">⛓️</span> Blockchain (18) ▾</button>
+    <div class="nav-dropdown-menu">
+        <a href="blockchain.html" class="nav-dropdown-header">📋 Blockchain Syllabus Hub (All 18)</a>
+        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit I (Mods 1–4)</div>
+        <a href="blockchain-module-1.html">Module 1: Growth, History of Blockchain & Bitcoin</a>
+        <a href="blockchain-module-2.html">Module 2: Distributed Systems & Blockchain</a>
+        <a href="blockchain-module-3.html">Module 3: Consensus Protocols</a>
+        <a href="blockchain-module-4.html">Module 4: Decentralization</a>
+        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit II (Mods 5–8)</div>
+        <a href="blockchain-module-5.html">Module 5: Symmetric Cryptography</a>
+        <a href="blockchain-module-6.html">Module 6: Public Key Cryptography</a>
+        <a href="blockchain-module-7.html">Module 7: Digital Signatures + Cryptographic Constructs</a>
+        <a href="blockchain-module-8.html">Module 8: SHA & Cryptographic Hash Functions</a>
+        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit III (Mods 9–13)</div>
+        <a href="blockchain-module-9.html">Module 9: Consensus Problem, Analysis & Design</a>
+        <a href="blockchain-module-10.html">Module 10: Classification & Traditional Consensus (Paxos, Raft, PBFT)</a>
+        <a href="blockchain-module-11.html">Module 11: Blockchain Consensus (PoW, PoS, DPoS) & Selection</a>
+        <a href="blockchain-module-12.html">Module 12: Bitcoin Architecture, Keys & Transactions</a>
+        <a href="blockchain-module-13.html">Module 13: Bitcoin Blockchain, Network, Mining & Forks</a>
+        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit IV (Mods 14–18)</div>
+        <a href="blockchain-module-14.html">Module 14: The Bitcoin Network</a>
+        <a href="blockchain-module-15.html">Module 15: Bitcoin Wallets</a>
+        <a href="blockchain-module-16.html">Module 16: Bitcoin Payments</a>
+        <a href="blockchain-module-17.html">Module 17: Innovation in Bitcoin and Advanced Protocols</a>
+        <a href="blockchain-module-18.html">Module 18: Bitcoin Investment, Buying and Selling Bitcoin</a>
+        <a href="blockchain_guide.html" class="nav-dropdown-special">📖 Full 8-Module Reader</a>
+    </div>
+</div>
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-btn"><span class="icon">🐍</span> Django Course (45) ▾</button>
+                <div class="nav-dropdown-menu">
+                    <a href="django.html" class="nav-dropdown-header">📋 Django Syllabus Hub</a>
+                    <a href="module-1.html">Module 1: Introduction to Web &amp; Django</a>
+                    <a href="module-2.html">Module 2: Project Architecture</a>
+                    <a href="django_guide.html" class="nav-dropdown-special">📖 Full 45-Module Reader</a>
+                </div>
+            </div>
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-btn"><span class="icon">📐</span> Mathematics (17) ▾</button>
+                <div class="nav-dropdown-menu">
+                    <a href="maths.html" class="nav-dropdown-header">📋 Number Theory Hub (All 17)</a>
+                    <a href="maths-module-1.html">Module 1: Divisibility Algorithm</a>
+                    <a href="maths-module-2.html">Module 2: Modular Arithmetic</a>
+                </div>
+            </div>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
+                <span class="theme-toggle-icon">🌙</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<div class="page-container">
+
+    <div class="module-banner">
+        <div class="module-badge">Unit IV — Module 16 of 18 — Bitcoin Payments</div>
+        <h1 class="module-banner-title">Bitcoin Payments</h1>
+    </div>
+
+    <div class="nav-toggle">
+        <button class="nav-toggle-btn" onclick="document.getElementById('bcNavPanel').classList.toggle('open')">
+            📚 All 18 Blockchain Modules ▾
+        </button>
+        <div class="nav-panel" id="bcNavPanel">
+<div class="nav-unit-header" style="font-weight: 800; font-size: 11.5px; text-transform: uppercase; color: #0284c7; margin: 12px 0 6px 4px; letter-spacing: 0.5px; break-inside: avoid;">Unit I: Blockchain Fundamentals</div>
+<a class="nav-item" href="blockchain-module-1.html">1. Growth, History of Blockchain & Bitcoin</a>
+<a class="nav-item" href="blockchain-module-2.html">2. Distributed Systems & Blockchain</a>
+<a class="nav-item" href="blockchain-module-3.html">3. Consensus Protocols</a>
+<a class="nav-item" href="blockchain-module-4.html">4. Decentralization</a>
+<div class="nav-unit-header" style="font-weight: 800; font-size: 11.5px; text-transform: uppercase; color: #0284c7; margin: 12px 0 6px 4px; letter-spacing: 0.5px; break-inside: avoid;">Unit II: Cryptographic Primitives</div>
+<a class="nav-item" href="blockchain-module-5.html">5. Symmetric Cryptography</a>
+<a class="nav-item" href="blockchain-module-6.html">6. Public Key Cryptography</a>
+<a class="nav-item" href="blockchain-module-7.html">7. Digital Signatures + Cryptographic Constructs</a>
+<a class="nav-item" href="blockchain-module-8.html">8. SHA & Cryptographic Hash Functions</a>
+<div class="nav-unit-header" style="font-weight: 800; font-size: 11.5px; text-transform: uppercase; color: #0284c7; margin: 12px 0 6px 4px; letter-spacing: 0.5px; break-inside: avoid;">Unit III: Consensus & Bitcoin Core</div>
+<a class="nav-item" href="blockchain-module-9.html">9. Consensus Problem, Analysis & Design</a>
+<a class="nav-item" href="blockchain-module-10.html">10. Classification & Traditional Consensus (Paxos, Raft, PBFT)</a>
+<a class="nav-item" href="blockchain-module-11.html">11. Blockchain Consensus (PoW, PoS, DPoS) & Selection</a>
+<a class="nav-item" href="blockchain-module-12.html">12. Bitcoin Architecture, Keys & Transactions</a>
+<a class="nav-item" href="blockchain-module-13.html">13. Bitcoin Blockchain, Network, Mining & Forks</a>
+<div class="nav-unit-header" style="font-weight: 800; font-size: 11.5px; text-transform: uppercase; color: #0284c7; margin: 12px 0 6px 4px; letter-spacing: 0.5px; break-inside: avoid;">Unit IV: Bitcoin Network, Wallets, Payments & Economics</div>
+<a class="nav-item" href="blockchain-module-14.html">14. The Bitcoin Network</a>
+<a class="nav-item" href="blockchain-module-15.html">15. Bitcoin Wallets</a>
+<span class="nav-item current">16. Bitcoin Payments</span>
+<a class="nav-item" href="blockchain-module-17.html">17. Innovation in Bitcoin and Advanced Protocols</a>
+<a class="nav-item" href="blockchain-module-18.html">18. Bitcoin Investment, Buying and Selling Bitcoin</a>
+        </div>
+    </div>
+
+    <div class="module-content">
+<p>Module 3</p>
+<p>Beginner-friendly, theory focused</p>
+<p>In Module 1, we studied how the Bitcoin network works. In Module 2, we studied wallets, private keys and Bitcoin addresses.</p>
+<p>Now we will connect these concepts and understand <strong>how Bitcoin is actually used to make payments in shops, online stores and businesses.</strong></p>
+<p>Your teacher's PPT and <em>Mastering Blockchain, Third Edition</em> are our main sources for this module.</p>
+<h2><strong>Module 3 roadmap</strong></h2>
+<ol>
+<li>Introduction to Bitcoin payments</li>
+<li>How Bitcoin payments work</li>
+<li>Bitcoin payment using QR codes</li>
+<li>Bitcoin URI and BIP21</li>
+<li>Bitcoin Point of Sale (POS) systems</li>
+<li>Bitcoin payment processors</li>
+<li>Bitcoin Payment Protocol — BIP70</li>
+<li>PaymentRequest, Payment and PaymentACK</li>
+<li>Man-in-the-middle attacks in Bitcoin payments</li>
+<li>BIP71 and BIP72</li>
+<li>Advantages and limitations of Bitcoin payments</li>
+<li>Important 5-mark and 10-mark exam questions</li>
+</ol>
+<h1><strong>Topic 1: Introduction to Bitcoin Payments</strong></h1>
+<h2><strong>1.1 What are Bitcoin payments?</strong></h2>
+<p>First, understand a normal payment.</p>
+<p>Suppose you go to a shop and buy a mobile phone worth ₹20,000.</p>
+<p>You can pay using:</p>
+<ul>
+<li>Cash</li>
+<li>Debit card</li>
+<li>Credit card</li>
+<li>UPI</li>
+</ul>
+<p>Now imagine the shop also accepts Bitcoin.</p>
+<p>Instead of paying ₹20,000 through UPI or a card, you can transfer the required amount of Bitcoin to the shop's Bitcoin address.</p>
+<p>This is called a <strong>Bitcoin payment</strong>.</p>
+<h3><strong>Definition</strong></h3>
+<p><strong>Bitcoin payment is the transfer of Bitcoin from one user to another as consideration for goods or services, using a transaction recorded on the Bitcoin blockchain.</strong></p>
+<p>For example:</p>
+<ul>
+<li>Aman purchases a laptop from a shop.</li>
+<li>The shop accepts Bitcoin.</li>
+<li>The shop provides a Bitcoin payment address.</li>
+<li>Aman uses his Bitcoin wallet to send the required amount.</li>
+<li>The transaction is broadcast to the Bitcoin network.</li>
+<li>The transaction can then be confirmed through mining and block inclusion.</li>
+</ul>
+<h2><strong>1.2 Why are businesses accepting Bitcoin?</strong></h2>
+<p>Your textbook explains that Bitcoin is not recognised as legal currency in many jurisdictions, but it is increasingly accepted as a payment method by online merchants and e-commerce websites.</p>
+<p>Businesses may accept Bitcoin because:</p>
+<ol>
+<li>It provides another payment option for customers.</li>
+<li>It allows payments through a decentralised network.</li>
+<li>It can support international payments.</li>
+<li>It provides an alternative to conventional payment systems.</li>
+<li>It can attract customers who prefer cryptocurrency payments.</li>
+</ol>
+<p><strong>Important distinction:</strong> Accepting Bitcoin as a payment method does not necessarily mean a country recognises Bitcoin as legal tender.</p>
+<h2><strong>1.3 Where can Bitcoin payments be used?</strong></h2>
+<p>There are two major environments:</p>
+<p><a href="https://images.openai.com/static-rsc-4/jw3xdJYcQb9vfLZ-0Muhhxn6UIa3dAgtoQZ83iw0loaOulfqgDWtJZSMwUdNqNvKBfG6qMLsx4nrylbTcCLvSty5hvZ_QcvEjyGvGd-BD4RKPzvYM8eHQZU9GnvHDwo7KU1vxEF83KfAJZcVDzW2AP6WDg_g_1p9Wd9IK32jumk?purpose=inline">مصرف الراجحي الأردن | حلول مصرفية متوافقة مع الشريعة الإسلامية - مصرف الراجحي</a></p>
+<p><strong>1. Online businesses</strong></p>
+<p>E-commerce websites can integrate Bitcoin merchant solutions and allow customers to pay during online checkout.</p>
+<p><a href="https://images.openai.com/static-rsc-4/nJGHyqpAW99iDOpLb70SF4MXAoUmJYMYxitM4h06xh1Gnk29wtd-fYQoiQ3xclMF6rKqEX4HQPCWH1yU0z5ykMhUeIhMLf7kL8C25-1dLKjbIIRPIguY-rSo0GngMEF9s_gMSNBhLSrNoQpF2gSIi9L_rw_5w4MVYE27fcJ4HCE?purpose=inline">What are omnichannel payments? A complete guide for modern merchants</a></p>
+<p><strong>2. Physical shops</strong></p>
+<p>Shops can use Bitcoin Point of Sale (POS) terminals or specialised hardware to receive payments.</p>
+<p>The textbook discusses both online merchant solutions and physical POS terminals.</p>
+<h1><strong>Topic 2: How Does a Bitcoin Payment Work?</strong></h1>
+<p>Let's understand the complete payment process using a simple example.</p>
+<p>Suppose Aman purchases a T-shirt worth ₹2,000 from a shop that accepts Bitcoin.</p>
+<h2><strong>Step-by-step working</strong></h2>
+<p><strong>Step 1: Shop calculates the price</strong></p>
+<p>The shop calculates the price in its normal currency, such as Indian Rupees.</p>
+<p><strong>Step 2: Shop provides payment details</strong></p>
+<p>The shop displays a Bitcoin address, QR code or payment link.</p>
+<p><strong>Step 3: Customer opens the wallet</strong></p>
+<p>Aman opens his Bitcoin wallet on his mobile phone.</p>
+<p><strong>Step 4: Customer enters payment details</strong></p>
+<p>He scans the QR code or enters the Bitcoin address and amount.</p>
+<p><strong>Step 5: Wallet creates the transaction</strong></p>
+<p>The wallet selects suitable UTXOs and creates the transaction.</p>
+<p><strong>Step 6: Transaction is digitally signed</strong></p>
+<p>The wallet uses the relevant private key to authorise the transaction.</p>
+<p><strong>Step 7: Transaction is broadcast</strong></p>
+<p>The signed transaction is broadcast to the Bitcoin network.</p>
+<p><strong>Step 8: Transaction is confirmed</strong></p>
+<p>Miners may include the transaction in a block. Once included in an accepted block, it receives its first confirmation.</p>
+<p><strong>Step 9: Merchant receives payment</strong></p>
+<p>The merchant monitors the payment and updates the order status according to its confirmation policy.</p>
+<h2><strong>Diagram: Bitcoin payment process</strong></h2>
+<p><strong>Customer selects a product</strong></p>
+<p>Example: T-shirt worth ₹2,000</p>
+<p><strong>Merchant provides Bitcoin address / QR code</strong></p>
+<p><strong>Customer scans QR code using wallet</strong></p>
+<p><strong>Wallet creates and signs transaction</strong></p>
+<p><strong>Transaction broadcast to Bitcoin network</strong></p>
+<p><strong>Miner includes transaction in a block</strong></p>
+<p><strong>Merchant detects payment and processes order</strong></p>
+<h3><strong>Important point: Is a transaction confirmed immediately?</strong></h3>
+<p>No.</p>
+<p>Broadcasting a transaction and confirming a transaction are two different things.</p>
+<ul>
+<li><strong>Broadcast:</strong> The transaction is sent to the Bitcoin network.</li>
+<li><strong>Confirmation:</strong> The transaction is included in a block accepted by the network.</li>
+</ul>
+<p>A merchant may display a payment as detected before it is confirmed, but the merchant must decide how many confirmations are required before treating the payment as sufficiently final.</p>
+<p>For higher-value transactions, merchants may wait for additional confirmations.</p>
+<h1><strong>Topic 3: Bitcoin Payments Using QR Codes</strong></h1>
+<h2><strong>3.1 What is a QR code?</strong></h2>
+<p>QR stands for <strong>Quick Response</strong>.</p>
+<p>A QR code is a two-dimensional barcode that stores information that can be read using a camera or QR-code scanner.</p>
+<p><a href="https://images.openai.com/static-rsc-4/6XRYCII1jLJUWdWkObb4maONuHuJ-W1Lb70zregvEH-ylG6B_I9B8v8shg0RVZrerpp4VidjvMaxrX1hmdslXbAczFqjZHQqnl7_RbSXi6uHdtkU1Gk3LTMcfDSvaH5xJglre_n2YKXtZDp2lKwX36ZdaqGVfPUw26g7rE5aSY0?purpose=inline">How to Use a Bitcoin Wallet for Payments: A Merchant Guide — Flash</a></p>
+<p><a href="https://paywithflash.com/how-to-use-a-crypto-wallet/?utm_source=chatgpt.com">paywithflash.com</a></p>
+<p>In Bitcoin payments, the QR code can contain the merchant's Bitcoin payment URI.</p>
+<p>This allows customers to scan the code instead of manually typing a long Bitcoin address.</p>
+<h2><strong>3.2 How does QR-based Bitcoin payment work?</strong></h2>
+<p>Suppose Aman visits a coffee shop.</p>
+<p>The bill is ₹300.</p>
+<p>The shop displays a QR code on its payment terminal.</p>
+<p>The process is:</p>
+<ol>
+<li>The shop generates payment information.</li>
+<li>The payment information is encoded into a QR code.</li>
+<li>Aman opens his Bitcoin wallet.</li>
+<li>He scans the QR code.</li>
+<li>His wallet reads the Bitcoin address and any supplied payment details.</li>
+<li>Aman checks the payment information.</li>
+<li>He confirms the transaction.</li>
+<li>The wallet signs and broadcasts the transaction.</li>
+</ol>
+<h2><strong>3.3 Advantages of QR-code payments</strong></h2>
+<ol>
+<li>No need to manually type long Bitcoin addresses.</li>
+<li>Reduces typing mistakes.</li>
+<li>Makes mobile payments convenient.</li>
+<li>Faster checkout experience.</li>
+<li>Can encode the payment amount and other optional information.</li>
+</ol>
+<h2><strong>3.4 Limitation</strong></h2>
+<p>A QR code does not itself transfer Bitcoin.</p>
+<p>It only provides payment information to the wallet.</p>
+<p>The actual Bitcoin transfer happens when the wallet creates, signs and broadcasts the transaction.</p>
+<p><strong>Remember:</strong> QR code = Payment information, not the payment itself.</p>
+<h1><strong>Topic 4: Bitcoin URI and BIP21</strong></h1>
+<p>Important 5-mark question</p>
+<p>This is one of the most important concepts in Bitcoin payments.</p>
+<h2><strong>4.1 First, what is a URI?</strong></h2>
+<p>URI stands for <strong>Uniform Resource Identifier</strong>.</p>
+<p>A URI is a string that identifies a resource or provides information needed to access or use it.</p>
+<p>For example:</p>
+<p><code>https://www.example.com</code></p>
+<p>This is a web URI.</p>
+<p>Similarly, Bitcoin defines its own payment URI format.</p>
+<h2><strong>4.2 What is a Bitcoin URI?</strong></h2>
+<p><strong>A Bitcoin URI is a specially formatted string that contains Bitcoin payment information, such as the recipient's Bitcoin address, amount and optional parameters.</strong></p>
+<p>It allows a user to initiate a Bitcoin payment by clicking a link or scanning a QR code.</p>
+<p>Your textbook explains that Bitcoin URIs are defined in BIP21 and are supported by nearly all Bitcoin wallets.</p>
+<h2><strong>4.3 What is BIP21?</strong></h2>
+<p><strong>BIP21 is a Bitcoin Improvement Proposal that defines a standard URI scheme for making Bitcoin payments.</strong></p>
+<p>Its purpose is to make Bitcoin payments easier by allowing payment information to be represented in a standard format.</p>
+<h3><strong>Example of a Bitcoin URI</strong></h3>
+<pre><code>bitcoin:1BoatSLRHtKNngkdXEeobR76b53LETtpyT?amount=0.01
+</code></pre>
+<p>Let's break it down.</p>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bitcoin:</code></td>
+<td>Identifies the Bitcoin URI scheme</td>
+</tr>
+<tr>
+<td><code>1Boat...</code></td>
+<td>Recipient's Bitcoin address</td>
+</tr>
+<tr>
+<td><code>?</code></td>
+<td>Starts the optional parameters</td>
+</tr>
+<tr>
+<td><code>amount=0.01</code></td>
+<td>Requests a payment of 0.01 BTC</td>
+</tr>
+</tbody>
+</table>
+<p>This means that the URI requests a payment of 0.01 BTC to the specified Bitcoin address.</p>
+<h2><strong>4.4 Important parameters in Bitcoin URI</strong></h2>
+<p>A Bitcoin URI can contain different optional parameters.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>address</code></td>
+<td>Recipient address is supplied directly after <code>bitcoin:</code></td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>Specifies the payment amount in BTC</td>
+</tr>
+<tr>
+<td><code>label</code></td>
+<td>Provides a human-readable label</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td>Provides a payment message</td>
+</tr>
+<tr>
+<td><code>r</code></td>
+<td>Refers to a payment-request resource used by the payment protocol</td>
+</tr>
+</tbody>
+</table>
+<p>Example:</p>
+<pre><code>bitcoin:1BoatSLRHtKNngkdXEeobR76b53LETtpyT?amount=0.01&amp;label=CoffeeShop&amp;message=Order123
+</code></pre>
+<p>Here:</p>
+<ul>
+<li>Address identifies the recipient.</li>
+<li>Amount specifies 0.01 BTC.</li>
+<li>Label displays CoffeeShop.</li>
+<li>Message contains Order123.</li>
+</ul>
+<h2><strong>4.5 Working of BIP21</strong></h2>
+<p><strong>Merchant creates Bitcoin URI</strong></p>
+<p><strong>URI is converted into QR code or shared as a link</strong></p>
+<p><strong>Customer scans or clicks it</strong></p>
+<p><strong>Bitcoin wallet reads payment details</strong></p>
+<p><strong>Customer verifies and sends payment</strong></p>
+<h3><strong>Advantages of BIP21</strong></h3>
+<ol>
+<li>Standardises Bitcoin payment links.</li>
+<li>Reduces manual entry of Bitcoin addresses.</li>
+<li>Supports QR-code-based payments.</li>
+<li>Can include the amount and payment description.</li>
+<li>Improves convenience for customers and merchants.</li>
+</ol>
+<h3><strong>Exam memory trick</strong></h3>
+<p><strong>BIP21 = Bitcoin Payment URI Standard.</strong></p>
+<p>If a question asks about BIP21, remember these four words:</p>
+<p><strong>Address → Amount → Label → Message.</strong></p>
+<h1><strong>Topic 5: Bitcoin Point of Sale (POS) Systems</strong></h1>
+<p>Important 5-mark and 10-mark topic</p>
+<h2><strong>5.1 What is a POS system?</strong></h2>
+<p>POS stands for <strong>Point of Sale</strong>.</p>
+<p>A POS system is a system or device used by a business to accept payments from customers when they purchase goods or services.</p>
+<p>For example, when you purchase groceries, the cashier enters the bill amount into a POS terminal.</p>
+<p>Traditional POS systems may accept debit cards, credit cards and other payment methods.</p>
+<p>Similarly, a Bitcoin POS system allows a shop to accept Bitcoin payments.</p>
+<h2><strong>5.2 What is a Bitcoin POS system?</strong></h2>
+<p><strong>A Bitcoin POS system is a payment solution that enables physical businesses to accept Bitcoin from customers using specialised terminals, software and QR codes.</strong></p>
+<p>Your textbook specifically discusses commercial Bitcoin POS solutions such as:</p>
+<ul>
+<li>XBT terminal</li>
+<li>34 Bytes Bitcoin POS terminal</li>
+</ul>
+<p><a href="https://images.openai.com/static-rsc-4/wXG5Q4meiFgsaG4ua7qsGxzb44GNSIrBLGzO-GMIVDWtMKf4oPziygt8b8dKMXkeswHdJ-xUSQ1d_bB2Soq-Gv-6sj5ud8iLkOURGZzufRsPGqUUnTnR7giUH0-VJJVBcwEEX07zAhUBWsfPhGiqhgMwgy_qBqpyuBnu398jZb4?purpose=inline">A Guide to Using a Lightning Wallet App for Bitcoin — Flash</a></p>
+<p><a href="https://images.openai.com/static-rsc-4/Y-1MYNmLar-BWtxrmZFctnKaATGYK0w5FCGn2yQn8btwZilC7aqFAEtJJeugV5pUgxh4D6XYVcFTjGDef7iYDNVkr7bzPwF7EIxejFeG7zNmO2Cwk4xd3dhrmYWOqQ1a8jwkPZLZ47-JEOA02zn-0FfMlMTXrvu7IiWYTJh_Crs?purpose=inline">Accept Bitcoin Payments | ByteConnect Australia | Byte Federal</a></p>
+<p><a href="https://images.openai.com/static-rsc-4/Xx3r3W5UKdiUi3-0BdZl_7xSOgrb2F2IaQo_u2IKTKChYp_9IiNYkjcZWD_Ngkrq6YCNkdV0DEFOstNXjg8_R91MEitlw8KLrA9rdao-TnMaGH1ecs0qzb0JCNNbBFYPl8E2olLEukFhiAAUfJOL6KfoGf7vAnDEx9X-U5LdaPc?purpose=inline">Bitcoin sur terminal de paiement - bitcoin.fr</a></p>
+<p>12</p>
+<h2><strong>5.3 Working of a Bitcoin POS system</strong></h2>
+<p>Let's understand the working with an example.</p>
+<p>Suppose Aman purchases a mobile cover worth ₹500 from a shop.</p>
+<p>The shop uses a Bitcoin POS terminal.</p>
+<p><strong>Step 1: Enter the amount</strong></p>
+<p>The salesperson enters ₹500 into the POS terminal.</p>
+<p><strong>Step 2: Generate payment information</strong></p>
+<p>The POS system calculates the equivalent Bitcoin amount using the applicable exchange rate.</p>
+<p><strong>Step 3: Generate a QR code</strong></p>
+<p>The terminal generates a receipt containing a QR code and other relevant payment information.</p>
+<p><strong>Step 4: Customer scans the QR code</strong></p>
+<p>Aman scans the QR code using his mobile Bitcoin wallet.</p>
+<p><strong>Step 5: Customer sends Bitcoin</strong></p>
+<p>The wallet creates and signs the transaction and broadcasts it to the Bitcoin network.</p>
+<p><strong>Step 6: Merchant receives payment information</strong></p>
+<p>The POS solution checks the payment at the designated Bitcoin address.</p>
+<p><strong>Step 7: Receipt is generated</strong></p>
+<p>Once the payment is received according to the merchant's acceptance policy, the system can print a receipt as physical evidence of the sale.</p>
+<h2><strong>5.4 Diagram of Bitcoin POS working</strong></h2>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Point-of-Sale (POS) System &amp; BIP21 QR Code Payment Flow</h4>
+            <div class="diagram-subtitle">From customer checkout counter to peer-to-peer network confirmation</div>
+        </div>
+        <div class="diagram-flow-row">
+            <div class="flow-step-card">
+                <div class="flow-step-num">Step 1</div>
+                <div class="flow-step-title">POS Invoice</div>
+                <div class="flow-step-desc">Merchant registers purchase; POS calculates real-time BTC amount and generates BIP21 URI.</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step-card">
+                <div class="flow-step-num">Step 2</div>
+                <div class="flow-step-title">QR Code Scan</div>
+                <div class="flow-step-desc">Customer scans QR with smartphone wallet; address, exact amount, and label auto-populate.</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step-card">
+                <div class="flow-step-num">Step 3</div>
+                <div class="flow-step-title">Signing &amp; Broadcast</div>
+                <div class="flow-step-desc">Customer reviews details, signs transaction with private key, and broadcasts to network.</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step-card">
+                <div class="flow-step-num">Step 4</div>
+                <div class="flow-step-title">POS Confirmation</div>
+                <div class="flow-step-desc">POS node detects transaction in mempool / first block confirmation &amp; prints receipt!</div>
+            </div>
+        </div>
+    </div>
+    
+<h2><strong>5.5 Advantages of Bitcoin POS systems</strong></h2>
+<ol>
+<li>Allows physical shops to accept Bitcoin.</li>
+<li>Makes cryptocurrency payments convenient.</li>
+<li>QR codes reduce manual address entry.</li>
+<li>Provides a structured checkout process.</li>
+<li>Can integrate with existing merchant payment solutions.</li>
+</ol>
+<h2><strong>5.6 Limitations</strong></h2>
+<ol>
+<li>Requires suitable hardware or software.</li>
+<li>Bitcoin price fluctuations can affect the value received.</li>
+<li>Network confirmation may take time.</li>
+<li>Merchants need to manage payment security.</li>
+<li>Acceptance depends on local laws and business requirements.</li>
+</ol>
+<p><strong>Exam tip:</strong> The textbook's four-step POS explanation is particularly important. Remember:</p>
+<p><strong>Enter price → Generate QR → Customer scans → Payment received and receipt printed.</strong></p>
+<h1><strong>Topic 6: Bitcoin Payment Processors</strong></h1>
+<h2><strong>6.1 First, understand the meaning of a payment processor</strong></h2>
+<p>Suppose you purchase a product from an online shopping website.</p>
+<p>You select a product, go to checkout and choose a payment method.</p>
+<p>The website needs a system to process the payment and communicate the payment status.</p>
+<p>A payment processor is a service that helps businesses accept and process payments.</p>
+<p>Traditional businesses may use card payment processors.</p>
+<p>Similarly, Bitcoin businesses can use Bitcoin payment processors.</p>
+<h2><strong>6.2 What is a Bitcoin payment processor?</strong></h2>
+<p><strong>A Bitcoin payment processor is an online service that helps merchants accept Bitcoin payments and integrate cryptocurrency payment functionality into their websites or e-commerce platforms.</strong></p>
+<p>Your textbook specifically mentions BitPay as an example.</p>
+<p><a href="https://images.openai.com/static-rsc-4/52WiZcNTbQ4ug4wXHALHtETJlJVJppsWybeCJ8dIGX_4WtjkEGWisiirtvB_agkbnwjEy32P2wMUkXqyzw7XzaGnwuMntfDWOkXndP0kM6pUFJcCCdnb12tiMJOQspr2LfuFf9QM3nj1FljHf4DVFC3sImEGYsdKnXbBnx6K7cs?purpose=inline">What is BitPay? Features, Benefits and Fees</a></p>
+<p><strong>BitPay</strong></p>
+<p>Example of a Bitcoin payment processor mentioned in the textbook.</p>
+<p><a href="https://bitpay.com/?utm_source=chatgpt.com">BitPay official website</a></p>
+<h2><strong>6.3 Why are Bitcoin payment processors needed?</strong></h2>
+<p>Imagine an online shopping website that wants to accept Bitcoin.</p>
+<p>The company may not want to develop the complete payment infrastructure itself.</p>
+<p>It can integrate a payment processor.</p>
+<p>The processor can help with:</p>
+<ol>
+<li>Generating payment requests.</li>
+<li>Providing payment instructions to customers.</li>
+<li>Monitoring incoming payments.</li>
+<li>Communicating payment status to the merchant.</li>
+<li>Integrating Bitcoin payments into an e-commerce website.</li>
+<li>In some services, providing secure storage or additional merchant services.</li>
+</ol>
+<h2><strong>6.4 Working of a Bitcoin payment processor</strong></h2>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Merchant Payment Processor Architecture (Volatility Shield)</h4>
+            <div class="diagram-subtitle">How gateways insulate merchants from cryptocurrency market volatility</div>
+        </div>
+        <div class="diagram-nodes-row" style="justify-content: space-around; align-items: center;">
+            <div class="diagram-node" style="flex: 1; max-width: 220px;">
+                <svg class="diagram-node-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+  <circle cx="12" cy="7" r="4"></circle>
+</svg>
+                <div class="diagram-node-title">Customer</div>
+                <div class="diagram-node-desc">Pays 0.0025 BTC from mobile wallet</div>
+            </div>
+            <div style="font-size: 22px; color: #38bdf8;">&rarr; <span style="font-size: 11px; display: block; color: #94a3b8;">BTC Transfer</span></div>
+            <div class="diagram-node primary" style="flex: 1; max-width: 250px;">
+                <svg class="diagram-node-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+  <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+  <line x1="6" y1="6" x2="6.01" y2="6"></line>
+  <line x1="6" y1="18" x2="6.01" y2="18"></line>
+</svg>
+                <div class="diagram-node-title">Payment Gateway (BitPay)</div>
+                <div class="diagram-node-desc">Locks exchange rate (15 min), converts BTC &rarr; Fiat, manages liquidity</div>
+            </div>
+            <div style="font-size: 22px; color: #10b981;">&rarr; <span style="font-size: 11px; display: block; color: #94a3b8;">Bank Settlement</span></div>
+            <div class="diagram-node success" style="flex: 1; max-width: 220px;">
+                <svg class="diagram-node-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+  <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+  <line x1="6" y1="6" x2="6.01" y2="6"></line>
+  <line x1="6" y1="18" x2="6.01" y2="18"></line>
+</svg>
+                <div class="diagram-node-title">Merchant Bank</div>
+                <div class="diagram-node-desc">Receives guaranteed fiat ($150 USD) with zero volatility risk!</div>
+            </div>
+        </div>
+    </div>
+    
+<p>Let's understand it through an example.</p>
+<p>Suppose Aman purchases a laptop from an online shopping website.</p>
+<p>The website uses a Bitcoin payment processor.</p>
+<p><strong>Step 1:</strong> Aman selects the laptop and proceeds to checkout.</p>
+<p><strong>Step 2:</strong> He selects Bitcoin as the payment option.</p>
+<p><strong>Step 3:</strong> The payment processor generates the required payment information.</p>
+<p><strong>Step 4:</strong> Aman receives a Bitcoin address, amount or QR code.</p>
+<p><strong>Step 5:</strong> Aman pays using his Bitcoin wallet.</p>
+<p><strong>Step 6:</strong> The payment processor monitors the transaction.</p>
+<p><strong>Step 7:</strong> The processor communicates the payment status to the merchant.</p>
+<p><strong>Step 8:</strong> The merchant processes the order according to its payment confirmation policy.</p>
+<p><strong>Customer selects product</strong></p>
+<p><strong>Online merchant website</strong></p>
+<p><strong>Bitcoin payment processor</strong></p>
+<p>Generates payment information and monitors payment</p>
+<p><strong>Customer pays through Bitcoin wallet</strong></p>
+<p><strong>Bitcoin network processes transaction</strong></p>
+<p><strong>Payment status reaches merchant</strong></p>
+<h2><strong>6.5 Advantages of Bitcoin payment processors</strong></h2>
+<ol>
+<li>Easy integration with e-commerce websites.</li>
+<li>Reduces the need to develop payment infrastructure independently.</li>
+<li>Helps businesses monitor incoming Bitcoin payments.</li>
+<li>Provides a convenient checkout experience.</li>
+<li>Some services provide additional merchant services, including secure storage.</li>
+</ol>
+<h2><strong>6.6 Limitations</strong></h2>
+<ol>
+<li>Businesses may depend on a third-party service provider.</li>
+<li>Service charges may apply.</li>
+<li>Security depends partly on the processor's implementation.</li>
+<li>Businesses must consider exchange-rate fluctuations.</li>
+<li>Service availability and regulatory requirements can vary.</li>
+</ol>
+<h2><strong>6.7 POS vs Payment Processor</strong></h2>
+<p>This is a useful comparison for exams.</p>
+<table>
+<thead>
+<tr>
+<th>Basis</th>
+<th>Bitcoin POS system</th>
+<th>Bitcoin payment processor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Main use</td>
+<td>Physical shops</td>
+<td>Online and e-commerce businesses</td>
+</tr>
+<tr>
+<td>Environment</td>
+<td>Retail checkout</td>
+<td>Website or online checkout</td>
+</tr>
+<tr>
+<td>Interface</td>
+<td>POS terminal or device</td>
+<td>Online payment service/API</td>
+</tr>
+<tr>
+<td>Payment method</td>
+<td>Commonly QR-code scanning</td>
+<td>Payment request, address or QR code</td>
+</tr>
+<tr>
+<td>Example</td>
+<td>34 Bytes POS</td>
+<td>BitPay</td>
+</tr>
+<tr>
+<td>Main purpose</td>
+<td>Accept Bitcoin at a physical point of sale</td>
+<td>Integrate and process Bitcoin payments for merchants</td>
+</tr>
+</tbody>
+</table>
+<h1><strong>Topic 7: Bitcoin Payment Protocol — BIP70</strong></h1>
+<p>Very important 10-mark question</p>
+<p>Now we are moving to one of the most important technical topics in Bitcoin payments.</p>
+<p>Before understanding BIP70, let's understand the problem it tries to address.</p>
+<h2><strong>7.1 What is the problem with ordinary Bitcoin payments?</strong></h2>
+<p>Suppose Aman wants to purchase a mobile phone from an online store.</p>
+<p>The store displays a Bitcoin address.</p>
+<p>Aman copies the address and sends Bitcoin.</p>
+<p>But imagine an attacker changes the displayed address and replaces it with their own Bitcoin address.</p>
+<p>Aman may believe he is paying the shop, but actually he is sending Bitcoin to the attacker.</p>
+<p>This is an example of a <strong>Man-in-the-Middle (MITM) attack</strong>.</p>
+<p>Another problem is that ordinary payment information does not necessarily provide a standardised, authenticated communication process between the merchant and customer.</p>
+<p>Bitcoin's Payment Protocol was proposed to address such issues.</p>
+<h2><strong>7.2 What is BIP70?</strong></h2>
+<p><strong>BIP70 is the Bitcoin Payment Protocol, designed to provide secure communication between a merchant and a customer during a Bitcoin payment.</strong></p>
+<p>Your teacher's PPT and textbook highlight these features:</p>
+<ol>
+<li>Secure communication between merchant and customer.</li>
+<li>Uses X.509 certificates for authentication.</li>
+<li>Runs over HTTP and HTTPS.</li>
+<li>Provides defence against Man-in-the-Middle attacks.</li>
+<li>Supports secure proof of payment.</li>
+</ol>
+<h3><strong>What is X.509?</strong></h3>
+<p>X.509 is a standard format for digital certificates.</p>
+<p>A digital certificate can be used to associate a public key with an identity, such as a merchant's identity.</p>
+<p>In the BIP70 design, certificates are used to authenticate the merchant's payment request.</p>
+<h3><strong>What is the purpose of BIP70?</strong></h3>
+<p>Imagine that Aman is paying an online shop.</p>
+<p>He should be able to verify that the payment request is genuinely associated with the intended merchant rather than an attacker who has modified the payment details.</p>
+<p>BIP70 introduces a structured protocol for this communication.</p>
+<h2><strong>7.3 Three important messages in BIP70</strong></h2>
+<p>Must remember for exam</p>
+<p>BIP70 has three important messages:</p>
+<ol>
+<li>PaymentRequest</li>
+<li>Payment</li>
+<li>PaymentACK</li>
+</ol>
+<p>Let's understand them one by one.</p>
+<h3><strong>1. PaymentRequest</strong></h3>
+<p><strong>PaymentRequest is a message sent by the merchant to the customer containing the payment details and merchant authentication information.</strong></p>
+<p>It can include:</p>
+<ul>
+<li>Payment amount</li>
+<li>Merchant payment details</li>
+<li>Payment destination information</li>
+<li>Expiration information</li>
+<li>Merchant certificate information</li>
+</ul>
+<p><strong>Example:</strong></p>
+<p>Aman wants to purchase a laptop worth ₹50,000.</p>
+<p>The merchant sends a PaymentRequest containing the payment information and authentication details.</p>
+<p>Aman's wallet can verify the merchant's certificate before presenting the payment request for approval.</p>
+<h3><strong>2. Payment</strong></h3>
+<p><strong>Payment is a message sent by the customer's wallet to the merchant after the customer makes the payment.</strong></p>
+<p>It contains information about the transaction.</p>
+<p>It may also include transaction details and a refund-related output.</p>
+<p><strong>Example:</strong></p>
+<p>Aman verifies the payment request and authorises the transaction.</p>
+<p>His wallet sends the payment information to the merchant.</p>
+<h3><strong>3. PaymentACK</strong></h3>
+<p><strong>PaymentACK is an acknowledgement message sent by the merchant to the customer after receiving the Payment message.</strong></p>
+<p>It acts as an acknowledgement of the payment submission and can include a memo or confirmation information.</p>
+<p><strong>Example:</strong></p>
+<p>After receiving Aman's payment message, the merchant sends PaymentACK to acknowledge receipt of the payment information.</p>
+<h3><strong>Easy memory trick</strong></h3>
+<ul>
+<li>PaymentRequest = Merchant asks for payment.</li>
+<li>Payment = Customer sends payment information.</li>
+<li>PaymentACK = Merchant acknowledges payment.</li>
+</ul>
+<h2><strong>7.4 Complete working of BIP70</strong></h2>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">BIP70 Payment Protocol 3-Step Architecture</h4>
+            <div class="diagram-subtitle">Secure, authenticated end-to-end checkout protocol preventing address spoofing</div>
+        </div>
+        <div class="diagram-nodes-row" style="justify-content: space-around; align-items: center;">
+            <div class="diagram-node primary" style="flex: 1; max-width: 240px;">
+                <svg class="diagram-node-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+  <circle cx="12" cy="7" r="4"></circle>
+</svg>
+                <div class="diagram-node-title">Customer Wallet</div>
+                <div class="diagram-node-desc">BIP70-compatible Bitcoin wallet</div>
+            </div>
+            <div style="flex: 2; padding: 0 15px; display: flex; flex-direction: column; gap: 14px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px; padding: 8px 12px;">
+                    <span style="font-size: 11.5px; color: #94a3b8;">1. Fetch payment URL</span>
+                    <span style="font-family: monospace; font-weight: bold; color: #38bdf8;">GET /invoice &rarr;</span>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 8px; padding: 8px 12px;">
+                    <span style="font-family: monospace; font-weight: bold; color: #c084fc;">&larr; PaymentRequest</span>
+                    <span style="font-size: 11.5px; color: #94a3b8;">X.509 cert, merchant name, outputs, expiry</span>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(234, 179, 8, 0.08); border: 1px solid rgba(234, 179, 8, 0.25); border-radius: 8px; padding: 8px 12px;">
+                    <span style="font-size: 11.5px; color: #94a3b8;">Signed tx + refund address</span>
+                    <span style="font-family: monospace; font-weight: bold; color: #facc15;">Payment &rarr;</span>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 8px; padding: 8px 12px;">
+                    <span style="font-family: monospace; font-weight: bold; color: #34d399;">&larr; PaymentACK</span>
+                    <span style="font-size: 11.5px; color: #94a3b8;">Official cryptographic receipt &amp; memo</span>
+                </div>
+            </div>
+            <div class="diagram-node success" style="flex: 1; max-width: 240px;">
+                <svg class="diagram-node-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+  <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+  <line x1="6" y1="6" x2="6.01" y2="6"></line>
+  <line x1="6" y1="18" x2="6.01" y2="18"></line>
+</svg>
+                <div class="diagram-node-title">Merchant Server</div>
+                <div class="diagram-node-desc">Verified legal business entity</div>
+            </div>
+        </div>
+    </div>
+    
+<p>Let's understand the complete process with a diagram.</p>
+<p><strong>Merchant</strong></p>
+<p><strong>Customer wallet</strong></p>
+<p><strong>1. PaymentRequest</strong></p>
+<p>Payment details and certificate information</p>
+<p>Receives and verifies request</p>
+<p>Receives payment message</p>
+<p><strong>2. Payment</strong></p>
+<p>Transaction information</p>
+<p><strong>3. PaymentACK</strong></p>
+<p>Acknowledgement</p>
+<p>Receives acknowledgement</p>
+<h3><strong>Step-by-step explanation</strong></h3>
+<p><strong>Step 1: Merchant creates PaymentRequest</strong></p>
+<p>The merchant prepares the payment request containing the amount, payment details and certificate information.</p>
+<p><strong>Step 2: Customer receives PaymentRequest</strong></p>
+<p>The customer's wallet receives the request.</p>
+<p><strong>Step 3: Certificate verification</strong></p>
+<p>The wallet checks the merchant's certificate to authenticate the request.</p>
+<p><strong>Step 4: Customer approves payment</strong></p>
+<p>The customer checks the details and authorises the transaction.</p>
+<p><strong>Step 5: Wallet sends Payment</strong></p>
+<p>The wallet sends a Payment message containing the transaction information to the merchant.</p>
+<p><strong>Step 6: Merchant sends PaymentACK</strong></p>
+<p>The merchant sends an acknowledgement message to the customer's wallet.</p>
+<p><strong>Step 7: Payment is processed</strong></p>
+<p>The Bitcoin transaction is broadcast and confirmed according to the normal Bitcoin network process.</p>
+<p><strong>Important distinction:</strong> PaymentACK acknowledges the payment message. It should not be confused with the Bitcoin network's block confirmation.</p>
+<h1><strong>Topic 8: Man-in-the-Middle (MITM) Attack in Bitcoin Payments</strong></h1>
+<h2><strong>8.1 What is a Man-in-the-Middle attack?</strong></h2>
+<p>A <strong>Man-in-the-Middle attack is a security attack in which an attacker secretly intercepts or modifies communication between two parties without their knowledge.</strong></p>
+<p>Let's understand it through a simple example.</p>
+<p>Aman wants to pay ₹5,000 to an online shop.</p>
+<p>The shop provides a Bitcoin payment address.</p>
+<p>An attacker intercepts the communication and replaces the shop's Bitcoin address with the attacker's address.</p>
+<p>Aman thinks he is paying the shop, but he is actually sending Bitcoin to the attacker.</p>
+<p>This is a Man-in-the-Middle attack.</p>
+<h2><strong>8.2 How does MITM happen in Bitcoin payments?</strong></h2>
+<p><strong>Merchant</strong></p>
+<p><strong>Attacker</strong></p>
+<p><strong>Customer</strong></p>
+<p>Genuine payment details</p>
+<p>Intercepted</p>
+<p>Attacker replaces merchant address</p>
+<p>False payment details</p>
+<p>Customer pays</p>
+<p>Illustration of an address-substitution attack. The customer mistakenly believes the attacker-controlled address belongs to the merchant.</p>
+<h2><strong>8.3 How does BIP70 help prevent this attack?</strong></h2>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">MITM Attack Prevention: Plain Address vs. X.509 Signed BIP70</h4>
+            <div class="diagram-subtitle">Cryptographic public key infrastructure guarantees payment recipient identity</div>
+        </div>
+        <div class="diagram-nodes-row" style="gap: 20px;">
+            <div class="diagram-node" style="flex: 1; text-align: left; background: rgba(239, 68, 68, 0.05); border-color: #ef4444;">
+                <div style="font-weight: 700; color: #f87171; font-size: 15px; margin-bottom: 8px;">
+                    ❌ Without BIP70 (Raw Bitcoin Address)
+                </div>
+                <div style="font-size: 13px; color: #cbd5e1; line-height: 1.55;">
+                    • Attacker intercepts insecure HTTP link or tampers with clipboard/DNS.<br>
+                    • Attacker swaps merchant address with attacker's address.<br>
+                    • Customer wallet has no way to verify identity &rarr; <strong>Funds stolen!</strong>
+                </div>
+            </div>
+            <div class="diagram-node" style="flex: 1; text-align: left; background: rgba(16, 185, 129, 0.05); border-color: #10b981;">
+                <div style="font-weight: 700; color: #34d399; font-size: 15px; margin-bottom: 8px;">
+                    ✅ With BIP70 (X.509 PKI Authenticated)
+                </div>
+                <div style="font-size: 13px; color: #cbd5e1; line-height: 1.55;">
+                    • PaymentRequest is signed with merchant's trusted SSL/TLS Certificate.<br>
+                    • If attacker alters address, cryptographic signature check fails.<br>
+                    • Wallet displays: <span style="color: #34d399; font-weight: bold;">🔒 Verified Merchant Name</span> &rarr; <strong>100% Protected!</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<p>BIP70 uses X.509 certificates to authenticate the merchant's payment request.</p>
+<p>The basic idea is:</p>
+<ol>
+<li>Merchant sends a PaymentRequest.</li>
+<li>The request contains certificate information.</li>
+<li>The customer's wallet verifies the merchant's certificate.</li>
+<li>The wallet can display the authenticated merchant identity.</li>
+<li>The customer can check that the payment request belongs to the intended merchant.</li>
+</ol>
+<p>This makes it harder for an attacker to silently replace the merchant's payment details with their own while still appearing to be the authenticated merchant.</p>
+<h3><strong>Important exam point</strong></h3>
+<p>BIP70 was designed to provide authentication and defence against MITM attacks. It does not mean that every possible attack against a user's device, wallet or payment process is prevented.</p>
+<h1><strong>Topic 9: BIP71 and BIP72</strong></h1>
+<p>These two proposals are related to BIP70.</p>
+<p>Your textbook specifically mentions both.</p>
+<h2><strong>9.1 What is BIP71?</strong></h2>
+<p><strong>BIP71 defines MIME types for the Bitcoin Payment Protocol.</strong></p>
+<p>First understand MIME.</p>
+<p>MIME stands for Multipurpose Internet Mail Extensions.</p>
+<p>MIME types help systems identify the format and type of information being transmitted.</p>
+<p>In the Bitcoin Payment Protocol, BIP71 standardises the MIME types used for payment-protocol messages.</p>
+<p>In simple words:</p>
+<p>BIP71 helps different software systems identify and handle Bitcoin payment-protocol data consistently.</p>
+<h2><strong>9.2 What is BIP72?</strong></h2>
+<p><strong>BIP72 defines URI extensions that allow Bitcoin URIs to reference the Bitcoin Payment Protocol.</strong></p>
+<p>Remember BIP21?</p>
+<p>BIP21 defines a standard Bitcoin URI.</p>
+<p>BIP72 extends the URI mechanism to support BIP70 payment requests.</p>
+<p>This allows a payment URI to refer to a payment-request resource rather than simply containing an ordinary payment address and amount.</p>
+<h2><strong>9.3 Difference between BIP21, BIP70, BIP71 and BIP72</strong></h2>
+<table>
+<thead>
+<tr>
+<th>BIP</th>
+<th>Main purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BIP21</td>
+<td>Defines Bitcoin payment URI format</td>
+</tr>
+<tr>
+<td>BIP70</td>
+<td>Defines secure Bitcoin Payment Protocol</td>
+</tr>
+<tr>
+<td>BIP71</td>
+<td>Defines Payment Protocol MIME types</td>
+</tr>
+<tr>
+<td>BIP72</td>
+<td>Defines URI extensions for Payment Protocol</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Memory trick:</strong></p>
+<ul>
+<li>21 = Payment URI</li>
+<li>70 = Secure payment protocol</li>
+<li>71 = MIME types</li>
+<li>72 = URI extensions</li>
+</ul>
+<h1><strong>Topic 10: Advantages and Limitations of Bitcoin Payments</strong></h1>
+<h2><strong>Advantages</strong></h2>
+<p><strong>1. Decentralised payment system</strong></p>
+<p>Bitcoin payments are processed through a decentralised network rather than depending on one central payment authority.</p>
+<p><strong>2. Global accessibility</strong></p>
+<p>Bitcoin can be used for cross-border payments where the relevant services and regulations permit.</p>
+<p><strong>3. Transparency</strong></p>
+<p>Transactions are recorded on the public blockchain.</p>
+<p><strong>4. No traditional card-network requirement</strong></p>
+<p>A Bitcoin payment does not require the conventional card-network infrastructure used for debit and credit card payments.</p>
+<p><strong>5. Merchant integration</strong></p>
+<p>Businesses can use QR codes, POS terminals and payment processors to accept Bitcoin.</p>
+<p><strong>6. Cryptographic security</strong></p>
+<p>Private-key-based digital signatures help authorise transactions.</p>
+<h2><strong>Limitations</strong></h2>
+<p><strong>1. Price volatility</strong></p>
+<p>Bitcoin's market price can change significantly, affecting the value received by merchants.</p>
+<p><strong>2. Confirmation time</strong></p>
+<p>A transaction is not necessarily confirmed immediately after being broadcast.</p>
+<p><strong>3. Irreversible payments</strong></p>
+<p>Once a transaction is confirmed, reversing it is generally not possible through a normal card-style chargeback mechanism.</p>
+<p><strong>4. Technical complexity</strong></p>
+<p>Customers and businesses need to understand wallets, addresses, keys and transaction fees.</p>
+<p><strong>5. Regulatory differences</strong></p>
+<p>Bitcoin's legal and regulatory treatment differs across jurisdictions.</p>
+<p><strong>6. Security risks</strong></p>
+<p>Phishing, malware, stolen private keys and fraudulent payment requests can result in financial loss.</p>
+<h1><strong>Module 3 — Exam Preparation</strong></h1>
+<p>Now let's prepare the answers exactly in the format you can use in your theory examination.</p>
+<h2><strong>A. Important 5-mark questions</strong></h2>
+<table>
+<thead>
+<tr>
+<th>No.</th>
+<th>Question</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>What are Bitcoin payments? Explain their working.</td>
+<td>High</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Explain Bitcoin payments using QR codes.</td>
+<td>High</td>
+</tr>
+<tr>
+<td>3</td>
+<td>What is Bitcoin URI? Explain BIP21.</td>
+<td>Very high</td>
+</tr>
+<tr>
+<td>4</td>
+<td>What is a Bitcoin POS system? Explain its working.</td>
+<td>Very high</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Explain Bitcoin payment processors with examples.</td>
+<td>High</td>
+</tr>
+<tr>
+<td>6</td>
+<td>What is BIP70? Explain its purpose.</td>
+<td>Very high</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Explain PaymentRequest, Payment and PaymentACK.</td>
+<td>Very high</td>
+</tr>
+<tr>
+<td>8</td>
+<td>What is a Man-in-the-Middle attack? How does BIP70 help prevent it?</td>
+<td>Very high</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Explain BIP71 and BIP72.</td>
+<td>High</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Write advantages and limitations of Bitcoin payments.</td>
+<td>Medium</td>
+</tr>
+</tbody>
+</table>
+<h2><strong>B. Important 10-mark questions</strong></h2>
+<ol>
+<li>Explain Bitcoin payments and their complete working with a suitable diagram.</li>
+<li>Explain Bitcoin URI and BIP21 with an example.</li>
+<li>Explain Bitcoin POS systems and their working with a suitable diagram.</li>
+<li>Explain Bitcoin payment processors and their role in e-commerce.</li>
+<li>Explain BIP70 Payment Protocol, including its three messages.</li>
+<li>Explain Man-in-the-Middle attacks in Bitcoin payments and how BIP70 provides protection.</li>
+<li>Explain BIP21, BIP70, BIP71 and BIP72 and differentiate between them.</li>
+</ol>
+<h2><strong>C. Exam-ready 10-mark answer: Explain BIP70 Payment Protocol</strong></h2>
+<p><strong>Introduction:</strong></p>
+<p>BIP70 is the Bitcoin Payment Protocol designed to provide secure communication between merchants and customers during Bitcoin payments. It uses X.509 digital certificates for authentication and operates over HTTP and HTTPS.</p>
+<p><strong>Objectives of BIP70:</strong></p>
+<ol>
+<li>Provide secure communication between merchant and customer.</li>
+<li>Authenticate the merchant's payment request.</li>
+<li>Protect against Man-in-the-Middle attacks.</li>
+<li>Provide a structured payment process.</li>
+<li>Support secure proof of payment.</li>
+</ol>
+<p><strong>Three important messages:</strong></p>
+<p><strong>1. PaymentRequest:</strong> It is sent by the merchant to the customer and contains payment details and certificate information.</p>
+<p><strong>2. Payment:</strong> It is sent by the customer's wallet to the merchant after the customer authorises payment. It contains transaction information.</p>
+<p><strong>3. PaymentACK:</strong> It is sent by the merchant to acknowledge receipt of the Payment message.</p>
+<p><strong>Working:</strong></p>
+<ol>
+<li>Merchant creates a PaymentRequest.</li>
+<li>Customer's wallet receives the request.</li>
+<li>Wallet verifies the merchant's certificate.</li>
+<li>Customer checks and approves payment.</li>
+<li>Wallet creates and signs the Bitcoin transaction.</li>
+<li>Wallet sends a Payment message to the merchant.</li>
+<li>Merchant sends PaymentACK.</li>
+<li>The transaction is broadcast to the Bitcoin network and can be confirmed through block inclusion.</li>
+</ol>
+<p><strong>Advantages:</strong></p>
+<ul>
+<li>Provides merchant authentication.</li>
+<li>Helps prevent MITM attacks.</li>
+<li>Provides structured payment communication.</li>
+<li>Supports proof-of-payment information.</li>
+<li>Improves security in merchant-customer communication.</li>
+</ul>
+<p><strong>Conclusion:</strong></p>
+<p>BIP70 provides a standardised and authenticated communication mechanism for Bitcoin payments, helping merchants and customers exchange payment information securely.</p>
+<h2><strong>D. Important comparison: BIP21 vs BIP70</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Basis</th>
+<th>BIP21</th>
+<th>BIP70</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Full purpose</td>
+<td>Bitcoin URI standard</td>
+<td>Secure Payment Protocol</td>
+</tr>
+<tr>
+<td>Main function</td>
+<td>Shares payment information</td>
+<td>Secure merchant-customer communication</td>
+</tr>
+<tr>
+<td>Information</td>
+<td>Address, amount, label, message</td>
+<td>Payment request, certificates and transaction information</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>Does not itself authenticate the merchant</td>
+<td>Uses X.509 certificates for authentication</td>
+</tr>
+<tr>
+<td>Main use</td>
+<td>Payment links and QR codes</td>
+<td>Authenticated payment requests</td>
+</tr>
+<tr>
+<td>Complexity</td>
+<td>Simple</td>
+<td>More complex</td>
+</tr>
+</tbody>
+</table>
+<h2><strong>E. Quick revision sheet</strong></h2>
+<p><strong>Remember these points before the examination</strong></p>
+<ul>
+<li>Bitcoin payment = Transfer of Bitcoin for goods or services.</li>
+<li>QR code = Encoded payment information.</li>
+<li>BIP21 = Bitcoin URI standard.</li>
+<li>URI = Uniform Resource Identifier.</li>
+<li>POS = Point of Sale.</li>
+<li>XBT terminal and 34 Bytes = POS examples.</li>
+<li>Payment processor = Helps merchants accept Bitcoin.</li>
+<li>BitPay = Payment processor example.</li>
+<li>BIP70 = Secure Payment Protocol.</li>
+<li>X.509 = Digital certificate standard.</li>
+<li>HTTP/HTTPS = Communication protocols used by BIP70.</li>
+<li>PaymentRequest = Merchant sends payment details.</li>
+<li>Payment = Customer sends transaction information.</li>
+<li>PaymentACK = Merchant acknowledges payment message.</li>
+<li>MITM = Attacker intercepts or modifies communication.</li>
+<li>BIP71 = Payment Protocol MIME types.</li>
+<li>BIP72 = URI extensions for Payment Protocol.</li>
+</ul>
+
+    <div class="quiz-section-wrap" id="module-quiz-section">
+        <div class="quiz-card-container">
+            <div class="quiz-main-header">
+                <div class="quiz-title-area">
+                    <h3 class="quiz-title">📝 Quick Self-Test &amp; Knowledge Check</h3>
+                    <p class="quiz-subtitle">Test your understanding of POS systems, QR codes, BIP21 URIs, payment processors, and the BIP70 Payment Protocol with X.509 PKI.</p>
+                </div>
+                <div class="quiz-action-bar">
+                    <span class="quiz-stat-pill" id="quiz-progress-text-16">0/10 Answered</span>
+                    <span class="quiz-score-pill" id="quiz-score-text-16">🏆 Score: 0/10</span>
+                    <button class="quiz-reset-btn" onclick="resetQuiz(16, 10)">
+                        🔄 Reset Quiz
+                    </button>
+                </div>
+            </div>
+
+            <div class="quiz-progress-track">
+                <div class="quiz-progress-fill" id="quiz-progress-fill-16"></div>
+            </div>
+
+            <div class="quiz-questions-list">
+                
+        <div class="quiz-question-box" id="qbox_16_1">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 1 of 10</span>
+                <span class="quiz-q-status" id="qstatus_16_1">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">1. Which BIP defines the Bitcoin URI payment format?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_16_1_opt_0"
+                    onclick="handleQuizClick(16, 1, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">BIP32</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_1_opt_1"
+                    onclick="handleQuizClick(16, 1, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">BIP21</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_1_opt_2"
+                    onclick="handleQuizClick(16, 1, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">BIP70</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_1_opt_3"
+                    onclick="handleQuizClick(16, 1, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">BIP72</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_16_1">
+                <div class="exp-content" id="qexp_text_16_1"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_16_2">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 2 of 10</span>
+                <span class="quiz-q-status" id="qstatus_16_2">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">2. What is the main purpose of a Bitcoin POS system?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_16_2_opt_0"
+                    onclick="handleQuizClick(16, 2, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">Mine Bitcoin</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_2_opt_1"
+                    onclick="handleQuizClick(16, 2, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Accept Bitcoin payments at physical shops</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_2_opt_2"
+                    onclick="handleQuizClick(16, 2, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Generate private keys only</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_2_opt_3"
+                    onclick="handleQuizClick(16, 2, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Create new blocks</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_16_2">
+                <div class="exp-content" id="qexp_text_16_2"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_16_3">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 3 of 10</span>
+                <span class="quiz-q-status" id="qstatus_16_3">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">3. Which of these is an example of a Bitcoin payment processor mentioned in the textbook?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_16_3_opt_0"
+                    onclick="handleQuizClick(16, 3, 0, 0)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">BitPay</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_3_opt_1"
+                    onclick="handleQuizClick(16, 3, 1, 0)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Trezor</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_3_opt_2"
+                    onclick="handleQuizClick(16, 3, 2, 0)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">SHA-256</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_3_opt_3"
+                    onclick="handleQuizClick(16, 3, 3, 0)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">BIP32</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_16_3">
+                <div class="exp-content" id="qexp_text_16_3"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_16_4">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 4 of 10</span>
+                <span class="quiz-q-status" id="qstatus_16_4">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">4. Which BIP describes the secure Bitcoin Payment Protocol?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_16_4_opt_0"
+                    onclick="handleQuizClick(16, 4, 0, 2)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">BIP21</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_4_opt_1"
+                    onclick="handleQuizClick(16, 4, 1, 2)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">BIP32</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_4_opt_2"
+                    onclick="handleQuizClick(16, 4, 2, 2)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">BIP70</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_4_opt_3"
+                    onclick="handleQuizClick(16, 4, 3, 2)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">BIP39</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_16_4">
+                <div class="exp-content" id="qexp_text_16_4"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_16_5">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 5 of 10</span>
+                <span class="quiz-q-status" id="qstatus_16_5">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">5. Which certificate standard is used by BIP70 for authentication?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_16_5_opt_0"
+                    onclick="handleQuizClick(16, 5, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">AES</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_5_opt_1"
+                    onclick="handleQuizClick(16, 5, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">X.509</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_5_opt_2"
+                    onclick="handleQuizClick(16, 5, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">SHA-256</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_5_opt_3"
+                    onclick="handleQuizClick(16, 5, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Base58</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_16_5">
+                <div class="exp-content" id="qexp_text_16_5"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_16_6">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 6 of 10</span>
+                <span class="quiz-q-status" id="qstatus_16_6">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">6. Which message is sent by the merchant to request payment?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_16_6_opt_0"
+                    onclick="handleQuizClick(16, 6, 0, 2)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">PaymentACK</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_6_opt_1"
+                    onclick="handleQuizClick(16, 6, 1, 2)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Payment</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_6_opt_2"
+                    onclick="handleQuizClick(16, 6, 2, 2)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">PaymentRequest</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_6_opt_3"
+                    onclick="handleQuizClick(16, 6, 3, 2)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Block</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_16_6">
+                <div class="exp-content" id="qexp_text_16_6"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_16_7">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 7 of 10</span>
+                <span class="quiz-q-status" id="qstatus_16_7">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">7. Which message acknowledges the Payment message?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_16_7_opt_0"
+                    onclick="handleQuizClick(16, 7, 0, 0)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">PaymentACK</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_7_opt_1"
+                    onclick="handleQuizClick(16, 7, 1, 0)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">PaymentRequest</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_7_opt_2"
+                    onclick="handleQuizClick(16, 7, 2, 0)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Inv</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_7_opt_3"
+                    onclick="handleQuizClick(16, 7, 3, 0)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Verack</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_16_7">
+                <div class="exp-content" id="qexp_text_16_7"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_16_8">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 8 of 10</span>
+                <span class="quiz-q-status" id="qstatus_16_8">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">8. Which BIP defines MIME types for the Payment Protocol?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_16_8_opt_0"
+                    onclick="handleQuizClick(16, 8, 0, 2)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">BIP21</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_8_opt_1"
+                    onclick="handleQuizClick(16, 8, 1, 2)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">BIP70</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_8_opt_2"
+                    onclick="handleQuizClick(16, 8, 2, 2)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">BIP71</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_8_opt_3"
+                    onclick="handleQuizClick(16, 8, 3, 2)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">BIP72</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_16_8">
+                <div class="exp-content" id="qexp_text_16_8"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_16_9">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 9 of 10</span>
+                <span class="quiz-q-status" id="qstatus_16_9">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">9. Which BIP defines URI extensions for the Payment Protocol?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_16_9_opt_0"
+                    onclick="handleQuizClick(16, 9, 0, 3)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">BIP32</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_9_opt_1"
+                    onclick="handleQuizClick(16, 9, 1, 3)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">BIP39</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_9_opt_2"
+                    onclick="handleQuizClick(16, 9, 2, 3)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">BIP71</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_9_opt_3"
+                    onclick="handleQuizClick(16, 9, 3, 3)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">BIP72</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_16_9">
+                <div class="exp-content" id="qexp_text_16_9"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_16_10">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 10 of 10</span>
+                <span class="quiz-q-status" id="qstatus_16_10">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">10. What does a Man-in-the-Middle attacker attempt to do?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_16_10_opt_0"
+                    onclick="handleQuizClick(16, 10, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">Mine a block</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_10_opt_1"
+                    onclick="handleQuizClick(16, 10, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Intercept or modify communication</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_10_opt_2"
+                    onclick="handleQuizClick(16, 10, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Generate a wallet seed</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_16_10_opt_3"
+                    onclick="handleQuizClick(16, 10, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Confirm a transaction</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_16_10">
+                <div class="exp-content" id="qexp_text_16_10"></div>
+            </div>
+        </div>
+            </div>
+
+            <div class="quiz-result-banner" id="quiz-result-banner-16">
+                <div class="res-title" id="quiz-res-title-16">🎉 Module Quiz Completed!</div>
+                <p class="res-score" id="quiz-res-score-16"></p>
+                <div class="res-actions">
+                    <button class="quiz-reset-btn" onclick="resetQuiz(16, 10)">Retake Quiz</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        const mod = 16;
+        const totalQ = 10;
+        const explanations = {"1": "BIP21 defines the standardized URI scheme `bitcoin:<address>?amount=<value>&label=<label>` used for click-to-pay links and QR codes.", "2": "A Point of Sale (POS) system allows brick-and-mortar retail shops to generate instant invoices, convert local currency amounts to Bitcoin at real-time exchange rates, and present dynamic QR codes for customer checkout.", "3": "BitPay is a prominent merchant payment gateway that handles crypto checkout, manages exchange rate risk, and deposits fiat currency directly into the merchant's bank account.", "4": "BIP70 defines the Bitcoin Payment Protocol, adding cryptographic signatures, merchant identification, refund addresses, and tamper-resistant payment verification to Bitcoin transactions.", "5": "BIP70 uses X.509 public-key infrastructure (PKI) digital certificates (the same standard securing HTTPS web traffic) to verify the legal identity of the merchant requesting payment.", "6": "In the BIP70 flow, the merchant server generates a `PaymentRequest` message containing payment instructions, expiration time, memo, and an optional X.509 signature for wallet verification.", "7": "After receiving the signed Bitcoin transaction in a `Payment` message, the merchant server broadcasts it and returns a `PaymentACK` message as an official cryptographic receipt.", "8": "BIP71 specifies the formal MIME media types (e.g., application/bitcoin-paymentrequest, application/bitcoin-payment) for handling payment protocol messages over HTTP/email.", "9": "BIP72 defines extensions to the BIP21 URI scheme to allow fetching BIP70 PaymentRequest files via URLs (e.g. `bitcoin:address?r=https://merchant.com/pay`).", "10": "A Man-in-the-Middle (MITM) attacker attempts to intercept communication between customer and merchant to substitute the merchant's Bitcoin address with an attacker-controlled address. BIP70 stops this using X.509 certificate signatures."};
+        let userAnswers = {};
+        let score = 0;
+
+        window.handleQuizClick = function(m, qid, selectedIdx, correctIdx) {
+            if (m !== mod) return;
+            if (userAnswers[qid] !== undefined) return; // already answered
+
+            userAnswers[qid] = selectedIdx;
+            const isCorrect = (selectedIdx === correctIdx);
+            if (isCorrect) score++;
+
+            // Highlight buttons
+            for (let i = 0; i < 4; i++) {
+                const btn = document.getElementById(`q_${m}_${qid}_opt_${i}`);
+                if (btn) {
+                    btn.disabled = true;
+                    if (i === correctIdx) {
+                        btn.className = 'quiz-option-btn correct';
+                    } else if (i === selectedIdx && !isCorrect) {
+                        btn.className = 'quiz-option-btn incorrect';
+                    } else {
+                        btn.className = 'quiz-option-btn dim';
+                    }
+                }
+            }
+
+            // Update question status
+            const statusEl = document.getElementById(`qstatus_${m}_${qid}`);
+            if (statusEl) {
+                statusEl.textContent = isCorrect ? '✅ Correct' : '❌ Incorrect';
+                statusEl.className = isCorrect ? 'quiz-q-status correct' : 'quiz-q-status incorrect';
+            }
+
+            // Show explanation
+            const expBox = document.getElementById(`qexp_${m}_${qid}`);
+            const expText = document.getElementById(`qexp_text_${m}_${qid}`);
+            if (expBox && expText) {
+                const exp = explanations[qid] || '';
+                expText.innerHTML = (isCorrect ? '<strong>Right on target!</strong> ' : '<strong>Concept clarity:</strong> ') + exp;
+                expBox.className = 'quiz-explanation-box ' + (isCorrect ? 'correct' : 'incorrect');
+                expBox.style.display = 'block';
+            }
+
+            // Update stats
+            const answeredCount = Object.keys(userAnswers).length;
+            const progText = document.getElementById(`quiz-progress-text-${mod}`);
+            if (progText) progText.textContent = `${answeredCount}/${totalQ} Answered`;
+
+            const scoreText = document.getElementById(`quiz-score-text-${mod}`);
+            if (scoreText) scoreText.textContent = `🏆 Score: ${score}/${totalQ}`;
+
+            const progFill = document.getElementById(`quiz-progress-fill-${mod}`);
+            if (progFill) progFill.style.width = `${Math.round((answeredCount / totalQ) * 100)}%`;
+
+            // If complete, show banner
+            if (answeredCount === totalQ) {
+                const banner = document.getElementById(`quiz-result-banner-${mod}`);
+                const resTitle = document.getElementById(`quiz-res-title-${mod}`);
+                const resScore = document.getElementById(`quiz-res-score-${mod}`);
+                if (banner && resTitle && resScore) {
+                    banner.style.display = 'block';
+                    if (score === totalQ) {
+                        resTitle.innerHTML = '🏆 Perfect Score! Mastermind Level';
+                        resScore.innerHTML = `Incredible work! You answered all ${totalQ} questions correctly. You have mastered this module!`;
+                    } else if (score >= Math.ceil(totalQ * 0.6)) {
+                        resTitle.innerHTML = '🌟 Great Job! Concept Check Passed';
+                        resScore.innerHTML = `You scored ${score} out of ${totalQ} (${Math.round((score/totalQ)*100)}%). Review the explanations above for complete mastery.`;
+                    } else {
+                        resTitle.innerHTML = '📚 Good Effort! Keep Revising';
+                        resScore.innerHTML = `You scored ${score} out of ${totalQ}. Review the module summary above and retake the quiz to boost your score!`;
+                    }
+                }
+            }
+        };
+
+        window.resetQuiz = function(m, tQ) {
+            if (m !== mod) return;
+            userAnswers = {};
+            score = 0;
+
+            for (let qid = 1; qid <= tQ; qid++) {
+                for (let i = 0; i < 4; i++) {
+                    const btn = document.getElementById(`q_${m}_${qid}_opt_${i}`);
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.className = 'quiz-option-btn';
+                    }
+                }
+                const statusEl = document.getElementById(`qstatus_${m}_${qid}`);
+                if (statusEl) statusEl.textContent = '⏳ Not answered';
+
+                const expBox = document.getElementById(`qexp_${m}_${qid}`);
+                if (expBox) {
+                    expBox.style.display = 'none';
+                    expBox.className = 'quiz-explanation-box';
+                }
+            }
+
+            const progText = document.getElementById(`quiz-progress-text-${mod}`);
+            if (progText) progText.textContent = `0/${totalQ} Answered`;
+
+            const scoreText = document.getElementById(`quiz-score-text-${mod}`);
+            if (scoreText) scoreText.textContent = `🏆 Score: 0/${totalQ}`;
+
+            const progFill = document.getElementById(`quiz-progress-fill-${mod}`);
+            if (progFill) progFill.style.width = '0%';
+
+            const banner = document.getElementById(`quiz-result-banner-${mod}`);
+            if (banner) banner.style.display = 'none';
+        };
+    })();
+    </script>
+    
+
+        <div style="margin-top: 35px; padding: 20px 24px; background: rgba(2, 132, 199, 0.05); border: 1.5px solid rgba(2, 132, 199, 0.2); border-radius: 12px;">
+            <h4 style="margin: 0 0 8px 0; color: #0284c7; font-size: 16px;">🚀 Module 16 Completed!</h4>
+            <p style="margin: 0; font-size: 14px; color: var(--text-body); line-height: 1.6;">
+                Great progress! You have mastered <strong>Bitcoin Payments</strong>. Continue to <strong>Module 17: Innovation in Bitcoin and Advanced Protocols</strong> to advance through Unit IV!
+            </p>
+        </div>
+        
+    </div>
+
+    <div class="prev-next">
+        <a class="pn-btn" href="blockchain-module-15.html">&larr; Module 15</a>
+        <a class="pn-reader" href="blockchain.html">📋 Blockchain Hub</a>
+        <a class="pn-btn" href="blockchain-module-17.html">Module 17 &rarr;</a>
+    </div>
+
+</div>
+
+<script src="shared.js"></script>
+</body>
+</html>

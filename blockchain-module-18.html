@@ -1,0 +1,1875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 18: Bitcoin Investment, Buying and Selling Bitcoin — Blockchain Study Guide</title>
+    <meta name="description" content="Blockchain &amp; Cryptography study guide — Unit IV — Module 18 of 18 — Bitcoin Investment, Buying & Selling: Centralized (CEX) vs decentralized (DEX) exchanges, buying vs selling, investment vs trading, long vs short positions, trading instruments (CFDs, spread betting, margin trading), order book mechanics (bids, asks, spread = ask - bid), market orders vs limit orders, and investment risks.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+
+    <!-- MathJax for LaTeX rendering -->
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['\\(', '\\)']],
+            displayMath: [['$$', '$$']],
+        },
+        options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+@page { size: A4; margin: 15mm; }
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text-body, #2d3748);
+    margin: 0; padding: 0;
+    background-color: var(--bg-body, #f3f5f8);
+}
+
+.page-container {
+    max-width: 1100px;
+    margin: 25px auto 40px;
+    padding: 40px 55px;
+    background-color: var(--bg-page, #ffffff);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+}
+
+.module-banner {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0284c7 100%);
+    border-radius: 10px;
+    padding: 28px 32px;
+    margin-bottom: 28px;
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(2, 132, 199, 0.2);
+}
+.module-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    font-size: 12px; font-weight: 700;
+    padding: 4px 16px; border-radius: 20px;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    border: 1px solid rgba(255,255,255,0.25);
+    margin-bottom: 10px;
+}
+.module-banner-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 26px; font-weight: 700; line-height: 1.3;
+    margin: 0; color: #fff !important; border: none !important; padding: 0 !important;
+}
+
+.nav-toggle { margin-bottom: 24px; }
+.nav-toggle-btn {
+    display: inline-block;
+    background: #0284c7;
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+.nav-toggle-btn:hover { background: #0369a1; }
+
+.nav-panel {
+    display: none;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 8px;
+    column-count: 2;
+    column-gap: 24px;
+}
+.nav-panel.open { display: block !important; }
+
+.nav-item {
+    display: block;
+    padding: 6px 10px;
+    font-size: 13px;
+    color: var(--link-color, #0284c7);
+    text-decoration: none;
+    border-radius: 4px;
+    break-inside: avoid;
+    transition: all 0.15s;
+}
+.nav-item:hover { background: rgba(2, 132, 199, 0.1); color: #0284c7; }
+.nav-item.current {
+    background: #0284c7;
+    color: #fff !important;
+    font-weight: 600;
+}
+
+h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    color: var(--heading-color, #0f172a);
+    border-bottom: 2px solid #0284c7;
+    padding-bottom: 8px;
+    margin-top: 36px; margin-bottom: 18px;
+    line-height: 1.3;
+}
+h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 20px;
+    color: var(--heading-h2, #0369a1);
+    border-left: 5px solid #0284c7;
+    padding-left: 12px;
+    margin-top: 30px; margin-bottom: 14px;
+    line-height: 1.35;
+}
+h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 17px;
+    color: var(--heading-h3, #075985);
+    margin-top: 22px; margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+p { margin-top: 0; margin-bottom: 14px; overflow-wrap: break-word; }
+ul, ol { margin-top: 0; margin-bottom: 16px; padding-left: 28px; }
+li { margin-bottom: 6px; }
+hr { border: none; border-top: 1px solid var(--border-color, #e2e8f0); margin: 28px 0; }
+
+code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13.5px;
+    background: var(--code-bg, #f1f5f9);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color, #e2e8f0);
+}
+
+pre {
+    background: #0f172a;
+    color: #f8fafc;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 13.5px;
+}
+pre code { background: transparent; border: none; color: inherit; padding: 0; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid var(--border-color, #cbd5e1);
+    padding: 10px 14px;
+    text-align: left;
+}
+th {
+    background: var(--table-th-bg, #f1f5f9);
+    font-weight: 700;
+    color: var(--text-heading, #0f172a);
+}
+
+.ref-pill {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(2, 132, 199, 0.08);
+    color: #0284c7;
+    border: 1px solid rgba(2, 132, 199, 0.2);
+    border-radius: 16px;
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 4px 4px 4px 0;
+}
+
+.exam-header-banner {
+    background: linear-gradient(135deg, #1e3a8a, #0284c7);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    margin: 28px 0 16px 0;
+}
+
+.memory-trick-banner {
+    background: linear-gradient(135deg, #065f46, #10b981);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    margin: 24px 0 14px 0;
+}
+
+.math-display {
+    margin: 18px 0;
+    overflow-x: auto;
+    text-align: center;
+}
+
+.prev-next {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-color, #e2e8f0);
+}
+
+.pn-btn {
+    display: inline-block;
+    background: #0284c7;
+    color: #fff;
+    padding: 10px 22px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background 0.2s, transform 0.15s;
+}
+.pn-btn:hover { background: #0369a1; transform: translateY(-1px); }
+
+.pn-reader {
+    color: #64748b;
+    font-size: 13.5px;
+    text-decoration: none;
+    font-weight: 500;
+}
+.pn-reader:hover { color: #0284c7; }
+
+/* Dark mode overrides */
+[data-theme="dark"] .page-container {
+    background-color: var(--bg-page, #0b1120);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+[data-theme="dark"] code {
+    background: #1e293b;
+    border-color: #334155;
+    color: #38bdf8;
+}
+[data-theme="dark"] th {
+    background: #1e293b;
+    color: #f8fafc;
+}
+[data-theme="dark"] .nav-panel {
+    background: #0f172a;
+    border-color: #1e293b;
+}
+
+@media (max-width: 768px) {
+    .page-container { padding: 24px 18px; margin: 15px auto; }
+    .module-banner { padding: 20px; }
+    .module-banner-title { font-size: 20px; }
+    .nav-panel { column-count: 1; }
+}
+</style>
+</head>
+<body>
+
+<!-- GLOBAL NAVIGATION HEADER -->
+<header class="global-navbar">
+    <div class="nav-container">
+        <a href="index.html" class="nav-brand">
+            <span class="nav-brand-icon">⚡</span>
+            <span class="nav-brand-text">OmniCourse<span class="nav-brand-accent">.Hub</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link"><span class="icon">🏠</span> All Subjects</a>
+            <div class="nav-dropdown">
+    <button class="nav-dropdown-btn active"><span class="icon">⛓️</span> Blockchain (18) ▾</button>
+    <div class="nav-dropdown-menu">
+        <a href="blockchain.html" class="nav-dropdown-header">📋 Blockchain Syllabus Hub (All 18)</a>
+        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit I (Mods 1–4)</div>
+        <a href="blockchain-module-1.html">Module 1: Growth, History of Blockchain & Bitcoin</a>
+        <a href="blockchain-module-2.html">Module 2: Distributed Systems & Blockchain</a>
+        <a href="blockchain-module-3.html">Module 3: Consensus Protocols</a>
+        <a href="blockchain-module-4.html">Module 4: Decentralization</a>
+        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit II (Mods 5–8)</div>
+        <a href="blockchain-module-5.html">Module 5: Symmetric Cryptography</a>
+        <a href="blockchain-module-6.html">Module 6: Public Key Cryptography</a>
+        <a href="blockchain-module-7.html">Module 7: Digital Signatures + Cryptographic Constructs</a>
+        <a href="blockchain-module-8.html">Module 8: SHA & Cryptographic Hash Functions</a>
+        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit III (Mods 9–13)</div>
+        <a href="blockchain-module-9.html">Module 9: Consensus Problem, Analysis & Design</a>
+        <a href="blockchain-module-10.html">Module 10: Classification & Traditional Consensus (Paxos, Raft, PBFT)</a>
+        <a href="blockchain-module-11.html">Module 11: Blockchain Consensus (PoW, PoS, DPoS) & Selection</a>
+        <a href="blockchain-module-12.html">Module 12: Bitcoin Architecture, Keys & Transactions</a>
+        <a href="blockchain-module-13.html">Module 13: Bitcoin Blockchain, Network, Mining & Forks</a>
+        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit IV (Mods 14–18)</div>
+        <a href="blockchain-module-14.html">Module 14: The Bitcoin Network</a>
+        <a href="blockchain-module-15.html">Module 15: Bitcoin Wallets</a>
+        <a href="blockchain-module-16.html">Module 16: Bitcoin Payments</a>
+        <a href="blockchain-module-17.html">Module 17: Innovation in Bitcoin and Advanced Protocols</a>
+        <a href="blockchain-module-18.html">Module 18: Bitcoin Investment, Buying and Selling Bitcoin</a>
+        <a href="blockchain_guide.html" class="nav-dropdown-special">📖 Full 8-Module Reader</a>
+    </div>
+</div>
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-btn"><span class="icon">🐍</span> Django Course (45) ▾</button>
+                <div class="nav-dropdown-menu">
+                    <a href="django.html" class="nav-dropdown-header">📋 Django Syllabus Hub</a>
+                    <a href="module-1.html">Module 1: Introduction to Web &amp; Django</a>
+                    <a href="module-2.html">Module 2: Project Architecture</a>
+                    <a href="django_guide.html" class="nav-dropdown-special">📖 Full 45-Module Reader</a>
+                </div>
+            </div>
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-btn"><span class="icon">📐</span> Mathematics (17) ▾</button>
+                <div class="nav-dropdown-menu">
+                    <a href="maths.html" class="nav-dropdown-header">📋 Number Theory Hub (All 17)</a>
+                    <a href="maths-module-1.html">Module 1: Divisibility Algorithm</a>
+                    <a href="maths-module-2.html">Module 2: Modular Arithmetic</a>
+                </div>
+            </div>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
+                <span class="theme-toggle-icon">🌙</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<div class="page-container">
+
+    <div class="module-banner">
+        <div class="module-badge">Unit IV — Module 18 of 18 — Bitcoin Investment, Buying & Selling</div>
+        <h1 class="module-banner-title">Bitcoin Investment, Buying and Selling Bitcoin</h1>
+    </div>
+
+    <div class="nav-toggle">
+        <button class="nav-toggle-btn" onclick="document.getElementById('bcNavPanel').classList.toggle('open')">
+            📚 All 18 Blockchain Modules ▾
+        </button>
+        <div class="nav-panel" id="bcNavPanel">
+<div class="nav-unit-header" style="font-weight: 800; font-size: 11.5px; text-transform: uppercase; color: #0284c7; margin: 12px 0 6px 4px; letter-spacing: 0.5px; break-inside: avoid;">Unit I: Blockchain Fundamentals</div>
+<a class="nav-item" href="blockchain-module-1.html">1. Growth, History of Blockchain & Bitcoin</a>
+<a class="nav-item" href="blockchain-module-2.html">2. Distributed Systems & Blockchain</a>
+<a class="nav-item" href="blockchain-module-3.html">3. Consensus Protocols</a>
+<a class="nav-item" href="blockchain-module-4.html">4. Decentralization</a>
+<div class="nav-unit-header" style="font-weight: 800; font-size: 11.5px; text-transform: uppercase; color: #0284c7; margin: 12px 0 6px 4px; letter-spacing: 0.5px; break-inside: avoid;">Unit II: Cryptographic Primitives</div>
+<a class="nav-item" href="blockchain-module-5.html">5. Symmetric Cryptography</a>
+<a class="nav-item" href="blockchain-module-6.html">6. Public Key Cryptography</a>
+<a class="nav-item" href="blockchain-module-7.html">7. Digital Signatures + Cryptographic Constructs</a>
+<a class="nav-item" href="blockchain-module-8.html">8. SHA & Cryptographic Hash Functions</a>
+<div class="nav-unit-header" style="font-weight: 800; font-size: 11.5px; text-transform: uppercase; color: #0284c7; margin: 12px 0 6px 4px; letter-spacing: 0.5px; break-inside: avoid;">Unit III: Consensus & Bitcoin Core</div>
+<a class="nav-item" href="blockchain-module-9.html">9. Consensus Problem, Analysis & Design</a>
+<a class="nav-item" href="blockchain-module-10.html">10. Classification & Traditional Consensus (Paxos, Raft, PBFT)</a>
+<a class="nav-item" href="blockchain-module-11.html">11. Blockchain Consensus (PoW, PoS, DPoS) & Selection</a>
+<a class="nav-item" href="blockchain-module-12.html">12. Bitcoin Architecture, Keys & Transactions</a>
+<a class="nav-item" href="blockchain-module-13.html">13. Bitcoin Blockchain, Network, Mining & Forks</a>
+<div class="nav-unit-header" style="font-weight: 800; font-size: 11.5px; text-transform: uppercase; color: #0284c7; margin: 12px 0 6px 4px; letter-spacing: 0.5px; break-inside: avoid;">Unit IV: Bitcoin Network, Wallets, Payments & Economics</div>
+<a class="nav-item" href="blockchain-module-14.html">14. The Bitcoin Network</a>
+<a class="nav-item" href="blockchain-module-15.html">15. Bitcoin Wallets</a>
+<a class="nav-item" href="blockchain-module-16.html">16. Bitcoin Payments</a>
+<a class="nav-item" href="blockchain-module-17.html">17. Innovation in Bitcoin and Advanced Protocols</a>
+<span class="nav-item current">18. Bitcoin Investment, Buying and Selling Bitcoin</span>
+        </div>
+    </div>
+
+    <div class="module-content">
+<h1><strong>Unit IV — Module 5: Bitcoin Investment, Buying and Selling Bitcoin</strong></h1>
+<p>Final module of Unit IV<br />
+ Important for 5-mark and 10-mark questions</p>
+<p>This is the final module of Unit IV. We'll cover the remaining syllabus topic:</p>
+<p>Bitcoin investment and buying and selling Bitcoin.</p>
+<p>As requested, we will not cover Bitcoin Clients and APIs because that part has been removed from your syllabus.</p>
+<h2><strong>Module 5 roadmap</strong></h2>
+<ol>
+<li>Introduction to Bitcoin investment</li>
+<li>Bitcoin exchanges</li>
+<li>Buying and selling Bitcoin</li>
+<li>Bitcoin trading</li>
+<li>Long and short positions</li>
+<li>CFDs (Contracts for Difference)</li>
+<li>Spread betting</li>
+<li>Margin trading</li>
+<li>Bitcoin order book</li>
+<li>Bid price and ask price</li>
+<li>Market orders and limit orders</li>
+<li>Advantages and risks of Bitcoin investment</li>
+<li>Important 5-mark and 10-mark questions<br />
+The primary textbook reference for this module is Mastering Blockchain, Third Edition, Chapter 7, page 248. It covers exchanges, trading choices, long and short positions, order books, bid and ask prices, and market and limit orders.<span class="ref-pill">📚 Textbook Reference:<br />
+Mastering_Blockchain_Third_Edition.pdf</span></li>
+</ol>
+<h1><strong>Topic 1: Introduction to Bitcoin Investment</strong></h1>
+<h2><strong>1.1 What is Bitcoin investment?</strong></h2>
+<p>First, understand investment through a simple example.</p>
+<p>Suppose Aman purchases gold worth ₹50,000.</p>
+<p>He believes that the price of gold may increase in the future.</p>
+<p>After some time, if the price increases, he may sell the gold at a higher price and earn a profit.</p>
+<p>The same basic idea applies to Bitcoin investment.</p>
+<p>Bitcoin investment means purchasing Bitcoin with the expectation that its value may increase in the future, allowing the investor to sell it at a profit.</p>
+<p>For example:<br />
+- Aman purchases Bitcoin worth ₹10,000.<br />
+- After some time, its value increases to ₹12,000.<br />
+- He sells his Bitcoin.<br />
+His profit is:<br />
+<div class="math-display">$$Profit = Selling\ Price - Buying\ Price$$</div></p>
+<div class="math-display">$$= \text{₹}12,000-\text{₹}10,000$$</div>
+<div class="math-display">$$\boxed{Profit=\text{₹}2,000}$$</div>
+<p>This is a simple example before considering fees and taxes.</p>
+<h2><strong>1.2 Why do people invest in Bitcoin?</strong></h2>
+<p>People invest in Bitcoin for different reasons:<br />
+1. Potential price appreciation: Investors may expect Bitcoin's price to increase over time.<br />
+2. Digital asset ownership: Bitcoin is a digital asset that can be held in a wallet.<br />
+3. Trading opportunities: Traders attempt to profit from price movements.<br />
+4. Portfolio diversification: Some investors include Bitcoin alongside other assets.<br />
+5. Global market access: Bitcoin is traded on online exchanges in many countries.<br />
+Remember that Bitcoin's price can also decrease. Investment does not guarantee profit.</p>
+<h2><strong>1.3 Investment vs Trading</strong></h2>
+<p>These two terms are related but different.<br />
+| Basis | Bitcoin investment | Bitcoin trading |<br />
+| --- | --- | --- |<br />
+| Meaning | Purchasing Bitcoin as an investment | Buying and selling to benefit from price movements |<br />
+| Time period | Often longer term | Often shorter term |<br />
+| Main objective | Potential long-term appreciation | Profit from price changes |<br />
+| Activity | May involve holding Bitcoin | May involve frequent buying and selling |<br />
+| Example | Buy Bitcoin and hold for two years | Buy Bitcoin today and sell when its price changes |</p>
+<p>Easy way to remember:<br />
+- Investment = Buy and hold.<br />
+- Trading = Buy and sell based on price movements.</p>
+<h1><strong>Topic 2: Bitcoin Exchanges</strong></h1>
+<p>Important 5-mark question</p>
+<h2><strong>2.1 First understand what an exchange is</strong></h2>
+<p>Suppose you want to purchase a mobile phone.</p>
+<p>You visit an online shopping website, select the phone and pay the required amount.</p>
+<p>Similarly, if you want to purchase Bitcoin, you generally use a cryptocurrency exchange.</p>
+<p>An exchange provides a platform where buyers and sellers can trade Bitcoin.</p>
+<h2><strong>2.2 What is a Bitcoin exchange?</strong></h2>
+<p>A Bitcoin exchange is an online platform that allows users to buy, sell and trade Bitcoin against traditional currencies or other cryptocurrencies.</p>
+<p>For example:<br />
+- A person wants to buy Bitcoin using Indian rupees.<br />
+- Another person wants to sell Bitcoin and receive money.<br />
+- The exchange provides the platform where their orders can be matched.<br />
+Your textbook mentions CEX.io as an example of a Bitcoin exchange.</p>
+<p>CEX.IO</p>
+<p>Example shown in your textbook's Bitcoin exchange section.</p>
+<p>CEX.IO website</p>
+<h2><strong>2.3 What services do Bitcoin exchanges provide?</strong></h2>
+<p>Your textbook specifically mentions the following services:<br />
+1. Bitcoin buying and selling: Users can purchase and sell Bitcoin.<br />
+2. Bitcoin trading: Users can trade by opening long or short positions.<br />
+3. CFDs: Some platforms offer Contracts for Difference.<br />
+4. Spread betting: Some exchanges or trading platforms provide spread-betting facilities.<br />
+5. Margin trading: Users may trade with borrowed funds.<br />
+6. Cryptocurrency exchange: Bitcoin can be exchanged for other virtual currencies.<br />
+7. Advanced market data: Platforms may provide charts, trading strategies and other information to help traders.<br />
+These services vary by exchange, country and regulatory requirements. Not every platform offers every service.<span class="ref-pill">📚 Textbook Reference:<br />
+Mastering_Blockchain_Third_Edition.pdf</span></p>
+<h2><strong>2.4 How does a Bitcoin exchange work?</strong></h2>
+<p>Let's understand with an example.</p>
+<p>Suppose Aman wants to purchase Bitcoin worth ₹5,000.</p>
+<p>Step 1: Create an account</p>
+<p>Aman creates an account on a cryptocurrency exchange.</p>
+<p>Step 2: Complete required verification</p>
+<p>The exchange may require identity verification according to its rules and applicable regulations.</p>
+<p>Step 3: Add funds</p>
+<p>Aman deposits money using a supported payment method.</p>
+<p>Step 4: Select Bitcoin</p>
+<p>He selects the Bitcoin trading pair, such as BTC/INR.</p>
+<p>Step 5: Place an order</p>
+<p>He enters the amount of Bitcoin he wants to purchase and chooses an order type.</p>
+<p>Step 6: Order matching</p>
+<p>The exchange matches his buy order with a suitable sell order.</p>
+<p>Step 7: Bitcoin is credited</p>
+<p>After execution, the purchased Bitcoin is reflected in his exchange account.<br />
+1. User creates an exchange account</p>
+<ol>
+<li>
+<p>Deposits money</p>
+</li>
+<li>
+<p>Selects Bitcoin (BTC)</p>
+</li>
+<li>
+<p>Places a buy order</p>
+</li>
+<li>
+<p>Exchange matches buyer and seller</p>
+</li>
+<li>
+<p>Bitcoin is credited to the account</p>
+</li>
+</ol>
+<h2><strong>2.5 Types of Bitcoin exchanges</strong></h2>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Centralized Exchange (CEX) vs. Decentralized Exchange (DEX)</h4>
+            <div class="diagram-subtitle">Comparing custodial order matching platforms with non-custodial smart contract protocols</div>
+        </div>
+        <div class="diagram-nodes-row" style="gap: 20px;">
+            <div class="diagram-node" style="flex: 1; text-align: left; background: #0f172a; border-color: #0284c7;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;">
+                    <svg class="diagram-node-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+  <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+  <line x1="6" y1="6" x2="6.01" y2="6"></line>
+  <line x1="6" y1="18" x2="6.01" y2="18"></line>
+</svg>
+                    <span style="font-weight: 700; color: #38bdf8; font-size: 15px;">Centralized Exchange (CEX)</span>
+                </div>
+                <ul style="margin: 0; padding-left: 18px; font-size: 13px; color: #cbd5e1; line-height: 1.6;">
+                    <li><strong>Custody:</strong> Platform holds users' private keys (custodial).</li>
+                    <li><strong>Order Matching:</strong> Off-chain high-frequency order books.</li>
+                    <li><strong>Fiat Support:</strong> Direct bank transfers, credit cards &amp; fiat pairs.</li>
+                    <li><strong>KYC:</strong> Identity verification required by regulatory authorities.</li>
+                </ul>
+            </div>
+            <div class="diagram-node" style="flex: 1; text-align: left; background: #0f172a; border-color: #10b981;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;">
+                    <svg class="diagram-node-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+</svg>
+                    <span style="font-weight: 700; color: #34d399; font-size: 15px;">Decentralized Exchange (DEX)</span>
+                </div>
+                <ul style="margin: 0; padding-left: 18px; font-size: 13px; color: #cbd5e1; line-height: 1.6;">
+                    <li><strong>Self-Custody:</strong> Users trade directly from their personal wallets.</li>
+                    <li><strong>Settlement:</strong> Executed through smart contracts or atomic swaps.</li>
+                    <li><strong>Privacy &amp; Censorship:</strong> No central point of control or KYC requirement.</li>
+                    <li><strong>Counterparty Risk:</strong> Immune to exchange insolvency/exit scams.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+<p>For basic understanding, exchanges can be classified into two broad categories.<br />
+1. Centralised exchanges (CEX)<br />
+A centralised exchange is operated by a company or organisation that manages the trading platform.</p>
+<p>Examples include:<br />
+- Coinbase<br />
+- Kraken<br />
+- Binance<br />
+The exchange generally manages user accounts, order matching and other platform operations.<br />
+2. Decentralised exchanges (DEX)<br />
+A decentralised exchange allows users to trade cryptocurrencies through blockchain-based protocols, often using smart contracts.</p>
+<p>Users generally interact through their own wallets rather than relying on a central company to hold and manage every aspect of their funds.<br />
+Difference between CEX and DEX<br />
+| Basis | Centralised exchange | Decentralised exchange |<br />
+| --- | --- | --- |<br />
+| Management | Managed by an organisation | Operates through decentralised protocols |<br />
+| Control | Platform manages important operations | Users generally interact through their wallets |<br />
+| Account | Usually requires a platform account | Often wallet-based |<br />
+| Trading | Exchange's order-matching system | Smart contracts or decentralised mechanisms |<br />
+| Example | Coinbase | Uniswap |</p>
+<p>Note: This comparison provides general background. Your textbook's main focus is on online Bitcoin exchanges and their trading facilities.</p>
+<h1><strong>Topic 3: Buying and Selling Bitcoin</strong></h1>
+<h2><strong>3.1 How to buy Bitcoin?</strong></h2>
+<p>Buying Bitcoin means exchanging traditional money or another cryptocurrency for Bitcoin.</p>
+<p>For example:</p>
+<p>Aman wants to purchase Bitcoin worth ₹10,000.</p>
+<p>Suppose the market price is:<br />
+<div class="math-display">$$1\ BTC=\text{₹}50,00,000$$</div></p>
+<p>The amount of Bitcoin he receives before fees is:<br />
+<div class="math-display">$$BTC=\frac{10,000}{50,00,000}$$</div></p>
+<div class="math-display">$$\boxed{BTC=0.002}$$</div>
+<p>Therefore, Aman receives 0.002 BTC before applicable fees.</p>
+<h2><strong>3.2 How to sell Bitcoin?</strong></h2>
+<p>Selling Bitcoin means exchanging the Bitcoin you own for traditional money or another cryptocurrency.</p>
+<p>Suppose Aman owns:<br />
+<div class="math-display">$$0.002\ BTC$$</div></p>
+<p>The selling price is:<br />
+<div class="math-display">$$1\ BTC=\text{₹}55,00,000$$</div></p>
+<p>The selling value is:<br />
+<div class="math-display">$$0.002\times55,00,000$$</div></p>
+<div class="math-display">$$\boxed{\text{₹}11,000}$$</div>
+<p>His original purchase cost was ₹10,000.</p>
+<p>Therefore:<br />
+<div class="math-display">$$= \text{₹}12,000-\text{₹}10,000$$</div>0</p>
+<p><div class="math-display">$$= \text{₹}12,000-\text{₹}10,000$$</div>1</p>
+<p>This calculation ignores fees, taxes and any difference between the quoted price and actual execution price.</p>
+<h2><strong>3.3 Important terms</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Buying price</td>
+<td>Price at which Bitcoin is purchased</td>
+</tr>
+<tr>
+<td>Selling price</td>
+<td>Price at which Bitcoin is sold</td>
+</tr>
+<tr>
+<td>Profit</td>
+<td>Selling value minus total cost</td>
+</tr>
+<tr>
+<td>Loss</td>
+<td>Total cost minus selling value</td>
+</tr>
+<tr>
+<td>Exchange fee</td>
+<td>Fee charged for a transaction</td>
+</tr>
+<tr>
+<td>Trading pair</td>
+<td>Two currencies being traded, such as BTC/INR</td>
+</tr>
+<tr>
+<td>Liquidity</td>
+<td>How easily an asset can be bought or sold without greatly affecting its price</td>
+</tr>
+</tbody>
+</table>
+<h1><strong>Topic 4: Bitcoin Trading — Long and Short Positions</strong></h1>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Long Position vs. Short Position Mechanics</h4>
+            <div class="diagram-subtitle">How traders profit from bullish rising markets vs bearish declining markets</div>
+        </div>
+        <div class="diagram-nodes-row" style="gap: 20px;">
+            <div class="diagram-node" style="flex: 1; text-align: left; background: rgba(16, 185, 129, 0.05); border-color: #10b981;">
+                <div style="font-weight: 700; color: #34d399; font-size: 15px; margin-bottom: 8px;">
+                    📈 Long Position (Bullish Strategy)
+                </div>
+                <div style="font-size: 13px; color: #cbd5e1; line-height: 1.55;">
+                    1. Buy Bitcoin at <strong>$60,000</strong>.<br>
+                    2. Price increases to <strong>$65,000</strong>.<br>
+                    3. Sell Bitcoin at higher price.<br>
+                    &bull; <strong>Net Profit:</strong> <span style="color: #34d399; font-weight: bold;">+$5,000</span>
+                </div>
+            </div>
+            <div class="diagram-node" style="flex: 1; text-align: left; background: rgba(239, 68, 68, 0.05); border-color: #ef4444;">
+                <div style="font-weight: 700; color: #f87171; font-size: 15px; margin-bottom: 8px;">
+                    📉 Short Position (Bearish Strategy)
+                </div>
+                <div style="font-size: 13px; color: #cbd5e1; line-height: 1.55;">
+                    1. Borrow 1 BTC and sell immediately at <strong>$60,000</strong>.<br>
+                    2. Price falls to <strong>$55,000</strong>.<br>
+                    3. Buy back 1 BTC for $55,000 and return to lender.<br>
+                    &bull; <strong>Net Profit:</strong> <span style="color: #34d399; font-weight: bold;">+$5,000</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<p>Very important 5-mark question<br />
+Your textbook specifically explains that traders can open long or short positions to potentially profit when Bitcoin's price goes up or down.<span class="ref-pill">📚 Textbook Reference:<br />
+Mastering_Blockchain_Third_Edition.pdf</span></p>
+<p>First, understand what a position means.</p>
+<p>A position is the trading exposure a trader takes in the market.</p>
+<p>There are two important positions:<br />
+1. Long position.<br />
+2. Short position.</p>
+<h2><strong>4.1 What is a long position?</strong></h2>
+<p>A long position is a trading position in which a trader expects the price of Bitcoin to increase.</p>
+<p>In simple words:</p>
+<p>Buy first, expecting the price to rise.<br />
+Example<br />
+Aman purchases Bitcoin at ₹50,00,000 per BTC.</p>
+<p>He expects its price to increase.</p>
+<p>After some time, the price reaches ₹55,00,000.</p>
+<p>He sells his Bitcoin.</p>
+<p>His profit per BTC is:<br />
+<div class="math-display">$$= \text{₹}12,000-\text{₹}10,000$$</div>2</p>
+<p><div class="math-display">$$= \text{₹}12,000-\text{₹}10,000$$</div>3</p>
+<p>Long position<br />
+Buying price₹50 L</p>
+<p>Selling price₹55 L</p>
+<p>Price increases → Profit</p>
+<h2><strong>4.2 What is a short position?</strong></h2>
+<p>A short position is a trading position in which a trader expects the price of Bitcoin to decrease.</p>
+<p>In simple words:</p>
+<p>The trader takes a position that benefits if the price falls.</p>
+<p>In a conventional short sale, the trader borrows an asset, sells it and later buys it back to return it.<br />
+Example<br />
+Suppose Aman takes a short position when Bitcoin is priced at ₹50,00,000.</p>
+<p>The price falls to ₹45,00,000.</p>
+<p>He buys Bitcoin back at the lower price to close his position.</p>
+<p>His profit before costs is:<br />
+<div class="math-display">$$= \text{₹}12,000-\text{₹}10,000$$</div>4</p>
+<p><div class="math-display">$$= \text{₹}12,000-\text{₹}10,000$$</div>5</p>
+<p>Short position<br />
+Opening price₹50 L</p>
+<p>Closing price₹45 L</p>
+<p>Price decreases → Profit</p>
+<p>If the price increases instead, a short position can result in a loss.</p>
+<h2><strong>4.3 Difference between long and short positions</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Basis</th>
+<th>Long position</th>
+<th>Short position</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Expectation</td>
+<td>Price will increase</td>
+<td>Price will decrease</td>
+</tr>
+<tr>
+<td>Basic action</td>
+<td>Buy and later sell</td>
+<td>Sell/short and later buy back</td>
+</tr>
+<tr>
+<td>Profit when</td>
+<td>Price rises</td>
+<td>Price falls</td>
+</tr>
+<tr>
+<td>Loss when</td>
+<td>Price falls</td>
+<td>Price rises</td>
+</tr>
+<tr>
+<td>Market view</td>
+<td>Bullish</td>
+<td>Bearish</td>
+</tr>
+</tbody>
+</table>
+<p>Memory trick:<br />
+- Long = Expect price to go up.<br />
+- Short = Expect price to go down.</p>
+<h1><strong>Topic 5: Other Bitcoin Trading Choices</strong></h1>
+<p>Your textbook also mentions CFDs, spread betting and margin trading. These are additional trading methods offered by some platforms.<span class="ref-pill">📚 Textbook Reference:<br />
+Mastering_Blockchain_Third_Edition.pdf</span></p>
+<p>Let's understand each one.</p>
+<h2><strong>5.1 CFDs — Contracts for Difference</strong></h2>
+<p>CFD stands for Contract for Difference.</p>
+<p>A CFD is a financial contract between a trader and a provider in which the parties settle the difference between the opening and closing prices of an asset.</p>
+<p>In simple words:</p>
+<p>You do not necessarily purchase or own actual Bitcoin. Instead, you enter into a contract based on Bitcoin's price movement.<br />
+Example<br />
+Suppose Aman enters a Bitcoin CFD when the price is ₹50,00,000.</p>
+<p>He closes the contract when the price becomes ₹52,00,000.</p>
+<p>The price difference is:<br />
+<div class="math-display">$$= \text{₹}12,000-\text{₹}10,000$$</div>6</p>
+<p>The contract's profit or loss depends on the position size and contract terms.</p>
+<p>If Aman had taken a short position, the price increase would create a loss instead.<br />
+Important features<br />
+1. Does not necessarily involve owning actual Bitcoin.<br />
+2. Allows traders to speculate on price movements.<br />
+3. Can support both long and short positions.<br />
+4. May involve leverage.<br />
+5. Can create substantial losses.</p>
+<h2><strong>5.2 Spread betting</strong></h2>
+<p>Spread betting is a form of financial trading in which a person bets on whether the price of an asset will rise or fall, with profit or loss determined by the size of the price movement and the amount staked per unit of movement.<br />
+Example<br />
+Suppose Aman believes Bitcoin's price will rise.</p>
+<p>He stakes ₹100 for every ₹1,000 increase in the quoted price.</p>
+<p>If the price increases by ₹5,000:<br />
+<div class="math-display">$$= \text{₹}12,000-\text{₹}10,000$$</div>7</p>
+<p><div class="math-display">$$= \text{₹}12,000-\text{₹}10,000$$</div>8</p>
+<p>If the price falls by ₹5,000, the loss would be ₹500, before charges.</p>
+<p>Important: Spread betting is not the same as purchasing and owning Bitcoin. Its availability and legal treatment vary by country.</p>
+<h2><strong>5.3 Margin trading</strong></h2>
+<p>Margin trading is a trading method in which a trader uses borrowed funds from an exchange or broker to take a larger position than their own available capital would normally allow.</p>
+<p>Let's understand through a simple example.</p>
+<p>Aman has ₹10,000.</p>
+<p>The exchange allows him to trade with 5× leverage.</p>
+<p>Therefore:<br />
+<div class="math-display">$$= \text{₹}12,000-\text{₹}10,000$$</div>9</p>
+<p><div class="math-display">$$\boxed{Profit=\text{₹}2,000}$$</div>0</p>
+<p>He can control a ₹50,000 position using ₹10,000 of his own capital.<br />
+Why is margin trading risky?<br />
+Suppose the price moves against his position.</p>
+<p>Even a relatively small price movement can create a large loss relative to his own capital.</p>
+<p>The exchange may also liquidate his position if the available margin becomes insufficient.<br />
+Important terms<br />
+- Margin: Money provided by the trader as collateral.<br />
+- Leverage: The multiplier that increases exposure.<br />
+- Liquidation: Forced closing of a position when margin requirements are not maintained.</p>
+<h2><strong>5.4 Comparison of trading methods</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Meaning</th>
+<th>Do you necessarily own Bitcoin?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Spot buying</td>
+<td>Purchase actual Bitcoin</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Long position</td>
+<td>Benefit from an increase in price</td>
+<td>Depends on the instrument</td>
+</tr>
+<tr>
+<td>Short position</td>
+<td>Benefit from a decrease in price</td>
+<td>Not necessarily</td>
+</tr>
+<tr>
+<td>CFD</td>
+<td>Contract based on price difference</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Spread betting</td>
+<td>Bet on price movements</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Margin trading</td>
+<td>Trade using borrowed funds</td>
+<td>Depends on the instrument</td>
+</tr>
+</tbody>
+</table>
+<h1><strong>Topic 6: Bitcoin Order Book</strong></h1>
+<p>Very important 10-mark topic<br />
+This is one of the most important topics in the textbook's Bitcoin investment section.</p>
+<h2><strong>6.1 What is an order book?</strong></h2>
+<p>First understand this through an everyday example.</p>
+<p>Suppose you want to sell your old mobile phone.</p>
+<p>You say:</p>
+<p>"I am willing to sell it for ₹10,000."</p>
+<p>Another person says:</p>
+<p>"I am willing to buy it for ₹9,000."</p>
+<p>A third person says:</p>
+<p>"I can pay ₹9,500."</p>
+<p>All these buy and sell offers represent demand and supply.</p>
+<p>A Bitcoin exchange maintains a similar list of buying and selling orders.</p>
+<p>An order book is a list of all outstanding buy and sell orders for a particular trading pair on an exchange.</p>
+<p>It shows the prices and quantities at which buyers want to purchase and sellers want to sell Bitcoin.</p>
+<p>Your textbook illustrates an order book using the CEX.io exchange.<span class="ref-pill">📚 Textbook Reference:<br />
+Mastering_Blockchain_Third_Edition.pdf</span></p>
+<h2><strong>6.2 Two main parts of an order book</strong></h2>
+<p>An order book has two major sides:<br />
+1. Buy orders (Bids).<br />
+2. Sell orders (Asks).<br />
+A. Buy orders — Bids<br />
+A bid is an offer made by a buyer who wants to purchase Bitcoin at a particular price.</p>
+<p>Example:</p>
+<p>Aman wants to purchase 0.01 BTC at ₹50,00,000 per BTC.</p>
+<p>He places a buy order.</p>
+<p>That order appears on the buy side of the order book.<br />
+B. Sell orders — Asks<br />
+An ask is an offer made by a seller who wants to sell Bitcoin at a particular price.</p>
+<p>Example:</p>
+<p>Rahul wants to sell 0.01 BTC at ₹50,50,000 per BTC.</p>
+<p>He places a sell order.</p>
+<p>That order appears on the sell side.</p>
+<h2><strong>6.3 Example of a Bitcoin order book</strong></h2>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Bitcoin Order Book &amp; Bid-Ask Spread Structure</h4>
+            <div class="diagram-subtitle">Real-time matching engine ledger of limit buy orders (bids) and limit sell orders (asks)</div>
+        </div>
+        <div style="max-width: 550px; margin: 0 auto; background: #0f172a; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); padding: 16px;">
+            <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 12px; color: #94a3b8; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px; margin-bottom: 8px;">
+                <span>Type</span>
+                <span>Price (USD)</span>
+                <span>Amount (BTC)</span>
+                <span>Total</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-family: monospace; font-size: 13px; color: #f87171; padding: 3px 0;">
+                <span>Ask</span><span>$64,250</span><span>1.20 BTC</span><span>$77,100</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-family: monospace; font-size: 13px; color: #f87171; padding: 3px 0;">
+                <span>Ask</span><span>$64,200</span><span>2.50 BTC</span><span>$160,500</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-family: monospace; font-size: 13px; color: #f87171; padding: 3px 0; background: rgba(239,68,68,0.1); border-radius: 4px;">
+                <span><strong>Best Ask</strong></span><span><strong>$64,150</strong></span><span>0.80 BTC</span><span>$51,320</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin: 10px 0; padding: 6px; background: rgba(56, 189, 248, 0.12); border: 1px dashed rgba(56, 189, 248, 0.4); border-radius: 6px;">
+                <span style="font-size: 12px; font-weight: bold; color: #38bdf8;">Bid-Ask Spread = Ask ($64,150) &minus; Bid ($64,100) = $50.00</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-family: monospace; font-size: 13px; color: #34d399; padding: 3px 0; background: rgba(16,185,129,0.1); border-radius: 4px;">
+                <span><strong>Best Bid</strong></span><span><strong>$64,100</strong></span><span>1.50 BTC</span><span>$96,150</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-family: monospace; font-size: 13px; color: #34d399; padding: 3px 0;">
+                <span>Bid</span><span>$64,050</span><span>3.00 BTC</span><span>$192,150</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-family: monospace; font-size: 13px; color: #34d399; padding: 3px 0;">
+                <span>Bid</span><span>$64,000</span><span>5.20 BTC</span><span>$332,800</span>
+            </div>
+        </div>
+    </div>
+    
+<p>Let's assume the exchange displays the following orders.<br />
+BTC/INR order book — illustrative example<br />
+Buy orders (Bids)</p>
+<p>BUYERS</p>
+<p>PriceQuantity<br />
+₹50,00,000</p>
+<h2><strong>0.10 BTC</strong></h2>
+<p>₹49,90,000</p>
+<h2><strong>0.20 BTC</strong></h2>
+<p>₹49,80,000</p>
+<h2><strong>0.15 BTC</strong></h2>
+<p>Sell orders (Asks)</p>
+<p>SELLERS</p>
+<p>PriceQuantity<br />
+₹50,10,000</p>
+<h2><strong>0.12 BTC</strong></h2>
+<p>₹50,20,000</p>
+<h2><strong>0.08 BTC</strong></h2>
+<p>₹50,30,000</p>
+<h2><strong>0.25 BTC</strong></h2>
+<p>Best bid₹50,00,000<br />
+Best ask₹50,10,000</p>
+<p>Bid-ask spread₹10,000</p>
+<p>Illustrative values created for learning; not live market prices.</p>
+<h2><strong>6.4 How does an order book work?</strong></h2>
+<p>Suppose:<br />
+- Buyer is willing to pay ₹50,00,000.<br />
+- Seller is willing to sell at ₹50,10,000.<br />
+The prices do not match.</p>
+<p>Therefore, the trade will not execute immediately.</p>
+<p>Now suppose the buyer increases the bid to ₹50,10,000.</p>
+<p>The buyer's bid and seller's ask match.</p>
+<p>A trade can occur.</p>
+<p>This is called order matching.</p>
+<h2><strong>6.5 What happens when bid and ask prices match?</strong></h2>
+<p>When a suitable buy order and sell order match, the exchange executes the trade.</p>
+<p>For example:<br />
+<div class="math-display">$$\boxed{Profit=\text{₹}2,000}$$</div>1</p>
+<p><div class="math-display">$$\boxed{Profit=\text{₹}2,000}$$</div>2</p>
+<p>Since both prices are equal, the order can be matched, subject to available quantities and exchange rules.</p>
+<p>Remember: An order book provides transparency about the buying and selling interest in a market.</p>
+<h1><strong>Topic 7: Bid Price and Ask Price</strong></h1>
+<p>Very important 5-mark question</p>
+<h2><strong>7.1 What is a bid price?</strong></h2>
+<p>Bid price is the highest price that a buyer is currently willing to pay for Bitcoin.</p>
+<p>Example:</p>
+<p>A buyer wants to purchase Bitcoin at ₹50,00,000.</p>
+<p>His bid price is ₹50,00,000.</p>
+<h2><strong>7.2 What is an ask price?</strong></h2>
+<p>Ask price is the lowest price at which a seller is currently willing to sell Bitcoin.</p>
+<p>Example:</p>
+<p>A seller wants to sell Bitcoin at ₹50,10,000.</p>
+<p>His ask price is ₹50,10,000.</p>
+<h2><strong>7.3 What is bid-ask spread?</strong></h2>
+<p>Bid-ask spread is the difference between the lowest ask price and the highest bid price.</p>
+<p>Formula:<br />
+<div class="math-display">$$\boxed{Profit=\text{₹}2,000}$$</div>3</p>
+<p>Example:<br />
+- Best bid = ₹50,00,000<br />
+- Best ask = ₹50,10,000<br />
+<div class="math-display">$$\boxed{Profit=\text{₹}2,000}$$</div>4</p>
+<p><div class="math-display">$$\boxed{Profit=\text{₹}2,000}$$</div>5</p>
+<h2><strong>7.4 Why is the bid-ask spread important?</strong></h2>
+<ol>
+<li>It indicates the difference between buying and selling prices.</li>
+<li>It helps traders understand market liquidity.</li>
+<li>A smaller spread generally indicates a more liquid market.</li>
+<li>A larger spread can indicate lower liquidity or greater market uncertainty.</li>
+</ol>
+<h2><strong>7.5 Difference between bid and ask</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Basis</th>
+<th>Bid</th>
+<th>Ask</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Meaning</td>
+<td>Buyer's offered price</td>
+<td>Seller's offered price</td>
+</tr>
+<tr>
+<td>Represents</td>
+<td>Demand</td>
+<td>Supply</td>
+</tr>
+<tr>
+<td>Placed by</td>
+<td>Buyer</td>
+<td>Seller</td>
+</tr>
+<tr>
+<td>Typical relationship</td>
+<td>Lower</td>
+<td>Higher</td>
+</tr>
+<tr>
+<td>Example</td>
+<td>₹50,00,000</td>
+<td>₹50,10,000</td>
+</tr>
+</tbody>
+</table>
+<p>Memory trick:<br />
+- Bid = Buyer.<br />
+- Ask = Seller.</p>
+<h1><strong>Topic 8: Types of Bitcoin Orders</strong></h1>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Market Order vs. Limit Order Execution Flow</h4>
+            <div class="diagram-subtitle">Comparing immediate liquidity taker execution with resting maker order placement</div>
+        </div>
+        <div class="diagram-nodes-row" style="gap: 20px;">
+            <div class="diagram-node" style="flex: 1; text-align: left; background: #0f172a; border-color: #f59e0b;">
+                <div style="font-weight: 700; color: #fbbf24; font-size: 15px; margin-bottom: 8px;">
+                    ⚡ Market Order (Liquidity Taker)
+                </div>
+                <div style="font-size: 13px; color: #cbd5e1; line-height: 1.55;">
+                    • Executes <strong>immediately</strong> at current best available market prices.<br>
+                    • ✅ <strong>Guaranteed Execution:</strong> Filled right away without waiting.<br>
+                    • ⚠️ <strong>Price Uncertainty:</strong> Subject to market slippage if large volumes consume multiple book levels.
+                </div>
+            </div>
+            <div class="diagram-node" style="flex: 1; text-align: left; background: #0f172a; border-color: #3b82f6;">
+                <div style="font-weight: 700; color: #60a5fa; font-size: 15px; margin-bottom: 8px;">
+                    🎯 Limit Order (Liquidity Maker)
+                </div>
+                <div style="font-size: 13px; color: #cbd5e1; line-height: 1.55;">
+                    • Rests on the order book until market reaches specified limit price (or better).<br>
+                    • ✅ <strong>Guaranteed Price:</strong> You never pay more or sell for less than your limit.<br>
+                    • ⚠️ <strong>Execution Uncertainty:</strong> May never fill if market price does not reach your limit.
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<p>Very important 10-mark question<br />
+Your textbook identifies two common order types:<br />
+1. Market orders.<br />
+2. Limit orders.<span class="ref-pill">📚 Textbook Reference:<br />
+   Mastering_Blockchain_Third_Edition.pdf</span><br />
+Let's understand both carefully.</p>
+<h2><strong>8.1 What is a market order?</strong></h2>
+<p>A market order is an order to buy or sell Bitcoin immediately at the best available prices in the order book.</p>
+<p>In simple words:</p>
+<p>You want to buy or sell immediately rather than wait for a specific price.<br />
+Example<br />
+Suppose Bitcoin's order book looks like this:<br />
+| Seller's price | Available quantity |<br />
+| --- | --- |<br />
+| ₹50,00,000 | 0.01 BTC |<br />
+| ₹50,10,000 | 0.02 BTC |<br />
+| ₹50,20,000 | 0.03 BTC |</p>
+<p>Aman places a market buy order for 0.01 BTC.</p>
+<p>The exchange matches his order with the best available ask.</p>
+<p>He purchases 0.01 BTC at ₹50,00,000, assuming the quantity is still available.<br />
+Important features<br />
+1. Designed for immediate execution.<br />
+2. Uses available orders in the order book.<br />
+3. Does not guarantee a specific execution price.<br />
+4. Can experience slippage if liquidity is insufficient.</p>
+<h2><strong>8.2 What is a limit order?</strong></h2>
+<p>A limit order is an order to buy or sell a specified quantity of Bitcoin at a specified price or better.</p>
+<p>In simple words:</p>
+<p>You decide the price at which you are willing to trade.<br />
+Example 1: Limit buy order<br />
+Suppose Bitcoin is currently trading at ₹50,00,000.</p>
+<p>Aman does not want to purchase at that price.</p>
+<p>He wants to purchase only when the price reaches ₹49,00,000 or lower.</p>
+<p>He places a limit buy order at ₹49,00,000.</p>
+<p>The order remains in the order book until:<br />
+- A suitable seller matches it, or<br />
+- It is cancelled or expires according to its order conditions.<br />
+Example 2: Limit sell order<br />
+Suppose Rahul owns Bitcoin and wants to sell it only at ₹55,00,000 or higher.</p>
+<p>He places a limit sell order at ₹55,00,000.</p>
+<p>The order will execute if a suitable buyer is available at that price or better.<br />
+Important features<br />
+1. Specifies a desired price.<br />
+2. Provides control over the execution price.<br />
+3. May not execute immediately.<br />
+4. Can remain open until executed or cancelled.<br />
+5. Can have a specified validity period.</p>
+<h2><strong>8.3 Difference between market order and limit order</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Basis</th>
+<th>Market order</th>
+<th>Limit order</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Meaning</td>
+<td>Buy or sell at the best available market price</td>
+<td>Buy or sell at a specified price or better</td>
+</tr>
+<tr>
+<td>Execution</td>
+<td>Usually immediate if liquidity is available</td>
+<td>Only when matching conditions are met</td>
+</tr>
+<tr>
+<td>Price control</td>
+<td>No guaranteed specific price</td>
+<td>Specifies a price limit</td>
+</tr>
+<tr>
+<td>Execution certainty</td>
+<td>Generally higher</td>
+<td>Not guaranteed</td>
+</tr>
+<tr>
+<td>Waiting</td>
+<td>Normally no waiting for a target price</td>
+<td>May remain open</td>
+</tr>
+<tr>
+<td>Example</td>
+<td>Buy BTC immediately</td>
+<td>Buy BTC only at ₹49 lakh or lower</td>
+</tr>
+</tbody>
+</table>
+<h2><strong>8.4 What is order expiry?</strong></h2>
+<p>Your textbook also mentions that a limit order can be left open for a specified period.</p>
+<p>If it is not executed during that period, it can be cancelled.</p>
+<p>For example:</p>
+<p>Aman places a limit buy order at ₹49,00,000.</p>
+<p>He specifies that the order should remain open for 24 hours.</p>
+<p>If no suitable seller is available within 24 hours, the order is cancelled under that condition.</p>
+<h1><strong>Topic 9: Complete Working — From Buying Bitcoin to Selling Bitcoin</strong></h1>
+<p>Let's combine everything you have learned.</p>
+<p>Suppose Aman wants to purchase Bitcoin and later sell it.<br />
+1. Create exchange account</p>
+<p>Register and complete required verification</p>
+<ol>
+<li>Deposit funds</li>
+</ol>
+<p>Add supported currency to the account</p>
+<ol>
+<li>Select trading pair</li>
+</ol>
+<p>Choose BTC/INR</p>
+<ol>
+<li>Check order book</li>
+</ol>
+<p>View available bids and asks</p>
+<ol>
+<li>Place buy order</li>
+</ol>
+<p>Choose market or limit order</p>
+<ol>
+<li>Buy Bitcoin</li>
+</ol>
+<p>Exchange matches the order</p>
+<ol>
+<li>Hold or trade</li>
+</ol>
+<p>Monitor the Bitcoin position</p>
+<ol>
+<li>Place sell order</li>
+</ol>
+<p>Choose market or limit order</p>
+<ol>
+<li>Receive proceeds</li>
+</ol>
+<p>Selling order executes and proceeds are credited</p>
+<p>This is the overall process of buying and selling Bitcoin through an online exchange.</p>
+<h1><strong>Topic 10: Advantages and Risks of Bitcoin Investment</strong></h1>
+<p>Advantages<br />
+1. Potential returns: Bitcoin's price may increase, creating opportunities for profit.<br />
+2. Global trading: Bitcoin is available through exchanges in many countries.<br />
+3. Trading flexibility: Users can buy, sell and trade Bitcoin.<br />
+4. Market information: Exchanges provide charts, order books and market data.<br />
+5. Different trading methods: Some platforms offer spot trading, long and short positions and derivatives.<br />
+Risks and limitations<br />
+1. Price volatility: Bitcoin's price can rise or fall sharply.<br />
+2. Market risk: Investors may lose money due to unfavourable price movements.<br />
+3. Exchange risk: An exchange may face security, operational or financial problems.<br />
+4. Leverage risk: Margin trading can magnify both profits and losses.<br />
+5. Liquidity risk: It may be difficult to execute a large order at the expected price.<br />
+6. Regulatory risk: Rules governing cryptocurrency trading differ across countries.<br />
+7. Technical risk: Users can lose access to their Bitcoin through lost keys, phishing or other security problems.<br />
+Important: In this chapter, we are studying the working and concepts of Bitcoin investment, not recommending that you buy or trade Bitcoin.</p>
+<p>Module 5 — Exam Preparation</p>
+<h1><strong>A. Important 5-mark questions</strong></h1>
+<table>
+<thead>
+<tr>
+<th>No.</th>
+<th>Question</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>What is Bitcoin investment? Explain its importance.</td>
+<td>High</td>
+</tr>
+<tr>
+<td>2</td>
+<td>What is a Bitcoin exchange? Explain its functions.</td>
+<td>Very high</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Explain buying and selling of Bitcoin.</td>
+<td>High</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Differentiate between investment and trading.</td>
+<td>High</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Explain long and short positions.</td>
+<td>Very high</td>
+</tr>
+<tr>
+<td>6</td>
+<td>What are CFDs? Explain with an example.</td>
+<td>High</td>
+</tr>
+<tr>
+<td>7</td>
+<td>What is margin trading? Explain with an example.</td>
+<td>High</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Define Bitcoin order book.</td>
+<td>Very high</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Differentiate between bid price and ask price.</td>
+<td>Very high</td>
+</tr>
+<tr>
+<td>10</td>
+<td>What is a bid-ask spread?</td>
+<td>High</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Differentiate between market order and limit order.</td>
+<td>Very high</td>
+</tr>
+</tbody>
+</table>
+<h1><strong>B. Important 10-mark questions</strong></h1>
+<ol>
+<li>Explain Bitcoin investment and the process of buying and selling Bitcoin through an online exchange.</li>
+<li>Explain the working of a Bitcoin exchange and the services provided by it.</li>
+<li>Explain Bitcoin order books, bid prices, ask prices and bid-ask spread with a suitable example.</li>
+<li>Explain market orders and limit orders with examples and differentiate between them.</li>
+<li>Explain long positions, short positions, CFDs, spread betting and margin trading.</li>
+<li>Explain the advantages and risks associated with Bitcoin investment and trading.</li>
+</ol>
+<h1><strong>C. Exam-ready 10-mark answer: Explain Bitcoin Order Book</strong></h1>
+<p>Introduction:</p>
+<p>An order book is a list of outstanding buy and sell orders maintained by a cryptocurrency exchange. It displays the prices and quantities at which buyers are willing to purchase Bitcoin and sellers are willing to sell Bitcoin.</p>
+<p>Components of an order book:<br />
+1. Buy orders (Bids): These represent prices offered by buyers who want to purchase Bitcoin.<br />
+2. Sell orders (Asks): These represent prices requested by sellers who want to sell Bitcoin.<br />
+Bid price:</p>
+<p>It is the highest price a buyer is willing to pay for Bitcoin.</p>
+<p>Ask price:</p>
+<p>It is the lowest price at which a seller is willing to sell Bitcoin.</p>
+<p>Bid-ask spread:</p>
+<p>It is the difference between the lowest ask price and the highest bid price.<br />
+<div class="math-display">$$\boxed{Profit=\text{₹}2,000}$$</div>6</p>
+<p>For example:<br />
+- Best bid = ₹50,00,000<br />
+- Best ask = ₹50,10,000<br />
+Therefore:<br />
+<div class="math-display">$$\boxed{Profit=\text{₹}2,000}$$</div>7</p>
+<p>Order matching:</p>
+<p>When a suitable buy order and sell order match in price and quantity, the exchange executes the trade.</p>
+<p>Types of orders:<br />
+1. Market order: Executes against the best available prices in the order book.<br />
+2. Limit order: Allows a buyer or seller to specify the price at which they are willing to trade.<br />
+Advantages:<br />
+- Provides information about market demand and supply.<br />
+- Helps traders understand available liquidity.<br />
+- Supports transparent order matching.<br />
+- Helps traders decide appropriate buying and selling prices.<br />
+Conclusion:</p>
+<p>An order book is an important component of a Bitcoin exchange because it displays buying and selling interest and helps match buyers with sellers.</p>
+<h1><strong>D. Quick revision sheet</strong></h1>
+<p>Remember these definitions<br />
+- Bitcoin investment = Purchasing Bitcoin expecting potential appreciation.<br />
+- Bitcoin exchange = Platform for buying, selling and trading Bitcoin.<br />
+- Long position = Profit when price increases.<br />
+- Short position = Profit when price decreases.<br />
+- CFD = Contract based on price difference.<br />
+- Spread betting = Bet on the direction and movement of price.<br />
+- Margin trading = Trading with borrowed funds.<br />
+- Order book = List of outstanding buy and sell orders.<br />
+- Bid = Buyer's offered price.<br />
+- Ask = Seller's requested price.<br />
+- Spread = Ask − Bid.<br />
+- Market order = Execute at the best available market price.<br />
+- Limit order = Execute at a specified price or better.<br />
+- Liquidity = Ease of buying or selling an asset.<br />
+- Slippage = Difference between expected and actual execution price.</p>
+
+    <div class="quiz-section-wrap" id="module-quiz-section">
+        <div class="quiz-card-container">
+            <div class="quiz-main-header">
+                <div class="quiz-title-area">
+                    <h3 class="quiz-title">📝 Quick Self-Test &amp; Knowledge Check</h3>
+                    <p class="quiz-subtitle">Test your understanding of crypto exchanges (CEX vs DEX), trading positions, CFDs, margin trading, order books, bid-ask spread, and order types.</p>
+                </div>
+                <div class="quiz-action-bar">
+                    <span class="quiz-stat-pill" id="quiz-progress-text-18">0/10 Answered</span>
+                    <span class="quiz-score-pill" id="quiz-score-text-18">🏆 Score: 0/10</span>
+                    <button class="quiz-reset-btn" onclick="resetQuiz(18, 10)">
+                        🔄 Reset Quiz
+                    </button>
+                </div>
+            </div>
+
+            <div class="quiz-progress-track">
+                <div class="quiz-progress-fill" id="quiz-progress-fill-18"></div>
+            </div>
+
+            <div class="quiz-questions-list">
+                
+        <div class="quiz-question-box" id="qbox_18_1">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 1 of 10</span>
+                <span class="quiz-q-status" id="qstatus_18_1">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">1. What is a Bitcoin exchange?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_18_1_opt_0"
+                    onclick="handleQuizClick(18, 1, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">A mining algorithm</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_1_opt_1"
+                    onclick="handleQuizClick(18, 1, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">A platform for buying and selling Bitcoin</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_1_opt_2"
+                    onclick="handleQuizClick(18, 1, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">A type of wallet only</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_1_opt_3"
+                    onclick="handleQuizClick(18, 1, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">A consensus protocol</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_18_1">
+                <div class="exp-content" id="qexp_text_18_1"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_18_2">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 2 of 10</span>
+                <span class="quiz-q-status" id="qstatus_18_2">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">2. A long position generally benefits when Bitcoin's price:</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_18_2_opt_0"
+                    onclick="handleQuizClick(18, 2, 0, 0)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">Increases</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_2_opt_1"
+                    onclick="handleQuizClick(18, 2, 1, 0)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Decreases</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_2_opt_2"
+                    onclick="handleQuizClick(18, 2, 2, 0)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Becomes zero</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_2_opt_3"
+                    onclick="handleQuizClick(18, 2, 3, 0)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Does not change</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_18_2">
+                <div class="exp-content" id="qexp_text_18_2"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_18_3">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 3 of 10</span>
+                <span class="quiz-q-status" id="qstatus_18_3">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">3. A short position generally benefits when Bitcoin's price:</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_18_3_opt_0"
+                    onclick="handleQuizClick(18, 3, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">Increases</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_3_opt_1"
+                    onclick="handleQuizClick(18, 3, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Decreases</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_3_opt_2"
+                    onclick="handleQuizClick(18, 3, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Remains fixed</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_3_opt_3"
+                    onclick="handleQuizClick(18, 3, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Doubles</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_18_3">
+                <div class="exp-content" id="qexp_text_18_3"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_18_4">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 4 of 10</span>
+                <span class="quiz-q-status" id="qstatus_18_4">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">4. What is a CFD?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_18_4_opt_0"
+                    onclick="handleQuizClick(18, 4, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">A Bitcoin wallet</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_4_opt_1"
+                    onclick="handleQuizClick(18, 4, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">A contract based on the difference in an asset's price</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_4_opt_2"
+                    onclick="handleQuizClick(18, 4, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">A mining device</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_4_opt_3"
+                    onclick="handleQuizClick(18, 4, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">A type of blockchain</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_18_4">
+                <div class="exp-content" id="qexp_text_18_4"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_18_5">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 5 of 10</span>
+                <span class="quiz-q-status" id="qstatus_18_5">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">5. What does margin trading involve?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_18_5_opt_0"
+                    onclick="handleQuizClick(18, 5, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">Trading only with cash</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_5_opt_1"
+                    onclick="handleQuizClick(18, 5, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Using borrowed funds to increase trading exposure</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_5_opt_2"
+                    onclick="handleQuizClick(18, 5, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Mining Bitcoin</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_5_opt_3"
+                    onclick="handleQuizClick(18, 5, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Creating a new block</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_18_5">
+                <div class="exp-content" id="qexp_text_18_5"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_18_6">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 6 of 10</span>
+                <span class="quiz-q-status" id="qstatus_18_6">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">6. What is an order book?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_18_6_opt_0"
+                    onclick="handleQuizClick(18, 6, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">A list of private keys</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_6_opt_1"
+                    onclick="handleQuizClick(18, 6, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">A list of outstanding buy and sell orders</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_6_opt_2"
+                    onclick="handleQuizClick(18, 6, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">A list of mined blocks</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_6_opt_3"
+                    onclick="handleQuizClick(18, 6, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">A wallet backup</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_18_6">
+                <div class="exp-content" id="qexp_text_18_6"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_18_7">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 7 of 10</span>
+                <span class="quiz-q-status" id="qstatus_18_7">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">7. What is a bid price?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_18_7_opt_0"
+                    onclick="handleQuizClick(18, 7, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">The seller's lowest requested price</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_7_opt_1"
+                    onclick="handleQuizClick(18, 7, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">The buyer's offered price</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_7_opt_2"
+                    onclick="handleQuizClick(18, 7, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">The mining reward</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_7_opt_3"
+                    onclick="handleQuizClick(18, 7, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">The exchange fee</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_18_7">
+                <div class="exp-content" id="qexp_text_18_7"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_18_8">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 8 of 10</span>
+                <span class="quiz-q-status" id="qstatus_18_8">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">8. What is an ask price?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_18_8_opt_0"
+                    onclick="handleQuizClick(18, 8, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">The buyer's offered price</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_8_opt_1"
+                    onclick="handleQuizClick(18, 8, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">The seller's requested price</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_8_opt_2"
+                    onclick="handleQuizClick(18, 8, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">The average mining cost</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_8_opt_3"
+                    onclick="handleQuizClick(18, 8, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">The transaction ID</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_18_8">
+                <div class="exp-content" id="qexp_text_18_8"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_18_9">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 9 of 10</span>
+                <span class="quiz-q-status" id="qstatus_18_9">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">9. How is the bid-ask spread calculated?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_18_9_opt_0"
+                    onclick="handleQuizClick(18, 9, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">Bid + Ask</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_9_opt_1"
+                    onclick="handleQuizClick(18, 9, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Ask − Bid</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_9_opt_2"
+                    onclick="handleQuizClick(18, 9, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Bid × Ask</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_9_opt_3"
+                    onclick="handleQuizClick(18, 9, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Ask ÷ Bid</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_18_9">
+                <div class="exp-content" id="qexp_text_18_9"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_18_10">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 10 of 10</span>
+                <span class="quiz-q-status" id="qstatus_18_10">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">10. Which order specifies a price at which the trader is willing to buy or sell?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_18_10_opt_0"
+                    onclick="handleQuizClick(18, 10, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">Market order</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_10_opt_1"
+                    onclick="handleQuizClick(18, 10, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Limit order</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_10_opt_2"
+                    onclick="handleQuizClick(18, 10, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Mining order</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_18_10_opt_3"
+                    onclick="handleQuizClick(18, 10, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Block order</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_18_10">
+                <div class="exp-content" id="qexp_text_18_10"></div>
+            </div>
+        </div>
+            </div>
+
+            <div class="quiz-result-banner" id="quiz-result-banner-18">
+                <div class="res-title" id="quiz-res-title-18">🎉 Module Quiz Completed!</div>
+                <p class="res-score" id="quiz-res-score-18"></p>
+                <div class="res-actions">
+                    <button class="quiz-reset-btn" onclick="resetQuiz(18, 10)">Retake Quiz</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        const mod = 18;
+        const totalQ = 10;
+        const explanations = {"1": "A Bitcoin exchange is a digital marketplace (centralized or decentralized) where users can exchange fiat currencies (like USD, EUR, INR) for Bitcoin or swap Bitcoin with other crypto assets.", "2": "Taking a long position (buying with the expectation of rising value) yields a profit when the market price of the asset increases over time.", "3": "Taking a short position (selling borrowed assets) allows a trader to profit when the asset price declines, by buying it back later at a cheaper price.", "4": "A Contract for Difference (CFD) is a financial derivative where buyer and seller agree to settle the cash difference between the opening and closing price of an asset without owning the underlying cryptocurrency.", "5": "Margin trading allows traders to borrow capital from an exchange to leverage their trading positions, increasing potential profit gains while also significantly magnifying liquidation risks.", "6": "An order book is a real-time list maintained by an exchange of all open limit buy orders (bids) and sell orders (asks) organized by price level.", "7": "The bid price is the highest price that prospective buyers in the market are currently offering to pay for an asset.", "8": "The ask price (or offer price) is the lowest price that sellers in the market are currently willing to accept to sell their asset.", "9": "The bid-ask spread is calculated as Ask Price minus Bid Price. A narrower spread indicates higher liquidity and lower transaction friction.", "10": "A limit order specifies a strict price boundary at which the trader is willing to transact (or better). Unlike a market order, execution is not guaranteed if the market does not reach that price."};
+        let userAnswers = {};
+        let score = 0;
+
+        window.handleQuizClick = function(m, qid, selectedIdx, correctIdx) {
+            if (m !== mod) return;
+            if (userAnswers[qid] !== undefined) return; // already answered
+
+            userAnswers[qid] = selectedIdx;
+            const isCorrect = (selectedIdx === correctIdx);
+            if (isCorrect) score++;
+
+            // Highlight buttons
+            for (let i = 0; i < 4; i++) {
+                const btn = document.getElementById(`q_${m}_${qid}_opt_${i}`);
+                if (btn) {
+                    btn.disabled = true;
+                    if (i === correctIdx) {
+                        btn.className = 'quiz-option-btn correct';
+                    } else if (i === selectedIdx && !isCorrect) {
+                        btn.className = 'quiz-option-btn incorrect';
+                    } else {
+                        btn.className = 'quiz-option-btn dim';
+                    }
+                }
+            }
+
+            // Update question status
+            const statusEl = document.getElementById(`qstatus_${m}_${qid}`);
+            if (statusEl) {
+                statusEl.textContent = isCorrect ? '✅ Correct' : '❌ Incorrect';
+                statusEl.className = isCorrect ? 'quiz-q-status correct' : 'quiz-q-status incorrect';
+            }
+
+            // Show explanation
+            const expBox = document.getElementById(`qexp_${m}_${qid}`);
+            const expText = document.getElementById(`qexp_text_${m}_${qid}`);
+            if (expBox && expText) {
+                const exp = explanations[qid] || '';
+                expText.innerHTML = (isCorrect ? '<strong>Right on target!</strong> ' : '<strong>Concept clarity:</strong> ') + exp;
+                expBox.className = 'quiz-explanation-box ' + (isCorrect ? 'correct' : 'incorrect');
+                expBox.style.display = 'block';
+            }
+
+            // Update stats
+            const answeredCount = Object.keys(userAnswers).length;
+            const progText = document.getElementById(`quiz-progress-text-${mod}`);
+            if (progText) progText.textContent = `${answeredCount}/${totalQ} Answered`;
+
+            const scoreText = document.getElementById(`quiz-score-text-${mod}`);
+            if (scoreText) scoreText.textContent = `🏆 Score: ${score}/${totalQ}`;
+
+            const progFill = document.getElementById(`quiz-progress-fill-${mod}`);
+            if (progFill) progFill.style.width = `${Math.round((answeredCount / totalQ) * 100)}%`;
+
+            // If complete, show banner
+            if (answeredCount === totalQ) {
+                const banner = document.getElementById(`quiz-result-banner-${mod}`);
+                const resTitle = document.getElementById(`quiz-res-title-${mod}`);
+                const resScore = document.getElementById(`quiz-res-score-${mod}`);
+                if (banner && resTitle && resScore) {
+                    banner.style.display = 'block';
+                    if (score === totalQ) {
+                        resTitle.innerHTML = '🏆 Perfect Score! Mastermind Level';
+                        resScore.innerHTML = `Incredible work! You answered all ${totalQ} questions correctly. You have mastered this module!`;
+                    } else if (score >= Math.ceil(totalQ * 0.6)) {
+                        resTitle.innerHTML = '🌟 Great Job! Concept Check Passed';
+                        resScore.innerHTML = `You scored ${score} out of ${totalQ} (${Math.round((score/totalQ)*100)}%). Review the explanations above for complete mastery.`;
+                    } else {
+                        resTitle.innerHTML = '📚 Good Effort! Keep Revising';
+                        resScore.innerHTML = `You scored ${score} out of ${totalQ}. Review the module summary above and retake the quiz to boost your score!`;
+                    }
+                }
+            }
+        };
+
+        window.resetQuiz = function(m, tQ) {
+            if (m !== mod) return;
+            userAnswers = {};
+            score = 0;
+
+            for (let qid = 1; qid <= tQ; qid++) {
+                for (let i = 0; i < 4; i++) {
+                    const btn = document.getElementById(`q_${m}_${qid}_opt_${i}`);
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.className = 'quiz-option-btn';
+                    }
+                }
+                const statusEl = document.getElementById(`qstatus_${m}_${qid}`);
+                if (statusEl) statusEl.textContent = '⏳ Not answered';
+
+                const expBox = document.getElementById(`qexp_${m}_${qid}`);
+                if (expBox) {
+                    expBox.style.display = 'none';
+                    expBox.className = 'quiz-explanation-box';
+                }
+            }
+
+            const progText = document.getElementById(`quiz-progress-text-${mod}`);
+            if (progText) progText.textContent = `0/${totalQ} Answered`;
+
+            const scoreText = document.getElementById(`quiz-score-text-${mod}`);
+            if (scoreText) scoreText.textContent = `🏆 Score: 0/${totalQ}`;
+
+            const progFill = document.getElementById(`quiz-progress-fill-${mod}`);
+            if (progFill) progFill.style.width = '0%';
+
+            const banner = document.getElementById(`quiz-result-banner-${mod}`);
+            if (banner) banner.style.display = 'none';
+        };
+    })();
+    </script>
+    
+
+        <div style="margin-top: 35px; padding: 22px 26px; background: rgba(16, 185, 129, 0.06); border: 1.5px solid rgba(16, 185, 129, 0.3); border-radius: 12px;">
+            <h4 style="margin: 0 0 8px 0; color: #10b981; font-size: 18px;">🎓 All 18 Blockchain Modules Completed!</h4>
+            <p style="margin: 0; font-size: 14.5px; color: var(--text-body); line-height: 1.6;">
+                Outstanding achievement! You have thoroughly completed all 18 modules across <strong>Unit I, Unit II, Unit III, and Unit IV</strong> of Blockchain &amp; Cryptography. Review the syllabus hub, recap key revision sheets, and retake quizzes for 100% exam mastery!
+            </p>
+        </div>
+        
+    </div>
+
+    <div class="prev-next">
+        <a class="pn-btn" href="blockchain-module-17.html">&larr; Module 17</a>
+        <a class="pn-reader" href="blockchain.html">📋 Blockchain Hub</a>
+        <a class="pn-btn" href="blockchain.html">Blockchain Completed! &check;</a>
+    </div>
+
+</div>
+
+<script src="shared.js"></script>
+</body>
+</html>

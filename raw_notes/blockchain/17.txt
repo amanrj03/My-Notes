@@ -1,0 +1,1331 @@
+# **Unit IV — Module 4: Innovation in Bitcoin and Advanced Protocols**
+
+
+
+Module 4
+
+Important for 5-mark and 10-mark questions
+
+
+
+In the previous module, we studied how Bitcoin payments work. Now we will understand how Bitcoin has been improved over time to solve its limitations.
+
+Before starting, one important source note: your uploaded *All topics of bitcoin.pptx* covers Bitcoin fundamentals, transactions, scripts, blockchain and mining, but it does not contain detailed slides on the innovations in this module. Therefore, for this particular syllabus section, I'll follow the relevant chapter of your textbook, *Mastering Blockchain, Third Edition*, especially pages 243–247, and explain the concepts from the basics.
+
+## **Module 4 roadmap**
+
+1. Introduction to Bitcoin innovation
+2. Bitcoin Improvement Proposals (BIPs)
+3. Soft fork vs hard fork
+4. Limitations of the original Bitcoin protocol
+5. Segregated Witness (SegWit)
+6. Bitcoin Cash (BCH)
+7. Bitcoin Unlimited
+8. Bitcoin Gold (BTG)
+9. Lightning Network
+10. Comparison of advanced Bitcoin protocols
+11. Important 5-mark and 10-mark exam questions
+
+# **Topic 1: Introduction to Bitcoin Innovation**
+
+## **1.1 Why does Bitcoin need innovation?**
+
+First, let's understand one simple thing.
+
+When Bitcoin was introduced, it provided a decentralised digital payment system. People could transfer Bitcoin without depending on a central bank or payment intermediary.
+
+However, as more people started using Bitcoin, some limitations became visible.
+
+Imagine a road with only one lane.
+
+Initially, only 10 cars use that road, so there is no problem.
+
+But later, 10,000 cars start using the same road. Traffic increases, and vehicles must wait.
+
+A similar problem can happen in Bitcoin.
+
+When more people want to make transactions, the network has limited capacity to process them.
+
+This creates problems such as:
+
+1. Limited transaction throughput.
+2. Delays in transaction confirmation during busy periods.
+3. Higher transaction fees when block space is in high demand.
+4. Security issues, such as transaction malleability.
+5. Limitations in the original protocol that require improvements.
+
+Therefore, developers and researchers have proposed different improvements to Bitcoin.
+
+## **1.2 What is Bitcoin innovation?**
+
+**Bitcoin innovation refers to the development of improvements, upgrades and new protocols designed to address limitations in the Bitcoin system and improve its performance, security, scalability and functionality.**
+
+According to your textbook, these improvements generally take two forms:
+
+- Bitcoin Improvement Proposals (BIPs).
+- New versions or implementations of Bitcoin protocols, sometimes resulting in separate networks and currencies.
+
+Some improvements can be implemented through a soft fork, while others require a hard fork.
+
+We will understand both shortly.
+
+## **1.3 Main objectives of Bitcoin innovation**
+
+| Objective     | Simple explanation                                |
+| ------------- | ------------------------------------------------- |
+| Scalability   | Handle more transactions                          |
+| Speed         | Improve transaction processing                    |
+| Security      | Fix vulnerabilities and weaknesses                |
+| Efficiency    | Reduce unnecessary data and processing            |
+| Compatibility | Support upgrades while considering existing users |
+| Functionality | Introduce new capabilities                        |
+
+**Remember:** Bitcoin innovation mainly tries to make the system more scalable, secure, efficient and useful.
+
+# **Topic 2: Bitcoin Improvement Proposals (BIPs)**
+
+Very important 5-mark question
+
+## **2.1 First understand what a proposal means**
+
+Suppose your college has a rule that students can borrow only two books from the library.
+
+Some students believe that the limit should be increased to four books.
+
+They prepare a written proposal explaining:
+
+- What the current problem is.
+- What change is needed.
+- Why the change is useful.
+- How the change should be implemented.
+
+The proposal is discussed and evaluated before a decision is made.
+
+A similar idea is used in Bitcoin.
+
+Bitcoin is maintained by a community of developers, users, miners and other participants. When someone wants to suggest an improvement, the suggestion can be documented through a Bitcoin Improvement Proposal.
+
+## **2.2 What is a BIP?**
+
+**BIP stands for Bitcoin Improvement Proposal. It is a formal document used to propose improvements, describe design issues or communicate information related to the Bitcoin ecosystem.**
+
+BIPs help the Bitcoin community discuss and evaluate proposed changes in a structured way.
+
+They are not automatically accepted just because someone writes a proposal. A proposal needs appropriate review, discussion and adoption.
+
+## **2.3 Types of BIPs**
+
+According to your textbook, there are three types of BIPs:
+
+**1. Standard BIP**
+
+Protocol changes
+
+Used to describe major changes that affect the Bitcoin system.
+
+Examples:
+
+- Block-size changes.
+- Network protocol changes.
+- Transaction verification changes.
+
+**2. Process BIP**
+
+Process changes
+
+Used to propose changes in processes outside the core Bitcoin protocol.
+
+According to the textbook, these are implemented only after consensus among Bitcoin users.
+
+**3. Informational BIP**
+
+Information and guidance
+
+Used to advise or record information about the Bitcoin ecosystem.
+
+Examples:
+
+- Design issues.
+- General information.
+- Recommendations and guidance.
+
+## **2.4 Difference between the three types of BIPs**
+
+| Basis       | Standard BIP                                  | Process BIP                          | Informational BIP                  |
+| ----------- | --------------------------------------------- | ------------------------------------ | ---------------------------------- |
+| Purpose     | Changes to Bitcoin protocol                   | Changes to processes                 | Provides information               |
+| Focus       | Technical protocol                            | Community or development process     | Guidance and advice                |
+| Example     | Transaction verification change               | Change in a development process      | Documentation of a design issue    |
+| Main impact | Can affect Bitcoin software and network rules | Affects how a process is carried out | Primarily communicates information |
+
+## **2.5 How does a BIP help Bitcoin improve?**
+
+Understand this example:
+
+Suppose developers identify a security problem in Bitcoin.
+
+1. The problem is identified.
+2. A proposed solution is documented.
+3. The proposal is submitted as a BIP.
+4. Developers and community members discuss the proposal.
+5. The proposal is reviewed and improved.
+6. If accepted and adopted, the change can be implemented.
+
+**Problem identified**
+
+**Improvement proposed**
+
+**BIP document prepared**
+
+**Community discussion and review**
+
+**Proposal accepted and adopted**
+
+**Implementation of improvement**
+
+### **Advantages of BIPs**
+
+1. Provide a structured way to propose improvements.
+2. Encourage community participation.
+3. Help document technical changes.
+4. Improve transparency in the development process.
+5. Help Bitcoin evolve over time.
+
+### **Exam memory trick**
+
+**BIP = A formal proposal for improving Bitcoin.**
+
+Remember the three types:
+
+- Standard = Technical changes.
+- Process = Process changes.
+- Informational = Information and guidance.
+
+# **Topic 3: Soft Fork and Hard Fork**
+
+Very important — prepare the comparison for 10 marks
+
+Before studying SegWit, Bitcoin Cash and Bitcoin Gold, you must understand forks.
+
+## **3.1 What is a fork?**
+
+Imagine a road that divides into two different roads.
+
+Both roads started from the same point, but after the division, they follow different paths.
+
+A similar situation can occur in a blockchain.
+
+**A fork is a situation in which the blockchain or its protocol rules diverge, resulting in different versions or branches of the chain.**
+
+Your teacher's Bitcoin PPT also introduces three types of blockchain forks:
+
+1. Temporary fork.
+2. Soft fork.
+3. Hard fork.
+
+In this module, we mainly need to understand soft forks and hard forks.
+
+## **3.2 What is a soft fork?**
+
+**A soft fork is a backward-compatible change to blockchain protocol rules in which the new rules are more restrictive than the old rules.**
+
+In simple words:
+
+A soft fork introduces new rules without requiring all existing nodes to upgrade immediately.
+
+Older nodes can continue to recognise blocks produced under the new rules as valid under their older rule set, although they may not enforce all the new restrictions.
+
+### **Simple example**
+
+Imagine a college allows students to submit assignments with a maximum of 20 pages.
+
+Now the college introduces a new rule:
+
+"Students can submit assignments with a maximum of 15 pages."
+
+The new rule is stricter.
+
+An old system that accepts assignments up to 20 pages can still accept a 15-page assignment.
+
+Similarly, a soft fork makes the protocol rules more restrictive while maintaining backward compatibility.
+
+### **Important features**
+
+1. Backward-compatible protocol upgrade.
+2. New rules are more restrictive.
+3. Does not necessarily create a new cryptocurrency.
+4. Old nodes can continue operating, but may not enforce the new rules.
+5. Requires sufficient adoption to enforce the upgraded rules effectively.
+
+## **3.3 What is a hard fork?**
+
+**A hard fork is a non-backward-compatible change in blockchain protocol rules that can cause the blockchain to split into two separate chains when participants do not all adopt the new rules.**
+
+In simple words:
+
+A hard fork introduces changes that older software does not recognise as valid.
+
+### **Simple example**
+
+Imagine a college changes its assignment rule from a maximum of 20 pages to a maximum of 30 pages.
+
+The old system rejects assignments above 20 pages.
+
+The new system accepts assignments up to 30 pages.
+
+Now both systems follow different rules.
+
+If some students and teachers continue using the old system while others use the new one, the systems can become incompatible.
+
+A similar situation can happen in a blockchain hard fork.
+
+### **Important features**
+
+1. Non-backward-compatible change.
+2. Old nodes may reject blocks created under the new rules.
+3. Requires participants to upgrade if they want to follow the new rules.
+4. Can result in two separate blockchain networks.
+5. Can result in a new cryptocurrency.
+
+## **3.4 Diagram: Soft fork vs Hard fork**
+
+**Soft fork**
+
+Original blockchain
+
+New, more restrictive rules
+
+One continuing blockchain
+
+**Hard fork**
+
+Original blockchain
+
+Incompatible protocol rules
+
+**Old chain**
+
+Old rules
+
+**New chain**
+
+New rules
+
+## **3.5 Difference between soft fork and hard fork**
+
+| Basis         | Soft fork                               | Hard fork                                  |
+| ------------- | --------------------------------------- | ------------------------------------------ |
+| Compatibility | Backward-compatible                     | Not backward-compatible                    |
+| Rule change   | More restrictive rules                  | Incompatible rule changes                  |
+| Old nodes     | Can still recognise new blocks as valid | May reject blocks under new rules          |
+| Upgrade       | Not every node must upgrade immediately | Nodes must upgrade to follow the new rules |
+| Chain split   | Usually avoids a permanent split        | Can create two separate chains             |
+| New currency  | Not necessarily                         | Can result in a new currency               |
+
+## **3.6 Real Bitcoin examples**
+
+| Upgrade or project          | Type      |
+| --------------------------- | --------- |
+| Segregated Witness (SegWit) | Soft fork |
+| Bitcoin Cash                | Hard fork |
+| Bitcoin Gold                | Hard fork |
+
+**Exam tip:** If a question asks you to differentiate between soft fork and hard fork, always include the backward-compatibility point. It is the most important distinction.
+
+# **Topic 4: Why Did Bitcoin Need Advanced Protocols?**
+
+Before understanding the individual protocols, let's understand the two major problems discussed in your textbook.
+
+## **4.1 Problem 1: Low transaction throughput**
+
+What is transaction throughput?
+
+**Transaction throughput is the number of transactions a network can process in a given period of time.**
+
+It is generally measured in transactions per second (TPS).
+
+For example:
+
+- A network processing 5 transactions per second has a throughput of 5 TPS.
+- A network processing 1,000 transactions per second has a throughput of 1,000 TPS.
+
+Your textbook gives an approximate historical comparison:
+
+| Network  | Approximate throughput quoted in the textbook |
+| -------- | --------------------------------------------- |
+| Bitcoin  | 3–7 TPS                                       |
+| Visa     | 24,000 TPS                                    |
+| PayPal   | 200 TPS                                       |
+| Ethereum | 20 TPS                                        |
+
+These are the historical illustrative figures in the textbook, not guaranteed current performance measurements.
+
+### **Why is low throughput a problem?**
+
+Suppose 1,000 people want to send Bitcoin at approximately the same time.
+
+But the network has limited space in its blocks.
+
+Not every transaction can be included in the next block.
+
+As a result:
+
+1. Some transactions remain unconfirmed.
+2. Users may have to wait longer.
+3. Users may increase their transaction fees to attract miners.
+4. The network can become congested.
+
+This is called the **scalability problem**.
+
+## **4.2 Problem 2: Transaction malleability**
+
+This is another important technical problem.
+
+First understand the transaction ID.
+
+When a Bitcoin transaction is created, it has a unique identifier called a transaction ID (TXID).
+
+A simplified explanation is that the TXID is calculated using a cryptographic hash of the transaction data.
+
+### **What is transaction malleability?**
+
+**Transaction malleability is the possibility of modifying certain parts of a transaction's representation, particularly its signature data, without changing the underlying transaction's intended economic effect, which could result in a different transaction ID.**
+
+Let's understand with an example.
+
+Suppose Aman sends 0.01 BTC to Rahul.
+
+The transaction has a TXID:
+
+`TXID-A`
+
+An attacker modifies the signature representation without changing the actual payment conditions.
+
+The modified transaction may have:
+
+`TXID-B`
+
+Both transaction representations can refer to the same intended payment.
+
+This creates confusion for systems that depend on the original transaction ID.
+
+### **Why is it a problem?**
+
+1. Transaction identifiers may change.
+2. Applications tracking transactions by TXID may become confused.
+3. It can create complications in payment protocols.
+4. It was a security concern for systems built on top of Bitcoin.
+
+### **How did SegWit help?**
+
+SegWit separated signature data (witness data) from the transaction data used to calculate the traditional TXID.
+
+This helped address the transaction malleability problem.
+
+# **Topic 5: Segregated Witness (SegWit)**
+
+Very important 10-mark question
+
+## **5.1 What is SegWit?**
+
+SegWit stands for **Segregated Witness**.
+
+Let's understand the two words:
+
+- Segregated = Separated.
+- Witness = Signature and related unlocking information used to prove that a transaction is authorised.
+
+**Segregated Witness (SegWit) is a Bitcoin protocol upgrade implemented through a soft fork that separates signature-related witness data from the traditional transaction data structure.**
+
+It was designed to improve Bitcoin's security, efficiency and transaction capacity.
+
+Your textbook identifies SegWit as a soft fork-based upgrade.
+
+## **5.2 Why was SegWit introduced?**
+
+SegWit was introduced to address several limitations:
+
+1. Transaction malleability.
+2. Limited transaction capacity.
+3. Inefficient bandwidth usage.
+4. Transaction signing and verification efficiency.
+5. Difficulty in upgrading Bitcoin's scripting system.
+
+## **5.3 Main idea behind SegWit**
+
+Before SegWit, signature information was included within the traditional transaction structure.
+
+After SegWit, the signature-related information was separated into a separate structure called the **witness**.
+
+Let's understand with a simplified diagram.
+
+**Before SegWit — Traditional transaction**
+
+**Transaction data**
+
+**Signature data**
+
+Signature information is included in the traditional transaction representation.
+
+**After SegWit — Witness separated**
+
+**Base transaction data**
+
+Inputs, outputs and other transaction fields
+
+**Witness data**
+
+Signatures and related witness information
+
+The witness is stored separately from the base transaction data.
+
+This separation is the central concept behind SegWit.
+
+## **5.4 Important improvements of SegWit**
+
+Your textbook describes the following improvements.
+
+### **1. Fix for transaction malleability**
+
+This is one of the most important advantages.
+
+SegWit separates signature data from the transaction data used to calculate the traditional TXID.
+
+Therefore, changing witness data does not change the TXID in the same way that changing the signature representation could affect the traditional transaction ID before SegWit.
+
+**Result:** It helps solve the transaction malleability problem.
+
+### **2. Better bandwidth efficiency**
+
+Lightweight clients do not always need to download all signature information when requesting transaction data for certain verification purposes.
+
+Separating witness information can reduce the amount of data that needs to be transferred in those situations.
+
+**Result:** Improved bandwidth efficiency.
+
+### **3. Faster transaction verification**
+
+SegWit introduced improvements to transaction signature hashing and verification.
+
+Your textbook discusses BIP143, which introduced a new signature-hashing algorithm for SegWit transactions.
+
+The improvement reduces unnecessary repeated work during signature verification.
+
+**Result:** More efficient transaction signing and verification.
+
+### **4. Script versioning**
+
+SegWit introduced script versioning capability.
+
+This means that different versions of scripts can be supported.
+
+It makes future improvements to Bitcoin's scripting system easier.
+
+### **5. Increased block capacity**
+
+Before SegWit, Bitcoin used a block-size limit of 1 MB.
+
+SegWit introduced a block weight limit instead of relying only on the traditional block-size limit.
+
+This allows more transaction data to fit into a block, depending on the proportion of witness data.
+
+### **6. Improved address format**
+
+SegWit introduced an improved address format called **Bech32**.
+
+These addresses generally begin with:
+
+`bc1`
+
+Advantages include:
+
+- Better error detection.
+- Easier readability.
+- Lowercase character representation.
+- Clear distinction from legacy address formats.
+
+[Bitcoin - Native SegWit vs Taproot: A Comprehensive Guide for Beginners | Trust](https://images.openai.com/static-rsc-4/zhqHHDzCcsjC9UKZTA6cY1GsF3iG55oVHL41qtjYe7G6SksYpjlHWs_PUxF5OH8jLpjnt1aPKxeo2ORm0Ex9y_9zLNzSX3Z_cv9_0IxwM49ifDA3LwPx_f1SiBajbppspPg32WG9wMVNd_VzZSiV-lVYOIKhhAY8D2M0n2qfDkU?purpose=inline)
+
+[trustwallet.com](https://trustwallet.com/blog/guides/bitcoin-native-segwit-vs-taproot-a-comprehensive-guide-for-beginners?utm_source=chatgpt.com)
+
+## **5.5 Block weight in SegWit**
+
+This is a technical concept that can be asked in a 10-mark question.
+
+Before SegWit, block size was limited to 1 MB.
+
+SegWit introduced a new concept called **block weight**.
+
+The textbook gives the following transaction-weight formula:
+
+\\[ \text{Weight} = 3 \times \text{Base size} + \text{Total size} \\]
+
+Here:
+
+- Base size = Transaction size without witness data.
+- Total size = Transaction size including witness data.
+
+### **Example**
+
+Suppose a transaction has:
+
+- Base size = 100 bytes.
+- Total size = 150 bytes.
+
+Then:
+
+\\[ \text{Weight}=3(100)+150 \\]
+
+\\[ =300+150 \\]
+
+\\[ \boxed{450\text{ weight units}} \\]
+
+Your textbook states that blocks can have a maximum of 4 million weight units.
+
+This mechanism allows witness data to have a lower weight than ordinary transaction data.
+
+## **5.6 Types of SegWit transactions**
+
+Your textbook discusses four types.
+
+Let's understand their names first.
+
+| Type        | Full form                                           | Basic meaning                              |
+| ----------- | --------------------------------------------------- | ------------------------------------------ |
+| P2WPKH      | Pay to Witness Public Key Hash                      | Witness-based payment to a public-key hash |
+| P2SH-P2WPKH | Pay to Script Hash — Pay to Witness Public Key Hash | Nested SegWit for backward compatibility   |
+| P2WSH       | Pay to Witness Script Hash                          | Witness-based payment to a script hash     |
+| P2SH-P2WSH  | Pay to Script Hash — Pay to Witness Script Hash     | Nested SegWit script-hash payment          |
+
+### **1. P2WPKH**
+
+It is similar to the traditional P2PKH transaction.
+
+The major difference is that the signature and public key are moved from the traditional ScriptSig field into the witness field.
+
+Its simplified locking script is:
+
+```
+OP_0 <pubKeyHash>
+```
+
+### **2. P2SH-P2WPKH**
+
+This is a nested SegWit transaction.
+
+It places a P2WPKH structure inside the traditional P2SH mechanism.
+
+Its purpose is to provide backward compatibility with older Bitcoin software.
+
+### **3. P2WSH**
+
+It is a witness-based script-hash transaction.
+
+The signature and redeem script information are moved into the witness structure.
+
+It uses a 32-byte SHA-256 script hash.
+
+### **4. P2SH-P2WSH**
+
+This is another nested SegWit format.
+
+It places P2WSH inside P2SH to provide backward compatibility.
+
+**Exam tip:** You should remember the full forms of all four types. If a 10-mark question asks about SegWit, include at least a brief explanation of these transaction types.
+
+## **5.7 Important facts about SegWit**
+
+- Proposed through BIP141, BIP143, BIP144 and BIP145.
+- Activated on Bitcoin's main network on 24 August 2017.
+- Activation occurred at block 481824.
+- Implemented as a soft fork.
+- Uses witness data separately from base transaction data.
+- Introduced block weight.
+- Supports Bech32 addresses.
+
+### **Exam-ready conclusion**
+
+Segregated Witness is an important Bitcoin protocol upgrade that improves transaction malleability protection, transaction capacity, bandwidth efficiency and script upgradeability. It was implemented through a soft fork and introduced the witness structure and block-weight mechanism.
+
+# **Topic 6: Bitcoin Cash (BCH)**
+
+Important 5-mark question
+
+## **6.1 What is Bitcoin Cash?**
+
+First, understand why Bitcoin Cash was created.
+
+Some members of the Bitcoin community believed that increasing the block-size limit was necessary to support more transactions.
+
+They disagreed with the approach taken by the Bitcoin network.
+
+As a result, a separate blockchain was created through a hard fork.
+
+**Bitcoin Cash (BCH) is a cryptocurrency that originated as a hard fork of Bitcoin, with the objective of increasing transaction capacity by allowing larger blocks.**
+
+## **6.2 Why was Bitcoin Cash introduced?**
+
+The main objective was to improve transaction capacity.
+
+The original Bitcoin block-size limit was 1 MB.
+
+Bitcoin Cash increased the block-size limit, allowing more transactions to be included in a block.
+
+## **6.3 Important features mentioned in your textbook**
+
+According to *Mastering Blockchain, Third Edition*:
+
+1. Bitcoin Cash increased the block limit to 8 MB in the version described in the book.
+2. It uses Proof of Work (PoW).
+3. It uses ASIC-based mining hardware.
+4. It introduced replay protection.
+5. It introduced wipe-out protection.
+6. It uses transaction-signature differences to distinguish its transactions from Bitcoin.
+
+[Bitcoin Cash (BCH) Logo - Crypto Logos](https://images.openai.com/static-rsc-4/dFax84OOIqRjd4CsT5sTgDamEZrN4QqdrN1Hi2Y7TKVB6FUvE0jSaEAK7kLnnEGykJGTwdkceH_vNoFJ8FEhlKiswXrt4S3Cg1jaN5gIo1jW_DpxtsuwtrMhjOHYlB4zA3eXAZL4zoorCYn7IX71ysZJDaskd7Z0_dQKzIBMDFs?purpose=inline)
+
+[cryptologos.cc](https://cryptologos.cc/coin/bitcoin-cash/?utm_source=chatgpt.com)
+
+### **What is replay protection?**
+
+Imagine Aman has Bitcoin on two chains after a fork.
+
+He creates a transaction on one chain.
+
+Without appropriate protection, a similar transaction could potentially be replayed on the other chain.
+
+Replay protection uses mechanisms that help prevent transactions intended for one chain from being accepted and replayed on the other.
+
+### **What is wipe-out protection?**
+
+Wipe-out protection is designed to reduce the risk of one chain being overwhelmed or replaced by the other chain during a contentious fork situation.
+
+## **6.4 Advantages of Bitcoin Cash**
+
+1. Larger blocks can accommodate more transactions.
+2. Aims to improve transaction capacity.
+3. Uses the familiar Proof of Work model.
+4. Provides replay protection.
+5. Developed as an alternative approach to Bitcoin scalability.
+
+## **6.5 Limitations**
+
+1. Larger blocks can increase storage and bandwidth requirements for nodes.
+2. It creates a separate cryptocurrency and blockchain.
+3. It has its own network adoption and security considerations.
+4. Increasing block size alone does not solve every scalability problem.
+
+# **Topic 7: Bitcoin Unlimited**
+
+## **7.1 What is Bitcoin Unlimited?**
+
+Bitcoin Unlimited is an alternative Bitcoin implementation that proposed a different approach to the block-size debate.
+
+**Bitcoin Unlimited is a Bitcoin protocol implementation that allows miners to reach agreement on the block-size limit instead of imposing one fixed hard limit in the manner described by the textbook.**
+
+In simple words:
+
+In traditional Bitcoin, the protocol specifies a block capacity limit.
+
+Bitcoin Unlimited proposed that miners could decide the acceptable block-size cap through consensus.
+
+## **7.2 Why was Bitcoin Unlimited proposed?**
+
+The objective was to provide more flexibility in block-size management.
+
+Supporters believed that miners should have a greater role in deciding how large blocks could become.
+
+## **7.3 Important features**
+
+Your textbook discusses three important concepts:
+
+### **1. Miner-selected block-size limit**
+
+Instead of a fixed hard limit, miners can reach consensus on the block-size cap over time.
+
+### **2. Extremely Thin Blocks**
+
+First understand the problem.
+
+Suppose a node already has 90 transactions in its mempool.
+
+A miner creates a block containing those 90 transactions plus 10 new transactions.
+
+If the miner sends the complete block to that node, the node receives the same 90 transactions again.
+
+This creates unnecessary data transfer.
+
+**Extremely thin blocks** aim to reduce this duplication.
+
+The requesting node sends a `getdata` request along with a Bloom filter that identifies transactions it already has.
+
+The other node sends only the missing transactions in the thin block.
+
+**Example of thin block communication**
+
+**Requesting node already has**
+
+TX1, TX2, TX3, TX4
+
+**Miner's block contains**
+
+TX1, TX2, TX3, TX4, TX5, TX6
+
+**Thin block sends only**
+
+TX5 and TX6
+
+### **3. Parallel validation**
+
+In traditional sequential validation, a node processes a new block and completes its validation before moving on to certain other validation and relay tasks.
+
+Bitcoin Unlimited proposed parallel validation.
+
+This allows nodes to validate more than one block and process incoming transactions in parallel.
+
+**Result:** Improved processing efficiency.
+
+## **7.4 Advantages of Bitcoin Unlimited**
+
+1. Flexible block-size management.
+2. Reduced duplicate transaction transmission through thin blocks.
+3. Improved efficiency through parallel validation.
+4. Aims to increase network capacity.
+
+## **7.5 Limitations**
+
+1. Larger blocks can increase hardware and network requirements.
+2. Reaching agreement on block-size limits can be difficult.
+3. More powerful hardware may be needed to process larger blocks.
+4. Different preferences among miners and nodes can lead to disagreements.
+
+# **Topic 8: Bitcoin Gold (BTG)**
+
+Important 5-mark question
+
+## **8.1 First understand the mining centralisation problem**
+
+Remember that Bitcoin uses Proof of Work.
+
+Miners compete to solve a mathematical puzzle using computing power.
+
+The miner who successfully mines a block receives the block reward and transaction fees.
+
+Initially, Bitcoin mining could be performed using ordinary computers.
+
+However, as mining became more competitive, specialised hardware called ASICs became increasingly important.
+
+### **What is an ASIC?**
+
+ASIC stands for **Application-Specific Integrated Circuit**.
+
+It is a specialised computer chip designed to perform a particular task efficiently.
+
+In Bitcoin, ASICs are designed specifically for Bitcoin mining.
+
+The problem is that ASIC mining equipment can be expensive.
+
+Therefore, miners who can afford more powerful and expensive equipment may gain a significant advantage.
+
+This can contribute to mining centralisation.
+
+## **8.2 What is Bitcoin Gold?**
+
+**Bitcoin Gold (BTG) is a cryptocurrency created through a hard fork of the original Bitcoin blockchain, with the objective of reducing mining centralisation and making mining more accessible through GPU-based mining.**
+
+[Bitcoin Gold (BTG) Logo Vector Free Download | Logowik](https://images.openai.com/static-rsc-4/_qX0IIdYt9ZCfE8fFaaTW2vbiYVM_hR91--Z__gvylz-ruFDTXi8ujR2q6wtekvOQQw2VyAoxVsyOUao3ljSGv8s1hsleFM8rkkeU2CGe1huon7rZn4ZNX9doKYsQCP-KgzRIFmP5yjIT1DubvUkC2S2tcUVHfgurnUhEtovqmQ?purpose=inline)
+
+[logowik.com](https://logowik.com/bitcoin-gold-btg-logo-vector-svg-pdf-ai-eps-cdr-free-download-10151.html?utm_source=chatgpt.com)
+
+## **8.3 Why was Bitcoin Gold introduced?**
+
+The main objective was to address mining centralisation.
+
+Bitcoin Gold aimed to reduce the advantage of specialised ASIC mining hardware.
+
+It used the Equihash mining algorithm, which was designed to be more resistant to ASIC mining than Bitcoin's SHA-256 mining algorithm.
+
+This allowed GPU-based mining.
+
+### **What is GPU?**
+
+GPU stands for **Graphics Processing Unit**.
+
+It is a processor commonly used for graphics processing and parallel computations.
+
+Unlike a specialised Bitcoin ASIC, a GPU can be used for many different computing tasks.
+
+## **8.4 Important features of Bitcoin Gold**
+
+According to your textbook:
+
+1. It originated through a hard fork.
+2. It was implemented from block 491407 of the original Bitcoin blockchain.
+3. It aimed to address mining centralisation.
+4. It used Equihash as its mining algorithm.
+5. It was designed to be ASIC-resistant.
+6. It used GPUs for mining.
+
+## **8.5 Advantages of Bitcoin Gold**
+
+1. Aimed to make mining more accessible.
+2. Reduced dependence on specialised Bitcoin ASIC hardware.
+3. Encouraged GPU-based mining.
+4. Attempted to reduce mining centralisation.
+
+## **8.6 Limitations**
+
+1. ASIC resistance is not a permanent guarantee against specialised hardware development.
+2. GPU mining still requires investment in hardware and electricity.
+3. A separate blockchain needs its own network security and adoption.
+4. A hard fork creates a separate cryptocurrency ecosystem.
+
+# **Topic 9: Lightning Network**
+
+Very important 10-mark question
+
+This is one of the most important innovations in Bitcoin because it attempts to solve the scalability and speed problems without recording every payment directly on the main blockchain.
+
+## **9.1 Why was the Lightning Network needed?**
+
+Let's understand with a real-life example.
+
+Suppose Aman visits a coffee shop every day.
+
+Every day, he purchases coffee worth ₹100.
+
+If he pays using an ordinary Bitcoin on-chain transaction each time, every payment needs to be processed through the Bitcoin blockchain.
+
+This can create problems:
+
+1. More transactions need block space.
+2. Payments may wait for confirmation.
+3. Transaction fees may become expensive.
+4. Small everyday payments may become inconvenient.
+
+Now imagine Aman and the coffee shop could make multiple payments without recording every individual payment on the main blockchain.
+
+This is the basic idea behind the Lightning Network.
+
+## **9.2 What is the Lightning Network?**
+
+**The Lightning Network is a Layer 2 payment protocol built on top of Bitcoin that enables fast, low-cost off-chain payments through payment channels.**
+
+Your textbook describes it as a solution for scalable, instant off-chain payments.
+
+It was introduced in early 2016.
+
+### **First understand Layer 1 and Layer 2**
+
+**Layer 1:** The original Bitcoin blockchain, where transactions are recorded and secured by the Bitcoin network.
+
+**Layer 2:** An additional protocol built on top of the main blockchain to perform certain activities more efficiently.
+
+The Lightning Network operates as Layer 2.
+
+## **9.3 What is an off-chain transaction?**
+
+An off-chain transaction is a transaction or payment update that takes place outside the main blockchain rather than being individually recorded as a separate on-chain transaction.
+
+For example:
+
+Aman and a coffee shop open a payment channel.
+
+They can make several payments through this channel.
+
+Instead of recording each payment separately on the Bitcoin blockchain, they update the channel's balance.
+
+The relevant channel-opening and closing transactions are recorded on the main blockchain.
+
+## **9.4 What is a payment channel?**
+
+**A payment channel is a mechanism that allows two participants to exchange multiple payments off-chain while using the Bitcoin blockchain to establish and settle the channel.**
+
+Let's understand with an example.
+
+Aman opens a payment channel with a coffee shop and deposits 0.01 BTC into the channel.
+
+Now suppose he makes these payments:
+
+| Payment         | Amount        |
+| --------------- | ------------- |
+| First coffee    | 0.001 BTC     |
+| Second coffee   | 0.002 BTC     |
+| Third coffee    | 0.001 BTC     |
+| Fourth coffee   | 0.003 BTC     |
+| **Total spent** | **0.007 BTC** |
+
+The remaining balance is:
+
+\\[ 0.01-0.007=0.003\ BTC \\]
+
+Aman has made four payments through the channel.
+
+Instead of putting every individual payment on the Bitcoin blockchain, the channel keeps track of the updated balance.
+
+When the channel is closed, the final settlement is recorded on the Bitcoin blockchain.
+
+## **9.5 Working of the Lightning Network**
+
+There are three main stages:
+
+### **Stage 1: Opening a payment channel**
+
+Aman and the coffee shop create a payment channel.
+
+They use a Bitcoin on-chain transaction to establish the channel and lock funds into it.
+
+### **Stage 2: Making off-chain payments**
+
+Aman makes multiple payments through the channel.
+
+The channel's balance is updated without requiring each payment to be separately recorded on the main blockchain.
+
+### **Stage 3: Closing the payment channel**
+
+When Aman and the coffee shop finish using the channel, they close it.
+
+The final balance is settled through an on-chain Bitcoin transaction.
+
+## **9.6 Diagram: Working of the Lightning Network**
+
+**Bitcoin main blockchain**
+
+Layer 1
+
+**Open payment channel**
+
+On-chain funding transaction
+
+**Lightning payment channel**
+
+Layer 2 — Multiple off-chain payments
+
+Payment 1
+
+Payment 2
+
+Payment 3
+
+**Close payment channel**
+
+Final settlement transaction
+
+**Final balance recorded on Bitcoin blockchain**
+
+## **9.7 Advantages of the Lightning Network**
+
+**1. Faster payments**
+
+Payments can be completed without waiting for every individual payment to be included in a Bitcoin block.
+
+**2. Lower transaction costs**
+
+Multiple payments can take place without requiring an individual on-chain transaction for each payment.
+
+**3. Improved scalability**
+
+It reduces the need to record every small payment directly on the Bitcoin blockchain.
+
+**4. Suitable for micropayments**
+
+It supports small-value payments, such as buying coffee or making small online payments.
+
+**5. Supports frequent transactions**
+
+Participants can make multiple payments through an established channel.
+
+## **9.8 Limitations of the Lightning Network**
+
+1. Requires payment-channel liquidity.
+2. Users need compatible Lightning wallets and infrastructure.
+3. Managing channels can be technically complex.
+4. Payments depend on suitable routes and available liquidity.
+5. Users must understand channel management and settlement.
+
+## **9.9 Bitcoin vs Lightning Network**
+
+| Basis        | Bitcoin main chain                    | Lightning Network                |
+| ------------ | ------------------------------------- | -------------------------------- |
+| Layer        | Layer 1                               | Layer 2                          |
+| Payment type | On-chain                              | Mostly off-chain                 |
+| Speed        | Depends on block confirmation         | Generally much faster            |
+| Fees         | On-chain transaction fees             | Generally lower payment costs    |
+| Record       | Transactions recorded on blockchain   | Channel updates happen off-chain |
+| Main purpose | Decentralised settlement and security | Faster, scalable payments        |
+| Suitable for | Main-chain settlement                 | Frequent and smaller payments    |
+
+### **Important exam conclusion**
+
+The Lightning Network improves Bitcoin scalability by enabling multiple off-chain payments through payment channels. Only the channel opening and final settlement need to be recorded on the main blockchain, reducing the need for every payment to consume on-chain block space.
+
+# **Topic 10: Comparison of Bitcoin Advanced Protocols**
+
+This table is extremely useful for revision and 10-mark comparison questions.
+
+| Protocol          | Main problem addressed                                   | Main technique                                                     | Fork type                  |
+| ----------------- | -------------------------------------------------------- | ------------------------------------------------------------------ | -------------------------- |
+| SegWit            | Transaction malleability and limited capacity            | Separates witness data; introduces block weight                    | Soft fork                  |
+| Bitcoin Cash      | Limited transaction capacity                             | Larger block limit                                                 | Hard fork                  |
+| Bitcoin Unlimited | Block-size restrictions and block propagation efficiency | Miner-selected block-size cap, thin blocks and parallel validation | Alternative implementation |
+| Bitcoin Gold      | Mining centralisation                                    | Equihash and GPU mining                                            | Hard fork                  |
+| Lightning Network | Scalability and slow on-chain payments                   | Off-chain payment channels                                         | Layer 2 protocol           |
+
+## **Understand the differences through one-line explanations**
+
+**SegWit:** Separates signature data to improve transaction structure, security and capacity.
+
+**Bitcoin Cash:** Increases block capacity to support more transactions per block.
+
+**Bitcoin Unlimited:** Proposes flexible block-size limits and more efficient block propagation and validation.
+
+**Bitcoin Gold:** Attempts to make mining more accessible by reducing dependence on ASIC hardware.
+
+**Lightning Network:** Enables fast off-chain payments through payment channels.
+
+# **Module 4 — Exam Preparation**
+
+## **A. Important 5-mark questions**
+
+| No. | Question                                                     | Priority  |
+| --- | ------------------------------------------------------------ | --------- |
+| 1   | What are Bitcoin Improvement Proposals? Explain their types. | Very high |
+| 2   | Differentiate between soft fork and hard fork.               | Very high |
+| 3   | What is SegWit? Explain its advantages.                      | Very high |
+| 4   | What is Bitcoin Cash? Explain its features.                  | High      |
+| 5   | Explain Bitcoin Unlimited and its features.                  | High      |
+| 6   | What is Bitcoin Gold? Why was it introduced?                 | High      |
+| 7   | What is the Lightning Network? Explain payment channels.     | Very high |
+| 8   | What is transaction malleability?                            | High      |
+| 9   | Explain the concept of block weight in SegWit.               | High      |
+| 10  | Differentiate between on-chain and off-chain transactions.   | High      |
+
+## **B. Important 10-mark questions**
+
+1. Explain Bitcoin Improvement Proposals and their different types with examples.
+2. Explain Segregated Witness (SegWit) in detail, including its working, advantages and transaction types.
+3. Explain Bitcoin Cash, Bitcoin Unlimited and Bitcoin Gold with their features and objectives.
+4. Explain the Lightning Network and its working with a suitable diagram.
+5. Differentiate between soft fork and hard fork with suitable examples.
+6. Explain the major innovations in Bitcoin and how they address the limitations of the original protocol.
+
+## **C. Exam-ready 10-mark answer: Explain SegWit**
+
+**Introduction:**
+
+Segregated Witness (SegWit) is a Bitcoin protocol upgrade implemented through a soft fork. It was introduced to address transaction malleability, improve transaction capacity, increase bandwidth efficiency and improve transaction verification.
+
+**Working:**
+
+SegWit separates signature-related witness data from the traditional transaction data structure. Earlier, signature data was included within the traditional transaction structure. After SegWit, it is stored separately in a witness structure.
+
+**Features and advantages:**
+
+1. **Transaction malleability:** Separates witness data from the data used to calculate the traditional transaction ID.
+2. **Bandwidth efficiency:** Allows lightweight clients to avoid downloading unnecessary witness information in certain situations.
+3. **Faster verification:** Introduces improvements in transaction signature hashing and verification through BIP143.
+4. **Script versioning:** Supports easier upgrades to Bitcoin's scripting system.
+5. **Increased block capacity:** Introduces a block-weight limit instead of relying only on the traditional 1 MB block-size limit.
+6. **Improved address format:** Introduces Bech32 addresses, commonly beginning with `bc1`.
+
+**Types of SegWit transactions:**
+
+- P2WPKH
+- P2SH-P2WPKH
+- P2WSH
+- P2SH-P2WSH
+
+**Conclusion:**
+
+SegWit is an important Bitcoin upgrade that improves transaction malleability protection, capacity, efficiency and script upgradeability. It was activated on the Bitcoin main network on 24 August 2017.
+
+## **D. Exam-ready 10-mark answer: Explain Lightning Network**
+
+**Introduction:**
+
+The Lightning Network is a Layer 2 payment protocol built on top of Bitcoin. It was introduced to improve Bitcoin's scalability by enabling fast and low-cost off-chain payments.
+
+**Working:**
+
+1. **Opening a payment channel:** Two participants create a payment channel using an on-chain Bitcoin transaction.
+2. **Locking funds:** Funds are committed to the channel.
+3. **Off-chain payments:** Participants make multiple payments through the channel without recording every payment individually on the Bitcoin blockchain.
+4. **Updating balances:** The channel maintains the latest payment balances.
+5. **Closing the channel:** Participants close the payment channel.
+6. **Final settlement:** The final balance is recorded on the Bitcoin blockchain.
+
+**Advantages:**
+
+- Faster payments.
+- Lower transaction costs.
+- Improved scalability.
+- Supports micropayments.
+- Suitable for frequent transactions.
+
+**Limitations:**
+
+- Requires channel liquidity.
+- Channel management can be complex.
+- Requires compatible infrastructure.
+- Payment routing depends on available liquidity.
+
+**Conclusion:**
+
+The Lightning Network improves Bitcoin's scalability by moving frequent payments off-chain while using the main Bitcoin blockchain for channel establishment and final settlement.
+
+## **E. Quick revision sheet**
+
+**Important facts to remember**
+
+- BIP = Bitcoin Improvement Proposal.
+- Standard BIP = Protocol changes.
+- Process BIP = Process changes.
+- Informational BIP = Information and guidance.
+- Soft fork = Backward-compatible upgrade.
+- Hard fork = Non-backward-compatible upgrade.
+- SegWit = Segregated Witness.
+- BIP141 = SegWit proposal.
+- BIP143 = SegWit signature hashing.
+- Bech32 = SegWit address encoding.
+- Block weight = 4 million weight units maximum.
+- Bitcoin Cash = Hard fork, larger block limit.
+- Bitcoin Unlimited = Miner-selected block-size cap proposal.
+- Extremely thin blocks = Send missing transactions.
+- Parallel validation = Validate multiple items in parallel.
+- Bitcoin Gold = Hard fork, Equihash, GPU mining.
+- ASIC = Application-Specific Integrated Circuit.
+- Lightning Network = Layer 2.
+- Payment channel = Multiple off-chain payments.
+- On-chain = Recorded on the main blockchain.
+- Off-chain = Processed outside the main blockchain.
+
+## **F. Test your understanding**
+
+**1. What does BIP stand for?**
+
+Bitcoin Internet Protocol
+
+Bitcoin Improvement Proposal
+
+Blockchain Integration Process
+
+Bitcoin Internal Payment
+
+**2. Which type of BIP deals with major protocol changes?**
+
+Standard BIP
+
+Process BIP
+
+Informational BIP
+
+None
+
+**3. Which fork is backward-compatible?**
+
+Hard fork
+
+Soft fork
+
+Temporary fork only
+
+Neither
+
+**4. What is the main purpose of SegWit?**
+
+Replace Bitcoin mining
+
+Separate witness data and improve Bitcoin transactions
+
+Create a new cryptocurrency
+
+Remove digital signatures
+
+**5. Which address format is associated with native SegWit?**
+
+bc1
+
+0x
+
+LTC
+
+ETH
+
+**6. What is the maximum block weight introduced by SegWit?**
+
+1 million units
+
+2 million units
+
+4 million units
+
+8 million units
+
+**7. Bitcoin Cash was created through which type of fork?**
+
+Soft fork
+
+Hard fork
+
+No fork
+
+Temporary fork
+
+**8. What is the main objective of Bitcoin Gold?**
+
+Increase mining centralisation
+
+Reduce mining centralisation
+
+Remove PoW completely
+
+Eliminate wallets
+
+**9. Which algorithm is associated with Bitcoin Gold in the textbook?**
+
+SHA-256
+
+Equihash
+
+AES
+
+RSA
+
+**10. What is the main purpose of the Lightning Network?**
+
+Increase mining rewards
+
+Enable faster off-chain payments
+
+Replace public keys
+
+Increase block time
+
+**0/10 answered**
+
+Reset quiz
+
+Module 4 complete
+
+### **Source references**
+
+- Your textbook, *Mastering Blockchain, Third Edition*, Chapter 7, pages 243–247: BIP types, SegWit, Bitcoin Cash, Bitcoin Unlimited and Bitcoin Gold.&#x20;
+- Your uploaded *All topics of bitcoin.pptx*: background on Bitcoin transactions, transaction malleability-related concepts, block structure, forks and mining.&#x20;
+
+**One historical note:** The Bitcoin Cash 8 MB block limit and other numerical details above are the historical descriptions in your textbook, not necessarily current network specifications.
+
+## **Unit IV — Progress**
+
+| Module | Topics                                         | Status    |
+| ------ | ---------------------------------------------- | --------- |
+| 1      | The Bitcoin Network                            | Completed |
+| 2      | Bitcoin Wallets                                | Completed |
+| 3      | Bitcoin Payments                               | Completed |
+| 4      | Innovation in Bitcoin and Advanced Protocols   | Completed |
+| 5      | Bitcoin Investment, Buying and Selling Bitcoin | Next      |
+
+**Next: Module 5 — Bitcoin Investment, Buying and Selling Bitcoin**
+
+We'll start with what Bitcoin investment means, exchanges, how buying and selling work, order books, bid and ask prices, market orders, limit orders, trading and investment risks.
+
+Say **NEXT** when you're ready.

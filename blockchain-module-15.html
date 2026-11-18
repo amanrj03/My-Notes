@@ -1,0 +1,1980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 15: Bitcoin Wallets — Blockchain Study Guide</title>
+    <meta name="description" content="Blockchain &amp; Cryptography study guide — Unit IV — Module 15 of 18 — Bitcoin Wallets: Private keys, public keys, and address derivation pipeline (secp256k1, SHA-256, RIPEMD-160, Base58Check), non-deterministic (JBOK) vs hierarchical deterministic (HD BIP32/BIP44) wallets, BIP39 mnemonic seed words, wallet types, hot vs cold storage, and UTXO transaction management.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+
+    <!-- MathJax for LaTeX rendering -->
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['\\(', '\\)']],
+            displayMath: [['$$', '$$']],
+        },
+        options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+@page { size: A4; margin: 15mm; }
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text-body, #2d3748);
+    margin: 0; padding: 0;
+    background-color: var(--bg-body, #f3f5f8);
+}
+
+.page-container {
+    max-width: 1100px;
+    margin: 25px auto 40px;
+    padding: 40px 55px;
+    background-color: var(--bg-page, #ffffff);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+}
+
+.module-banner {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0284c7 100%);
+    border-radius: 10px;
+    padding: 28px 32px;
+    margin-bottom: 28px;
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(2, 132, 199, 0.2);
+}
+.module-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    font-size: 12px; font-weight: 700;
+    padding: 4px 16px; border-radius: 20px;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    border: 1px solid rgba(255,255,255,0.25);
+    margin-bottom: 10px;
+}
+.module-banner-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 26px; font-weight: 700; line-height: 1.3;
+    margin: 0; color: #fff !important; border: none !important; padding: 0 !important;
+}
+
+.nav-toggle { margin-bottom: 24px; }
+.nav-toggle-btn {
+    display: inline-block;
+    background: #0284c7;
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+.nav-toggle-btn:hover { background: #0369a1; }
+
+.nav-panel {
+    display: none;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 8px;
+    column-count: 2;
+    column-gap: 24px;
+}
+.nav-panel.open { display: block !important; }
+
+.nav-item {
+    display: block;
+    padding: 6px 10px;
+    font-size: 13px;
+    color: var(--link-color, #0284c7);
+    text-decoration: none;
+    border-radius: 4px;
+    break-inside: avoid;
+    transition: all 0.15s;
+}
+.nav-item:hover { background: rgba(2, 132, 199, 0.1); color: #0284c7; }
+.nav-item.current {
+    background: #0284c7;
+    color: #fff !important;
+    font-weight: 600;
+}
+
+h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    color: var(--heading-color, #0f172a);
+    border-bottom: 2px solid #0284c7;
+    padding-bottom: 8px;
+    margin-top: 36px; margin-bottom: 18px;
+    line-height: 1.3;
+}
+h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 20px;
+    color: var(--heading-h2, #0369a1);
+    border-left: 5px solid #0284c7;
+    padding-left: 12px;
+    margin-top: 30px; margin-bottom: 14px;
+    line-height: 1.35;
+}
+h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 17px;
+    color: var(--heading-h3, #075985);
+    margin-top: 22px; margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+p { margin-top: 0; margin-bottom: 14px; overflow-wrap: break-word; }
+ul, ol { margin-top: 0; margin-bottom: 16px; padding-left: 28px; }
+li { margin-bottom: 6px; }
+hr { border: none; border-top: 1px solid var(--border-color, #e2e8f0); margin: 28px 0; }
+
+code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13.5px;
+    background: var(--code-bg, #f1f5f9);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color, #e2e8f0);
+}
+
+pre {
+    background: #0f172a;
+    color: #f8fafc;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 13.5px;
+}
+pre code { background: transparent; border: none; color: inherit; padding: 0; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid var(--border-color, #cbd5e1);
+    padding: 10px 14px;
+    text-align: left;
+}
+th {
+    background: var(--table-th-bg, #f1f5f9);
+    font-weight: 700;
+    color: var(--text-heading, #0f172a);
+}
+
+.ref-pill {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(2, 132, 199, 0.08);
+    color: #0284c7;
+    border: 1px solid rgba(2, 132, 199, 0.2);
+    border-radius: 16px;
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 4px 4px 4px 0;
+}
+
+.exam-header-banner {
+    background: linear-gradient(135deg, #1e3a8a, #0284c7);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    margin: 28px 0 16px 0;
+}
+
+.memory-trick-banner {
+    background: linear-gradient(135deg, #065f46, #10b981);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    margin: 24px 0 14px 0;
+}
+
+.math-display {
+    margin: 18px 0;
+    overflow-x: auto;
+    text-align: center;
+}
+
+.prev-next {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-color, #e2e8f0);
+}
+
+.pn-btn {
+    display: inline-block;
+    background: #0284c7;
+    color: #fff;
+    padding: 10px 22px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background 0.2s, transform 0.15s;
+}
+.pn-btn:hover { background: #0369a1; transform: translateY(-1px); }
+
+.pn-reader {
+    color: #64748b;
+    font-size: 13.5px;
+    text-decoration: none;
+    font-weight: 500;
+}
+.pn-reader:hover { color: #0284c7; }
+
+/* Dark mode overrides */
+[data-theme="dark"] .page-container {
+    background-color: var(--bg-page, #0b1120);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+[data-theme="dark"] code {
+    background: #1e293b;
+    border-color: #334155;
+    color: #38bdf8;
+}
+[data-theme="dark"] th {
+    background: #1e293b;
+    color: #f8fafc;
+}
+[data-theme="dark"] .nav-panel {
+    background: #0f172a;
+    border-color: #1e293b;
+}
+
+@media (max-width: 768px) {
+    .page-container { padding: 24px 18px; margin: 15px auto; }
+    .module-banner { padding: 20px; }
+    .module-banner-title { font-size: 20px; }
+    .nav-panel { column-count: 1; }
+}
+</style>
+</head>
+<body>
+
+<!-- GLOBAL NAVIGATION HEADER -->
+<header class="global-navbar">
+    <div class="nav-container">
+        <a href="index.html" class="nav-brand">
+            <span class="nav-brand-icon">⚡</span>
+            <span class="nav-brand-text">OmniCourse<span class="nav-brand-accent">.Hub</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link"><span class="icon">🏠</span> All Subjects</a>
+            <div class="nav-dropdown">
+    <button class="nav-dropdown-btn active"><span class="icon">⛓️</span> Blockchain (18) ▾</button>
+    <div class="nav-dropdown-menu">
+        <a href="blockchain.html" class="nav-dropdown-header">📋 Blockchain Syllabus Hub (All 18)</a>
+        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit I (Mods 1–4)</div>
+        <a href="blockchain-module-1.html">Module 1: Growth, History of Blockchain & Bitcoin</a>
+        <a href="blockchain-module-2.html">Module 2: Distributed Systems & Blockchain</a>
+        <a href="blockchain-module-3.html">Module 3: Consensus Protocols</a>
+        <a href="blockchain-module-4.html">Module 4: Decentralization</a>
+        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit II (Mods 5–8)</div>
+        <a href="blockchain-module-5.html">Module 5: Symmetric Cryptography</a>
+        <a href="blockchain-module-6.html">Module 6: Public Key Cryptography</a>
+        <a href="blockchain-module-7.html">Module 7: Digital Signatures + Cryptographic Constructs</a>
+        <a href="blockchain-module-8.html">Module 8: SHA & Cryptographic Hash Functions</a>
+        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit III (Mods 9–13)</div>
+        <a href="blockchain-module-9.html">Module 9: Consensus Problem, Analysis & Design</a>
+        <a href="blockchain-module-10.html">Module 10: Classification & Traditional Consensus (Paxos, Raft, PBFT)</a>
+        <a href="blockchain-module-11.html">Module 11: Blockchain Consensus (PoW, PoS, DPoS) & Selection</a>
+        <a href="blockchain-module-12.html">Module 12: Bitcoin Architecture, Keys & Transactions</a>
+        <a href="blockchain-module-13.html">Module 13: Bitcoin Blockchain, Network, Mining & Forks</a>
+        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit IV (Mods 14–18)</div>
+        <a href="blockchain-module-14.html">Module 14: The Bitcoin Network</a>
+        <a href="blockchain-module-15.html">Module 15: Bitcoin Wallets</a>
+        <a href="blockchain-module-16.html">Module 16: Bitcoin Payments</a>
+        <a href="blockchain-module-17.html">Module 17: Innovation in Bitcoin and Advanced Protocols</a>
+        <a href="blockchain-module-18.html">Module 18: Bitcoin Investment, Buying and Selling Bitcoin</a>
+        <a href="blockchain_guide.html" class="nav-dropdown-special">📖 Full 8-Module Reader</a>
+    </div>
+</div>
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-btn"><span class="icon">🐍</span> Django Course (45) ▾</button>
+                <div class="nav-dropdown-menu">
+                    <a href="django.html" class="nav-dropdown-header">📋 Django Syllabus Hub</a>
+                    <a href="module-1.html">Module 1: Introduction to Web &amp; Django</a>
+                    <a href="module-2.html">Module 2: Project Architecture</a>
+                    <a href="django_guide.html" class="nav-dropdown-special">📖 Full 45-Module Reader</a>
+                </div>
+            </div>
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-btn"><span class="icon">📐</span> Mathematics (17) ▾</button>
+                <div class="nav-dropdown-menu">
+                    <a href="maths.html" class="nav-dropdown-header">📋 Number Theory Hub (All 17)</a>
+                    <a href="maths-module-1.html">Module 1: Divisibility Algorithm</a>
+                    <a href="maths-module-2.html">Module 2: Modular Arithmetic</a>
+                </div>
+            </div>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
+                <span class="theme-toggle-icon">🌙</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<div class="page-container">
+
+    <div class="module-banner">
+        <div class="module-badge">Unit IV — Module 15 of 18 — Bitcoin Wallets</div>
+        <h1 class="module-banner-title">Bitcoin Wallets</h1>
+    </div>
+
+    <div class="nav-toggle">
+        <button class="nav-toggle-btn" onclick="document.getElementById('bcNavPanel').classList.toggle('open')">
+            📚 All 18 Blockchain Modules ▾
+        </button>
+        <div class="nav-panel" id="bcNavPanel">
+<div class="nav-unit-header" style="font-weight: 800; font-size: 11.5px; text-transform: uppercase; color: #0284c7; margin: 12px 0 6px 4px; letter-spacing: 0.5px; break-inside: avoid;">Unit I: Blockchain Fundamentals</div>
+<a class="nav-item" href="blockchain-module-1.html">1. Growth, History of Blockchain & Bitcoin</a>
+<a class="nav-item" href="blockchain-module-2.html">2. Distributed Systems & Blockchain</a>
+<a class="nav-item" href="blockchain-module-3.html">3. Consensus Protocols</a>
+<a class="nav-item" href="blockchain-module-4.html">4. Decentralization</a>
+<div class="nav-unit-header" style="font-weight: 800; font-size: 11.5px; text-transform: uppercase; color: #0284c7; margin: 12px 0 6px 4px; letter-spacing: 0.5px; break-inside: avoid;">Unit II: Cryptographic Primitives</div>
+<a class="nav-item" href="blockchain-module-5.html">5. Symmetric Cryptography</a>
+<a class="nav-item" href="blockchain-module-6.html">6. Public Key Cryptography</a>
+<a class="nav-item" href="blockchain-module-7.html">7. Digital Signatures + Cryptographic Constructs</a>
+<a class="nav-item" href="blockchain-module-8.html">8. SHA & Cryptographic Hash Functions</a>
+<div class="nav-unit-header" style="font-weight: 800; font-size: 11.5px; text-transform: uppercase; color: #0284c7; margin: 12px 0 6px 4px; letter-spacing: 0.5px; break-inside: avoid;">Unit III: Consensus & Bitcoin Core</div>
+<a class="nav-item" href="blockchain-module-9.html">9. Consensus Problem, Analysis & Design</a>
+<a class="nav-item" href="blockchain-module-10.html">10. Classification & Traditional Consensus (Paxos, Raft, PBFT)</a>
+<a class="nav-item" href="blockchain-module-11.html">11. Blockchain Consensus (PoW, PoS, DPoS) & Selection</a>
+<a class="nav-item" href="blockchain-module-12.html">12. Bitcoin Architecture, Keys & Transactions</a>
+<a class="nav-item" href="blockchain-module-13.html">13. Bitcoin Blockchain, Network, Mining & Forks</a>
+<div class="nav-unit-header" style="font-weight: 800; font-size: 11.5px; text-transform: uppercase; color: #0284c7; margin: 12px 0 6px 4px; letter-spacing: 0.5px; break-inside: avoid;">Unit IV: Bitcoin Network, Wallets, Payments & Economics</div>
+<a class="nav-item" href="blockchain-module-14.html">14. The Bitcoin Network</a>
+<span class="nav-item current">15. Bitcoin Wallets</span>
+<a class="nav-item" href="blockchain-module-16.html">16. Bitcoin Payments</a>
+<a class="nav-item" href="blockchain-module-17.html">17. Innovation in Bitcoin and Advanced Protocols</a>
+<a class="nav-item" href="blockchain-module-18.html">18. Bitcoin Investment, Buying and Selling Bitcoin</a>
+        </div>
+    </div>
+
+    <div class="module-content">
+<p>Module 2</p>
+<p>Beginner level</p>
+<p>In Module 1, we learned how Bitcoin computers communicate with each other. Now we'll understand something every Bitcoin user needs: a <strong>Bitcoin wallet</strong>.</p>
+<p>We'll start from zero. Before learning the different wallet types, you must understand one very important concept:</p>
+<p><strong>A Bitcoin wallet does not actually store bitcoins. It stores and manages the cryptographic keys that allow you to control and spend bitcoins recorded on the blockchain.</strong></p>
+<p>This is one of the most important concepts in this module and is directly explained in your teacher's <em><span class="ref-pill">📄 Slides Reference: Bitcoin client and payment.pptx</span></em> and <em>Mastering Blockchain, Third Edition</em>.</p>
+<h2><strong>Module 2 roadmap</strong></h2>
+<ol>
+<li>What is a Bitcoin wallet?</li>
+<li>What does a Bitcoin wallet actually store?</li>
+<li>Private key, public key and Bitcoin address</li>
+<li>How a wallet sends and receives Bitcoin</li>
+<li>Types of Bitcoin wallets</li>
+<li>Non-deterministic wallets</li>
+<li>Deterministic wallets</li>
+<li>Hierarchical Deterministic (HD) wallets</li>
+<li>Brain wallets</li>
+<li>Paper wallets</li>
+<li>Hardware wallets</li>
+<li>Online wallets</li>
+<li>Mobile wallets</li>
+<li>Hot wallets vs cold wallets</li>
+<li>Wallet backup and recovery</li>
+<li>Seed phrases and mnemonic codes</li>
+<li>Wallet security</li>
+<li>Important 5-mark and 10-mark questions</li>
+</ol>
+<h1><strong>Topic 1: What is a Bitcoin Wallet?</strong></h1>
+<h2><strong>1.1 First, understand a normal wallet</strong></h2>
+<p>Imagine you have a physical wallet.</p>
+<p><a href="https://images.openai.com/static-rsc-4/vwJ0II-K4x4VH4D7ehR4fLjpkTgYPtRBt3OuHVwVm25HQDj52iI5wcocnms6ejXC84jVDSW_CPkmszNKsgrs_ihVNQ5G-EzQpyG2atuutNimJNT60RlUCATU4bNjLwE2lhMsZtG0dDrH3nAQHjDN8DlLVpDEU42P3mU6aPv9Sy0?purpose=inline">Best Leather Wallets for Men 2026: Slim, RFID &amp; Handcrafted | CalfNero</a></p>
+<p><a href="https://calfnero.in/blogs/news/best-leather-wallets-for-men-2026-slim-rfid-handcrafted-calfnero?utm_source=chatgpt.com">calfnero.in</a></p>
+<p>You keep:</p>
+<ul>
+<li>Money</li>
+<li>Debit and credit cards</li>
+<li>Identification cards</li>
+</ul>
+<p>Whenever you want to pay someone, you take money out of your wallet.</p>
+<p>Now, Bitcoin works differently.</p>
+<p>You cannot physically keep Bitcoin inside your mobile phone or computer. Bitcoin exists as transaction records on the blockchain.</p>
+<p>So, what does a Bitcoin wallet do?</p>
+<p>It manages the cryptographic keys that allow you to access and spend the Bitcoin associated with your wallet.</p>
+<h2><strong>1.2 Definition of a Bitcoin wallet</strong></h2>
+<p><strong>A Bitcoin wallet is a software application or physical device used to generate, store and manage cryptographic keys, allowing users to send, receive and manage Bitcoin transactions.</strong></p>
+<p>Your teacher's PPT specifically lists these wallet functions:</p>
+<ol>
+<li>Generating cryptographic keys.</li>
+<li>Storing cryptographic keys.</li>
+<li>Sending and receiving Bitcoin.</li>
+<li>Backing up keys.</li>
+<li>Keeping track of the available balance.</li>
+</ol>
+<p>In simple language, a Bitcoin wallet is a tool that helps you manage your Bitcoin ownership and transactions.</p>
+<h2><strong>1.3 Does a Bitcoin wallet actually store bitcoins?</strong></h2>
+<p>Very important concept</p>
+<p>No. A Bitcoin wallet does not store actual bitcoins.</p>
+<p>Let's understand this with an example.</p>
+<p>Suppose Aman has 2 BTC in his wallet.</p>
+<p>Where are those 2 BTC?</p>
+<p>They are represented by unspent transaction outputs (UTXOs) recorded on the Bitcoin blockchain.</p>
+<p>The wallet stores the keys needed to satisfy the conditions for spending those outputs.</p>
+<p>The wallet also examines blockchain information to calculate the balance associated with the keys it manages.</p>
+<h3><strong>Real-life example</strong></h3>
+<p>Imagine that your bank stores your money in its banking system.</p>
+<p>Your ATM card does not contain the actual money. It gives you a way to access and use the money associated with your bank account.</p>
+<p>Similarly:</p>
+<ul>
+<li>Bitcoin blockchain = records the transaction outputs.</li>
+<li>Bitcoin wallet = manages the keys used to control those outputs.</li>
+<li>Private key = gives the ability to authorise spending under the relevant spending conditions.</li>
+</ul>
+<p><strong>Important difference:</strong> Bitcoin is not stored inside the wallet. The wallet stores the keys that provide control over Bitcoin recorded on the blockchain.</p>
+<h2><strong>1.4 What does a Bitcoin wallet store?</strong></h2>
+<p>A Bitcoin wallet may manage:</p>
+<ul>
+<li>Private keys</li>
+<li>Public keys</li>
+<li>Bitcoin addresses</li>
+<li>Seed or recovery information</li>
+<li>Transaction information</li>
+<li>Wallet-related metadata</li>
+</ul>
+<p>The most important item is the <strong>private key</strong>.</p>
+<p>Why? Because the private key is used to create digital signatures authorising transactions.</p>
+<p>We'll understand this in detail in the next topic.</p>
+<h1><strong>Topic 2: Understanding Private Keys, Public Keys and Bitcoin Addresses</strong></h1>
+<p>Before learning wallet types, you must understand these three terms.</p>
+<p>They are the foundation of Bitcoin wallets.</p>
+<h2><strong>2.1 What is a private key?</strong></h2>
+<p>A <strong>private key is a secret cryptographic number used to authorise the spending of Bitcoin.</strong></p>
+<p>In Bitcoin, private keys are 256-bit numbers generated within the valid range specified by the secp256k1 elliptic curve.</p>
+<p>Your teacher's PPT explains that private keys are randomly generated and are commonly represented in Wallet Import Format (WIF) for importing or exporting keys.</p>
+<h3><strong>Simple example</strong></h3>
+<p>Imagine that Aman owns Bitcoin.</p>
+<p>His wallet has a private key.</p>
+<p>When Aman wants to send Bitcoin to Rahul, the wallet uses the private key to digitally sign the transaction.</p>
+<p>The private key proves that Aman can authorise the spending of the relevant Bitcoin.</p>
+<p><strong>Important:</strong> Never share your private key with another person.</p>
+<p>Anyone who obtains a private key controlling your Bitcoin may be able to spend the associated funds.</p>
+<h2><strong>2.2 What is a public key?</strong></h2>
+<p>A <strong>public key is a cryptographic key derived from a private key and used by others to verify digital signatures.</strong></p>
+<p>In Bitcoin, public keys are generated using Elliptic Curve Cryptography (ECC), specifically the secp256k1 curve.</p>
+<p>The public key is not secret like the private key.</p>
+<h3><strong>Example</strong></h3>
+<p>Suppose Aman has:</p>
+<ul>
+<li>Private key: Secret</li>
+<li>Public key: Derived from the private key</li>
+</ul>
+<p>When Aman signs a Bitcoin transaction, other nodes can use the corresponding public key to verify that the signature is valid.</p>
+<p>This helps establish that the transaction was authorised by someone controlling the corresponding private key.</p>
+<h2><strong>2.3 What is a Bitcoin address?</strong></h2>
+<p>A <strong>Bitcoin address is an identifier that a sender can use to specify where Bitcoin should be sent.</strong></p>
+<p>Think of it like a bank account number.</p>
+<p>If Rahul wants to receive Bitcoin from Aman, Rahul shares his Bitcoin address with Aman.</p>
+<p>Aman enters that address in his wallet to create the payment.</p>
+<p>Example of a traditional Bitcoin address:</p>
+<p>EXAMPLE BITCOIN ADDRESS</p>
+<h2><strong>1ANAguGG8bikEv2fYsTBnRUmx7QUcK58wt</strong></h2>
+<p>Example from your teacher's Bitcoin material.</p>
+<p>A Bitcoin address is not the private key. It is an identifier used in the transaction's spending conditions.</p>
+<h2><strong>2.4 Relationship between private key, public key and address</strong></h2>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Bitcoin Key &amp; Address Derivation Pipeline</h4>
+            <div class="diagram-subtitle">From a 256-bit private key to a Base58Check legacy P2PKH address</div>
+        </div>
+        <div class="diagram-flow-row" style="flex-wrap: wrap;">
+            <div class="flow-step-card" style="min-width: 170px;">
+                <div class="flow-step-num">Step 1</div>
+                <div class="flow-step-title">Private Key ($k$)</div>
+                <div class="flow-step-desc">256-bit cryptographically secure random integer</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step-card" style="min-width: 170px;">
+                <div class="flow-step-num">Step 2: ECDSA</div>
+                <div class="flow-step-title">Public Key ($K$)</div>
+                <div class="flow-step-desc">Elliptic Curve point multiplication: K = k &times; G (secp256k1)</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step-card" style="min-width: 170px;">
+                <div class="flow-step-num">Step 3: Hash160</div>
+                <div class="flow-step-title">Public Key Hash</div>
+                <div class="flow-step-desc">RIPEMD160(SHA256(K)) produces 160-bit fingerprint</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step-card" style="min-width: 170px;">
+                <div class="flow-step-num">Step 4: Base58Check</div>
+                <div class="flow-step-title">Bitcoin Address</div>
+                <div class="flow-step-desc">Prefix <code>0x00</code> + 4-byte SHA256 checksum &rarr; <code>1A1z...</code></div>
+            </div>
+        </div>
+    </div>
+    
+<p>Let's understand their relationship.</p>
+<h2><strong>Private key</strong></h2>
+<p>Secret number generated by wallet</p>
+<h2><strong>Public key</strong></h2>
+<p>Derived using elliptic curve cryptography</p>
+<h2><strong>Bitcoin address</strong></h2>
+<p>Derived from public-key or script-related data, depending on address type</p>
+<p>Remember:</p>
+<ul>
+<li>Private key → used to sign.</li>
+<li>Public key → used to verify.</li>
+<li>Bitcoin address → shared to receive payments.</li>
+</ul>
+<h2><strong>2.5 How is a traditional Bitcoin address generated?</strong></h2>
+<p>Your teacher's <em><span class="ref-pill">📄 Slides Reference: All topics of bitcoin.pptx</span></em> explains the traditional public-key-hash address-generation process.</p>
+<p>Let's understand each step.</p>
+<p><strong>Step 1:</strong> Generate a private key.</p>
+<p><strong>Step 2:</strong> Derive the public key from the private key.</p>
+<p><strong>Step 3:</strong> Apply SHA-256 to the public key.</p>
+<p><strong>Step 4:</strong> Apply RIPEMD-160 to the SHA-256 result.</p>
+<p><strong>Step 5:</strong> Add the relevant version information.</p>
+<p><strong>Step 6:</strong> Calculate a checksum using double SHA-256.</p>
+<p><strong>Step 7:</strong> Encode the result using Base58Check.</p>
+<p>The result is a traditional Bitcoin address such as a P2PKH address.</p>
+<p><strong>Private key</strong></p>
+<p><strong>Public key</strong></p>
+<p><strong>SHA-256</strong></p>
+<p><strong>RIPEMD-160</strong></p>
+<p><strong>Add version information</strong></p>
+<p><strong>Double SHA-256 checksum</strong></p>
+<p><strong>Base58Check encoding</strong></p>
+<h2><strong>Bitcoin address</strong></h2>
+<h3><strong>What is Base58Check?</strong></h3>
+<p>Base58Check is an encoding method used to represent Bitcoin data in a human-readable format, with a checksum to help detect typing errors.</p>
+<p>Your teacher's PPT mentions that traditional addresses can begin with:</p>
+<ul>
+<li><code>1</code> — commonly associated with P2PKH addresses.</li>
+<li><code>3</code> — commonly associated with P2SH addresses.</li>
+</ul>
+<p>Modern Bitcoin also supports SegWit addresses beginning with <code>bc1</code>, which we'll encounter in the payments and advanced-protocol modules.</p>
+<p><strong>Exam point:</strong> Do not write that every Bitcoin address begins with 1 or 3. That applies to the traditional address types covered in the older public-key-hash discussion.</p>
+<h1><strong>Topic 3: How Does a Bitcoin Wallet Work?</strong></h1>
+<p>Now let's understand how a wallet is used in real life.</p>
+<p>Suppose Aman wants to send 0.5 BTC to Rahul.</p>
+<h2><strong>3.1 Receiving Bitcoin</strong></h2>
+<p>Rahul wants to receive Bitcoin.</p>
+<ol>
+<li>Rahul opens his Bitcoin wallet.</li>
+<li>The wallet provides a Bitcoin receiving address.</li>
+<li>Rahul shares the address with Aman.</li>
+<li>Aman creates a transaction using Rahul's address.</li>
+<li>The transaction is broadcast to the Bitcoin network.</li>
+<li>Once included in an accepted block, the payment is recorded on the blockchain.</li>
+<li>Rahul's wallet detects the relevant transaction and updates its displayed balance.</li>
+</ol>
+<p><strong>Rahul opens wallet</strong></p>
+<p><strong>Wallet generates or displays receiving address</strong></p>
+<p><strong>Rahul shares address with Aman</strong></p>
+<p><strong>Aman sends Bitcoin</strong></p>
+<p><strong>Transaction is confirmed and Rahul's wallet recognises the payment</strong></p>
+<h2><strong>3.2 Sending Bitcoin</strong></h2>
+<p>Now suppose Aman wants to send 0.5 BTC to Rahul.</p>
+<p>The process is:</p>
+<ol>
+<li>Aman opens his wallet.</li>
+<li>He enters Rahul's Bitcoin address.</li>
+<li>He enters the amount, 0.5 BTC.</li>
+<li>The wallet selects suitable unspent transaction outputs (UTXOs).</li>
+<li>The wallet creates a transaction with inputs and outputs.</li>
+<li>The wallet signs the transaction using the required private key.</li>
+<li>The transaction is broadcast to Bitcoin nodes.</li>
+<li>Miners may include it in a block.</li>
+<li>The transaction receives confirmations as additional blocks build on that block.</li>
+</ol>
+<p><strong>Important:</strong> A wallet does not send a private key to Rahul or to the Bitcoin network. It uses the key locally to produce the required signature.</p>
+<h2><strong>3.3 What is a UTXO?</strong></h2>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">UTXO Transaction Selection &amp; Change Address Mechanism</h4>
+            <div class="diagram-subtitle">Unspent transaction outputs must be spent in their entirety</div>
+        </div>
+        <div class="diagram-nodes-row" style="justify-content: space-around; align-items: center;">
+            <div class="diagram-node" style="flex: 1; max-width: 220px; background: rgba(56, 189, 248, 0.05); border-color: #0284c7;">
+                <div style="font-weight: 700; color: #38bdf8; margin-bottom: 6px;">Inputs (UTXOs Spent)</div>
+                <div style="font-size: 12.5px; color: #cbd5e1; line-height: 1.5;">
+                    UTXO #1: <strong>0.80 BTC</strong><br>
+                    UTXO #2: <strong>0.50 BTC</strong><br>
+                    <hr style="border: none; border-top: 1px dashed rgba(255,255,255,0.2); margin: 6px 0;">
+                    Total In: <span style="color: #38bdf8; font-weight: bold;">1.3000 BTC</span>
+                </div>
+            </div>
+            <div style="font-size: 24px; color: #64748b;">&rarr;</div>
+            <div class="diagram-node primary" style="flex: 1; max-width: 200px;">
+                <svg class="diagram-node-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path>
+  <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path>
+  <path d="M18 12a2 2 0 0 0 0 4h4v-4z"></path>
+</svg>
+                <div class="diagram-node-title">Transaction Engine</div>
+                <div class="diagram-node-desc">ECDSA signature unlocking scripts validated</div>
+            </div>
+            <div style="font-size: 24px; color: #64748b;">&rarr;</div>
+            <div class="diagram-node" style="flex: 1; max-width: 260px; background: rgba(16, 185, 129, 0.05); border-color: #10b981;">
+                <div style="font-weight: 700; color: #34d399; margin-bottom: 6px;">Outputs (New UTXOs)</div>
+                <div style="font-size: 12.5px; color: #cbd5e1; line-height: 1.5;">
+                    1. Recipient: <strong>1.0000 BTC</strong><br>
+                    2. Change Address: <strong>0.2995 BTC</strong><br>
+                    3. Miner Fee: <strong>0.0005 BTC</strong><br>
+                    <hr style="border: none; border-top: 1px dashed rgba(255,255,255,0.2); margin: 6px 0;">
+                    Total Out: <span style="color: #34d399; font-weight: bold;">1.3000 BTC</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<p>UTXO stands for <strong>Unspent Transaction Output</strong>.</p>
+<p>Bitcoin uses the UTXO model instead of maintaining a simple account balance in the way many traditional banking systems do.</p>
+<p>Let's understand with an example.</p>
+<p>Suppose Aman receives:</p>
+<ul>
+<li>0.4 BTC from Rahul.</li>
+<li>0.8 BTC from Priya.</li>
+</ul>
+<p>Aman now controls UTXOs totalling 1.2 BTC.</p>
+<p>He wants to send 0.5 BTC to someone.</p>
+<p>His wallet might construct a transaction like this:</p>
+<p><strong>Transaction example</strong></p>
+<p><strong>Inputs</strong></p>
+<h1><strong>1.2 BTC</strong></h1>
+<p>0.4 + 0.8 BTC</p>
+<p><strong>Outputs</strong></p>
+<h1><strong>1.198 BTC</strong></h1>
+<p>0.5 BTC payment + 0.698 BTC change</p>
+<p><strong>Transaction fee</strong></p>
+<h2><strong>0.002 BTC</strong></h2>
+<p>Here:</p>
+<p>\<div class="math-display">$$\text{Inputs}=\text{Outputs}+\text{Fee} \$$</div></p>
+<p>\<div class="math-display">$$1.2=0.5+0.698+0.002 \$$</div></p>
+<p>Aman sends 0.5 BTC to the recipient, receives 0.698 BTC as change, and pays 0.002 BTC as the transaction fee.</p>
+<p>The original UTXOs are spent, and new UTXOs are created.</p>
+<p><strong>Remember:</strong> the wallet calculates the balance by examining the UTXOs associated with the keys or scripts it manages.</p>
+<h1><strong>Topic 4: Types of Bitcoin Wallets</strong></h1>
+<p>Very important for theory exam</p>
+<p>Your teacher's PPT and textbook describe eight wallet types.</p>
+<ol>
+<li>Non-deterministic wallets</li>
+<li>Deterministic wallets</li>
+<li>Hierarchical Deterministic (HD) wallets</li>
+<li>Brain wallets</li>
+<li>Paper wallets</li>
+<li>Hardware wallets</li>
+<li>Online wallets</li>
+<li>Mobile wallets</li>
+</ol>
+<p>We will understand each type with its working, advantages, disadvantages and examples.</p>
+<p>One important clarification before starting:</p>
+<p>The first four mainly describe <strong>how keys are generated and organised</strong>, whereas paper, hardware, online and mobile describe <strong>how keys are stored or accessed</strong>. These categories can overlap. For example, a mobile wallet can also be an HD wallet.</p>
+<h2><strong>4.1 Non-deterministic wallet (JBOK wallet)</strong></h2>
+<p>JBOK = Just a Bunch of Keys</p>
+<h3><strong>Definition</strong></h3>
+<p>A <strong>non-deterministic wallet is a wallet in which multiple private keys are generated independently and randomly rather than being derived from one common seed.</strong></p>
+<p>Your teacher's PPT explains that Bitcoin Core historically generated a number of keys when first started and generated additional keys as required.</p>
+<h3><strong>How does it work?</strong></h3>
+<p>Suppose Aman creates a non-deterministic wallet.</p>
+<p>The wallet independently generates several random private keys:</p>
+<p><strong>Non-deterministic wallet</strong></p>
+<p>Private key 1</p>
+<p>Randomly generated</p>
+<p>Private key 2</p>
+<p>Randomly generated</p>
+<p>Private key 3</p>
+<p>Randomly generated</p>
+<p>Private key 4</p>
+<p>Randomly generated</p>
+<p>Private key 5</p>
+<p>Randomly generated</p>
+<p>Private key 6</p>
+<p>Randomly generated</p>
+<p>Each private key is generated independently.</p>
+<p>The keys are not generated from one common seed.</p>
+<h3><strong>Advantages</strong></h3>
+<ol>
+<li>Private keys are generated randomly.</li>
+<li>Each key is independent.</li>
+<li>Straightforward key-generation concept.</li>
+</ol>
+<h3><strong>Disadvantages</strong></h3>
+<ol>
+<li>Managing many independent keys is difficult.</li>
+<li>Each key needs to be backed up appropriately.</li>
+<li>Losing a private key can mean losing control of the Bitcoin associated with it.</li>
+<li>Repeated backup management can become complicated.</li>
+</ol>
+<h3><strong>Real-life example</strong></h3>
+<p>Imagine you have ten lockers, and each locker has a completely different key.</p>
+<p>If you lose the key to one locker, you cannot simply use another locker's key.</p>
+<p>This is similar to a non-deterministic wallet.</p>
+<h2><strong>4.2 Deterministic wallet</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>A <strong>deterministic wallet is a wallet in which multiple private keys are derived from a single randomly generated seed using cryptographic functions.</strong></p>
+<p>Your teacher's PPT describes keys being derived from a random seed through hash functions.</p>
+<h3><strong>How does it work?</strong></h3>
+<p>Suppose Aman creates a deterministic wallet.</p>
+<p>The wallet generates one random seed.</p>
+<p>Using this seed, it derives multiple private keys.</p>
+<p><strong>Random seed</strong></p>
+<p>One starting value</p>
+<p>Cryptographic derivation</p>
+<p>Private key 1</p>
+<p>Private key 2</p>
+<p>Private key 3</p>
+<p>The same seed and derivation procedure can regenerate the same keys.</p>
+<h3><strong>Advantages</strong></h3>
+<ol>
+<li>Only one seed needs to be backed up.</li>
+<li>Key recovery is easier.</li>
+<li>Key management is simpler than independently backing up many keys.</li>
+<li>The wallet can regenerate its keys from the seed.</li>
+</ol>
+<h3><strong>Disadvantages</strong></h3>
+<ol>
+<li>Losing the seed can mean losing access to all keys derived from it.</li>
+<li>Anyone obtaining the seed may be able to recover the wallet's keys.</li>
+<li>The seed must be stored securely.</li>
+</ol>
+<h3><strong>Real-life example</strong></h3>
+<p>Imagine you have one master key that can generate the keys for ten different lockers.</p>
+<p>If you safely preserve the master key, you can regenerate the other keys.</p>
+<p>That is the basic idea behind a deterministic wallet.</p>
+<h2><strong>4.3 Hierarchical Deterministic (HD) wallet</strong></h2>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">JBOK (Random) vs. Hierarchical Deterministic (HD BIP32/BIP44) Wallets</h4>
+            <div class="diagram-subtitle">Single master seed backup vs hazardous independent random keys</div>
+        </div>
+        <div class="diagram-nodes-row" style="gap: 20px;">
+            <div class="diagram-node" style="flex: 1; text-align: left; background: #0f172a; border-color: #ef4444;">
+                <div style="font-weight: 700; color: #f87171; font-size: 15px; margin-bottom: 8px;">
+                    JBOK / Type 0 (Just a Bunch of Keys)
+                </div>
+                <div style="font-size: 13px; color: #cbd5e1; line-height: 1.55;">
+                    • Every key pair is generated randomly from independent entropy.<br>
+                    • If a user creates 100 addresses, 100 independent private keys exist.<br>
+                    • ⚠️ <strong>Dangerous:</strong> Wallet must be backed up after every transaction or address generation, or new funds are lost forever!
+                </div>
+            </div>
+            <div class="diagram-node" style="flex: 1; text-align: left; background: #0f172a; border-color: #0284c7;">
+                <div style="font-weight: 700; color: #38bdf8; font-size: 15px; margin-bottom: 8px;">
+                    HD Wallet / Type 2 (BIP32 / BIP44 Standard)
+                </div>
+                <div style="font-size: 13px; color: #cbd5e1; line-height: 1.55;">
+                    • <strong>One Master Seed:</strong> Derives an infinite mathematical tree of keys.<br>
+                    • Derivation path: <code>m / purpose' / coin_type' / account' / change / index</code><br>
+                    • ✅ <strong>Safe &amp; Easy:</strong> Backing up the single 12/24-word seed phrase restores all past, current, and future addresses automatically!
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<p>Important 5-mark and 10-mark topic</p>
+<h3><strong>Definition</strong></h3>
+<p>A <strong>Hierarchical Deterministic (HD) wallet is a type of deterministic wallet in which keys are organised in a hierarchical tree structure, with master, parent, child and further descendant keys derived from a seed.</strong></p>
+<p>Your teacher's PPT specifically mentions BIP32 and BIP44 in connection with HD wallets.</p>
+<h3><strong>First understand the word hierarchical</strong></h3>
+<p>Hierarchical means organised in levels.</p>
+<p>For example, consider a university:</p>
+<p><strong>University</strong></p>
+<p>School A</p>
+<p>School B</p>
+<p>Dept A1</p>
+<p>Dept A2</p>
+<p>Dept B1</p>
+<p>Dept B2</p>
+<p>The university is at the top, schools are below it, and departments are further down.</p>
+<p>An HD wallet follows a similar hierarchy for keys.</p>
+<h3><strong>How does an HD wallet work?</strong></h3>
+<p><strong>Step 1:</strong> A random seed is generated.</p>
+<p><strong>Step 2:</strong> The seed is used to generate a master key.</p>
+<p><strong>Step 3:</strong> The master key is used to derive child keys.</p>
+<p><strong>Step 4:</strong> Child keys can derive further child keys.</p>
+<p><strong>Step 5:</strong> The wallet can organise keys into multiple branches.</p>
+<p><strong>Seed</strong></p>
+<p><strong>Master key</strong></p>
+<p>Child key A</p>
+<p>Child key B</p>
+<p>Child A1</p>
+<p>Child A2</p>
+<p>Child B1</p>
+<p>Child B2</p>
+<h3><strong>Important characteristics</strong></h3>
+<ol>
+<li>Keys are derived from a common seed.</li>
+<li>Keys are arranged in a tree-like hierarchy.</li>
+<li>Parent keys can derive child keys.</li>
+<li>The wallet can generate many addresses.</li>
+<li>A backup of the seed can restore the derived wallet keys, provided the relevant derivation and recovery information is preserved.</li>
+</ol>
+<h3><strong>What is BIP32?</strong></h3>
+<p>BIP32 defines the hierarchical deterministic wallet structure and key derivation mechanism.</p>
+<h3><strong>What is BIP44?</strong></h3>
+<p>BIP44 defines a commonly used hierarchy for organising multiple cryptocurrency accounts and address branches within HD wallets.</p>
+<h3><strong>Advantages</strong></h3>
+<ul>
+<li>Easy backup and recovery.</li>
+<li>Better organisation of multiple keys.</li>
+<li>Can generate many addresses from one seed.</li>
+<li>Convenient for wallets managing multiple accounts.</li>
+<li>More manageable than independent key backups.</li>
+</ul>
+<h3><strong>Disadvantages</strong></h3>
+<ul>
+<li>The seed must be protected carefully.</li>
+<li>If the recovery seed is compromised, many or all derived funds may be at risk.</li>
+<li>The hierarchy and derivation paths can be confusing for beginners.</li>
+</ul>
+<h3><strong>Real-life example</strong></h3>
+<p>Imagine a tree:</p>
+<ul>
+<li>Root = Master key.</li>
+<li>Main branches = Child keys.</li>
+<li>Smaller branches = Further child keys.</li>
+<li>Leaves = Individual keys used for addresses.</li>
+</ul>
+<p>All these keys are derived through a structured hierarchy.</p>
+<p><strong>Memory trick:</strong> Seed → Master → Parent → Child → Address.</p>
+<h2><strong>4.4 Brain wallet</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>A <strong>brain wallet is a wallet in which a private key is derived from a password or passphrase memorised by the user.</strong></p>
+<p>The idea is simple: instead of writing down a recovery secret, the user remembers a phrase and uses it to derive the key.</p>
+<h3><strong>How does it work?</strong></h3>
+<ol>
+<li>The user chooses a passphrase.</li>
+<li>A cryptographic process derives a private key from that passphrase.</li>
+<li>The corresponding public key and address can be generated.</li>
+<li>The user can regenerate the same key by using the same passphrase and derivation procedure.</li>
+</ol>
+<h3><strong>Example</strong></h3>
+<p>Suppose Aman chooses a phrase:</p>
+<p><code>Aman loves blockchain technology</code></p>
+<p>A wallet could hash the phrase to derive a private key.</p>
+<p>However, this is dangerous if the phrase is predictable.</p>
+<h3><strong>Advantages</strong></h3>
+<ol>
+<li>The user does not need to carry a physical wallet.</li>
+<li>The passphrase can be remembered.</li>
+<li>The key can be regenerated from the same phrase.</li>
+</ol>
+<h3><strong>Disadvantages</strong></h3>
+<ol>
+<li>Weak or common phrases can be guessed.</li>
+<li>Attackers can use dictionary attacks.</li>
+<li>Brute-force attacks can be used to search possible passwords.</li>
+<li>If someone guesses the phrase, they may gain control of the associated Bitcoin.</li>
+</ol>
+<p>Security warning</p>
+<p>Brain wallets based on user-chosen phrases are unsafe in practice. Even a phrase that seems difficult to guess may be predictable compared with a properly generated random seed.</p>
+<p>Your teacher's PPT and textbook both specifically mention password guessing and brute-force attacks as weaknesses.</p>
+<p><strong>Remember:</strong> Brain wallet = Remembered phrase → Derived private key.</p>
+<h2><strong>4.5 Paper wallet</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>A <strong>paper wallet is a physical paper document containing Bitcoin key information, usually a private key and corresponding address, sometimes represented using QR codes.</strong></p>
+<p><a href="https://images.openai.com/static-rsc-4/VI8tt_T2Z0-aEBNJ5vyn-bmHmUN7w3kKotUyPVa2lJJhkPlky2DXNSUcxQF1g4dXfSRT2eFqdcf2sL9OH_P3sUVp35uGULM6-j_6DpX-CMNu02Jd5x9GRuVPIkD1zr1iHpSiujBPwofZru5jFCQhU5uD4d3UA8u1W8mq0SMM0X8?purpose=inline">Secure Bitcoin Cold Wallet &amp; Personalized Crypto Gift Cards</a></p>
+<p><a href="https://images.openai.com/static-rsc-4/H5Sh7vZgt92PmidjWka2-u1heSQv_TzEi4X5-2JYe8I2e4ALevYUR-xqP6Z9Vls4Lphc48kCWqpX0vNs_oCF8FN4pMJJN7CUkLt2Bb4WXo4GhQfU0_w9UzhF899m3_ou9nB0hvcC4b5ar1z6WJDPSQkT2yjjsnYoxR8LsldW22A?purpose=inline">Pros and Cons of Bitcoin Paper Wallet</a></p>
+<p><a href="https://images.openai.com/static-rsc-4/Njk73HTJYMkd4dph32tVecS0CsmTyCKgDRaS7qjY2oO7fBV-U6yhpbJQI0-BLbrcTl_czoiq9wNNNjI2FUFWbUFEWYtPSNsFbcXmmspabzdDTZhQGNu6lUepktiYnEX-T8QSg_eBAgARuveEsDdlVWq00eiRFTe_k0H38Cxj9vs?purpose=inline">Wallets | Crypto UX Handbook</a></p>
+<p>6</p>
+<h3><strong>How does it work?</strong></h3>
+<ol>
+<li>A Bitcoin key pair is generated.</li>
+<li>The corresponding Bitcoin address is created.</li>
+<li>The public address and private key are printed on paper.</li>
+<li>The paper is kept in a secure physical location.</li>
+<li>When the user needs to spend the Bitcoin, the private key must be imported or swept into suitable wallet software.</li>
+</ol>
+<h3><strong>Advantages</strong></h3>
+<ol>
+<li>The private key can be kept offline.</li>
+<li>It does not need to remain connected to the internet.</li>
+<li>It can be stored in a physically secure location.</li>
+<li>It reduces exposure to some online attacks while kept securely offline.</li>
+</ol>
+<h3><strong>Disadvantages</strong></h3>
+<ol>
+<li>Paper can be damaged by water or fire.</li>
+<li>It can be lost or stolen.</li>
+<li>Someone who sees or copies the private key may steal the funds.</li>
+<li>Spending from a paper wallet requires careful handling of the private key.</li>
+</ol>
+<h3><strong>Real-life example</strong></h3>
+<p>Imagine printing your Bitcoin private key and address and keeping the paper inside a locked locker.</p>
+<p>This is a paper wallet.</p>
+<p><strong>Important:</strong> A paper wallet is not automatically safe just because it is offline. Secure generation, printing and storage matter.</p>
+<h2><strong>4.6 Hardware wallet</strong></h2>
+<p>Important wallet type</p>
+<h3><strong>Definition</strong></h3>
+<p>A <strong>hardware wallet is a dedicated physical device designed to store and protect private keys and help authorise cryptocurrency transactions securely.</strong></p>
+<p><a href="https://images.openai.com/static-rsc-4/SMcL2fiErFgWEv3TLb48rYYkelmXVa9nGQO9qFgAugpiAMTg8Alyp_PRwpUlAI1Yqm7-3hX4OSU4P-1b1RonO8dZ1VVu4sd3GHSAWDa4e61dtlyoH-j4xWZk5Od9xjxkugQuPciM45tqAOLEp1Yc6CuuMknqNmcXReT7BJNtcsM?purpose=inline">Ledger Adds Orchid’s Digital Currency (OXT)</a></p>
+<p><a href="https://images.openai.com/static-rsc-4/tisvqrLHp53qD4Xd4EhSj4tQrWmYkIGTQtCRt29bhWIKeTfTJD7qhcWeCpK30zJxQZfaqUz-F97ePoK9_QHGu-__F9ZikgOj3ySKzKc7Idc18ZPfqAfdOMas56_9LeJAE-30HLk0bjiNAi3lTuWbXqAAQeGdv0GvgU2HVnr4TJk?purpose=inline">Yellow.com</a></p>
+<p><a href="https://images.openai.com/static-rsc-4/3AZXekCwouUWsR7EZBpwTVBWSenG9WFZ4mw5TtOfDS3LavOyl05vIlMNqxEm_CMlbHKgMEEmb9rXNVPUQwtaXGxMymg9XSf551UqFnfEBHgNVltnfR6PZtISgH1elYFXAMQC7jPrqUybsvIQuEy-zI6nUlRnNJ8dwwcrJxeq7FE?purpose=inline">KaBuM  Aperte o K e evolua em Tecnologia e Games</a></p>
+<p>6</p>
+<p>Examples mentioned in your teacher's PPT and textbook:</p>
+<ul>
+<li>Ledger</li>
+<li>Trezor</li>
+</ul>
+<h3><strong>How does a hardware wallet work?</strong></h3>
+<p>Suppose Aman owns Bitcoin and uses a hardware wallet.</p>
+<ol>
+<li>The private key is generated and protected by the hardware wallet.</li>
+<li>Aman connects the wallet to a computer or mobile device.</li>
+<li>He creates a transaction using wallet software.</li>
+<li>The transaction details are sent to the hardware wallet for signing.</li>
+<li>Aman checks the transaction details on the device.</li>
+<li>The hardware wallet uses the protected private key to create the signature.</li>
+<li>The signed transaction is returned to the connected software.</li>
+<li>The software broadcasts the transaction to the Bitcoin network.</li>
+</ol>
+<p><strong>Most important point:</strong> the private key is not supposed to leave the protected hardware device during normal signing.</p>
+<h3><strong>Advantages</strong></h3>
+<ol>
+<li>Private keys are protected in a dedicated device.</li>
+<li>Provides protection against many malware attacks on connected computers.</li>
+<li>The user can verify transaction details on the device.</li>
+<li>Suitable for long-term storage of Bitcoin.</li>
+<li>Often offers stronger key protection than ordinary online wallets.</li>
+</ol>
+<h3><strong>Disadvantages</strong></h3>
+<ol>
+<li>Hardware wallets cost money.</li>
+<li>The physical device can be lost or damaged.</li>
+<li>Users must securely back up their recovery seed.</li>
+<li>If the recovery information is stolen, funds may be compromised.</li>
+<li>Users must verify they are purchasing genuine devices from trusted sources.</li>
+</ol>
+<h3><strong>Real-life example</strong></h3>
+<p>Imagine keeping your house keys inside a special locked electronic box.</p>
+<p>When you need to open the house, the box performs the required action without giving your key to another person.</p>
+<p>A hardware wallet follows a similar idea: it protects the private key and signs transactions without normally exposing the key to the connected computer.</p>
+<h2><strong>4.7 Online wallet</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>An <strong>online wallet is a wallet provided through an internet-based service, usually through a website or cloud-based platform, that allows users to manage Bitcoin transactions.</strong></p>
+<p><a href="https://images.openai.com/static-rsc-4/feG6Myr_b9sOndi2cI-YlZRY69a2lkb3Siu-4hPJXQtLlISPUlqqYJnWDedHw0fPtE7x5D0UdqGSYbR_fKdgyhuV5F4qPENPNOmCfU5OuleytCzeiKCNfwcdQPN9kmsMCBMz3XCRCOYBLBb3hnelXTzr4T-QPISX7g4iL49VPS0?purpose=inline">Software Development Services by Freelance Programmers | Fiverr</a></p>
+<p><a href="https://www.fiverr.com/qputctri/setup-profitable-miner-software-miner-app-crypto-app-miner-software?utm_source=chatgpt.com">fiverr.com</a></p>
+<h3><strong>How does it work?</strong></h3>
+<ol>
+<li>A user accesses the wallet service through a website.</li>
+<li>The user logs in.</li>
+<li>The wallet interface displays the available Bitcoin information.</li>
+<li>The user can send and receive Bitcoin.</li>
+<li>The service provides the required wallet functions.</li>
+</ol>
+<p>The exact custody arrangement depends on the service. Some online wallets control the private keys themselves, while others provide interfaces to keys controlled by the user.</p>
+<p>Your textbook's online-wallet discussion describes web-based services and highlights that users must trust the service provider.</p>
+<h3><strong>Advantages</strong></h3>
+<ol>
+<li>Easy to access through a web browser.</li>
+<li>Convenient for sending and receiving Bitcoin.</li>
+<li>Does not necessarily require installing software locally.</li>
+<li>Useful for people who want a simple interface.</li>
+</ol>
+<h3><strong>Disadvantages</strong></h3>
+<ol>
+<li>Security depends partly on the service provider.</li>
+<li>Online services can be targets for hackers.</li>
+<li>Account compromise can put funds at risk.</li>
+<li>Some custodial services control the private keys on behalf of users.</li>
+</ol>
+<p><strong>Remember:</strong> Online wallet = Internet-based wallet service.</p>
+<h2><strong>4.8 Mobile wallet</strong></h2>
+<h3><strong>Definition</strong></h3>
+<p>A <strong>mobile wallet is a Bitcoin wallet application installed on a smartphone or mobile device that allows users to manage keys and send or receive Bitcoin.</strong></p>
+<p><a href="https://images.openai.com/static-rsc-4/Rpu4Ijs_jeEouWV4te5RZ3yocl01VfbI830ovt5aiD67mst2xyHoo9TQ0IAWccA_1hKxi_FFWlC-PtqoHXkKjV4ktqommv7-DZ6KuVoGdhjp2vmNE6-eCYmF08XXOfGnJv4113lNC60MkhXBPScbuvNL1r0ZchO70UoWaImTd94?purpose=inline">Low Fees</a></p>
+<p><a href="https://images.openai.com/static-rsc-4/JYzoYqRO8fxOJsZe0oykDf7iSkbLmsE_GWGavkt-JDrwbwidgL_7dM9zp9zLlLzLdPxnS8WRzRwH9Q6nq0TLNnLnGRwku-jZZRJyKuRa5_fGpy1SGURtQLIXzQtu5skW2CQTLaaPrFyJk8dVgmGcSOSehU_0I9tOXubZPnH0wjg?purpose=inline">Secure Bitcoin Wallet - Begin Wallet</a></p>
+<p><a href="https://images.openai.com/static-rsc-4/p8PrGYR9Cl4UnyDuSjge4ybct_n3kStM-aCqYhrr8K_myEV0JYhXFiqrq_q6XWqgFScG_Wg8n710dzkbAl86btEDaJqe0U4GIOlwc17652PrzIMspIDhsS70h5VEPF92q2Xbo9hY7xr2Sng4kPbD7l_z-CvfJsOUJZ4DrJTX5cU?purpose=inline">NBCBANQ - Digital Banking &amp; Crypto Wallet | Web3 Mastercard</a></p>
+<p>9</p>
+<h3><strong>How does it work?</strong></h3>
+<ol>
+<li>The user installs a Bitcoin wallet application.</li>
+<li>The wallet generates or imports the required keys.</li>
+<li>The user can display a receiving address.</li>
+<li>Another person can scan its QR code to make a payment.</li>
+<li>The user can create and sign outgoing transactions.</li>
+<li>The transaction is broadcast to the Bitcoin network through the wallet's network connection or a backend service.</li>
+</ol>
+<h3><strong>Advantages</strong></h3>
+<ol>
+<li>Easy to carry.</li>
+<li>Convenient for daily payments.</li>
+<li>Can scan QR codes.</li>
+<li>Provides quick access to receiving and sending functions.</li>
+<li>Can be used while travelling.</li>
+</ol>
+<h3><strong>Disadvantages</strong></h3>
+<ol>
+<li>A lost or stolen phone may expose wallet access if it is not properly secured.</li>
+<li>Malware or malicious applications can create risks.</li>
+<li>Users must protect backups and recovery phrases.</li>
+<li>Phone damage or loss can interrupt access until recovery.</li>
+</ol>
+<h3><strong>Real-life example</strong></h3>
+<p>Imagine going to a shop and paying by scanning a QR code using your phone.</p>
+<p>A Bitcoin mobile wallet can provide this type of payment experience.</p>
+<h1><strong>Topic 5: Hot Wallets vs Cold Wallets</strong></h1>
+<p>This is a very important comparison question.</p>
+<p>Before understanding it, remember:</p>
+<ul>
+<li>Hot and cold describe how keys are connected or exposed to online systems.</li>
+<li>They are not completely separate wallet-generation categories.</li>
+</ul>
+<p>For example, an HD wallet can be hot or cold depending on how it is used.</p>
+<h2><strong>5.1 What is a hot wallet?</strong></h2>
+<p><strong>A hot wallet is a Bitcoin wallet whose keys are managed in an internet-connected environment or are readily accessible to an online system for transactions.</strong></p>
+<p>Examples:</p>
+<ul>
+<li>Many mobile wallets</li>
+<li>Online wallets</li>
+<li>Desktop wallets connected to the internet</li>
+</ul>
+<h3><strong>Advantages</strong></h3>
+<ol>
+<li>Convenient for regular payments.</li>
+<li>Easy access.</li>
+<li>Suitable for frequent transactions.</li>
+<li>Quick to send and receive Bitcoin.</li>
+</ol>
+<h3><strong>Disadvantages</strong></h3>
+<ol>
+<li>More exposed to online threats.</li>
+<li>Malware can create security risks.</li>
+<li>Phishing attacks may compromise wallet access.</li>
+<li>Device or account compromise can expose funds.</li>
+</ol>
+<h2><strong>5.2 What is a cold wallet?</strong></h2>
+<p><strong>A cold wallet is a wallet arrangement in which private keys are kept offline and isolated from ordinary internet-connected systems.</strong></p>
+<p>Examples:</p>
+<ul>
+<li>Properly configured hardware wallets</li>
+<li>Carefully generated and stored paper wallets</li>
+<li>Other offline key-storage arrangements</li>
+</ul>
+<h3><strong>Advantages</strong></h3>
+<ol>
+<li>Reduces exposure to online attacks.</li>
+<li>Suitable for longer-term storage.</li>
+<li>Private keys can remain offline.</li>
+<li>Reduces some risks associated with malware on everyday devices.</li>
+</ol>
+<h3><strong>Disadvantages</strong></h3>
+<ol>
+<li>Less convenient for frequent transactions.</li>
+<li>Requires careful physical storage.</li>
+<li>Can be lost or damaged.</li>
+<li>Transactions require an additional signing and broadcasting process.</li>
+</ol>
+<h2><strong>5.3 Hot wallet vs cold wallet comparison</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Basis</th>
+<th>Hot wallet</th>
+<th>Cold wallet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Internet connection</td>
+<td>Keys are used in an online environment</td>
+<td>Keys are kept offline</td>
+</tr>
+<tr>
+<td>Convenience</td>
+<td>High</td>
+<td>Lower</td>
+</tr>
+<tr>
+<td>Online attack exposure</td>
+<td>Higher</td>
+<td>Lower</td>
+</tr>
+<tr>
+<td>Transaction speed</td>
+<td>Generally convenient</td>
+<td>May require additional steps</td>
+</tr>
+<tr>
+<td>Usage</td>
+<td>Regular payments</td>
+<td>Long-term storage</td>
+</tr>
+<tr>
+<td>Examples</td>
+<td>Online and many mobile wallets</td>
+<td>Hardware and paper wallets when properly used</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://images.openai.com/static-rsc-4/6tZepMQXIsjXtmOE6XZrVVm2yeEdwn3U9hl9h3mHsqZTV0wKviaMCcz00MaHAcCj8LT5EBRotmsJmKTwjzz-yiHx6zOO_PnTGdecn3T5f9NColb8j8s3XTEGodHoW8ctTI1JkejEfKKiZJT38h9Ty1Pv7ptvEr5qLyAGq1wvrAk?purpose=inline">Pocket miner: how to mine cryptocurrency with a smartphone  | Prague Blockchain Conf</a></p>
+<p><strong>Hot wallet</strong></p>
+<p>Convenient for everyday use.</p>
+<p><a href="https://images.openai.com/static-rsc-4/zXz95IvA-rEVcTh8uxvkEQ3otDT2G1T-vfbFd-LWQthqoHq2Mve-MaHkWQ6eul6zIcV53U_NYHG9-OX32Y7QqwnLhYLmsAA9cviWi4U-IJeCCqriLOFi_T8wuADKvZlcFqUSiGZWYQxfpH5erAJCbkzdowjotwyyOsOw_FUMvjg?purpose=inline">How do you secure your cryptocurrencies? - Crypto wallet at Safebox24 safe deposit box</a></p>
+<p><strong>Cold wallet</strong></p>
+<p>Better suited to offline key storage.</p>
+<p><strong>Exam tip:</strong> Do not write that a hardware wallet is automatically safe just because it is a hardware device. Its security also depends on secure setup, recovery-phrase protection and careful transaction verification.</p>
+<h1><strong>Topic 6: Wallet Backup and Recovery</strong></h1>
+<p>Now suppose Aman has 5 BTC in his wallet.</p>
+<p>One day, his phone stops working.</p>
+<p>Does he lose his Bitcoin?</p>
+<p>Not necessarily.</p>
+<p>If Aman has properly backed up his wallet recovery information, he may be able to restore access using another compatible wallet.</p>
+<p>This is why backup and recovery are extremely important.</p>
+<h2><strong>6.1 What is wallet backup?</strong></h2>
+<p><strong>Wallet backup is the process of safely creating and preserving a copy of the information required to recover a Bitcoin wallet and its keys.</strong></p>
+<p>Your teacher's PPT specifically mentions backing up cryptographic keys as one of the functions of wallet software.</p>
+<h3><strong>Why is backup necessary?</strong></h3>
+<ol>
+<li>A mobile phone may be lost.</li>
+<li>A computer may be damaged.</li>
+<li>A wallet application may be deleted.</li>
+<li>A storage device may fail.</li>
+<li>A user may accidentally lose access to the wallet.</li>
+</ol>
+<p>A backup helps recover wallet access in such situations.</p>
+<h2><strong>6.2 What is wallet recovery?</strong></h2>
+<p><strong>Wallet recovery is the process of restoring access to a Bitcoin wallet using previously saved recovery information.</strong></p>
+<p>For a modern deterministic wallet, this commonly involves restoring from the seed or recovery phrase and using the appropriate wallet derivation settings.</p>
+<h3><strong>Example</strong></h3>
+<p>Suppose Aman uses an HD wallet.</p>
+<p>He has a recovery phrase stored safely.</p>
+<p>His mobile phone is damaged.</p>
+<p>He installs a compatible wallet on a new phone and restores it using the recovery phrase and the correct wallet settings.</p>
+<p>The wallet can regenerate the associated keys and addresses.</p>
+<p><strong>Original wallet</strong></p>
+<p>Contains derived keys</p>
+<p><strong>Create and securely store recovery backup</strong></p>
+<p><strong>Phone is lost or damaged</strong></p>
+<p><strong>Install compatible wallet on new device</strong></p>
+<p><strong>Restore using recovery information</strong></p>
+<h1><strong>Topic 7: Seed Phrase and Mnemonic Code</strong></h1>
+<p>Very important concept</p>
+<h2><strong>7.1 What is a seed?</strong></h2>
+<p>A <strong>seed is a randomly generated value used by a deterministic wallet to derive cryptographic keys.</strong></p>
+<p>Instead of backing up every private key separately, the wallet can use the seed to regenerate the keys.</p>
+<h2><strong>7.2 What is a mnemonic phrase?</strong></h2>
+<p>A <strong>mnemonic phrase is a sequence of human-readable words used to represent recovery information for a wallet.</strong></p>
+<p>For example, a wallet might provide a 12-word or 24-word recovery phrase.</p>
+<p><strong>Illustrative recovery phrase format</strong></p>
+<p>Word 1</p>
+<p>••••••</p>
+<p>Word 2</p>
+<p>••••••</p>
+<p>Word 3</p>
+<p>••••••</p>
+<p>Word 4</p>
+<p>••••••</p>
+<p>Word 5</p>
+<p>••••••</p>
+<p>Word 6</p>
+<p>••••••</p>
+<p>Word 7</p>
+<p>••••••</p>
+<p>Word 8</p>
+<p>••••••</p>
+<p>Word 9</p>
+<p>••••••</p>
+<p>Word 10</p>
+<p>••••••</p>
+<p>Word 11</p>
+<p>••••••</p>
+<p>Word 12</p>
+<p>••••••</p>
+<p>This is only a format illustration, not a usable recovery phrase.</p>
+<p>Your textbook explains that BIP39 defines mnemonic code words used in deterministic wallet recovery.</p>
+<h2><strong>7.3 How does a mnemonic phrase work?</strong></h2>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">BIP39 Mnemonic Seed Phrase Generation Flow</h4>
+            <div class="diagram-subtitle">Translating raw computer entropy into 12 to 24 human-readable English words</div>
+        </div>
+        <div class="diagram-flow-row">
+            <div class="flow-step-card">
+                <div class="flow-step-num">Step 1</div>
+                <div class="flow-step-title">True Entropy</div>
+                <div class="flow-step-desc">Generate 128 to 256 bits of cryptographically secure random data.</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step-card">
+                <div class="flow-step-num">Step 2</div>
+                <div class="flow-step-title">Checksum</div>
+                <div class="flow-step-desc">Compute SHA-256 of entropy; append first 4 to 8 bits as checksum.</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step-card">
+                <div class="flow-step-num">Step 3</div>
+                <div class="flow-step-title">Word Mapping</div>
+                <div class="flow-step-desc">Divide into 11-bit chunks; map each integer to BIP39 dictionary (2048 words).</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step-card">
+                <div class="flow-step-num">Step 4</div>
+                <div class="flow-step-title">Master 512-bit Seed</div>
+                <div class="flow-step-desc">Run PBKDF2 (HMAC-SHA512 with 2048 rounds) with optional passphrase &rarr; Seed!</div>
+            </div>
+        </div>
+    </div>
+    
+<ol>
+<li>The wallet generates random entropy.</li>
+<li>A checksum is added according to the mnemonic-generation procedure.</li>
+<li>The result is divided into groups of bits.</li>
+<li>Each group maps to a word in the defined word list.</li>
+<li>The resulting words form a mnemonic phrase.</li>
+<li>The phrase can be converted into seed material using the defined derivation procedure.</li>
+<li>The seed is used to derive wallet keys.</li>
+</ol>
+<p>The important relationship is:</p>
+<p>\<div class="math-display">$$\text{Mnemonic phrase} \rightarrow \text{Seed} \rightarrow \text{Wallet keys} \$$</div></p>
+<h2><strong>7.4 What is BIP39?</strong></h2>
+<p><strong>BIP39 is a Bitcoin Improvement Proposal that defines a method for representing wallet recovery information as mnemonic words and deriving seed material from those words.</strong></p>
+<h3><strong>Advantages of mnemonic phrases</strong></h3>
+<ol>
+<li>Easier to write down than a long private key.</li>
+<li>Easier to back up.</li>
+<li>Can restore keys in compatible wallets.</li>
+<li>Supports deterministic wallet recovery.</li>
+</ol>
+<h3><strong>Disadvantages and risks</strong></h3>
+<ol>
+<li>Anyone who obtains the phrase may gain access to the wallet.</li>
+<li>Losing the phrase can make recovery difficult or impossible if no other backup exists.</li>
+<li>Typing errors or missing words can prevent recovery.</li>
+<li>Users must use compatible wallet settings and derivation paths to recover the expected addresses.</li>
+</ol>
+<h2><strong>7.5 Seed phrase vs private key</strong></h2>
+<p>This is a common source of confusion.</p>
+<table>
+<thead>
+<tr>
+<th>Seed phrase</th>
+<th>Private key</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Recovery information represented by words</td>
+<td>A secret cryptographic number</td>
+</tr>
+<tr>
+<td>Can derive multiple wallet keys</td>
+<td>Controls spending under its associated conditions</td>
+</tr>
+<tr>
+<td>Commonly used for wallet restoration</td>
+<td>Used to create digital signatures</td>
+</tr>
+<tr>
+<td>Can provide access to a whole derived wallet</td>
+<td>Usually relates to a particular key</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Very important:</strong> A recovery phrase is often more powerful than a single private key because it can regenerate many keys in a wallet.</p>
+<p>Never share your recovery phrase with anyone. A genuine wallet provider should not need you to disclose it to customer support.</p>
+<h1><strong>Topic 8: Wallet Security</strong></h1>
+<p>A Bitcoin wallet is only as safe as the way its keys and recovery information are protected.</p>
+<p>Let's understand the main security practices.</p>
+<h2><strong>8.1 Protect the private key</strong></h2>
+<p>The private key must remain secret.</p>
+<p>If an attacker obtains the key, the attacker may be able to authorise spending of the associated Bitcoin.</p>
+<h2><strong>8.2 Protect the recovery phrase</strong></h2>
+<p>A seed or recovery phrase can restore the wallet's keys.</p>
+<p>It should be stored securely and never shared through messages, emails or untrusted websites.</p>
+<h2><strong>8.3 Use a strong device password</strong></h2>
+<p>Protect the computer or mobile device on which the wallet operates.</p>
+<h2><strong>8.4 Use two-factor authentication where available</strong></h2>
+<p>For online wallet accounts, two-factor authentication can provide an additional security layer.</p>
+<p>However, 2FA does not replace protecting private keys or recovery phrases.</p>
+<h2><strong>8.5 Beware of phishing attacks</strong></h2>
+<p>Phishing is an attack in which someone tricks a user into revealing sensitive information through fake websites, messages or applications.</p>
+<p>Example:</p>
+<p>Aman receives an email saying:</p>
+<p>"Your Bitcoin wallet is blocked. Click here and enter your recovery phrase."</p>
+<p>The website is fake and designed to steal his recovery phrase.</p>
+<h2><strong>8.6 Keep backups in secure locations</strong></h2>
+<p>A recovery backup should be protected against:</p>
+<ul>
+<li>Theft</li>
+<li>Fire</li>
+<li>Water damage</li>
+<li>Accidental deletion</li>
+<li>Unauthorised access</li>
+</ul>
+<h2><strong>8.7 Verify transaction details</strong></h2>
+<p>Before signing a transaction, verify:</p>
+<ul>
+<li>Recipient address</li>
+<li>Amount</li>
+<li>Network</li>
+<li>Transaction fee</li>
+</ul>
+<p>This is especially important when using hardware wallets.</p>
+<h2><strong>8.8 Use genuine wallet software and devices</strong></h2>
+<p>Download wallet applications from trusted sources and purchase hardware wallets through trusted channels.</p>
+<p>Avoid unknown applications or devices that could have been modified to steal keys.</p>
+<h1><strong>Module 2 — Exam Preparation</strong></h1>
+<p>Now let's convert what we studied into proper examination answers.</p>
+<h2><strong>A. Important 5-mark questions</strong></h2>
+<table>
+<thead>
+<tr>
+<th>No.</th>
+<th>Question</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>What is a Bitcoin wallet? Explain its functions.</td>
+<td>High</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Differentiate between private key, public key and Bitcoin address.</td>
+<td>Very high</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Explain how a Bitcoin address is generated.</td>
+<td>Very high</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Explain non-deterministic and deterministic wallets.</td>
+<td>High</td>
+</tr>
+<tr>
+<td>5</td>
+<td>What is an HD wallet? Explain BIP32 and BIP44.</td>
+<td>Very high</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Explain brain wallets and their limitations.</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Explain paper wallets and hardware wallets.</td>
+<td>High</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Differentiate between hot and cold wallets.</td>
+<td>Very high</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Explain seed phrases and BIP39.</td>
+<td>High</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Explain wallet backup and recovery.</td>
+<td>High</td>
+</tr>
+</tbody>
+</table>
+<h2><strong>B. Important 10-mark questions</strong></h2>
+<ol>
+<li>Explain different types of Bitcoin wallets with their advantages and disadvantages.</li>
+<li>Explain the working of a Bitcoin wallet with a suitable diagram.</li>
+<li>Explain private keys, public keys and Bitcoin address generation.</li>
+<li>Explain deterministic and hierarchical deterministic wallets in detail.</li>
+<li>Explain different wallet security mechanisms and backup methods.</li>
+<li>Compare hot wallets and cold wallets with suitable examples.</li>
+</ol>
+<h2><strong>C. Exam-ready 10-mark answer: Explain different types of Bitcoin wallets</strong></h2>
+<p><strong>Introduction:</strong></p>
+<p>A Bitcoin wallet is a software application or physical device used to generate, store and manage cryptographic keys. It allows users to send, receive and manage Bitcoin transactions. A wallet does not actually store bitcoins; it manages the keys required to control the unspent transaction outputs recorded on the blockchain.</p>
+<p><strong>Types of Bitcoin wallets:</strong></p>
+<p><strong>1. Non-deterministic wallet:</strong> It generates private keys independently and randomly. Each key requires appropriate backup. It is also called a Just a Bunch of Keys (JBOK) wallet.</p>
+<p><strong>2. Deterministic wallet:</strong> It generates multiple private keys from a single random seed using cryptographic functions. The seed can be used to regenerate the keys.</p>
+<p><strong>3. Hierarchical Deterministic wallet:</strong> It organises keys in a tree structure consisting of master, parent and child keys. It is defined through BIP32 and BIP44 and supports convenient key management.</p>
+<p><strong>4. Brain wallet:</strong> It derives private keys from a password or passphrase remembered by the user. It is vulnerable to password guessing and brute-force attacks.</p>
+<p><strong>5. Paper wallet:</strong> It stores private-key information on paper, sometimes in QR-code format. It requires protection against theft, loss and physical damage.</p>
+<p><strong>6. Hardware wallet:</strong> It uses a dedicated physical device to protect private keys and authorise transactions. Examples include Ledger and Trezor.</p>
+<p><strong>7. Online wallet:</strong> It is provided through an internet-based service and allows users to manage Bitcoin transactions through a web interface. It requires consideration of the service provider's security.</p>
+<p><strong>8. Mobile wallet:</strong> It is installed on a smartphone and allows users to send and receive Bitcoin, often using QR-code scanning.</p>
+<p><strong>Conclusion:</strong></p>
+<p>Bitcoin wallets provide secure key management and convenient access to Bitcoin transactions. The choice of wallet depends on security, convenience, backup requirements and user needs.</p>
+<h2><strong>D. Important comparison: Deterministic vs Non-deterministic vs HD wallets</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Basis</th>
+<th>Non-deterministic</th>
+<th>Deterministic</th>
+<th>HD</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Key generation</td>
+<td>Random independent keys</td>
+<td>Keys derived from one seed</td>
+<td>Hierarchical keys derived from seed</td>
+</tr>
+<tr>
+<td>Seed</td>
+<td>Not required for independent keys</td>
+<td>Required</td>
+<td>Required</td>
+</tr>
+<tr>
+<td>Structure</td>
+<td>No common hierarchy</td>
+<td>Derived key sequence</td>
+<td>Tree structure</td>
+</tr>
+<tr>
+<td>Backup</td>
+<td>Individual keys need backing up</td>
+<td>Seed backup</td>
+<td>Seed backup</td>
+</tr>
+<tr>
+<td>Recovery</td>
+<td>More complicated</td>
+<td>Easier</td>
+<td>Easier</td>
+</tr>
+<tr>
+<td>Standards</td>
+<td>JBOK concept</td>
+<td>BIP39 mnemonic is commonly used for seed representation</td>
+<td>BIP32, BIP44</td>
+</tr>
+</tbody>
+</table>
+<h2><strong>E. Quick revision sheet</strong></h2>
+<p><strong>Remember these important points</strong></p>
+<ul>
+<li>Wallet = Manages cryptographic keys.</li>
+<li>Private key = Used to sign transactions.</li>
+<li>Public key = Used to verify signatures.</li>
+<li>Address = Identifier used to receive Bitcoin.</li>
+<li>UTXO = Unspent Transaction Output.</li>
+<li>JBOK = Just a Bunch of Keys.</li>
+<li>Deterministic wallet = Keys from one seed.</li>
+<li>HD wallet = Hierarchical tree of keys.</li>
+<li>BIP32 = HD wallet key derivation.</li>
+<li>BIP44 = Hierarchical wallet organisation.</li>
+<li>Brain wallet = Private key derived from remembered passphrase.</li>
+<li>Paper wallet = Key information printed on paper.</li>
+<li>Hardware wallet = Dedicated physical key-protection device.</li>
+<li>Online wallet = Internet-based wallet service.</li>
+<li>Mobile wallet = Wallet application on a smartphone.</li>
+<li>BIP39 = Mnemonic code words for wallet recovery.</li>
+<li>Hot wallet = Keys used in an online environment.</li>
+<li>Cold wallet = Keys kept offline.</li>
+</ul>
+<p><strong>Source alignment:</strong> The eight wallet types and their descriptions follow your teacher's <em><span class="ref-pill">📄 Slides Reference: Bitcoin client and payment.pptx</span></em> and the wallet section of <em>Mastering Blockchain, Third Edition</em>, pages 237–240.&#x20;<span class="ref-pill">📄 Slides Reference: </p>
+<p>Bitcoin client and payment.pptx</span><span class="ref-pill">📚 Textbook Reference: </p>
+<p>Mastering_Blockchain_Third_Edition.pdf</span></p>
+
+    <div class="quiz-section-wrap" id="module-quiz-section">
+        <div class="quiz-card-container">
+            <div class="quiz-main-header">
+                <div class="quiz-title-area">
+                    <h3 class="quiz-title">📝 Quick Self-Test &amp; Knowledge Check</h3>
+                    <p class="quiz-subtitle">Test your understanding of private/public keys, address derivation, wallet types, HD BIP32/BIP44, BIP39 mnemonics, and UTXOs.</p>
+                </div>
+                <div class="quiz-action-bar">
+                    <span class="quiz-stat-pill" id="quiz-progress-text-15">0/8 Answered</span>
+                    <span class="quiz-score-pill" id="quiz-score-text-15">🏆 Score: 0/8</span>
+                    <button class="quiz-reset-btn" onclick="resetQuiz(15, 8)">
+                        🔄 Reset Quiz
+                    </button>
+                </div>
+            </div>
+
+            <div class="quiz-progress-track">
+                <div class="quiz-progress-fill" id="quiz-progress-fill-15"></div>
+            </div>
+
+            <div class="quiz-questions-list">
+                
+        <div class="quiz-question-box" id="qbox_15_1">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 1 of 8</span>
+                <span class="quiz-q-status" id="qstatus_15_1">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">1. What does a Bitcoin wallet actually store and manage?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_15_1_opt_0"
+                    onclick="handleQuizClick(15, 1, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">Actual bitcoins</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_15_1_opt_1"
+                    onclick="handleQuizClick(15, 1, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Cryptographic keys</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_15_1_opt_2"
+                    onclick="handleQuizClick(15, 1, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Only transaction fees</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_15_1_opt_3"
+                    onclick="handleQuizClick(15, 1, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Mining blocks</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_15_1">
+                <div class="exp-content" id="qexp_text_15_1"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_15_2">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 2 of 8</span>
+                <span class="quiz-q-status" id="qstatus_15_2">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">2. Which key is used to sign an outgoing Bitcoin transaction?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_15_2_opt_0"
+                    onclick="handleQuizClick(15, 2, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">Public key</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_15_2_opt_1"
+                    onclick="handleQuizClick(15, 2, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Private key</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_15_2_opt_2"
+                    onclick="handleQuizClick(15, 2, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Bitcoin address</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_15_2_opt_3"
+                    onclick="handleQuizClick(15, 2, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Merkle root</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_15_2">
+                <div class="exp-content" id="qexp_text_15_2"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_15_3">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 3 of 8</span>
+                <span class="quiz-q-status" id="qstatus_15_3">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">3. What does JBOK stand for?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_15_3_opt_0"
+                    onclick="handleQuizClick(15, 3, 0, 0)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">Just a Bunch of Keys</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_15_3_opt_1"
+                    onclick="handleQuizClick(15, 3, 1, 0)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Joint Bitcoin Online Key</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_15_3_opt_2"
+                    onclick="handleQuizClick(15, 3, 2, 0)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Java Based Open Key</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_15_3_opt_3"
+                    onclick="handleQuizClick(15, 3, 3, 0)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Just a Bitcoin Output Key</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_15_3">
+                <div class="exp-content" id="qexp_text_15_3"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_15_4">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 4 of 8</span>
+                <span class="quiz-q-status" id="qstatus_15_4">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">4. Which BIP defines the HD wallet structure?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_15_4_opt_0"
+                    onclick="handleQuizClick(15, 4, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">BIP21</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_15_4_opt_1"
+                    onclick="handleQuizClick(15, 4, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">BIP32</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_15_4_opt_2"
+                    onclick="handleQuizClick(15, 4, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">BIP70</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_15_4_opt_3"
+                    onclick="handleQuizClick(15, 4, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">BIP39 only</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_15_4">
+                <div class="exp-content" id="qexp_text_15_4"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_15_5">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 5 of 8</span>
+                <span class="quiz-q-status" id="qstatus_15_5">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">5. Which wallet derives a private key from a remembered passphrase?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_15_5_opt_0"
+                    onclick="handleQuizClick(15, 5, 0, 2)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">Hardware wallet</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_15_5_opt_1"
+                    onclick="handleQuizClick(15, 5, 1, 2)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Paper wallet</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_15_5_opt_2"
+                    onclick="handleQuizClick(15, 5, 2, 2)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Brain wallet</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_15_5_opt_3"
+                    onclick="handleQuizClick(15, 5, 3, 2)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Mobile wallet</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_15_5">
+                <div class="exp-content" id="qexp_text_15_5"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_15_6">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 6 of 8</span>
+                <span class="quiz-q-status" id="qstatus_15_6">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">6. Which wallet uses a dedicated physical device to protect keys?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_15_6_opt_0"
+                    onclick="handleQuizClick(15, 6, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">Online wallet</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_15_6_opt_1"
+                    onclick="handleQuizClick(15, 6, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Hardware wallet</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_15_6_opt_2"
+                    onclick="handleQuizClick(15, 6, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Brain wallet</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_15_6_opt_3"
+                    onclick="handleQuizClick(15, 6, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Non-deterministic wallet</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_15_6">
+                <div class="exp-content" id="qexp_text_15_6"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_15_7">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 7 of 8</span>
+                <span class="quiz-q-status" id="qstatus_15_7">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">7. What does BIP39 define?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_15_7_opt_0"
+                    onclick="handleQuizClick(15, 7, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">Mining difficulty</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_15_7_opt_1"
+                    onclick="handleQuizClick(15, 7, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Mnemonic code words</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_15_7_opt_2"
+                    onclick="handleQuizClick(15, 7, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Block size</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_15_7_opt_3"
+                    onclick="handleQuizClick(15, 7, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Payment channels</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_15_7">
+                <div class="exp-content" id="qexp_text_15_7"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_15_8">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 8 of 8</span>
+                <span class="quiz-q-status" id="qstatus_15_8">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">8. Which is generally more suitable for long-term offline key storage?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_15_8_opt_0"
+                    onclick="handleQuizClick(15, 8, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">Hot wallet</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_15_8_opt_1"
+                    onclick="handleQuizClick(15, 8, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Cold wallet</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_15_8_opt_2"
+                    onclick="handleQuizClick(15, 8, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Online exchange account</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_15_8_opt_3"
+                    onclick="handleQuizClick(15, 8, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Web wallet</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_15_8">
+                <div class="exp-content" id="qexp_text_15_8"></div>
+            </div>
+        </div>
+            </div>
+
+            <div class="quiz-result-banner" id="quiz-result-banner-15">
+                <div class="res-title" id="quiz-res-title-15">🎉 Module Quiz Completed!</div>
+                <p class="res-score" id="quiz-res-score-15"></p>
+                <div class="res-actions">
+                    <button class="quiz-reset-btn" onclick="resetQuiz(15, 8)">Retake Quiz</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        const mod = 15;
+        const totalQ = 8;
+        const explanations = {"1": "Bitcoins are never physically stored in a wallet; they exist solely as unspent transaction outputs (UTXOs) recorded on the public blockchain ledger. A wallet stores and manages the cryptographic keys used to unlock and spend those coins.", "2": "The private key (kept secret by the owner) is used to generate ECDSA digital signatures that prove ownership of the funds being spent. The public key is used by other network nodes to verify this signature.", "3": "JBOK stands for 'Just a Bunch of Keys' (Type 0 non-deterministic wallets). In JBOK wallets, every key pair is generated from an independent random number, requiring frequent backups whenever new addresses are used.", "4": "BIP32 defines Hierarchical Deterministic (HD) wallets, allowing an infinite tree of child keys to be derived deterministically from a single master seed using chain codes.", "5": "A brain wallet generates a private key from a passphrase memorized in the user's mind by passing it through a hash algorithm. They are highly discouraged today because humans choose predictable passphrases vulnerable to brute-force dictionary attacks.", "6": "A hardware wallet (e.g. Ledger, Trezor) stores private keys on a dedicated, secure microcontroller chip isolated from the internet. Transactions are signed inside the device, protecting keys from malware on host computers.", "7": "BIP39 defines the standard for mnemonic code words\u2014translating raw cryptographic entropy into a sequence of 12 to 24 human-readable English words with a built-in checksum for easy backup and recovery.", "8": "A cold wallet stores cryptographic keys entirely offline, completely disconnected from the internet and network attacks, making it the industry standard for long-term secure holding."};
+        let userAnswers = {};
+        let score = 0;
+
+        window.handleQuizClick = function(m, qid, selectedIdx, correctIdx) {
+            if (m !== mod) return;
+            if (userAnswers[qid] !== undefined) return; // already answered
+
+            userAnswers[qid] = selectedIdx;
+            const isCorrect = (selectedIdx === correctIdx);
+            if (isCorrect) score++;
+
+            // Highlight buttons
+            for (let i = 0; i < 4; i++) {
+                const btn = document.getElementById(`q_${m}_${qid}_opt_${i}`);
+                if (btn) {
+                    btn.disabled = true;
+                    if (i === correctIdx) {
+                        btn.className = 'quiz-option-btn correct';
+                    } else if (i === selectedIdx && !isCorrect) {
+                        btn.className = 'quiz-option-btn incorrect';
+                    } else {
+                        btn.className = 'quiz-option-btn dim';
+                    }
+                }
+            }
+
+            // Update question status
+            const statusEl = document.getElementById(`qstatus_${m}_${qid}`);
+            if (statusEl) {
+                statusEl.textContent = isCorrect ? '✅ Correct' : '❌ Incorrect';
+                statusEl.className = isCorrect ? 'quiz-q-status correct' : 'quiz-q-status incorrect';
+            }
+
+            // Show explanation
+            const expBox = document.getElementById(`qexp_${m}_${qid}`);
+            const expText = document.getElementById(`qexp_text_${m}_${qid}`);
+            if (expBox && expText) {
+                const exp = explanations[qid] || '';
+                expText.innerHTML = (isCorrect ? '<strong>Right on target!</strong> ' : '<strong>Concept clarity:</strong> ') + exp;
+                expBox.className = 'quiz-explanation-box ' + (isCorrect ? 'correct' : 'incorrect');
+                expBox.style.display = 'block';
+            }
+
+            // Update stats
+            const answeredCount = Object.keys(userAnswers).length;
+            const progText = document.getElementById(`quiz-progress-text-${mod}`);
+            if (progText) progText.textContent = `${answeredCount}/${totalQ} Answered`;
+
+            const scoreText = document.getElementById(`quiz-score-text-${mod}`);
+            if (scoreText) scoreText.textContent = `🏆 Score: ${score}/${totalQ}`;
+
+            const progFill = document.getElementById(`quiz-progress-fill-${mod}`);
+            if (progFill) progFill.style.width = `${Math.round((answeredCount / totalQ) * 100)}%`;
+
+            // If complete, show banner
+            if (answeredCount === totalQ) {
+                const banner = document.getElementById(`quiz-result-banner-${mod}`);
+                const resTitle = document.getElementById(`quiz-res-title-${mod}`);
+                const resScore = document.getElementById(`quiz-res-score-${mod}`);
+                if (banner && resTitle && resScore) {
+                    banner.style.display = 'block';
+                    if (score === totalQ) {
+                        resTitle.innerHTML = '🏆 Perfect Score! Mastermind Level';
+                        resScore.innerHTML = `Incredible work! You answered all ${totalQ} questions correctly. You have mastered this module!`;
+                    } else if (score >= Math.ceil(totalQ * 0.6)) {
+                        resTitle.innerHTML = '🌟 Great Job! Concept Check Passed';
+                        resScore.innerHTML = `You scored ${score} out of ${totalQ} (${Math.round((score/totalQ)*100)}%). Review the explanations above for complete mastery.`;
+                    } else {
+                        resTitle.innerHTML = '📚 Good Effort! Keep Revising';
+                        resScore.innerHTML = `You scored ${score} out of ${totalQ}. Review the module summary above and retake the quiz to boost your score!`;
+                    }
+                }
+            }
+        };
+
+        window.resetQuiz = function(m, tQ) {
+            if (m !== mod) return;
+            userAnswers = {};
+            score = 0;
+
+            for (let qid = 1; qid <= tQ; qid++) {
+                for (let i = 0; i < 4; i++) {
+                    const btn = document.getElementById(`q_${m}_${qid}_opt_${i}`);
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.className = 'quiz-option-btn';
+                    }
+                }
+                const statusEl = document.getElementById(`qstatus_${m}_${qid}`);
+                if (statusEl) statusEl.textContent = '⏳ Not answered';
+
+                const expBox = document.getElementById(`qexp_${m}_${qid}`);
+                if (expBox) {
+                    expBox.style.display = 'none';
+                    expBox.className = 'quiz-explanation-box';
+                }
+            }
+
+            const progText = document.getElementById(`quiz-progress-text-${mod}`);
+            if (progText) progText.textContent = `0/${totalQ} Answered`;
+
+            const scoreText = document.getElementById(`quiz-score-text-${mod}`);
+            if (scoreText) scoreText.textContent = `🏆 Score: 0/${totalQ}`;
+
+            const progFill = document.getElementById(`quiz-progress-fill-${mod}`);
+            if (progFill) progFill.style.width = '0%';
+
+            const banner = document.getElementById(`quiz-result-banner-${mod}`);
+            if (banner) banner.style.display = 'none';
+        };
+    })();
+    </script>
+    
+
+        <div style="margin-top: 35px; padding: 20px 24px; background: rgba(2, 132, 199, 0.05); border: 1.5px solid rgba(2, 132, 199, 0.2); border-radius: 12px;">
+            <h4 style="margin: 0 0 8px 0; color: #0284c7; font-size: 16px;">🚀 Module 15 Completed!</h4>
+            <p style="margin: 0; font-size: 14px; color: var(--text-body); line-height: 1.6;">
+                Great progress! You have mastered <strong>Bitcoin Wallets</strong>. Continue to <strong>Module 16: Bitcoin Payments</strong> to advance through Unit IV!
+            </p>
+        </div>
+        
+    </div>
+
+    <div class="prev-next">
+        <a class="pn-btn" href="blockchain-module-14.html">&larr; Module 14</a>
+        <a class="pn-reader" href="blockchain.html">📋 Blockchain Hub</a>
+        <a class="pn-btn" href="blockchain-module-16.html">Module 16 &rarr;</a>
+    </div>
+
+</div>
+
+<script src="shared.js"></script>
+</body>
+</html>

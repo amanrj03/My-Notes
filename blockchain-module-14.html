@@ -1,0 +1,2017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 14: The Bitcoin Network — Blockchain Study Guide</title>
+    <meta name="description" content="Blockchain &amp; Cryptography study guide — Unit IV — Module 14 of 18 — The Bitcoin Network: P2P network architecture, full nodes vs SPV light clients, network discovery, protocol messages (version, verack, inv, getdata, tx, block), Initial Block Download (blocks-first vs headers-first), and mining pool protocols (Stratum).">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+
+    <!-- MathJax for LaTeX rendering -->
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['\\(', '\\)']],
+            displayMath: [['$$', '$$']],
+        },
+        options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+@page { size: A4; margin: 15mm; }
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text-body, #2d3748);
+    margin: 0; padding: 0;
+    background-color: var(--bg-body, #f3f5f8);
+}
+
+.page-container {
+    max-width: 1100px;
+    margin: 25px auto 40px;
+    padding: 40px 55px;
+    background-color: var(--bg-page, #ffffff);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+}
+
+.module-banner {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0284c7 100%);
+    border-radius: 10px;
+    padding: 28px 32px;
+    margin-bottom: 28px;
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(2, 132, 199, 0.2);
+}
+.module-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    font-size: 12px; font-weight: 700;
+    padding: 4px 16px; border-radius: 20px;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    border: 1px solid rgba(255,255,255,0.25);
+    margin-bottom: 10px;
+}
+.module-banner-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 26px; font-weight: 700; line-height: 1.3;
+    margin: 0; color: #fff !important; border: none !important; padding: 0 !important;
+}
+
+.nav-toggle { margin-bottom: 24px; }
+.nav-toggle-btn {
+    display: inline-block;
+    background: #0284c7;
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+.nav-toggle-btn:hover { background: #0369a1; }
+
+.nav-panel {
+    display: none;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 8px;
+    column-count: 2;
+    column-gap: 24px;
+}
+.nav-panel.open { display: block !important; }
+
+.nav-item {
+    display: block;
+    padding: 6px 10px;
+    font-size: 13px;
+    color: var(--link-color, #0284c7);
+    text-decoration: none;
+    border-radius: 4px;
+    break-inside: avoid;
+    transition: all 0.15s;
+}
+.nav-item:hover { background: rgba(2, 132, 199, 0.1); color: #0284c7; }
+.nav-item.current {
+    background: #0284c7;
+    color: #fff !important;
+    font-weight: 600;
+}
+
+h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    color: var(--heading-color, #0f172a);
+    border-bottom: 2px solid #0284c7;
+    padding-bottom: 8px;
+    margin-top: 36px; margin-bottom: 18px;
+    line-height: 1.3;
+}
+h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 20px;
+    color: var(--heading-h2, #0369a1);
+    border-left: 5px solid #0284c7;
+    padding-left: 12px;
+    margin-top: 30px; margin-bottom: 14px;
+    line-height: 1.35;
+}
+h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 17px;
+    color: var(--heading-h3, #075985);
+    margin-top: 22px; margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+p { margin-top: 0; margin-bottom: 14px; overflow-wrap: break-word; }
+ul, ol { margin-top: 0; margin-bottom: 16px; padding-left: 28px; }
+li { margin-bottom: 6px; }
+hr { border: none; border-top: 1px solid var(--border-color, #e2e8f0); margin: 28px 0; }
+
+code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13.5px;
+    background: var(--code-bg, #f1f5f9);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color, #e2e8f0);
+}
+
+pre {
+    background: #0f172a;
+    color: #f8fafc;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 13.5px;
+}
+pre code { background: transparent; border: none; color: inherit; padding: 0; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid var(--border-color, #cbd5e1);
+    padding: 10px 14px;
+    text-align: left;
+}
+th {
+    background: var(--table-th-bg, #f1f5f9);
+    font-weight: 700;
+    color: var(--text-heading, #0f172a);
+}
+
+.ref-pill {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(2, 132, 199, 0.08);
+    color: #0284c7;
+    border: 1px solid rgba(2, 132, 199, 0.2);
+    border-radius: 16px;
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 4px 4px 4px 0;
+}
+
+.exam-header-banner {
+    background: linear-gradient(135deg, #1e3a8a, #0284c7);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    margin: 28px 0 16px 0;
+}
+
+.memory-trick-banner {
+    background: linear-gradient(135deg, #065f46, #10b981);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    margin: 24px 0 14px 0;
+}
+
+.math-display {
+    margin: 18px 0;
+    overflow-x: auto;
+    text-align: center;
+}
+
+.prev-next {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-color, #e2e8f0);
+}
+
+.pn-btn {
+    display: inline-block;
+    background: #0284c7;
+    color: #fff;
+    padding: 10px 22px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background 0.2s, transform 0.15s;
+}
+.pn-btn:hover { background: #0369a1; transform: translateY(-1px); }
+
+.pn-reader {
+    color: #64748b;
+    font-size: 13.5px;
+    text-decoration: none;
+    font-weight: 500;
+}
+.pn-reader:hover { color: #0284c7; }
+
+/* Dark mode overrides */
+[data-theme="dark"] .page-container {
+    background-color: var(--bg-page, #0b1120);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+[data-theme="dark"] code {
+    background: #1e293b;
+    border-color: #334155;
+    color: #38bdf8;
+}
+[data-theme="dark"] th {
+    background: #1e293b;
+    color: #f8fafc;
+}
+[data-theme="dark"] .nav-panel {
+    background: #0f172a;
+    border-color: #1e293b;
+}
+
+@media (max-width: 768px) {
+    .page-container { padding: 24px 18px; margin: 15px auto; }
+    .module-banner { padding: 20px; }
+    .module-banner-title { font-size: 20px; }
+    .nav-panel { column-count: 1; }
+}
+</style>
+</head>
+<body>
+
+<!-- GLOBAL NAVIGATION HEADER -->
+<header class="global-navbar">
+    <div class="nav-container">
+        <a href="index.html" class="nav-brand">
+            <span class="nav-brand-icon">⚡</span>
+            <span class="nav-brand-text">OmniCourse<span class="nav-brand-accent">.Hub</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link"><span class="icon">🏠</span> All Subjects</a>
+            <div class="nav-dropdown">
+    <button class="nav-dropdown-btn active"><span class="icon">⛓️</span> Blockchain (18) ▾</button>
+    <div class="nav-dropdown-menu">
+        <a href="blockchain.html" class="nav-dropdown-header">📋 Blockchain Syllabus Hub (All 18)</a>
+        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit I (Mods 1–4)</div>
+        <a href="blockchain-module-1.html">Module 1: Growth, History of Blockchain & Bitcoin</a>
+        <a href="blockchain-module-2.html">Module 2: Distributed Systems & Blockchain</a>
+        <a href="blockchain-module-3.html">Module 3: Consensus Protocols</a>
+        <a href="blockchain-module-4.html">Module 4: Decentralization</a>
+        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit II (Mods 5–8)</div>
+        <a href="blockchain-module-5.html">Module 5: Symmetric Cryptography</a>
+        <a href="blockchain-module-6.html">Module 6: Public Key Cryptography</a>
+        <a href="blockchain-module-7.html">Module 7: Digital Signatures + Cryptographic Constructs</a>
+        <a href="blockchain-module-8.html">Module 8: SHA & Cryptographic Hash Functions</a>
+        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit III (Mods 9–13)</div>
+        <a href="blockchain-module-9.html">Module 9: Consensus Problem, Analysis & Design</a>
+        <a href="blockchain-module-10.html">Module 10: Classification & Traditional Consensus (Paxos, Raft, PBFT)</a>
+        <a href="blockchain-module-11.html">Module 11: Blockchain Consensus (PoW, PoS, DPoS) & Selection</a>
+        <a href="blockchain-module-12.html">Module 12: Bitcoin Architecture, Keys & Transactions</a>
+        <a href="blockchain-module-13.html">Module 13: Bitcoin Blockchain, Network, Mining & Forks</a>
+        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit IV (Mods 14–18)</div>
+        <a href="blockchain-module-14.html">Module 14: The Bitcoin Network</a>
+        <a href="blockchain-module-15.html">Module 15: Bitcoin Wallets</a>
+        <a href="blockchain-module-16.html">Module 16: Bitcoin Payments</a>
+        <a href="blockchain-module-17.html">Module 17: Innovation in Bitcoin and Advanced Protocols</a>
+        <a href="blockchain-module-18.html">Module 18: Bitcoin Investment, Buying and Selling Bitcoin</a>
+        <a href="blockchain_guide.html" class="nav-dropdown-special">📖 Full 8-Module Reader</a>
+    </div>
+</div>
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-btn"><span class="icon">🐍</span> Django Course (45) ▾</button>
+                <div class="nav-dropdown-menu">
+                    <a href="django.html" class="nav-dropdown-header">📋 Django Syllabus Hub</a>
+                    <a href="module-1.html">Module 1: Introduction to Web &amp; Django</a>
+                    <a href="module-2.html">Module 2: Project Architecture</a>
+                    <a href="django_guide.html" class="nav-dropdown-special">📖 Full 45-Module Reader</a>
+                </div>
+            </div>
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-btn"><span class="icon">📐</span> Mathematics (17) ▾</button>
+                <div class="nav-dropdown-menu">
+                    <a href="maths.html" class="nav-dropdown-header">📋 Number Theory Hub (All 17)</a>
+                    <a href="maths-module-1.html">Module 1: Divisibility Algorithm</a>
+                    <a href="maths-module-2.html">Module 2: Modular Arithmetic</a>
+                </div>
+            </div>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
+                <span class="theme-toggle-icon">🌙</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<div class="page-container">
+
+    <div class="module-banner">
+        <div class="module-badge">Unit IV — Module 14 of 18 — The Bitcoin Network</div>
+        <h1 class="module-banner-title">The Bitcoin Network</h1>
+    </div>
+
+    <div class="nav-toggle">
+        <button class="nav-toggle-btn" onclick="document.getElementById('bcNavPanel').classList.toggle('open')">
+            📚 All 18 Blockchain Modules ▾
+        </button>
+        <div class="nav-panel" id="bcNavPanel">
+<div class="nav-unit-header" style="font-weight: 800; font-size: 11.5px; text-transform: uppercase; color: #0284c7; margin: 12px 0 6px 4px; letter-spacing: 0.5px; break-inside: avoid;">Unit I: Blockchain Fundamentals</div>
+<a class="nav-item" href="blockchain-module-1.html">1. Growth, History of Blockchain & Bitcoin</a>
+<a class="nav-item" href="blockchain-module-2.html">2. Distributed Systems & Blockchain</a>
+<a class="nav-item" href="blockchain-module-3.html">3. Consensus Protocols</a>
+<a class="nav-item" href="blockchain-module-4.html">4. Decentralization</a>
+<div class="nav-unit-header" style="font-weight: 800; font-size: 11.5px; text-transform: uppercase; color: #0284c7; margin: 12px 0 6px 4px; letter-spacing: 0.5px; break-inside: avoid;">Unit II: Cryptographic Primitives</div>
+<a class="nav-item" href="blockchain-module-5.html">5. Symmetric Cryptography</a>
+<a class="nav-item" href="blockchain-module-6.html">6. Public Key Cryptography</a>
+<a class="nav-item" href="blockchain-module-7.html">7. Digital Signatures + Cryptographic Constructs</a>
+<a class="nav-item" href="blockchain-module-8.html">8. SHA & Cryptographic Hash Functions</a>
+<div class="nav-unit-header" style="font-weight: 800; font-size: 11.5px; text-transform: uppercase; color: #0284c7; margin: 12px 0 6px 4px; letter-spacing: 0.5px; break-inside: avoid;">Unit III: Consensus & Bitcoin Core</div>
+<a class="nav-item" href="blockchain-module-9.html">9. Consensus Problem, Analysis & Design</a>
+<a class="nav-item" href="blockchain-module-10.html">10. Classification & Traditional Consensus (Paxos, Raft, PBFT)</a>
+<a class="nav-item" href="blockchain-module-11.html">11. Blockchain Consensus (PoW, PoS, DPoS) & Selection</a>
+<a class="nav-item" href="blockchain-module-12.html">12. Bitcoin Architecture, Keys & Transactions</a>
+<a class="nav-item" href="blockchain-module-13.html">13. Bitcoin Blockchain, Network, Mining & Forks</a>
+<div class="nav-unit-header" style="font-weight: 800; font-size: 11.5px; text-transform: uppercase; color: #0284c7; margin: 12px 0 6px 4px; letter-spacing: 0.5px; break-inside: avoid;">Unit IV: Bitcoin Network, Wallets, Payments & Economics</div>
+<span class="nav-item current">14. The Bitcoin Network</span>
+<a class="nav-item" href="blockchain-module-15.html">15. Bitcoin Wallets</a>
+<a class="nav-item" href="blockchain-module-16.html">16. Bitcoin Payments</a>
+<a class="nav-item" href="blockchain-module-17.html">17. Innovation in Bitcoin and Advanced Protocols</a>
+<a class="nav-item" href="blockchain-module-18.html">18. Bitcoin Investment, Buying and Selling Bitcoin</a>
+        </div>
+    </div>
+
+    <div class="module-content">
+<p>Starting Module 1</p>
+<p>Beginner level</p>
+<p>In this module, we'll understand how Bitcoin computers communicate with each other, how a new computer joins the network, how nodes exchange information, and how a new node downloads the blockchain.</p>
+<p><strong>Primary sources:</strong> Your teacher's <em><span class="ref-pill">📄 Slides Reference: Bitcoin client and payment.pptx</span></em> and the Unit IV syllabus.\<br />
+<strong>Supporting textbook:</strong> <em>Mastering Blockchain, Third Edition</em>, Chapter 7 — The Bitcoin Network and Payments.</p>
+<p>The textbook's Chapter 7 begins with the Bitcoin P2P network, node types, network messages, node discovery and blockchain synchronisation. We'll follow that same progression.</p>
+<h2><strong>Module 1 roadmap</strong></h2>
+<ol>
+<li>Introduction to the Bitcoin network</li>
+<li>Peer-to-peer network architecture</li>
+<li>Bitcoin nodes and their functions</li>
+<li>Types of Bitcoin nodes</li>
+<li>Full nodes vs SPV nodes</li>
+<li>Bitcoin network protocol</li>
+<li>Important Bitcoin protocol messages</li>
+<li>How two Bitcoin nodes establish a connection</li>
+<li>Node discovery</li>
+<li>Blockchain synchronisation</li>
+<li>Initial Block Download (IBD)</li>
+<li>Blocks-first vs headers-first synchronisation</li>
+<li>Stratum protocol and mining-pool communication</li>
+<li>Exam preparation and revision</li>
+</ol>
+<h1><strong>Topic 1: Introduction to the Bitcoin Network</strong></h1>
+<h2><strong>1.1 First, what is a network?</strong></h2>
+<p>Before understanding the Bitcoin network, let's understand the meaning of a computer network.</p>
+<p>A <strong>computer network is a collection of computers and devices connected to each other so that they can exchange information and resources.</strong></p>
+<p>For example, suppose you and your friend are connected to the same Wi-Fi network.</p>
+<ul>
+<li>Your computer can communicate with another computer.</li>
+<li>You can send files.</li>
+<li>You can share information.</li>
+<li>You can access shared resources.</li>
+</ul>
+<p>The internet is a much larger network connecting computers around the world.</p>
+<p>Bitcoin also uses the internet to connect computers, but its purpose is different: these computers cooperate to maintain and use the Bitcoin system.</p>
+<h2><strong>1.2 What is the Bitcoin network?</strong></h2>
+<p><strong>The Bitcoin network is a peer-to-peer (P2P) network in which participating computers, called nodes, communicate with each other to exchange, verify and propagate Bitcoin transactions and blocks.</strong></p>
+<p>Your teacher's PPT gives three main activities performed by Bitcoin nodes:</p>
+<ol>
+<li>Performing transactions.</li>
+<li>Verifying and propagating transactions and blocks.</li>
+<li>Producing blocks through mining (for nodes that perform mining).</li>
+</ol>
+<p>The textbook also describes the Bitcoin network as a P2P network in which nodes verify and propagate transactions and blocks, while miners produce blocks.</p>
+<p>Let's understand this with a simple example.</p>
+<h3><strong>Example: Aman sends Bitcoin to Rahul</strong></h3>
+<p>Suppose Aman wants to send 0.5 BTC to Rahul.</p>
+<p>What happens?</p>
+<ol>
+<li>Aman's wallet creates a transaction.</li>
+<li>The transaction is sent to a Bitcoin node.</li>
+<li>That node checks whether the transaction follows Bitcoin's rules.</li>
+<li>The node shares the transaction with its connected peers.</li>
+<li>Other nodes receive and relay it.</li>
+<li>Miners may select the transaction and include it in a block.</li>
+<li>The new block is shared with the network.</li>
+<li>Other nodes verify the block.</li>
+</ol>
+<p>Notice something important: there is no single central bank server that must approve and record this payment.</p>
+<p>Instead, participating nodes communicate and independently apply Bitcoin's rules.</p>
+<p><strong>Example: Bitcoin network</strong></p>
+<p><strong>Aman's computer</strong></p>
+<p>Creates a Bitcoin transaction</p>
+<p><strong>Node A</strong></p>
+<p><strong>Node B</strong></p>
+<p><strong>Node C</strong></p>
+<p><strong>Node D</strong></p>
+<p>Verifies and relays</p>
+<p><strong>Miner node</strong></p>
+<p>Can produce blocks</p>
+<p>Illustrative network: real Bitcoin nodes have many connections, not necessarily this exact arrangement.</p>
+<h2><strong>1.3 Why does Bitcoin need a network?</strong></h2>
+<p>Imagine Bitcoin had only one computer maintaining all transactions.</p>
+<p>If that computer stopped working, the whole system could become unavailable. If someone controlled that computer, they could potentially control the recordkeeping process.</p>
+<p>Bitcoin uses a distributed P2P network to avoid relying on one central computer.</p>
+<p>The network provides:</p>
+<table>
+<thead>
+<tr>
+<th>Purpose</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Transaction propagation</td>
+<td>Shares transactions with other nodes.</td>
+</tr>
+<tr>
+<td>Transaction verification</td>
+<td>Checks whether transactions follow protocol rules.</td>
+</tr>
+<tr>
+<td>Block propagation</td>
+<td>Shares newly created blocks.</td>
+</tr>
+<tr>
+<td>Block verification</td>
+<td>Checks whether blocks are valid.</td>
+</tr>
+<tr>
+<td>Decentralisation</td>
+<td>Avoids dependence on a single central server.</td>
+</tr>
+<tr>
+<td>Network availability</td>
+<td>Other participating nodes can continue communicating when some nodes disconnect.</td>
+</tr>
+</tbody>
+</table>
+<h2><strong>1.4 Important: Bitcoin network vs Bitcoin blockchain</strong></h2>
+<p>These two terms are related but are not the same.</p>
+<table>
+<thead>
+<tr>
+<th>Bitcoin network</th>
+<th>Bitcoin blockchain</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A communication system connecting Bitcoin nodes.</td>
+<td>The ordered ledger of Bitcoin blocks.</td>
+</tr>
+<tr>
+<td>Allows nodes to exchange transactions and blocks.</td>
+<td>Stores the accepted transaction history.</td>
+</tr>
+<tr>
+<td>Includes nodes, peer connections and network messages.</td>
+<td>Includes blocks, headers and transactions.</td>
+</tr>
+<tr>
+<td>Helps distribute information.</td>
+<td>Records the history according to consensus rules.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Easy example to remember:</strong></p>
+<p>Think of a classroom.</p>
+<ul>
+<li>The students communicating with each other represent the Bitcoin network.</li>
+<li>The official record book maintained according to the classroom rules represents the blockchain.</li>
+</ul>
+<p>The network helps distribute information; the blockchain records the accepted history.</p>
+<h1><strong>Topic 2: Peer-to-Peer (P2P) Network Architecture</strong></h1>
+<p>This is one of the most important foundations of the Bitcoin network.</p>
+<h2><strong>2.1 What is a peer-to-peer network?</strong></h2>
+<p><strong>A peer-to-peer network is a network architecture in which computers, called peers, communicate directly with one another and share information without depending on a central server for every communication.</strong></p>
+<p>A computer participating in this network is called a <strong>peer</strong> or <strong>node</strong>.</p>
+<p>Let's understand it through two examples.</p>
+<h3><strong>Example A: Centralised network</strong></h3>
+<p>Imagine a company where all employees must send files through one central server.</p>
+<p><strong>Central server</strong></p>
+<p>Employee A</p>
+<p>Employee B</p>
+<p>Employee C</p>
+<p>Every employee depends on the central server.</p>
+<p>If the central server fails, communication may be interrupted.</p>
+<h3><strong>Example B: Peer-to-peer network</strong></h3>
+<p>Now imagine that employees can communicate directly with one another.</p>
+<p>Peer A</p>
+<p>Peer B</p>
+<p>Peer C</p>
+<p>Peer D</p>
+<p>Peer E</p>
+<p>Peer F</p>
+<p>Illustrative peers communicating directly through network connections.</p>
+<p>There is no single central computer that must handle every communication.</p>
+<p>Bitcoin uses this second architecture.</p>
+<h2><strong>2.2 How does P2P communication work in Bitcoin?</strong></h2>
+<p>Suppose Node A receives a new Bitcoin transaction.</p>
+<ol>
+<li>Node A checks the transaction.</li>
+<li>Node A announces information about it to connected peers.</li>
+<li>Interested peers request the transaction data if they do not already have it.</li>
+<li>Those peers can relay the transaction to their own peers.</li>
+<li>The transaction spreads across the network.</li>
+</ol>
+<p>This is commonly described as <strong>gossip-style propagation</strong>.</p>
+<p>In simple language, information spreads from one computer to its connected computers, which then share it further.</p>
+<h2><strong>2.3 Important characteristics of Bitcoin's P2P network</strong></h2>
+<h3><strong>1. Decentralised communication</strong></h3>
+<p>No single central server is required to relay all Bitcoin transactions and blocks.</p>
+<h3><strong>2. Distributed participation</strong></h3>
+<p>Many computers participate in maintaining and using the network.</p>
+<h3><strong>3. Direct peer communication</strong></h3>
+<p>Nodes establish connections with other nodes and exchange protocol messages.</p>
+<h3><strong>4. Dynamic network</strong></h3>
+<p>Nodes can join, leave or become temporarily unavailable.</p>
+<h3><strong>5. Information propagation</strong></h3>
+<p>Transactions and blocks are relayed through connected peers.</p>
+<h3><strong>6. Fault tolerance</strong></h3>
+<p>The network does not depend on one particular node remaining online.</p>
+<h2><strong>2.4 What is gossip protocol?</strong></h2>
+<p>A gossip protocol is a method of distributing information through a network by sharing it with selected peers, who then share it with their peers.</p>
+<p>Think of a college announcement.</p>
+<ul>
+<li>A teacher tells five students.</li>
+<li>Those students tell other students.</li>
+<li>The announcement spreads throughout the college.</li>
+</ul>
+<p>Bitcoin uses peer-to-peer information propagation mechanisms to distribute transactions and blocks.</p>
+<p><strong>Important distinction:</strong> gossip is a general description of propagation behaviour, not the name of a single Bitcoin transaction message.</p>
+<h1><strong>Topic 3: What is a Bitcoin Node?</strong></h1>
+<h2><strong>3.1 Definition of a node</strong></h2>
+<p>A <strong>Bitcoin node is a computer running Bitcoin software that participates in the Bitcoin network by communicating with other nodes and performing one or more Bitcoin-related functions.</strong></p>
+<p>In simple language, any computer running Bitcoin software and participating in the network can be called a Bitcoin node.</p>
+<p>For example:</p>
+<ul>
+<li>A computer that stores and verifies the blockchain.</li>
+<li>A computer that receives and relays transactions.</li>
+<li>A computer that downloads blockchain headers.</li>
+<li>A computer that performs mining.</li>
+</ul>
+<p>These are different kinds of participation.</p>
+<h2><strong>3.2 Main functions of Bitcoin nodes</strong></h2>
+<p>Your teacher's PPT and textbook identify the following major functions.</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Wallet</td>
+<td>Manages keys and helps users create and receive transactions.</td>
+</tr>
+<tr>
+<td>Miner</td>
+<td>Produces candidate blocks and performs Proof of Work.</td>
+</tr>
+<tr>
+<td>Blockchain storage</td>
+<td>Stores blockchain data.</td>
+</tr>
+<tr>
+<td>Network routing</td>
+<td>Communicates with peers and relays transactions and blocks.</td>
+</tr>
+</tbody>
+</table>
+<p>The textbook explains that a full Bitcoin node can perform these four functions. However, not every node needs to perform all of them.</p>
+<p>Let's understand them individually.</p>
+<h3><strong>1. Wallet function</strong></h3>
+<p>A wallet helps a user manage Bitcoin keys and create transactions.</p>
+<p>Example: Aman uses a wallet to send 0.1 BTC to Rahul.</p>
+<h3><strong>2. Mining function</strong></h3>
+<p>A mining node constructs candidate blocks and performs Proof of Work.</p>
+<p>Example: A miner searches for a block hash satisfying the current difficulty target.</p>
+<h3><strong>3. Blockchain storage function</strong></h3>
+<p>A node stores blockchain data so it can validate and access the transaction history.</p>
+<p>Example: A full node downloads and verifies blocks.</p>
+<h3><strong>4. Network routing function</strong></h3>
+<p>A node communicates with other peers and relays transactions and blocks.</p>
+<p>Example: Node A receives a transaction and forwards it to Node B.</p>
+<h2><strong>3.3 Does every Bitcoin node perform all four functions?</strong></h2>
+<p>No.</p>
+<p>This is a very important point.</p>
+<p>A Bitcoin network contains different kinds of nodes. Some store the entire blockchain, some operate lightweight wallets, and some perform mining.</p>
+<p>The functions depend on the type of node and its software configuration.</p>
+<h1><strong>Topic 4: Types of Bitcoin Nodes</strong></h1>
+<p>Your teacher's PPT highlights two main types:</p>
+<ol>
+<li>Full nodes</li>
+<li>Simple Payment Verification (SPV) nodes</li>
+</ol>
+<p>The textbook also discusses solo miners, mining nodes and mining-pool protocol servers.</p>
+<p>Let's understand all of them.</p>
+<h2><strong>4.1 Full node</strong></h2>
+<p>A <strong>full node is a Bitcoin node that independently validates blocks and transactions according to Bitcoin's consensus rules.</strong></p>
+<p>A full node downloads and maintains the blockchain data necessary for its operation.</p>
+<p>It checks whether transactions and blocks follow the Bitcoin protocol.</p>
+<h3><strong>Example</strong></h3>
+<p>Suppose Aman runs Bitcoin Core on his computer.</p>
+<p>His node:</p>
+<ol>
+<li>Connects to other Bitcoin peers.</li>
+<li>Downloads blockchain data.</li>
+<li>Verifies blocks and transactions.</li>
+<li>Maintains its blockchain state.</li>
+<li>Relays valid transactions and blocks.</li>
+</ol>
+<p>This is an example of a full-node setup.</p>
+<h3><strong>Functions of a full node</strong></h3>
+<ul>
+<li>Maintains blockchain data.</li>
+<li>Independently verifies blocks and transactions.</li>
+<li>Communicates with other nodes.</li>
+<li>Relays transactions and blocks.</li>
+<li>Can support wallet functionality.</li>
+<li>May also be configured to mine, although mining is not required to be a full node.</li>
+</ul>
+<h2><strong>Full node</strong></h2>
+<p><strong>Bitcoin Core software</strong></p>
+<p>Blockchain validation</p>
+<p>Blockchain storage</p>
+<p>Transaction relay</p>
+<p>Peer communication</p>
+<h2><strong>4.2 SPV node — Simple Payment Verification</strong></h2>
+<p><strong>An SPV node is a lightweight Bitcoin client that verifies whether a transaction is included in a block without downloading and independently validating the entire blockchain.</strong></p>
+<p>This is a very important concept.</p>
+<p>Imagine that you want to use Bitcoin on your mobile phone.</p>
+<p>Downloading and storing the entire blockchain may be inconvenient because it requires storage, bandwidth and processing resources.</p>
+<p>An SPV wallet reduces these requirements.</p>
+<h3><strong>How does an SPV node work?</strong></h3>
+<ol>
+<li>It connects to full nodes.</li>
+<li>It downloads block headers instead of the complete blockchain.</li>
+<li>When it needs to check a transaction, it requests the relevant transaction information.</li>
+<li>It receives a Merkle proof.</li>
+<li>It checks whether the transaction is included in a block by verifying the Merkle proof against that block's Merkle root.</li>
+</ol>
+<p>Let's understand this with an example.</p>
+<p>Suppose a block contains 1,000 transactions.</p>
+<p>A full node downloads and validates the block's transactions.</p>
+<p>An SPV client does not need to download all 1,000 transactions merely to check whether one particular transaction is included.</p>
+<p>Instead, it can obtain the relevant transaction and its Merkle proof.</p>
+<h2><strong>SPV verification</strong></h2>
+<p><strong>SPV wallet</strong></p>
+<p>Requests proof of a transaction</p>
+<p><strong>Full node</strong></p>
+<p>Provides transaction data and Merkle proof</p>
+<p><strong>SPV client checks the Merkle proof</strong></p>
+<p><strong>Checks inclusion against the block header's Merkle root</strong></p>
+<h3><strong>Advantages of SPV nodes</strong></h3>
+<ol>
+<li>Require less storage.</li>
+<li>Use less bandwidth than downloading the entire blockchain.</li>
+<li>Are suitable for mobile devices.</li>
+<li>Allow lightweight transaction-inclusion verification.</li>
+</ol>
+<h3><strong>Limitations of SPV nodes</strong></h3>
+<ol>
+<li>Do not independently validate every transaction and block.</li>
+<li>Depend on full nodes for some transaction information.</li>
+<li>Provide less independent verification than a fully validating node.</li>
+<li>Can have privacy limitations because requests to peers may reveal which transactions or addresses a user is interested in.</li>
+</ol>
+<p><strong>Very important exam point:</strong> SPV verifies transaction inclusion using Merkle proofs and block headers. It does not provide the same independent validation as a full node.</p>
+<h2><strong>4.3 Full node vs SPV node</strong></h2>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Full Node vs. SPV Lightweight Node Architecture</h4>
+            <div class="diagram-subtitle">Comparing complete consensus verification with lightweight header-only verification</div>
+        </div>
+        <div class="diagram-nodes-row" style="gap: 20px;">
+            <div class="diagram-node" style="flex: 1; min-width: 280px; text-align: left; background: #0f172a; border-color: #0284c7;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;">
+                    <svg class="diagram-node-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+  <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+  <line x1="6" y1="6" x2="6.01" y2="6"></line>
+  <line x1="6" y1="18" x2="6.01" y2="18"></line>
+</svg>
+                    <span style="font-weight: 700; color: #38bdf8; font-size: 15px;">Full Node (Core Backbone)</span>
+                </div>
+                <ul style="margin: 0; padding-left: 18px; font-size: 13px; color: #cbd5e1; line-height: 1.6;">
+                    <li><strong>Full Chain Storage:</strong> Stores 100% of historical blocks (~550+ GB).</li>
+                    <li><strong>Full Rule Validation:</strong> Validates every signature, UTXO, and consensus rule autonomously.</li>
+                    <li><strong>Zero Trust:</strong> Relies on no third party or centralized service.</li>
+                    <li><strong>Resource Demands:</strong> Requires high bandwidth, storage &amp; CPU.</li>
+                </ul>
+            </div>
+            <div class="diagram-node" style="flex: 1; min-width: 280px; text-align: left; background: #0f172a; border-color: #10b981;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;">
+                    <svg class="diagram-node-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+  <circle cx="12" cy="7" r="4"></circle>
+</svg>
+                    <span style="font-weight: 700; color: #34d399; font-size: 15px;">SPV Lightweight Node (BIP37)</span>
+                </div>
+                <ul style="margin: 0; padding-left: 18px; font-size: 13px; color: #cbd5e1; line-height: 1.6;">
+                    <li><strong>Headers Only:</strong> Downloads only 80-byte block headers (~50 MB total).</li>
+                    <li><strong>Merkle Branch Verification:</strong> Verifies transaction inclusion via O(log N) Merkle paths.</li>
+                    <li><strong>Honest Majority Assumption:</strong> Trusts the chain with most accumulated PoW.</li>
+                    <li><strong>Ideal for Mobile:</strong> Lightweight, runs comfortably on smartphones &amp; IoT.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+<p>This comparison is highly suitable for a 5-mark question.</p>
+<table>
+<thead>
+<tr>
+<th>Basis</th>
+<th>Full node</th>
+<th>SPV node</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Meaning</td>
+<td>Independently validates Bitcoin blocks and transactions</td>
+<td>Lightweight verification client</td>
+</tr>
+<tr>
+<td>Blockchain data</td>
+<td>Maintains the blockchain data needed for full validation</td>
+<td>Downloads block headers</td>
+</tr>
+<tr>
+<td>Transaction verification</td>
+<td>Independently checks consensus rules</td>
+<td>Checks transaction inclusion using Merkle proofs</td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>Higher</td>
+<td>Lower</td>
+</tr>
+<tr>
+<td>Bandwidth</td>
+<td>Generally higher</td>
+<td>Generally lower</td>
+</tr>
+<tr>
+<td>Security model</td>
+<td>Strong independent validation</td>
+<td>Relies on full nodes for some information</td>
+</tr>
+<tr>
+<td>Usage</td>
+<td>Independent network participation</td>
+<td>Lightweight wallets, especially mobile</td>
+</tr>
+</tbody>
+</table>
+<h2><strong>4.4 Solo mining node</strong></h2>
+<p>A solo mining node is a node that performs mining independently rather than participating in a mining pool.</p>
+<p>It can maintain blockchain data, communicate with peers and produce candidate blocks.</p>
+<p>The miner receives the block reward if its block is accepted, subject to the protocol rules.</p>
+<h2><strong>4.5 Mining node</strong></h2>
+<p>A mining node is a node that performs mining-related functions.</p>
+<p>Some mining setups focus mainly on computing hashes and may rely on other software or services for blockchain and network functions.</p>
+<h2><strong>4.6 Mining-pool protocol server</strong></h2>
+<p>The textbook also discusses mining-pool protocol servers.</p>
+<p>These servers coordinate mining-pool work using protocols such as <strong>Stratum</strong>.</p>
+<p>A mining pool combines the computational efforts of multiple miners. The server distributes work and receives the miners' submitted results.</p>
+<p>We'll understand Stratum more clearly later in this module.</p>
+<h1><strong>Topic 5: Bitcoin Network Protocol</strong></h1>
+<p>Now that we understand nodes, the next question is:</p>
+<p><strong>How do these computers communicate with each other?</strong></p>
+<p>They need a common set of communication rules.</p>
+<p>That set of rules is called a network protocol.</p>
+<h2><strong>5.1 What is a network protocol?</strong></h2>
+<p>A <strong>network protocol is a set of rules that defines how computers communicate and exchange information over a network.</strong></p>
+<p>For example, imagine two people speaking different languages.</p>
+<p>One speaks only Hindi, and the other understands only English.</p>
+<p>Communication becomes difficult.</p>
+<p>Similarly, computers need agreed formats, commands and rules to exchange information.</p>
+<p>Bitcoin uses its own P2P protocol to define how nodes communicate.</p>
+<h2><strong>5.2 Bitcoin P2P protocol</strong></h2>
+<p>The Bitcoin P2P protocol defines:</p>
+<ul>
+<li>How nodes establish connections.</li>
+<li>How nodes introduce themselves.</li>
+<li>How peers discover other peers.</li>
+<li>How transactions are announced and requested.</li>
+<li>How blocks are announced and requested.</li>
+<li>How blockchain data is synchronised.</li>
+<li>How connections are checked and maintained.</li>
+</ul>
+<p>Your teacher's PPT lists 27 types of protocol messages in its material. The exact set of supported messages can change with protocol versions and software updates.</p>
+<p>The important exam task is to understand the purpose of the main messages.</p>
+<h2><strong>5.3 What is a magic value?</strong></h2>
+<p>The textbook explains that a Bitcoin network is identified by a <strong>magic value</strong>.</p>
+<p>A magic value is a special identifier in the message structure that helps a node identify which Bitcoin network a message belongs to.</p>
+<p>The textbook lists these examples:</p>
+<table>
+<thead>
+<tr>
+<th>Network</th>
+<th>Magic value (hexadecimal)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Main network</td>
+<td><code>0xD9B4BEF9</code></td>
+</tr>
+<tr>
+<td>Testnet</td>
+<td><code>0xDAB5BFFA</code></td>
+</tr>
+<tr>
+<td>Testnet3</td>
+<td><code>0x0709110B</code></td>
+</tr>
+</tbody>
+</table>
+<p>Why is this needed?</p>
+<p>Imagine a node accidentally receives a message belonging to another Bitcoin network.</p>
+<p>The magic value helps identify the message's intended network.</p>
+<p><strong>Remember:</strong> mainnet is the real Bitcoin network, while testnet is used for testing.</p>
+<h1><strong>Topic 6: Important Bitcoin Protocol Messages</strong></h1>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Bitcoin Inventory Gossip &amp; Data Propagation Flow</h4>
+            <div class="diagram-subtitle">How new transactions and blocks propagate across the peer-to-peer network</div>
+        </div>
+        <div class="diagram-flow-row">
+            <div class="flow-step-card">
+                <div class="flow-step-num">Step 1</div>
+                <div class="flow-step-title">inv Announcement</div>
+                <div class="flow-step-desc">Node A broadcasts <code>inv</code> containing SHA-256 hashes of new transactions or blocks.</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step-card">
+                <div class="flow-step-num">Step 2</div>
+                <div class="flow-step-title">Mempool Lookup</div>
+                <div class="flow-step-desc">Node B checks its mempool/ledger; checks if it already possesses these hashes.</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step-card">
+                <div class="flow-step-num">Step 3</div>
+                <div class="flow-step-title">getdata Request</div>
+                <div class="flow-step-desc">For any missing items, Node B sends a <code>getdata</code> message requesting the full payload.</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step-card">
+                <div class="flow-step-num">Step 4</div>
+                <div class="flow-step-title">tx / block Delivery</div>
+                <div class="flow-step-desc">Node A transmits full <code>tx</code> or <code>block</code> data; Node B validates and relays.</div>
+            </div>
+        </div>
+    </div>
+    
+<p>This is one of the most important parts of your teacher's PPT.</p>
+<p>A Bitcoin node uses different messages to communicate with other nodes.</p>
+<p>Let's understand the important messages one by one, with simple examples.</p>
+<h2><strong>6.1 Version message</strong></h2>
+<p>The <code>version</code> message is used when one node introduces itself to another node.</p>
+<p>It provides information such as:</p>
+<ul>
+<li>Protocol version</li>
+<li>Services supported by the node</li>
+<li>Timestamp</li>
+<li>Network address information</li>
+<li>Other connection-related information</li>
+</ul>
+<p><strong>Example:</strong></p>
+<p>Node A sends Node B a message:</p>
+<p>"Hello! I am a Bitcoin node. This is my protocol version and information about my capabilities."</p>
+<p>This is the beginning of the connection handshake.</p>
+<h2><strong>6.2 Verack message</strong></h2>
+<p><code>verack</code> stands for <strong>version acknowledgement</strong>.</p>
+<p>It is sent to acknowledge the version message and complete the initial handshake.</p>
+<p><strong>Example:</strong></p>
+<p>Node A: "Here is my version information."</p>
+<p>Node B: "Here is my version information."</p>
+<p>Node A and Node B exchange <code>verack</code> messages to acknowledge the handshake.</p>
+<h2><strong>6.3 Inv message</strong></h2>
+<p><code>inv</code> stands for <strong>inventory</strong>.</p>
+<p>It is used by a node to announce that it knows about certain transactions or blocks.</p>
+<p>It generally advertises identifiers or hashes, rather than sending the complete transaction or block data.</p>
+<p><strong>Example:</strong></p>
+<p>Node A tells Node B:</p>
+<p>"I know about a new transaction. Here is its transaction ID."</p>
+<h2><strong>6.4 Getdata message</strong></h2>
+<p><code>getdata</code> is used to request actual transaction or block data that was previously advertised.</p>
+<p><strong>Example:</strong></p>
+<p>Node B receives an <code>inv</code> message from Node A.</p>
+<p>Node B responds:</p>
+<p>"Please send me the actual transaction."</p>
+<p>It sends a <code>getdata</code> message requesting the transaction.</p>
+<h2><strong>6.5 Getblocks message</strong></h2>
+<p><code>getblocks</code> is used in the older blocks-first synchronisation approach to request block inventory information.</p>
+<p>It helps a node discover which blocks are available after a particular known block.</p>
+<p>Your teacher's PPT describes it as requesting information about blocks after the last known hash, with a maximum inventory response of 500 blocks in the older method.</p>
+<h2><strong>6.6 Getheaders message</strong></h2>
+<p><code>getheaders</code> requests block headers from another node.</p>
+<p>Instead of requesting complete blocks immediately, a node can first obtain the headers.</p>
+<p>This is particularly important for headers-first synchronisation.</p>
+<h2><strong>6.7 Tx message</strong></h2>
+<p><code>tx</code> is used to transmit transaction data.</p>
+<p>For example, when a node requests a transaction using <code>getdata</code>, the other node can respond with a <code>tx</code> message.</p>
+<h2><strong>6.8 Block message</strong></h2>
+<p><code>block</code> is used to transmit complete block data.</p>
+<p>For example, when a node requests a particular block using <code>getdata</code>, the other node can respond with a <code>block</code> message.</p>
+<h2><strong>6.9 Headers message</strong></h2>
+<p><code>headers</code> is used to send requested block headers in response to a <code>getheaders</code> request.</p>
+<p>The textbook describes a response containing up to 2,000 block headers.</p>
+<h2><strong>6.10 Getaddr message</strong></h2>
+<p><code>getaddr</code> requests information about other known peers.</p>
+<p>A node uses it to discover additional nodes in the network.</p>
+<h2><strong>6.11 Addr message</strong></h2>
+<p><code>addr</code> provides information about known network peers, such as their IP addresses and port numbers.</p>
+<p>It can help a node establish additional peer connections.</p>
+<h2><strong>6.12 Ping and Pong messages</strong></h2>
+<p>These messages are used to check whether a peer connection is responsive.</p>
+<ul>
+<li><code>ping</code>: asks whether the other node is active.</li>
+<li><code>pong</code>: responds to the ping.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<p>Node A: "Are you still connected?"</p>
+<p>Node B: "Yes, I am here."</p>
+<h2><strong>6.13 Important messages — revision table</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Message</th>
+<th>Purpose</th>
+<th>Easy way to remember</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>version</code></td>
+<td>Introduces a node</td>
+<td>My introduction</td>
+</tr>
+<tr>
+<td><code>verack</code></td>
+<td>Acknowledges version</td>
+<td>Introduction accepted</td>
+</tr>
+<tr>
+<td><code>inv</code></td>
+<td>Announces blocks or transactions</td>
+<td>I have something</td>
+</tr>
+<tr>
+<td><code>getdata</code></td>
+<td>Requests actual data</td>
+<td>Send it to me</td>
+</tr>
+<tr>
+<td><code>getblocks</code></td>
+<td>Requests block inventory</td>
+<td>Which blocks do you have?</td>
+</tr>
+<tr>
+<td><code>getheaders</code></td>
+<td>Requests block headers</td>
+<td>Send me headers</td>
+</tr>
+<tr>
+<td><code>tx</code></td>
+<td>Sends transaction data</td>
+<td>Here is the transaction</td>
+</tr>
+<tr>
+<td><code>block</code></td>
+<td>Sends complete block data</td>
+<td>Here is the block</td>
+</tr>
+<tr>
+<td><code>headers</code></td>
+<td>Sends block headers</td>
+<td>Here are the headers</td>
+</tr>
+<tr>
+<td><code>getaddr</code></td>
+<td>Requests peer addresses</td>
+<td>Tell me other nodes</td>
+</tr>
+<tr>
+<td><code>addr</code></td>
+<td>Shares peer addresses</td>
+<td>Here are other nodes</td>
+</tr>
+<tr>
+<td><code>ping</code></td>
+<td>Checks peer responsiveness</td>
+<td>Are you there?</td>
+</tr>
+<tr>
+<td><code>pong</code></td>
+<td>Responds to ping</td>
+<td>Yes, I am here</td>
+</tr>
+</tbody>
+</table>
+<h3><strong>The most important message sequences</strong></h3>
+<p>Remember these three sequences:</p>
+<p><strong>1. Connection establishment</strong></p>
+<p>\<div class="math-display">$$\text{Version}\rightarrow\text{Verack} \$$</div></p>
+<p>Both peers exchange version information and acknowledge the connection.</p>
+<p><strong>2. Transaction or block exchange</strong></p>
+<p>\<div class="math-display">$$\text{Inv}\rightarrow\text{Getdata}\rightarrow\text{Tx/Block} \$$</div></p>
+<p>A node advertises information, another node requests the data, and the data is transferred.</p>
+<p><strong>3. Peer discovery</strong></p>
+<p>\<div class="math-display">$$\text{Getaddr}\rightarrow\text{Addr} \$$</div></p>
+<p>A node requests information about peers and receives peer addresses.</p>
+<h1><strong>Topic 7: How Do Two Bitcoin Nodes Establish a Connection?</strong></h1>
+<p>Now let's combine the protocol messages into a real communication process.</p>
+<p>Suppose Node A wants to connect with Node B.</p>
+<p>What happens?</p>
+<h2><strong>Step-by-step connection process</strong></h2>
+<h3><strong>Step 1: Node A sends a version message</strong></h3>
+<p>Node A introduces itself to Node B.</p>
+<p>It shares its protocol version and other connection information.</p>
+<h3><strong>Step 2: Node B sends its version message</strong></h3>
+<p>Node B responds with its own version information.</p>
+<h3><strong>Step 3: Both nodes exchange verack messages</strong></h3>
+<p>They acknowledge the version exchange.</p>
+<p>The initial connection handshake is now complete.</p>
+<h3><strong>Step 4: Nodes exchange getaddr and addr messages</strong></h3>
+<p>They can request and share information about other known peers.</p>
+<h3><strong>Step 5: Nodes begin exchanging blockchain information</strong></h3>
+<p>If they are synchronised, they can listen for new block announcements.</p>
+<p>If one node is behind, it requests the missing blockchain information.</p>
+<h2><strong>Bitcoin node connection handshake</strong></h2>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Bitcoin P2P Handshake Protocol Flow</h4>
+            <div class="diagram-subtitle">Two-way version / verack exchange establishing a peer connection</div>
+        </div>
+        <div class="diagram-nodes-row" style="justify-content: space-around; align-items: center;">
+            <div class="diagram-node primary" style="flex: 1; max-width: 240px;">
+                <svg class="diagram-node-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+  <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+  <line x1="6" y1="6" x2="6.01" y2="6"></line>
+  <line x1="6" y1="18" x2="6.01" y2="18"></line>
+</svg>
+                <div class="diagram-node-title">Node A (Initiator)</div>
+                <div class="diagram-node-desc">Client node connecting to peer</div>
+            </div>
+            <div style="flex: 2; padding: 0 15px; display: flex; flex-direction: column; gap: 14px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px; padding: 8px 12px;">
+                    <span style="font-family: monospace; font-weight: bold; color: #38bdf8;">1. version &rarr;</span>
+                    <span style="font-size: 11.5px; color: #94a3b8;">Proto ver, block height, IP, timestamp</span>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 8px; padding: 8px 12px;">
+                    <span style="font-size: 11.5px; color: #94a3b8;">Peer version info &amp; capabilities</span>
+                    <span style="font-family: monospace; font-weight: bold; color: #34d399;">&larr; 2. version</span>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 8px; padding: 8px 12px;">
+                    <span style="font-size: 11.5px; color: #94a3b8;">Peer acknowledges Node A version</span>
+                    <span style="font-family: monospace; font-weight: bold; color: #c084fc;">&larr; 3. verack</span>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(234, 179, 8, 0.08); border: 1px solid rgba(234, 179, 8, 0.25); border-radius: 8px; padding: 8px 12px;">
+                    <span style="font-family: monospace; font-weight: bold; color: #facc15;">4. verack &rarr;</span>
+                    <span style="font-size: 11.5px; color: #94a3b8;">Node A acknowledges; handshake complete!</span>
+                </div>
+            </div>
+            <div class="diagram-node success" style="flex: 1; max-width: 240px;">
+                <svg class="diagram-node-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+  <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+  <line x1="6" y1="6" x2="6.01" y2="6"></line>
+  <line x1="6" y1="18" x2="6.01" y2="18"></line>
+</svg>
+                <div class="diagram-node-title">Node B (Responder)</div>
+                <div class="diagram-node-desc">Remote Bitcoin full peer</div>
+            </div>
+        </div>
+        <div class="diagram-footer" style="margin-top: 14px; font-size: 12.5px; color: #94a3b8; text-align: center;">
+            💡 After the 4-step handshake succeeds, both nodes can safely exchange <code>inv</code>, <code>getdata</code>, <code>tx</code>, and <code>block</code> payloads.
+        </div>
+    </div>
+    
+<p><strong>Node A</strong></p>
+<p><strong>Node B</strong></p>
+<p>version</p>
+<p>Receives version</p>
+<p>Receives version</p>
+<p>version</p>
+<p>verack</p>
+<p>Acknowledges</p>
+<p>Acknowledges</p>
+<p>verack</p>
+<p><strong>Connection established</strong></p>
+<p>Peer discovery and blockchain synchronisation can proceed.</p>
+<p><strong>Exam tip:</strong> If the question asks how two Bitcoin nodes establish a connection, explain the version and verack handshake first. Then explain getaddr and addr, followed by blockchain synchronisation.</p>
+<h1><strong>Topic 8: Node Discovery</strong></h1>
+<h2><strong>8.1 What is node discovery?</strong></h2>
+<p><strong>Node discovery is the process through which a Bitcoin node finds other nodes on the network so that it can establish peer connections.</strong></p>
+<p>Think about buying a new phone.</p>
+<p>Before you can call someone, you need their phone number.</p>
+<p>Similarly, a new Bitcoin node needs information about other available Bitcoin nodes before it can connect to them.</p>
+<h2><strong>8.2 How does Bitcoin discover nodes?</strong></h2>
+<p>The textbook explains that Bitcoin Core can discover peers using <strong>DNS seeds</strong>.</p>
+<p>DNS stands for Domain Name System.</p>
+<p>DNS is a system that helps translate domain names into network addresses.</p>
+<p>In Bitcoin, DNS seeds are services that help a newly started node obtain addresses of available Bitcoin peers.</p>
+<h3><strong>Example</strong></h3>
+<p>Suppose Aman starts a new Bitcoin node.</p>
+<ol>
+<li>The node starts its Bitcoin software.</li>
+<li>It contacts DNS seed services configured by the software.</li>
+<li>The DNS seed returns information about available peers.</li>
+<li>The node obtains peer addresses.</li>
+<li>It attempts to establish connections with those peers.</li>
+<li>Once connected, it can discover additional peers through the network.</li>
+</ol>
+<h2><strong>8.3 What is a DNS seed?</strong></h2>
+<p>A <strong>DNS seed is a service that helps Bitcoin nodes discover other available Bitcoin nodes by providing peer-address information.</strong></p>
+<p>Remember that DNS seeds do not control Bitcoin transactions, mining or consensus.</p>
+<p>They help with initial peer discovery.</p>
+<h2><strong>8.4 Default Bitcoin network port</strong></h2>
+<p>The textbook gives these default TCP port examples:</p>
+<table>
+<thead>
+<tr>
+<th>Bitcoin network</th>
+<th>Default TCP port</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mainnet</td>
+<td>8333</td>
+</tr>
+<tr>
+<td>Testnet</td>
+<td>18333</td>
+</tr>
+</tbody>
+</table>
+<p>A port helps identify the application or service to which network traffic should be delivered.</p>
+<p>A node may use different port settings depending on its configuration.</p>
+<h2><strong>8.5 Why is node discovery important?</strong></h2>
+<ol>
+<li>Allows new nodes to join the Bitcoin network.</li>
+<li>Helps nodes find other peers.</li>
+<li>Supports transaction propagation.</li>
+<li>Supports block propagation.</li>
+<li>Helps blockchain synchronisation.</li>
+</ol>
+<h1><strong>Topic 9: Blockchain Synchronisation</strong></h1>
+<p>This is another very important topic from your teacher's PPT and the textbook.</p>
+<h2><strong>9.1 What is blockchain synchronisation?</strong></h2>
+<p><strong>Blockchain synchronisation is the process through which a Bitcoin node obtains the blockchain information it is missing and updates its local copy to follow the valid chain.</strong></p>
+<p>Let's understand it with an example.</p>
+<p>Suppose Aman installs Bitcoin software on a new computer.</p>
+<p>His computer has no previous Bitcoin blockchain data.</p>
+<p>But the Bitcoin network has already been operating for many years.</p>
+<p>How will Aman's computer obtain the blockchain?</p>
+<p>It connects to existing Bitcoin nodes and downloads the required blockchain information.</p>
+<p>This process is called blockchain synchronisation.</p>
+<h2><strong>9.2 Why is synchronisation required?</strong></h2>
+<p>A new node needs blockchain information to:</p>
+<ol>
+<li>Understand the history of transactions.</li>
+<li>Verify blocks and transactions.</li>
+<li>Identify the current chain.</li>
+<li>Check whether transactions spend valid unspent outputs.</li>
+<li>Participate correctly in the Bitcoin network.</li>
+</ol>
+<p>Without synchronisation, a new full node cannot independently validate the complete historical chain from its starting point.</p>
+<h2><strong>9.3 What is Initial Block Download (IBD)?</strong></h2>
+<p><strong>Initial Block Download (IBD) is the process through which a newly started or significantly unsynchronised Bitcoin node downloads and validates the blockchain data needed to catch up with the network.</strong></p>
+<p>Let's take a simple example.</p>
+<p>Aman starts a new full node.</p>
+<ul>
+<li>His computer has no recent blockchain data.</li>
+<li>It connects to existing Bitcoin peers.</li>
+<li>It requests blockchain information.</li>
+<li>It downloads block headers and blocks.</li>
+<li>It validates the data according to Bitcoin's rules.</li>
+<li>It catches up with the chain it considers valid.</li>
+</ul>
+<p>This initial catch-up process is called IBD.</p>
+<h3><strong>Important terms</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IBD node</td>
+<td>The node requesting blockchain information to catch up</td>
+</tr>
+<tr>
+<td>Sync node</td>
+<td>A peer from which the IBD node requests blockchain information</td>
+</tr>
+<tr>
+<td>Block header</td>
+<td>The header information of a block, without the complete block body</td>
+</tr>
+<tr>
+<td>Block</td>
+<td>The complete block data, including its transactions</td>
+</tr>
+</tbody>
+</table>
+<p>Your teacher's PPT uses the terms IBD node and sync node to explain the synchronisation process.</p>
+<h1><strong>Topic 10: Blocks-First vs Headers-First Synchronisation</strong></h1>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Initial Block Download (IBD): Headers-First vs Blocks-First</h4>
+            <div class="diagram-subtitle">Modern parallel headers-first synchronization vs legacy sequential downloading</div>
+        </div>
+        <div class="diagram-nodes-row" style="gap: 16px;">
+            <div class="diagram-node" style="flex: 1; text-align: left; background: rgba(239, 68, 68, 0.05); border-color: rgba(239, 68, 68, 0.3);">
+                <div style="font-weight: 700; color: #f87171; margin-bottom: 8px;">Legacy: Blocks-First Download</div>
+                <div style="font-size: 13px; color: #cbd5e1; line-height: 1.5;">
+                    Downloads full blocks sequentially one by one from a single peer. If a peer stalls or delivers an invalid block, sync freezes and resources are wasted.
+                </div>
+            </div>
+            <div class="diagram-node" style="flex: 1; text-align: left; background: rgba(16, 185, 129, 0.05); border-color: rgba(16, 185, 129, 0.3);">
+                <div style="font-weight: 700; color: #34d399; margin-bottom: 8px;">Modern: Headers-First Download</div>
+                <div style="font-size: 13px; color: #cbd5e1; line-height: 1.5;">
+                    Phase 1: Rapidly downloads all 80-byte block headers to validate the longest PoW chain.<br>
+                    Phase 2: Downloads full block bodies in <strong>parallel</strong> across dozens of peers simultaneously!
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<p>Your textbook explains two approaches to blockchain synchronisation:</p>
+<ol>
+<li>Blocks-first approach</li>
+<li>Headers-first approach</li>
+</ol>
+<p>This is a very important comparison for the examination.</p>
+<h2><strong>10.1 Blocks-first approach</strong></h2>
+<p>In the blocks-first approach, a node requests block information and downloads blocks as part of its synchronisation process.</p>
+<p>The older process used inventory announcements and block requests.</p>
+<h3><strong>Working</strong></h3>
+<ol>
+<li>A new node connects to an existing peer.</li>
+<li>It requests block inventory information using <code>getblocks</code>.</li>
+<li>The peer responds with an <code>inv</code> message.</li>
+<li>The new node requests blocks using <code>getdata</code>.</li>
+<li>The peer sends the requested blocks.</li>
+<li>The new node processes the received blockchain data.</li>
+</ol>
+<p>Your textbook describes this as the older and slower method.</p>
+<h2><strong>10.2 Headers-first approach</strong></h2>
+<p>The headers-first approach improves synchronisation by downloading block headers first.</p>
+<p>Instead of downloading complete blocks immediately, the node first obtains the chain's header information.</p>
+<h3><strong>Working</strong></h3>
+<ol>
+<li>A new node connects to existing peers.</li>
+<li>It sends a <code>getheaders</code> message.</li>
+<li>The peer responds with a <code>headers</code> message.</li>
+<li>The new node validates the received headers.</li>
+<li>It obtains the chain structure through the header chain.</li>
+<li>It then requests the required full blocks using <code>getdata</code>.</li>
+<li>Blocks can be downloaded from multiple available peers.</li>
+<li>The node validates the received blocks and catches up with the network.</li>
+</ol>
+<h2><strong>10.3 Why is headers-first better?</strong></h2>
+<p>Imagine downloading a large book.</p>
+<p><strong>Blocks-first:</strong> You start downloading the complete pages directly.</p>
+<p><strong>Headers-first:</strong> You first obtain the table of contents and chapter structure, and then download the required complete pages.</p>
+<p>The second approach helps the node establish the chain of block headers before downloading all the block data.</p>
+<p>The textbook explains that headers-first synchronisation was introduced in Bitcoin Core 0.10.0 and improved the synchronisation process compared with the older blocks-first approach.</p>
+<h2><strong>10.4 Comparison table</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Basis</th>
+<th>Blocks-first</th>
+<th>Headers-first</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Starting point</td>
+<td>Requests block inventory and blocks</td>
+<td>Requests block headers first</td>
+</tr>
+<tr>
+<td>Main messages</td>
+<td><code>getblocks</code>, <code>inv</code>, <code>getdata</code></td>
+<td><code>getheaders</code>, <code>headers</code>, <code>getdata</code></td>
+</tr>
+<tr>
+<td>First downloaded information</td>
+<td>Block inventory and full blocks</td>
+<td>Block headers</td>
+</tr>
+<tr>
+<td>Chain structure</td>
+<td>Learned through block downloads</td>
+<td>Header chain is established first</td>
+</tr>
+<tr>
+<td>Downloading blocks</td>
+<td>Older sequential inventory-based approach</td>
+<td>Can download required blocks in parallel from peers</td>
+</tr>
+<tr>
+<td>Performance</td>
+<td>Older, slower approach</td>
+<td>Improved synchronisation efficiency</td>
+</tr>
+</tbody>
+</table>
+<h2><strong>10.5 Headers-first synchronisation diagram</strong></h2>
+<p><strong>New node starts</strong></p>
+<p>Needs blockchain synchronisation</p>
+<p><strong>Connect to existing peers</strong></p>
+<p><strong>Send getheaders message</strong></p>
+<p><strong>Receive headers message</strong></p>
+<p><strong>Validate block headers</strong></p>
+<p><strong>Request full blocks using getdata</strong></p>
+<p><strong>Download and validate blocks</strong></p>
+<p><strong>Remember this sequence for the exam:</strong></p>
+<p>\<div class="math-display">$$\text{getheaders} \rightarrow \text{headers} \rightarrow \text{getdata} \rightarrow \text{block} \$$</div></p>
+<p>This is the essential message flow to remember for headers-first synchronisation.</p>
+<h1><strong>Topic 11: Stratum Protocol</strong></h1>
+
+    <div class="diagram-box">
+        <div class="diagram-header">
+            <h4 class="diagram-title">Mining Pool Architecture &amp; Stratum Protocol</h4>
+            <div class="diagram-subtitle">How thousands of ASICs collaborate through a pool coordinator without running full nodes</div>
+        </div>
+        <div class="diagram-nodes-row" style="justify-content: space-around; align-items: center;">
+            <div class="diagram-node" style="flex: 1; max-width: 220px; background: #0f172a;">
+                <svg class="diagram-node-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+  <rect x="9" y="9" width="6" height="6"></rect>
+  <line x1="9" y1="1" x2="9" y2="4"></line>
+  <line x1="15" y1="1" x2="15" y2="4"></line>
+  <line x1="9" y1="20" x2="9" y2="23"></line>
+  <line x1="15" y1="20" x2="15" y2="23"></line>
+  <line x1="20" y1="9" x2="23" y2="9"></line>
+  <line x1="20" y1="14" x2="23" y2="14"></line>
+  <line x1="1" y1="9" x2="4" y2="9"></line>
+  <line x1="1" y1="14" x2="4" y2="14"></line>
+</svg>
+                <div class="diagram-node-title">Mining Rig (ASIC)</div>
+                <div class="diagram-node-desc">Executes fast hashing; submits shares over Stratum JSON-RPC</div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                <span style="font-size: 11.5px; font-weight: bold; color: #38bdf8; background: rgba(56, 189, 248, 0.1); padding: 3px 8px; border-radius: 12px;">Stratum Protocol</span>
+                <span style="font-size: 20px; color: #64748b;">&harr;</span>
+                <span style="font-size: 11px; color: #94a3b8;">mining.notify / submit</span>
+            </div>
+            <div class="diagram-node primary" style="flex: 1; max-width: 240px;">
+                <svg class="diagram-node-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+  <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+  <line x1="6" y1="6" x2="6.01" y2="6"></line>
+  <line x1="6" y1="18" x2="6.01" y2="18"></line>
+</svg>
+                <div class="diagram-node-title">Pool Server Coordinator</div>
+                <div class="diagram-node-desc">Constructs candidate block, validates shares, distributes coinbase reward</div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                <span style="font-size: 11.5px; font-weight: bold; color: #34d399; background: rgba(16, 185, 129, 0.1); padding: 3px 8px; border-radius: 12px;">Bitcoin P2P</span>
+                <span style="font-size: 20px; color: #64748b;">&rarr;</span>
+                <span style="font-size: 11px; color: #94a3b8;">broadcast block</span>
+            </div>
+            <div class="diagram-node success" style="flex: 1; max-width: 220px;">
+                <svg class="diagram-node-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+</svg>
+                <div class="diagram-node-title">Bitcoin Network</div>
+                <div class="diagram-node-desc">Global decentralized nodes accept newly minted block</div>
+            </div>
+        </div>
+    </div>
+    
+<p>Your textbook also discusses the Stratum protocol in the Bitcoin network chapter.</p>
+<h2><strong>11.1 What is Stratum?</strong></h2>
+<p><strong>Stratum is a communication protocol commonly used to connect miners to mining pools.</strong></p>
+<p>Before understanding Stratum, let's understand why mining pools are needed.</p>
+<h3><strong>What is a mining pool?</strong></h3>
+<p>A mining pool is a group of miners who combine their computational resources to work toward finding valid blocks.</p>
+<p>Instead of mining completely independently, multiple miners work under the coordination of a pool.</p>
+<p>If the pool successfully finds a block, the reward is distributed among participants according to the pool's payment rules.</p>
+<h3><strong>Why do miners use Stratum?</strong></h3>
+<p>Suppose 100 miners are participating in a mining pool.</p>
+<p>They need a way to:</p>
+<ul>
+<li>Receive mining work.</li>
+<li>Submit their computed results.</li>
+<li>Communicate with the mining-pool server.</li>
+<li>Receive updated work when necessary.</li>
+</ul>
+<p>Stratum provides a communication mechanism for these tasks.</p>
+<h2><strong>11.2 Characteristics of Stratum</strong></h2>
+<p>According to your textbook:</p>
+<ol>
+<li>It is a line-based protocol.</li>
+<li>It uses TCP sockets.</li>
+<li>It uses human-readable JSON-RPC messages.</li>
+<li>It is commonly used for communication between miners and mining-pool servers.</li>
+</ol>
+<h3><strong>Simple example</strong></h3>
+<p><strong>Mining pool server</strong></p>
+<p>Coordinates mining work</p>
+<p>Miner 1</p>
+<p>Stratum client</p>
+<p>Miner 2</p>
+<p>Stratum client</p>
+<p>Miner 3</p>
+<p>Stratum client</p>
+<p>Miners receive work and submit their results through the mining-pool communication protocol.</p>
+<p><strong>Important difference:</strong> Bitcoin's regular P2P protocol is used for communication between Bitcoin nodes, while Stratum is commonly used for communication between mining-pool servers and miners.</p>
+<h1><strong>Module 1 — Exam Preparation</strong></h1>
+<p>Now let's prepare the important questions from this module.</p>
+<h2><strong>A. Important 5-mark questions</strong></h2>
+<ol>
+<li>Define the Bitcoin network and explain its main functions.</li>
+<li>What is a peer-to-peer network? Explain its characteristics.</li>
+<li>What is a Bitcoin node? Explain its major functions.</li>
+<li>Differentiate between full nodes and SPV nodes.</li>
+<li>Explain Simple Payment Verification with an example.</li>
+<li>What is the Bitcoin P2P protocol?</li>
+<li>Explain any five Bitcoin protocol messages.</li>
+<li>Explain the process of establishing a connection between two Bitcoin nodes.</li>
+<li>What is node discovery? Explain the role of DNS seeds.</li>
+<li>What is Initial Block Download (IBD)?</li>
+<li>Differentiate between blocks-first and headers-first synchronisation.</li>
+<li>Explain the Stratum protocol.</li>
+</ol>
+<h2><strong>B. Important 10-mark questions</strong></h2>
+<ol>
+<li>Explain the Bitcoin P2P network architecture and the functions of different nodes.</li>
+<li>Explain different types of Bitcoin nodes and compare full nodes with SPV nodes.</li>
+<li>Explain important Bitcoin network protocol messages with examples.</li>
+<li>Explain the complete process of node discovery and connection establishment.</li>
+<li>Explain blockchain synchronisation and compare blocks-first with headers-first synchronisation.</li>
+<li>Explain the working of the Bitcoin network with a suitable diagram.</li>
+<li>Explain the Stratum protocol and its role in mining pools.</li>
+</ol>
+<h2><strong>C. Exam-ready 10-mark answer: Explain the Bitcoin P2P network</strong></h2>
+<p><strong>Introduction:</strong></p>
+<p>The Bitcoin network is a decentralised peer-to-peer network in which computers called nodes communicate directly with each other. Nodes verify and propagate transactions and blocks, while mining nodes also produce blocks.</p>
+<p><strong>Architecture and working:</strong></p>
+<ol>
+<li>Bitcoin uses a P2P architecture without depending on a single central server.</li>
+<li>Nodes connect to other peers using the Bitcoin network protocol.</li>
+<li>Full nodes independently validate transactions and blocks.</li>
+<li>SPV nodes download block headers and use Merkle proofs for transaction-inclusion verification.</li>
+<li>Nodes exchange messages such as version, verack, inv and getdata.</li>
+<li>New nodes discover peers using mechanisms such as DNS seeds.</li>
+<li>Nodes synchronise blockchain data through methods such as headers-first synchronisation.</li>
+<li>Transactions are propagated between connected peers.</li>
+<li>Miners construct candidate blocks and perform Proof of Work.</li>
+<li>Valid blocks are independently checked and propagated by other nodes.</li>
+</ol>
+<p><strong>Advantages:</strong></p>
+<ul>
+<li>Decentralised communication.</li>
+<li>No single central server dependency.</li>
+<li>Fault tolerance.</li>
+<li>Distributed transaction and block propagation.</li>
+<li>Open participation.</li>
+</ul>
+<p><strong>Conclusion:</strong></p>
+<p>The Bitcoin P2P network provides the communication infrastructure required for transaction exchange, block propagation, verification and decentralised operation.</p>
+<h2><strong>D. Important comparison tables</strong></h2>
+<h3><strong>Full node vs SPV node</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Full node</th>
+<th>SPV node</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Independently validates consensus rules</td>
+<td>Does not independently validate the entire blockchain</td>
+</tr>
+<tr>
+<td>Maintains blockchain data</td>
+<td>Downloads block headers</td>
+</tr>
+<tr>
+<td>Higher storage requirements</td>
+<td>Lower storage requirements</td>
+</tr>
+<tr>
+<td>Greater independent verification</td>
+<td>Relies on full nodes for some information</td>
+</tr>
+<tr>
+<td>Suitable for independent validation</td>
+<td>Suitable for lightweight wallets</td>
+</tr>
+</tbody>
+</table>
+<h3><strong>Blocks-first vs headers-first</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Blocks-first</th>
+<th>Headers-first</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Older method</td>
+<td>Improved method</td>
+</tr>
+<tr>
+<td>Requests block inventories and blocks</td>
+<td>Downloads headers first</td>
+</tr>
+<tr>
+<td>Uses <code>getblocks</code> and <code>inv</code></td>
+<td>Uses <code>getheaders</code> and <code>headers</code></td>
+</tr>
+<tr>
+<td>Slower synchronisation approach</td>
+<td>More efficient synchronisation</td>
+</tr>
+<tr>
+<td>Block information is obtained directly</td>
+<td>Establishes header chain before requesting blocks</td>
+</tr>
+</tbody>
+</table>
+<h1><strong>E. Quick revision sheet</strong></h1>
+<p><strong>Remember these important facts</strong></p>
+<ul>
+<li>Bitcoin network = Peer-to-peer network.</li>
+<li>Node = Computer participating in Bitcoin.</li>
+<li>Full node = Independently validates blockchain rules.</li>
+<li>SPV = Lightweight verification using block headers and Merkle proofs.</li>
+<li>DNS seed = Helps discover Bitcoin peers.</li>
+<li><code>version</code> = Introduces a node.</li>
+<li><code>verack</code> = Acknowledges the handshake.</li>
+<li><code>inv</code> = Announces transaction/block inventory.</li>
+<li><code>getdata</code> = Requests actual data.</li>
+<li><code>getheaders</code> = Requests block headers.</li>
+<li><code>tx</code> = Sends transaction data.</li>
+<li><code>block</code> = Sends complete block data.</li>
+<li>IBD = Initial Block Download.</li>
+<li>Headers-first = Headers before full blocks.</li>
+<li>Stratum = Commonly used in mining pools.</li>
+</ul>
+
+    <div class="quiz-section-wrap" id="module-quiz-section">
+        <div class="quiz-card-container">
+            <div class="quiz-main-header">
+                <div class="quiz-title-area">
+                    <h3 class="quiz-title">📝 Quick Self-Test &amp; Knowledge Check</h3>
+                    <p class="quiz-subtitle">Test your mastery of Bitcoin P2P architecture, node types, handshake protocol, inventory propagation, IBD, and Stratum.</p>
+                </div>
+                <div class="quiz-action-bar">
+                    <span class="quiz-stat-pill" id="quiz-progress-text-14">0/6 Answered</span>
+                    <span class="quiz-score-pill" id="quiz-score-text-14">🏆 Score: 0/6</span>
+                    <button class="quiz-reset-btn" onclick="resetQuiz(14, 6)">
+                        🔄 Reset Quiz
+                    </button>
+                </div>
+            </div>
+
+            <div class="quiz-progress-track">
+                <div class="quiz-progress-fill" id="quiz-progress-fill-14"></div>
+            </div>
+
+            <div class="quiz-questions-list">
+                
+        <div class="quiz-question-box" id="qbox_14_1">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 1 of 6</span>
+                <span class="quiz-q-status" id="qstatus_14_1">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">1. Which node independently validates Bitcoin's consensus rules?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_14_1_opt_0"
+                    onclick="handleQuizClick(14, 1, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">SPV node</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_14_1_opt_1"
+                    onclick="handleQuizClick(14, 1, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Full node</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_14_1_opt_2"
+                    onclick="handleQuizClick(14, 1, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Wallet only</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_14_1_opt_3"
+                    onclick="handleQuizClick(14, 1, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">DNS seed</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_14_1">
+                <div class="exp-content" id="qexp_text_14_1"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_14_2">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 2 of 6</span>
+                <span class="quiz-q-status" id="qstatus_14_2">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">2. Which message announces knowledge of a transaction or block?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_14_2_opt_0"
+                    onclick="handleQuizClick(14, 2, 0, 2)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">getdata</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_14_2_opt_1"
+                    onclick="handleQuizClick(14, 2, 1, 2)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">verack</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_14_2_opt_2"
+                    onclick="handleQuizClick(14, 2, 2, 2)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">inv</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_14_2_opt_3"
+                    onclick="handleQuizClick(14, 2, 3, 2)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">pong</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_14_2">
+                <div class="exp-content" id="qexp_text_14_2"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_14_3">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 3 of 6</span>
+                <span class="quiz-q-status" id="qstatus_14_3">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">3. What does an SPV client download?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_14_3_opt_0"
+                    onclick="handleQuizClick(14, 3, 0, 2)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">Every complete block</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_14_3_opt_1"
+                    onclick="handleQuizClick(14, 3, 1, 2)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Only private keys</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_14_3_opt_2"
+                    onclick="handleQuizClick(14, 3, 2, 2)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Block headers</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_14_3_opt_3"
+                    onclick="handleQuizClick(14, 3, 3, 2)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Only mining rewards</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_14_3">
+                <div class="exp-content" id="qexp_text_14_3"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_14_4">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 4 of 6</span>
+                <span class="quiz-q-status" id="qstatus_14_4">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">4. Which service helps a new Bitcoin node discover peers?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_14_4_opt_0"
+                    onclick="handleQuizClick(14, 4, 0, 0)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">DNS seeds</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_14_4_opt_1"
+                    onclick="handleQuizClick(14, 4, 1, 0)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Coinbase transaction</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_14_4_opt_2"
+                    onclick="handleQuizClick(14, 4, 2, 0)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Merkle root</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_14_4_opt_3"
+                    onclick="handleQuizClick(14, 4, 3, 0)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Nonce</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_14_4">
+                <div class="exp-content" id="qexp_text_14_4"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_14_5">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 5 of 6</span>
+                <span class="quiz-q-status" id="qstatus_14_5">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">5. Which approach downloads block headers before full blocks?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_14_5_opt_0"
+                    onclick="handleQuizClick(14, 5, 0, 1)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">Blocks-first</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_14_5_opt_1"
+                    onclick="handleQuizClick(14, 5, 1, 1)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">Headers-first</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_14_5_opt_2"
+                    onclick="handleQuizClick(14, 5, 2, 1)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Mining-first</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_14_5_opt_3"
+                    onclick="handleQuizClick(14, 5, 3, 1)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">Wallet-first</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_14_5">
+                <div class="exp-content" id="qexp_text_14_5"></div>
+            </div>
+        </div>
+
+        <div class="quiz-question-box" id="qbox_14_6">
+            <div class="quiz-q-header">
+                <span class="quiz-q-badge">Question 6 of 6</span>
+                <span class="quiz-q-status" id="qstatus_14_6">⏳ Not answered</span>
+            </div>
+            <h4 class="quiz-q-text">6. Which protocol is commonly used in mining pools?</h4>
+            <div class="quiz-options-grid">
+                
+            <button class="quiz-option-btn" 
+                    id="q_14_6_opt_0"
+                    onclick="handleQuizClick(14, 6, 0, 2)">
+                <span class="opt-letter">A</span>
+                <span class="opt-text">HTTP</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_14_6_opt_1"
+                    onclick="handleQuizClick(14, 6, 1, 2)">
+                <span class="opt-letter">B</span>
+                <span class="opt-text">SMTP</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_14_6_opt_2"
+                    onclick="handleQuizClick(14, 6, 2, 2)">
+                <span class="opt-letter">C</span>
+                <span class="opt-text">Stratum</span>
+            </button>
+            <button class="quiz-option-btn" 
+                    id="q_14_6_opt_3"
+                    onclick="handleQuizClick(14, 6, 3, 2)">
+                <span class="opt-letter">D</span>
+                <span class="opt-text">FTP</span>
+            </button>
+            </div>
+            <div class="quiz-explanation-box" id="qexp_14_6">
+                <div class="exp-content" id="qexp_text_14_6"></div>
+            </div>
+        </div>
+            </div>
+
+            <div class="quiz-result-banner" id="quiz-result-banner-14">
+                <div class="res-title" id="quiz-res-title-14">🎉 Module Quiz Completed!</div>
+                <p class="res-score" id="quiz-res-score-14"></p>
+                <div class="res-actions">
+                    <button class="quiz-reset-btn" onclick="resetQuiz(14, 6)">Retake Quiz</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        const mod = 14;
+        const totalQ = 6;
+        const explanations = {"1": "A full node maintains a complete copy of the blockchain and independently validates every transaction and block against Bitcoin's consensus rules (such as checking signatures, inputs, and double-spends) without trusting any third party.", "2": "The 'inv' (inventory) message is broadcast by a Bitcoin node to announce that it has new transactions or blocks available. A receiving peer can then request the actual payload by replying with 'getdata'.", "3": "Simplified Payment Verification (SPV) clients (light nodes) download only the 80-byte block headers instead of complete multi-megabyte blocks. They rely on Merkle branches to verify whether a transaction is included in a block.", "4": "When a new node starts with an empty peer database, it queries predefined DNS seeds (managed by trusted Bitcoin core contributors) which resolve to IP addresses of active full nodes on the network.", "5": "In headers-first Initial Block Download (IBD), the node downloads all block headers first to construct and validate the longest Proof-of-Work chain before downloading full block payloads in parallel from multiple peers.", "6": "Stratum is a lightweight JSON-RPC based protocol designed specifically for communication between individual mining rigs (ASICs) and mining pool servers, avoiding the heavy overhead of running a full P2P node on each miner."};
+        let userAnswers = {};
+        let score = 0;
+
+        window.handleQuizClick = function(m, qid, selectedIdx, correctIdx) {
+            if (m !== mod) return;
+            if (userAnswers[qid] !== undefined) return; // already answered
+
+            userAnswers[qid] = selectedIdx;
+            const isCorrect = (selectedIdx === correctIdx);
+            if (isCorrect) score++;
+
+            // Highlight buttons
+            for (let i = 0; i < 4; i++) {
+                const btn = document.getElementById(`q_${m}_${qid}_opt_${i}`);
+                if (btn) {
+                    btn.disabled = true;
+                    if (i === correctIdx) {
+                        btn.className = 'quiz-option-btn correct';
+                    } else if (i === selectedIdx && !isCorrect) {
+                        btn.className = 'quiz-option-btn incorrect';
+                    } else {
+                        btn.className = 'quiz-option-btn dim';
+                    }
+                }
+            }
+
+            // Update question status
+            const statusEl = document.getElementById(`qstatus_${m}_${qid}`);
+            if (statusEl) {
+                statusEl.textContent = isCorrect ? '✅ Correct' : '❌ Incorrect';
+                statusEl.className = isCorrect ? 'quiz-q-status correct' : 'quiz-q-status incorrect';
+            }
+
+            // Show explanation
+            const expBox = document.getElementById(`qexp_${m}_${qid}`);
+            const expText = document.getElementById(`qexp_text_${m}_${qid}`);
+            if (expBox && expText) {
+                const exp = explanations[qid] || '';
+                expText.innerHTML = (isCorrect ? '<strong>Right on target!</strong> ' : '<strong>Concept clarity:</strong> ') + exp;
+                expBox.className = 'quiz-explanation-box ' + (isCorrect ? 'correct' : 'incorrect');
+                expBox.style.display = 'block';
+            }
+
+            // Update stats
+            const answeredCount = Object.keys(userAnswers).length;
+            const progText = document.getElementById(`quiz-progress-text-${mod}`);
+            if (progText) progText.textContent = `${answeredCount}/${totalQ} Answered`;
+
+            const scoreText = document.getElementById(`quiz-score-text-${mod}`);
+            if (scoreText) scoreText.textContent = `🏆 Score: ${score}/${totalQ}`;
+
+            const progFill = document.getElementById(`quiz-progress-fill-${mod}`);
+            if (progFill) progFill.style.width = `${Math.round((answeredCount / totalQ) * 100)}%`;
+
+            // If complete, show banner
+            if (answeredCount === totalQ) {
+                const banner = document.getElementById(`quiz-result-banner-${mod}`);
+                const resTitle = document.getElementById(`quiz-res-title-${mod}`);
+                const resScore = document.getElementById(`quiz-res-score-${mod}`);
+                if (banner && resTitle && resScore) {
+                    banner.style.display = 'block';
+                    if (score === totalQ) {
+                        resTitle.innerHTML = '🏆 Perfect Score! Mastermind Level';
+                        resScore.innerHTML = `Incredible work! You answered all ${totalQ} questions correctly. You have mastered this module!`;
+                    } else if (score >= Math.ceil(totalQ * 0.6)) {
+                        resTitle.innerHTML = '🌟 Great Job! Concept Check Passed';
+                        resScore.innerHTML = `You scored ${score} out of ${totalQ} (${Math.round((score/totalQ)*100)}%). Review the explanations above for complete mastery.`;
+                    } else {
+                        resTitle.innerHTML = '📚 Good Effort! Keep Revising';
+                        resScore.innerHTML = `You scored ${score} out of ${totalQ}. Review the module summary above and retake the quiz to boost your score!`;
+                    }
+                }
+            }
+        };
+
+        window.resetQuiz = function(m, tQ) {
+            if (m !== mod) return;
+            userAnswers = {};
+            score = 0;
+
+            for (let qid = 1; qid <= tQ; qid++) {
+                for (let i = 0; i < 4; i++) {
+                    const btn = document.getElementById(`q_${m}_${qid}_opt_${i}`);
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.className = 'quiz-option-btn';
+                    }
+                }
+                const statusEl = document.getElementById(`qstatus_${m}_${qid}`);
+                if (statusEl) statusEl.textContent = '⏳ Not answered';
+
+                const expBox = document.getElementById(`qexp_${m}_${qid}`);
+                if (expBox) {
+                    expBox.style.display = 'none';
+                    expBox.className = 'quiz-explanation-box';
+                }
+            }
+
+            const progText = document.getElementById(`quiz-progress-text-${mod}`);
+            if (progText) progText.textContent = `0/${totalQ} Answered`;
+
+            const scoreText = document.getElementById(`quiz-score-text-${mod}`);
+            if (scoreText) scoreText.textContent = `🏆 Score: 0/${totalQ}`;
+
+            const progFill = document.getElementById(`quiz-progress-fill-${mod}`);
+            if (progFill) progFill.style.width = '0%';
+
+            const banner = document.getElementById(`quiz-result-banner-${mod}`);
+            if (banner) banner.style.display = 'none';
+        };
+    })();
+    </script>
+    
+
+        <div style="margin-top: 35px; padding: 20px 24px; background: rgba(2, 132, 199, 0.05); border: 1.5px solid rgba(2, 132, 199, 0.2); border-radius: 12px;">
+            <h4 style="margin: 0 0 8px 0; color: #0284c7; font-size: 16px;">🚀 Module 14 Completed!</h4>
+            <p style="margin: 0; font-size: 14px; color: var(--text-body); line-height: 1.6;">
+                Great progress! You have mastered <strong>The Bitcoin Network</strong>. Continue to <strong>Module 15: Bitcoin Wallets</strong> to advance through Unit IV!
+            </p>
+        </div>
+        
+    </div>
+
+    <div class="prev-next">
+        <a class="pn-btn" href="blockchain-module-13.html">&larr; Module 13</a>
+        <a class="pn-reader" href="blockchain.html">📋 Blockchain Hub</a>
+        <a class="pn-btn" href="blockchain-module-15.html">Module 15 &rarr;</a>
+    </div>
+
+</div>
+
+<script src="shared.js"></script>
+</body>
+</html>

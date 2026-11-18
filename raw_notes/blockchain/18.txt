@@ -1,0 +1,998 @@
+Unit IV — Module 5: Bitcoin Investment, Buying and Selling Bitcoin
+
+Final module of Unit IV
+ Important for 5-mark and 10-mark questions
+
+This is the final module of Unit IV. We'll cover the remaining syllabus topic:
+
+Bitcoin investment and buying and selling Bitcoin.
+
+As requested, we will not cover Bitcoin Clients and APIs because that part has been removed from your syllabus.
+Module 5 roadmap
+1. Introduction to Bitcoin investment
+2. Bitcoin exchanges
+3. Buying and selling Bitcoin
+4. Bitcoin trading
+5. Long and short positions
+6. CFDs (Contracts for Difference)
+7. Spread betting
+8. Margin trading
+9. Bitcoin order book
+10. Bid price and ask price
+11. Market orders and limit orders
+12. Advantages and risks of Bitcoin investment
+13. Important 5-mark and 10-mark questions
+The primary textbook reference for this module is Mastering Blockchain, Third Edition, Chapter 7, page 248. It covers exchanges, trading choices, long and short positions, order books, bid and ask prices, and market and limit orders. 
+Mastering_Blockchain_Third_Edition.pdf
+
+
+Topic 1: Introduction to Bitcoin Investment
+1.1 What is Bitcoin investment?
+First, understand investment through a simple example.
+
+Suppose Aman purchases gold worth ₹50,000.
+
+He believes that the price of gold may increase in the future.
+
+After some time, if the price increases, he may sell the gold at a higher price and earn a profit.
+
+The same basic idea applies to Bitcoin investment.
+
+Bitcoin investment means purchasing Bitcoin with the expectation that its value may increase in the future, allowing the investor to sell it at a profit.
+
+For example:
+- Aman purchases Bitcoin worth ₹10,000.
+- After some time, its value increases to ₹12,000.
+- He sells his Bitcoin.
+His profit is:
+\[
+Profit = Selling\ Price - Buying\ Price
+\]
+
+\[
+= ₹12,000-₹10,000
+\]
+
+\[
+\boxed{Profit=₹2,000}
+\]
+
+This is a simple example before considering fees and taxes.
+1.2 Why do people invest in Bitcoin?
+People invest in Bitcoin for different reasons:
+1. Potential price appreciation: Investors may expect Bitcoin's price to increase over time.
+2. Digital asset ownership: Bitcoin is a digital asset that can be held in a wallet.
+3. Trading opportunities: Traders attempt to profit from price movements.
+4. Portfolio diversification: Some investors include Bitcoin alongside other assets.
+5. Global market access: Bitcoin is traded on online exchanges in many countries.
+Remember that Bitcoin's price can also decrease. Investment does not guarantee profit.
+1.3 Investment vs Trading
+These two terms are related but different.
+Basis	Bitcoin investment	Bitcoin trading
+Meaning	Purchasing Bitcoin as an investment	Buying and selling to benefit from price movements
+Time period	Often longer term	Often shorter term
+Main objective	Potential long-term appreciation	Profit from price changes
+Activity	May involve holding Bitcoin	May involve frequent buying and selling
+Example	Buy Bitcoin and hold for two years	Buy Bitcoin today and sell when its price changes
+
+Easy way to remember:
+- Investment = Buy and hold.
+- Trading = Buy and sell based on price movements.
+
+Topic 2: Bitcoin Exchanges
+Important 5-mark question
+2.1 First understand what an exchange is
+Suppose you want to purchase a mobile phone.
+
+You visit an online shopping website, select the phone and pay the required amount.
+
+Similarly, if you want to purchase Bitcoin, you generally use a cryptocurrency exchange.
+
+An exchange provides a platform where buyers and sellers can trade Bitcoin.
+2.2 What is a Bitcoin exchange?
+A Bitcoin exchange is an online platform that allows users to buy, sell and trade Bitcoin against traditional currencies or other cryptocurrencies.
+
+For example:
+- A person wants to buy Bitcoin using Indian rupees.
+- Another person wants to sell Bitcoin and receive money.
+- The exchange provides the platform where their orders can be matched.
+Your textbook mentions CEX.io as an example of a Bitcoin exchange.
+
+
+
+
+
+
+
+
+
+
+CEX.IO
+
+Example shown in your textbook's Bitcoin exchange section.
+
+CEX.IO website
+
+
+2.3 What services do Bitcoin exchanges provide?
+Your textbook specifically mentions the following services:
+1. Bitcoin buying and selling: Users can purchase and sell Bitcoin.
+2. Bitcoin trading: Users can trade by opening long or short positions.
+3. CFDs: Some platforms offer Contracts for Difference.
+4. Spread betting: Some exchanges or trading platforms provide spread-betting facilities.
+5. Margin trading: Users may trade with borrowed funds.
+6. Cryptocurrency exchange: Bitcoin can be exchanged for other virtual currencies.
+7. Advanced market data: Platforms may provide charts, trading strategies and other information to help traders.
+These services vary by exchange, country and regulatory requirements. Not every platform offers every service. 
+Mastering_Blockchain_Third_Edition.pdf
+
+2.4 How does a Bitcoin exchange work?
+Let's understand with an example.
+
+Suppose Aman wants to purchase Bitcoin worth ₹5,000.
+
+Step 1: Create an account
+
+Aman creates an account on a cryptocurrency exchange.
+
+Step 2: Complete required verification
+
+The exchange may require identity verification according to its rules and applicable regulations.
+
+Step 3: Add funds
+
+Aman deposits money using a supported payment method.
+
+Step 4: Select Bitcoin
+
+He selects the Bitcoin trading pair, such as BTC/INR.
+
+Step 5: Place an order
+
+He enters the amount of Bitcoin he wants to purchase and chooses an order type.
+
+Step 6: Order matching
+
+The exchange matches his buy order with a suitable sell order.
+
+Step 7: Bitcoin is credited
+
+After execution, the purchased Bitcoin is reflected in his exchange account.
+1. User creates an exchange account
+
+2. Deposits money
+
+3. Selects Bitcoin (BTC)
+
+4. Places a buy order
+
+5. Exchange matches buyer and seller
+
+6. Bitcoin is credited to the account
+
+
+2.5 Types of Bitcoin exchanges
+For basic understanding, exchanges can be classified into two broad categories.
+1. Centralised exchanges (CEX)
+A centralised exchange is operated by a company or organisation that manages the trading platform.
+
+Examples include:
+- Coinbase
+- Kraken
+- Binance
+The exchange generally manages user accounts, order matching and other platform operations.
+2. Decentralised exchanges (DEX)
+A decentralised exchange allows users to trade cryptocurrencies through blockchain-based protocols, often using smart contracts.
+
+Users generally interact through their own wallets rather than relying on a central company to hold and manage every aspect of their funds.
+Difference between CEX and DEX
+Basis	Centralised exchange	Decentralised exchange
+Management	Managed by an organisation	Operates through decentralised protocols
+Control	Platform manages important operations	Users generally interact through their wallets
+Account	Usually requires a platform account	Often wallet-based
+Trading	Exchange's order-matching system	Smart contracts or decentralised mechanisms
+Example	Coinbase	Uniswap
+
+Note: This comparison provides general background. Your textbook's main focus is on online Bitcoin exchanges and their trading facilities.
+
+Topic 3: Buying and Selling Bitcoin
+3.1 How to buy Bitcoin?
+Buying Bitcoin means exchanging traditional money or another cryptocurrency for Bitcoin.
+
+For example:
+
+Aman wants to purchase Bitcoin worth ₹10,000.
+
+Suppose the market price is:
+\[
+1\ BTC=₹50,00,000
+\]
+
+The amount of Bitcoin he receives before fees is:
+\[
+BTC=\frac{10,000}{50,00,000}
+\]
+
+\[
+\boxed{BTC=0.002}
+\]
+
+Therefore, Aman receives 0.002 BTC before applicable fees.
+3.2 How to sell Bitcoin?
+Selling Bitcoin means exchanging the Bitcoin you own for traditional money or another cryptocurrency.
+
+Suppose Aman owns:
+\[
+0.002\ BTC
+\]
+
+The selling price is:
+\[
+1\ BTC=₹55,00,000
+\]
+
+The selling value is:
+\[
+0.002\times55,00,000
+\]
+
+\[
+\boxed{₹11,000}
+\]
+
+His original purchase cost was ₹10,000.
+
+Therefore:
+\[
+Profit=11,000-10,000
+\]
+
+\[
+\boxed{₹1,000}
+\]
+
+This calculation ignores fees, taxes and any difference between the quoted price and actual execution price.
+3.3 Important terms
+Term	Meaning
+Buying price	Price at which Bitcoin is purchased
+Selling price	Price at which Bitcoin is sold
+Profit	Selling value minus total cost
+Loss	Total cost minus selling value
+Exchange fee	Fee charged for a transaction
+Trading pair	Two currencies being traded, such as BTC/INR
+Liquidity	How easily an asset can be bought or sold without greatly affecting its price
+
+
+Topic 4: Bitcoin Trading — Long and Short Positions
+Very important 5-mark question
+Your textbook specifically explains that traders can open long or short positions to potentially profit when Bitcoin's price goes up or down. 
+Mastering_Blockchain_Third_Edition.pdf
+
+First, understand what a position means.
+
+A position is the trading exposure a trader takes in the market.
+
+There are two important positions:
+1. Long position.
+2. Short position.
+4.1 What is a long position?
+A long position is a trading position in which a trader expects the price of Bitcoin to increase.
+
+In simple words:
+
+Buy first, expecting the price to rise.
+Example
+Aman purchases Bitcoin at ₹50,00,000 per BTC.
+
+He expects its price to increase.
+
+After some time, the price reaches ₹55,00,000.
+
+He sells his Bitcoin.
+
+His profit per BTC is:
+\[
+55,00,000-50,00,000
+\]
+
+\[
+\boxed{₹5,00,000}
+\]
+
+Long position
+Buying price₹50 L
+
+Selling price₹55 L
+
+
+Price increases → Profit
+
+4.2 What is a short position?
+A short position is a trading position in which a trader expects the price of Bitcoin to decrease.
+
+In simple words:
+
+The trader takes a position that benefits if the price falls.
+
+In a conventional short sale, the trader borrows an asset, sells it and later buys it back to return it.
+Example
+Suppose Aman takes a short position when Bitcoin is priced at ₹50,00,000.
+
+The price falls to ₹45,00,000.
+
+He buys Bitcoin back at the lower price to close his position.
+
+His profit before costs is:
+\[
+50,00,000-45,00,000
+\]
+
+\[
+\boxed{₹5,00,000}
+\]
+
+Short position
+Opening price₹50 L
+
+Closing price₹45 L
+
+
+Price decreases → Profit
+
+If the price increases instead, a short position can result in a loss.
+4.3 Difference between long and short positions
+Basis	Long position	Short position
+Expectation	Price will increase	Price will decrease
+Basic action	Buy and later sell	Sell/short and later buy back
+Profit when	Price rises	Price falls
+Loss when	Price falls	Price rises
+Market view	Bullish	Bearish
+
+Memory trick:
+- Long = Expect price to go up.
+- Short = Expect price to go down.
+
+Topic 5: Other Bitcoin Trading Choices
+Your textbook also mentions CFDs, spread betting and margin trading. These are additional trading methods offered by some platforms. 
+Mastering_Blockchain_Third_Edition.pdf
+
+Let's understand each one.
+5.1 CFDs — Contracts for Difference
+CFD stands for Contract for Difference.
+
+A CFD is a financial contract between a trader and a provider in which the parties settle the difference between the opening and closing prices of an asset.
+
+In simple words:
+
+You do not necessarily purchase or own actual Bitcoin. Instead, you enter into a contract based on Bitcoin's price movement.
+Example
+Suppose Aman enters a Bitcoin CFD when the price is ₹50,00,000.
+
+He closes the contract when the price becomes ₹52,00,000.
+
+The price difference is:
+\[
+52,00,000-50,00,000=₹2,00,000
+\]
+
+The contract's profit or loss depends on the position size and contract terms.
+
+If Aman had taken a short position, the price increase would create a loss instead.
+Important features
+1. Does not necessarily involve owning actual Bitcoin.
+2. Allows traders to speculate on price movements.
+3. Can support both long and short positions.
+4. May involve leverage.
+5. Can create substantial losses.
+5.2 Spread betting
+Spread betting is a form of financial trading in which a person bets on whether the price of an asset will rise or fall, with profit or loss determined by the size of the price movement and the amount staked per unit of movement.
+Example
+Suppose Aman believes Bitcoin's price will rise.
+
+He stakes ₹100 for every ₹1,000 increase in the quoted price.
+
+If the price increases by ₹5,000:
+\[
+Profit=5\times₹100
+\]
+
+\[
+\boxed{₹500}
+\]
+
+If the price falls by ₹5,000, the loss would be ₹500, before charges.
+
+Important: Spread betting is not the same as purchasing and owning Bitcoin. Its availability and legal treatment vary by country.
+5.3 Margin trading
+Margin trading is a trading method in which a trader uses borrowed funds from an exchange or broker to take a larger position than their own available capital would normally allow.
+
+Let's understand through a simple example.
+
+Aman has ₹10,000.
+
+The exchange allows him to trade with 5× leverage.
+
+Therefore:
+\[
+Trading\ Position=10,000\times5
+\]
+
+\[
+\boxed{₹50,000}
+\]
+
+He can control a ₹50,000 position using ₹10,000 of his own capital.
+Why is margin trading risky?
+Suppose the price moves against his position.
+
+Even a relatively small price movement can create a large loss relative to his own capital.
+
+The exchange may also liquidate his position if the available margin becomes insufficient.
+Important terms
+- Margin: Money provided by the trader as collateral.
+- Leverage: The multiplier that increases exposure.
+- Liquidation: Forced closing of a position when margin requirements are not maintained.
+5.4 Comparison of trading methods
+Method	Meaning	Do you necessarily own Bitcoin?
+Spot buying	Purchase actual Bitcoin	Yes
+Long position	Benefit from an increase in price	Depends on the instrument
+Short position	Benefit from a decrease in price	Not necessarily
+CFD	Contract based on price difference	No
+Spread betting	Bet on price movements	No
+Margin trading	Trade using borrowed funds	Depends on the instrument
+
+
+Topic 6: Bitcoin Order Book
+Very important 10-mark topic
+This is one of the most important topics in the textbook's Bitcoin investment section.
+6.1 What is an order book?
+First understand this through an everyday example.
+
+Suppose you want to sell your old mobile phone.
+
+You say:
+
+"I am willing to sell it for ₹10,000."
+
+Another person says:
+
+"I am willing to buy it for ₹9,000."
+
+A third person says:
+
+"I can pay ₹9,500."
+
+All these buy and sell offers represent demand and supply.
+
+A Bitcoin exchange maintains a similar list of buying and selling orders.
+
+An order book is a list of all outstanding buy and sell orders for a particular trading pair on an exchange.
+
+It shows the prices and quantities at which buyers want to purchase and sellers want to sell Bitcoin.
+
+Your textbook illustrates an order book using the CEX.io exchange. 
+Mastering_Blockchain_Third_Edition.pdf
+
+6.2 Two main parts of an order book
+An order book has two major sides:
+1. Buy orders (Bids).
+2. Sell orders (Asks).
+A. Buy orders — Bids
+A bid is an offer made by a buyer who wants to purchase Bitcoin at a particular price.
+
+Example:
+
+Aman wants to purchase 0.01 BTC at ₹50,00,000 per BTC.
+
+He places a buy order.
+
+That order appears on the buy side of the order book.
+B. Sell orders — Asks
+An ask is an offer made by a seller who wants to sell Bitcoin at a particular price.
+
+Example:
+
+Rahul wants to sell 0.01 BTC at ₹50,50,000 per BTC.
+
+He places a sell order.
+
+That order appears on the sell side.
+6.3 Example of a Bitcoin order book
+Let's assume the exchange displays the following orders.
+BTC/INR order book — illustrative example
+Buy orders (Bids)
+
+BUYERS
+
+PriceQuantity
+₹50,00,000
+
+0.10 BTC
+
+₹49,90,000
+
+0.20 BTC
+
+₹49,80,000
+
+0.15 BTC
+
+
+
+Sell orders (Asks)
+
+SELLERS
+
+PriceQuantity
+₹50,10,000
+
+0.12 BTC
+
+₹50,20,000
+
+0.08 BTC
+
+₹50,30,000
+
+0.25 BTC
+
+
+
+
+Best bid₹50,00,000
+Best ask₹50,10,000
+
+Bid-ask spread₹10,000
+
+Illustrative values created for learning; not live market prices.
+6.4 How does an order book work?
+Suppose:
+- Buyer is willing to pay ₹50,00,000.
+- Seller is willing to sell at ₹50,10,000.
+The prices do not match.
+
+Therefore, the trade will not execute immediately.
+
+Now suppose the buyer increases the bid to ₹50,10,000.
+
+The buyer's bid and seller's ask match.
+
+A trade can occur.
+
+This is called order matching.
+6.5 What happens when bid and ask prices match?
+When a suitable buy order and sell order match, the exchange executes the trade.
+
+For example:
+\[
+Bid=₹50,10,000
+\]
+
+\[
+Ask=₹50,10,000
+\]
+
+Since both prices are equal, the order can be matched, subject to available quantities and exchange rules.
+
+Remember: An order book provides transparency about the buying and selling interest in a market.
+
+Topic 7: Bid Price and Ask Price
+Very important 5-mark question
+7.1 What is a bid price?
+Bid price is the highest price that a buyer is currently willing to pay for Bitcoin.
+
+Example:
+
+A buyer wants to purchase Bitcoin at ₹50,00,000.
+
+His bid price is ₹50,00,000.
+7.2 What is an ask price?
+Ask price is the lowest price at which a seller is currently willing to sell Bitcoin.
+
+Example:
+
+A seller wants to sell Bitcoin at ₹50,10,000.
+
+His ask price is ₹50,10,000.
+7.3 What is bid-ask spread?
+Bid-ask spread is the difference between the lowest ask price and the highest bid price.
+
+Formula:
+\[
+Spread=Ask-Bid
+\]
+
+Example:
+- Best bid = ₹50,00,000
+- Best ask = ₹50,10,000
+\[
+Spread=50,10,000-50,00,000
+\]
+
+\[
+\boxed{Spread=₹10,000}
+\]
+
+7.4 Why is the bid-ask spread important?
+1. It indicates the difference between buying and selling prices.
+2. It helps traders understand market liquidity.
+3. A smaller spread generally indicates a more liquid market.
+4. A larger spread can indicate lower liquidity or greater market uncertainty.
+7.5 Difference between bid and ask
+Basis	Bid	Ask
+Meaning	Buyer's offered price	Seller's offered price
+Represents	Demand	Supply
+Placed by	Buyer	Seller
+Typical relationship	Lower	Higher
+Example	₹50,00,000	₹50,10,000
+
+Memory trick:
+- Bid = Buyer.
+- Ask = Seller.
+
+Topic 8: Types of Bitcoin Orders
+Very important 10-mark question
+Your textbook identifies two common order types:
+1. Market orders.
+2. Limit orders. 
+   Mastering_Blockchain_Third_Edition.pdf
+Let's understand both carefully.
+8.1 What is a market order?
+A market order is an order to buy or sell Bitcoin immediately at the best available prices in the order book.
+
+In simple words:
+
+You want to buy or sell immediately rather than wait for a specific price.
+Example
+Suppose Bitcoin's order book looks like this:
+Seller's price	Available quantity
+₹50,00,000	0.01 BTC
+₹50,10,000	0.02 BTC
+₹50,20,000	0.03 BTC
+
+Aman places a market buy order for 0.01 BTC.
+
+The exchange matches his order with the best available ask.
+
+He purchases 0.01 BTC at ₹50,00,000, assuming the quantity is still available.
+Important features
+1. Designed for immediate execution.
+2. Uses available orders in the order book.
+3. Does not guarantee a specific execution price.
+4. Can experience slippage if liquidity is insufficient.
+8.2 What is a limit order?
+A limit order is an order to buy or sell a specified quantity of Bitcoin at a specified price or better.
+
+In simple words:
+
+You decide the price at which you are willing to trade.
+Example 1: Limit buy order
+Suppose Bitcoin is currently trading at ₹50,00,000.
+
+Aman does not want to purchase at that price.
+
+He wants to purchase only when the price reaches ₹49,00,000 or lower.
+
+He places a limit buy order at ₹49,00,000.
+
+The order remains in the order book until:
+- A suitable seller matches it, or
+- It is cancelled or expires according to its order conditions.
+Example 2: Limit sell order
+Suppose Rahul owns Bitcoin and wants to sell it only at ₹55,00,000 or higher.
+
+He places a limit sell order at ₹55,00,000.
+
+The order will execute if a suitable buyer is available at that price or better.
+Important features
+1. Specifies a desired price.
+2. Provides control over the execution price.
+3. May not execute immediately.
+4. Can remain open until executed or cancelled.
+5. Can have a specified validity period.
+8.3 Difference between market order and limit order
+Basis	Market order	Limit order
+Meaning	Buy or sell at the best available market price	Buy or sell at a specified price or better
+Execution	Usually immediate if liquidity is available	Only when matching conditions are met
+Price control	No guaranteed specific price	Specifies a price limit
+Execution certainty	Generally higher	Not guaranteed
+Waiting	Normally no waiting for a target price	May remain open
+Example	Buy BTC immediately	Buy BTC only at ₹49 lakh or lower
+
+8.4 What is order expiry?
+Your textbook also mentions that a limit order can be left open for a specified period.
+
+If it is not executed during that period, it can be cancelled.
+
+For example:
+
+Aman places a limit buy order at ₹49,00,000.
+
+He specifies that the order should remain open for 24 hours.
+
+If no suitable seller is available within 24 hours, the order is cancelled under that condition.
+
+Topic 9: Complete Working — From Buying Bitcoin to Selling Bitcoin
+Let's combine everything you have learned.
+
+Suppose Aman wants to purchase Bitcoin and later sell it.
+1. Create exchange account
+
+Register and complete required verification
+
+2. Deposit funds
+
+Add supported currency to the account
+
+3. Select trading pair
+
+Choose BTC/INR
+
+4. Check order book
+
+View available bids and asks
+
+5. Place buy order
+
+Choose market or limit order
+
+6. Buy Bitcoin
+
+Exchange matches the order
+
+7. Hold or trade
+
+Monitor the Bitcoin position
+
+8. Place sell order
+
+Choose market or limit order
+
+9. Receive proceeds
+
+Selling order executes and proceeds are credited
+
+
+This is the overall process of buying and selling Bitcoin through an online exchange.
+
+Topic 10: Advantages and Risks of Bitcoin Investment
+Advantages
+1. Potential returns: Bitcoin's price may increase, creating opportunities for profit.
+2. Global trading: Bitcoin is available through exchanges in many countries.
+3. Trading flexibility: Users can buy, sell and trade Bitcoin.
+4. Market information: Exchanges provide charts, order books and market data.
+5. Different trading methods: Some platforms offer spot trading, long and short positions and derivatives.
+Risks and limitations
+1. Price volatility: Bitcoin's price can rise or fall sharply.
+2. Market risk: Investors may lose money due to unfavourable price movements.
+3. Exchange risk: An exchange may face security, operational or financial problems.
+4. Leverage risk: Margin trading can magnify both profits and losses.
+5. Liquidity risk: It may be difficult to execute a large order at the expected price.
+6. Regulatory risk: Rules governing cryptocurrency trading differ across countries.
+7. Technical risk: Users can lose access to their Bitcoin through lost keys, phishing or other security problems.
+Important: In this chapter, we are studying the working and concepts of Bitcoin investment, not recommending that you buy or trade Bitcoin.
+
+Module 5 — Exam Preparation
+A. Important 5-mark questions
+No.	Question	Priority
+1	What is Bitcoin investment? Explain its importance.	High
+2	What is a Bitcoin exchange? Explain its functions.	Very high
+3	Explain buying and selling of Bitcoin.	High
+4	Differentiate between investment and trading.	High
+5	Explain long and short positions.	Very high
+6	What are CFDs? Explain with an example.	High
+7	What is margin trading? Explain with an example.	High
+8	Define Bitcoin order book.	Very high
+9	Differentiate between bid price and ask price.	Very high
+10	What is a bid-ask spread?	High
+11	Differentiate between market order and limit order.	Very high
+
+B. Important 10-mark questions
+1. Explain Bitcoin investment and the process of buying and selling Bitcoin through an online exchange.
+2. Explain the working of a Bitcoin exchange and the services provided by it.
+3. Explain Bitcoin order books, bid prices, ask prices and bid-ask spread with a suitable example.
+4. Explain market orders and limit orders with examples and differentiate between them.
+5. Explain long positions, short positions, CFDs, spread betting and margin trading.
+6. Explain the advantages and risks associated with Bitcoin investment and trading.
+C. Exam-ready 10-mark answer: Explain Bitcoin Order Book
+Introduction:
+
+An order book is a list of outstanding buy and sell orders maintained by a cryptocurrency exchange. It displays the prices and quantities at which buyers are willing to purchase Bitcoin and sellers are willing to sell Bitcoin.
+
+Components of an order book:
+1. Buy orders (Bids): These represent prices offered by buyers who want to purchase Bitcoin.
+2. Sell orders (Asks): These represent prices requested by sellers who want to sell Bitcoin.
+Bid price:
+
+It is the highest price a buyer is willing to pay for Bitcoin.
+
+Ask price:
+
+It is the lowest price at which a seller is willing to sell Bitcoin.
+
+Bid-ask spread:
+
+It is the difference between the lowest ask price and the highest bid price.
+\[
+Spread=Ask-Bid
+\]
+
+For example:
+- Best bid = ₹50,00,000
+- Best ask = ₹50,10,000
+Therefore:
+\[
+Spread=₹10,000
+\]
+
+Order matching:
+
+When a suitable buy order and sell order match in price and quantity, the exchange executes the trade.
+
+Types of orders:
+1. Market order: Executes against the best available prices in the order book.
+2. Limit order: Allows a buyer or seller to specify the price at which they are willing to trade.
+Advantages:
+- Provides information about market demand and supply.
+- Helps traders understand available liquidity.
+- Supports transparent order matching.
+- Helps traders decide appropriate buying and selling prices.
+Conclusion:
+
+An order book is an important component of a Bitcoin exchange because it displays buying and selling interest and helps match buyers with sellers.
+
+D. Quick revision sheet
+Remember these definitions
+- Bitcoin investment = Purchasing Bitcoin expecting potential appreciation.
+- Bitcoin exchange = Platform for buying, selling and trading Bitcoin.
+- Long position = Profit when price increases.
+- Short position = Profit when price decreases.
+- CFD = Contract based on price difference.
+- Spread betting = Bet on the direction and movement of price.
+- Margin trading = Trading with borrowed funds.
+- Order book = List of outstanding buy and sell orders.
+- Bid = Buyer's offered price.
+- Ask = Seller's requested price.
+- Spread = Ask − Bid.
+- Market order = Execute at the best available market price.
+- Limit order = Execute at a specified price or better.
+- Liquidity = Ease of buying or selling an asset.
+- Slippage = Difference between expected and actual execution price.
+
+E. Test your understanding
+1. What is a Bitcoin exchange?
+
+A mining algorithm
+
+A platform for buying and selling Bitcoin
+
+A type of wallet only
+
+A consensus protocol
+
+
+
+2. A long position generally benefits when Bitcoin's price:
+
+Increases
+
+Decreases
+
+Becomes zero
+
+Does not change
+
+
+
+3. A short position generally benefits when Bitcoin's price:
+
+Increases
+
+Decreases
+
+Remains fixed
+
+Doubles
+
+
+
+4. What is a CFD?
+
+A Bitcoin wallet
+
+A contract based on the difference in an asset's price
+
+A mining device
+
+A type of blockchain
+
+
+
+5. What does margin trading involve?
+
+Trading only with cash
+
+Using borrowed funds to increase trading exposure
+
+Mining Bitcoin
+
+Creating a new block
+
+
+
+6. What is an order book?
+
+A list of private keys
+
+A list of outstanding buy and sell orders
+
+A list of mined blocks
+
+A wallet backup
+
+
+
+7. What is a bid price?
+
+The seller's lowest requested price
+
+The buyer's offered price
+
+The mining reward
+
+The exchange fee
+
+
+
+8. What is an ask price?
+
+The buyer's offered price
+
+The seller's requested price
+
+The average mining cost
+
+The transaction ID
+
+
+
+9. How is the bid-ask spread calculated?
+
+Bid + Ask
+
+Ask − Bid
+
+Bid × Ask
+
+Ask ÷ Bid
+
+
+
+10. Which order specifies a price at which the trader is willing to buy or sell?
+
+Market order
+
+Limit order
+
+Mining order
+
+Block order
+
+
+0/10 answered
+Reset quiz
+
+
+Unit IV — All modules completed
+Your complete Unit IV progress
+Module	Topics	Status
+1	The Bitcoin Network	Completed
+2	Wallets	Completed
+3	Bitcoin Payments	Completed
+4	Innovation in Bitcoin and Advanced Protocols	Completed
+5	Bitcoin Investment and Buying/Selling	Completed
+—	Bitcoin Clients and APIs	Removed from syllabus
+
+You have now completed the full included syllabus of Unit IV.
+
+The next useful step is a complete Unit IV revision with important 5-mark and 10-mark questions, model answers, and a mock theory examination.
