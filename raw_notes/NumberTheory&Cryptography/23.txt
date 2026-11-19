@@ -1,0 +1,694 @@
+# **Unit IV — Module 6: Hill Cipher**
+
+**A note about the textbook:** I checked your uploaded Rosen textbook, *U456 (Textbook content) MTH381.pdf*. Its cryptography chapter covers shift and affine ciphers, transposition ciphers and cryptosystems, but it does not contain a Hill cipher section. Your syllabus explicitly includes Hill cipher, so I’ll cover it as an additional syllabus topic using standard matrix-based cryptography, and distinguish that material from Rosen's coverage.
+
+The Hill cipher is important because it introduces **matrix multiplication and matrix inverses modulo 26**. Unlike the previous ciphers, it encrypts groups of letters together.
+
+## **6.1 What is the Hill cipher?**
+
+The Hill cipher is a polygraphic substitution cipher developed by mathematician Lester S. Hill in 1929.
+
+It encrypts a block of plaintext letters using a square key matrix.
+
+For example, if we use a \\(2\times2\\) key matrix, we encrypt two letters at a time.
+
+If we use a \\(3\times3\\) key matrix, we encrypt three letters at a time.
+
+The main mathematical operations are:
+
+1. Convert letters into numbers.
+2. Arrange the numbers into column vectors.
+3. Multiply the key matrix by the plaintext vector.
+4. Reduce every resulting entry modulo 26.
+5. Convert the resulting numbers back into letters.
+
+The alphabet mapping is:
+
+\\[ A=0,\ B=1,\ C=2,\ldots,Z=25. \\]
+
+## **6.2 Mathematical representation**
+
+Let the plaintext block be represented by the column vector
+
+\\[ P= \begin{bmatrix} p_1\\\ p_2 \end{bmatrix} \\]
+
+and let the encryption key be the \\(2\times2\\) matrix
+
+\\[ K= \begin{bmatrix} a&b\\\ c&d \end{bmatrix}. \\]
+
+The ciphertext vector is
+
+\\[ \boxed{C=KP\pmod{26}} \\]
+
+This is the fundamental Hill cipher encryption formula.
+
+Expanded:
+
+\\[ \begin{bmatrix} c_1\\\ c_2 \end{bmatrix} = \begin{bmatrix} a&b\\\ c&d \end{bmatrix} \begin{bmatrix} p_1\\\ p_2 \end{bmatrix} \pmod{26}. \\]
+
+Therefore,
+
+\\[ \boxed{c_1=(ap_1+bp_2)\bmod26} \\]
+
+\\[ \boxed{c_2=(cp_1+dp_2)\bmod26} \\]
+
+Notice that each ciphertext letter depends on both plaintext letters. This is the main difference from the shift, affine and Vigenère ciphers.
+
+## **6.3 First worked example — Encrypt a two-letter block**
+
+Given the key matrix:
+
+\\[ K= \begin{bmatrix} 3&3\\\ 2&5 \end{bmatrix} \\]
+
+Encrypt the plaintext block `HI`.
+
+**Step 1: Convert the plaintext into numbers.**
+
+\\[ H=7,\qquad I=8. \\]
+
+Thus,
+
+\\[ P= \begin{bmatrix} 7\\\ 8 \end{bmatrix}. \\]
+
+**Step 2: Write the encryption formula.**
+
+\\[ C=KP\pmod{26}. \\]
+
+Substitute:
+
+\\[ C= \begin{bmatrix} 3&3\\\ 2&5 \end{bmatrix} \begin{bmatrix} 7\\\ 8 \end{bmatrix} \pmod{26}. \\]
+
+**Step 3: Multiply the matrices.**
+
+First row:
+
+\\[ 3(7)+3(8)=21+24=45. \\]
+
+Second row:
+
+\\[ 2(7)+5(8)=14+40=54. \\]
+
+Therefore,
+
+\\[ C= \begin{bmatrix} 45\\\ 54 \end{bmatrix} \pmod{26}. \\]
+
+**Step 4: Reduce modulo 26.**
+
+\\[ 45\bmod26=19 \\]
+
+\\[ 54\bmod26=2. \\]
+
+Hence,
+
+\\[ C= \begin{bmatrix} 19\\\ 2 \end{bmatrix}. \\]
+
+**Step 5: Convert numbers into letters.**
+
+\\[ 19=T,\qquad 2=C. \\]
+
+ENCRYPTION RESULT
+
+# **HI → TC**
+
+This is the complete mathematical procedure for encrypting a two-letter block.
+
+## **6.4 Why must the key matrix be invertible?**
+
+Encryption alone is not sufficient. The receiver must be able to recover the original plaintext.
+
+From
+
+\\[ C=KP\pmod{26}, \\]
+
+we want to recover \\(P\\).
+
+If the inverse matrix \\(K^{-1}\\) exists modulo 26, multiply both sides by it:
+
+\\[ K^{-1}C=K^{-1}KP\pmod{26}. \\]
+
+Since
+
+\\[ K^{-1}K=I, \\]
+
+where \\(I\\) is the identity matrix,
+
+\\[ \boxed{P=K^{-1}C\pmod{26}}. \\]
+
+Thus, the key matrix must have an inverse modulo 26.
+
+### **Condition for a 2 × 2 key matrix**
+
+For
+
+\\[ K= \begin{bmatrix} a&b\\\ c&d \end{bmatrix}, \\]
+
+its determinant is
+
+\\[ \boxed{\det(K)=ad-bc}. \\]
+
+The matrix has an inverse modulo 26 if and only if
+
+\\[ \boxed{\gcd(\det(K),26)=1}. \\]
+
+This is a very important MCQ condition.
+
+Why?
+
+The ordinary matrix inverse formula involves division by the determinant. In modular arithmetic, division by a number is possible only when that number has a multiplicative inverse modulo 26.
+
+Therefore, the determinant must be relatively prime to 26.
+
+Since
+
+\\[ 26=2\times13, \\]
+
+the determinant must be divisible by neither 2 nor 13.
+
+**Examples:**
+
+| Determinant | GCD with 26 | Matrix invertible? |
+| ----------- | ----------- | ------------------ |
+| 5           | 1           | Yes                |
+| 7           | 1           | Yes                |
+| 9           | 1           | Yes                |
+| 10          | 2           | No                 |
+| 13          | 13          | No                 |
+| 15          | 1           | Yes                |
+| 26          | 26          | No                 |
+
+## **6.5 Finding the inverse of a 2 × 2 key matrix**
+
+For a matrix
+
+\\[ K= \begin{bmatrix} a&b\\\ c&d \end{bmatrix}, \\]
+
+the inverse modulo 26 is
+
+\\[ \boxed{ K^{-1}=(\det K)^{-1} \begin{bmatrix} d&-b\\\ -c&a \end{bmatrix} \pmod{26} } \\]
+
+This formula has two important parts:
+
+1. Find the determinant and its modular inverse.
+2. Multiply that inverse by the adjugate matrix.
+
+### **Worked example**
+
+Find the inverse of
+
+\\[ K= \begin{bmatrix} 3&3\\\ 2&5 \end{bmatrix} \pmod{26}. \\]
+
+**Step 1: Calculate the determinant.**
+
+\\[ \det(K)=(3)(5)-(3)(2) \\]
+
+\\[ =15-6=9. \\]
+
+**Step 2: Check whether the inverse exists.**
+
+\\[ \gcd(9,26)=1. \\]
+
+Therefore, the inverse exists.
+
+**Step 3: Find the inverse of the determinant modulo 26.**
+
+We need:
+
+\\[ 9x\equiv1\pmod{26}. \\]
+
+Since
+
+\\[ 9\times3=27\equiv1\pmod{26}, \\]
+
+we get
+
+\\[ \boxed{9^{-1}=3\pmod{26}}. \\]
+
+**Step 4: Form the adjugate matrix.**
+
+For a 2 × 2 matrix, interchange the diagonal elements and change the signs of the off-diagonal elements:
+
+\\[ \operatorname{adj}(K)= \begin{bmatrix} 5&-3\\\ -2&3 \end{bmatrix}. \\]
+
+**Step 5: Multiply by the inverse of the determinant.**
+
+\\[ K^{-1} = 3 \begin{bmatrix} 5&-3\\\ -2&3 \end{bmatrix} \pmod{26}. \\]
+
+\\[ = \begin{bmatrix} 15&-9\\\ -6&9 \end{bmatrix} \pmod{26}. \\]
+
+Convert negative entries to their nonnegative residues:
+
+\\[ -9\bmod26=17 \\]
+
+\\[ -6\bmod26=20. \\]
+
+Therefore,
+
+\\[ \boxed{ K^{-1}= \begin{bmatrix} 15&17\\\ 20&9 \end{bmatrix} \pmod{26} } \\]
+
+**Verification:** A valid inverse must satisfy
+
+\\[ KK^{-1}\equiv I\pmod{26}. \\]
+
+Indeed,
+
+\\[ \begin{bmatrix} 3&3\\\ 2&5 \end{bmatrix} \begin{bmatrix} 15&17\\\ 20&9 \end{bmatrix} = \begin{bmatrix} 105&78\\\ 130&79 \end{bmatrix}. \\]
+
+Taking each entry modulo 26:
+
+\\[ \begin{bmatrix} 1&0\\\ 0&1 \end{bmatrix}. \\]
+
+So the inverse is correct.
+
+## **6.6 Complete decryption example**
+
+We previously encrypted:
+
+\\[ \text{HI}\rightarrow\text{TC} \\]
+
+using
+
+\\[ K= \begin{bmatrix} 3&3\\\ 2&5 \end{bmatrix}. \\]
+
+Now decrypt `TC`.
+
+**Step 1: Convert ciphertext into a vector.**
+
+\\[ T=19,\qquad C=2. \\]
+
+\\[ C= \begin{bmatrix} 19\\\ 2 \end{bmatrix}. \\]
+
+**Step 2: Use the inverse matrix.**
+
+\\[ K^{-1}= \begin{bmatrix} 15&17\\\ 20&9 \end{bmatrix}. \\]
+
+**Step 3: Apply the decryption formula.**
+
+\\[ P=K^{-1}C\pmod{26}. \\]
+
+\\[ P= \begin{bmatrix} 15&17\\\ 20&9 \end{bmatrix} \begin{bmatrix} 19\\\ 2 \end{bmatrix} \pmod{26}. \\]
+
+Multiply:
+
+\\[ P= \begin{bmatrix} 15(19)+17(2)\\\ 20(19)+9(2) \end{bmatrix} \pmod{26}. \\]
+
+\\[ = \begin{bmatrix} 319\\\ 398 \end{bmatrix} \pmod{26}. \\]
+
+Reduce:
+
+\\[ 319\bmod26=7 \\]
+
+\\[ 398\bmod26=8. \\]
+
+Thus,
+
+\\[ P= \begin{bmatrix} 7\\\ 8 \end{bmatrix}. \\]
+
+Convert back to letters:
+
+\\[ 7=H,\qquad8=I. \\]
+
+DECRYPTION RESULT
+
+# **TC → HI**
+
+The original plaintext is successfully recovered.
+
+## **6.7 Hill cipher with a 3 × 3 key matrix**
+
+The Hill cipher is not limited to two-letter blocks.
+
+For a three-letter block, use a \\(3\times3\\) key matrix:
+
+\\[ K= \begin{bmatrix} a&b&c\\\ d&e&f\\\ g&h&i \end{bmatrix} \\]
+
+The plaintext is represented as:
+
+\\[ P= \begin{bmatrix} p_1\\\ p_2\\\ p_3 \end{bmatrix}. \\]
+
+Encryption is still:
+
+\\[ \boxed{C=KP\pmod{26}}. \\]
+
+Expanded:
+
+\\[ \begin{aligned} c_1&=(ap_1+bp_2+cp_3)\bmod26\\\ c_2&=(dp_1+ep_2+fp_3)\bmod26\\\ c_3&=(gp_1+hp_2+ip_3)\bmod26. \end{aligned} \\]
+
+The determinant of a 3 × 3 matrix is
+
+\\[ \begin{aligned} \det(K)={}&aei+bfg+cdh\\\ &-ceg-bdi-afh. \end{aligned} \\]
+
+The key matrix is invertible modulo 26 precisely when
+
+\\[ \boxed{\gcd(\det(K),26)=1}. \\]
+
+The same condition applies to square key matrices of any size.
+
+**Important distinction:** A matrix may have a nonzero determinant and still fail to have an inverse modulo 26. For example, determinant 2 is nonzero, but \\(\gcd(2,26)=2\\), so it has no modular inverse.
+
+## **6.8 Encrypting a complete message**
+
+Suppose the key matrix is
+
+\\[ K= \begin{bmatrix} 3&3\\\ 2&5 \end{bmatrix} \\]
+
+and the plaintext is:
+
+\\[ \text{HELP}. \\]
+
+Since the key is \\(2\times2\\), divide the message into blocks of two letters:
+
+\\[ \boxed{\text{HE}\quad\text{LP}} \\]
+
+### **First block: HE**
+
+\\[ H=7,\quad E=4. \\]
+
+\\[ P_1= \begin{bmatrix} 7\\\ 4 \end{bmatrix}. \\]
+
+\\[ C_1= \begin{bmatrix} 3&3\\\ 2&5 \end{bmatrix} \begin{bmatrix} 7\\\ 4 \end{bmatrix} \pmod{26}. \\]
+
+\\[ = \begin{bmatrix} 33\\\ 34 \end{bmatrix} \pmod{26} = \begin{bmatrix} 7\\\ 8 \end{bmatrix}. \\]
+
+This gives:
+
+\\[ \text{HE}\rightarrow\text{HI}. \\]
+
+### **Second block: LP**
+
+\\[ L=11,\quad P=15. \\]
+
+\\[ P_2= \begin{bmatrix} 11\\\ 15 \end{bmatrix}. \\]
+
+\\[ C_2= \begin{bmatrix} 3&3\\\ 2&5 \end{bmatrix} \begin{bmatrix} 11\\\ 15 \end{bmatrix} \pmod{26}. \\]
+
+\\[ = \begin{bmatrix} 78\\\ 97 \end{bmatrix} \pmod{26} = \begin{bmatrix} 0\\\ 19 \end{bmatrix}. \\]
+
+This gives:
+
+\\[ \text{LP}\rightarrow\text{AT}. \\]
+
+Therefore:
+
+COMPLETE ENCRYPTION
+
+# **HELP → HIAT**
+
+The message is encrypted block by block, using the same key matrix for each block.
+
+**What if the number of letters is not divisible by the block size?**
+
+The final block must be completed to the required size. A padding letter or agreed padding convention is used. For example, with a block size of 2, `CAT` can be padded as `CATX`. The receiver must know the padding convention to remove the extra letter correctly.
+
+## **6.9 Security and cryptanalysis of the Hill cipher**
+
+The Hill cipher has an important advantage over simple monoalphabetic substitution ciphers: it encrypts groups of letters rather than individual letters.
+
+This mixes the numerical values of multiple plaintext letters into the ciphertext.
+
+However, the Hill cipher is vulnerable to a **known-plaintext attack**.
+
+### **Known-plaintext attack**
+
+Suppose an attacker knows some plaintext blocks and their corresponding ciphertext blocks.
+
+For a two-dimensional Hill cipher:
+
+\\[ C=KP\pmod{26}. \\]
+
+If the attacker has two linearly independent plaintext vectors, they can form a plaintext matrix \\(P\\) and a corresponding ciphertext matrix \\(C\\):
+
+\\[ C=KP\pmod{26}. \\]
+
+If \\(P\\) is invertible modulo 26, then:
+
+\\[ \boxed{K=CP^{-1}\pmod{26}}. \\]
+
+This allows the attacker to recover the key matrix.
+
+**Important:** The plaintext matrix must itself be invertible modulo 26. Merely having two known plaintext blocks is not sufficient.
+
+### **Limitations of the Hill cipher**
+
+- The key matrix must be invertible modulo 26.
+- It is vulnerable to known-plaintext attacks.
+- It is a classical cipher and is not considered secure for modern communications.
+- It requires matrix arithmetic modulo 26.
+
+## **6.10 Comparison of all classical ciphers covered so far**
+
+| Cipher   | Mathematical operation                | Encryption unit          |
+| -------- | ------------------------------------- | ------------------------ |
+| Shift    | Addition modulo 26                    | One letter               |
+| Affine   | Multiplication and addition modulo 26 | One letter               |
+| Vigenère | Position-dependent addition modulo 26 | Repeated-key positions   |
+| Hill     | Matrix multiplication modulo 26       | Fixed-size letter blocks |
+
+**Remember these distinctions:**
+
+- Shift cipher: one fixed shift.
+- Affine cipher: one fixed multiplication and addition.
+- Vigenère cipher: different shifts according to a repeating keyword.
+- Hill cipher: matrix multiplication combines multiple plaintext letters.
+
+## **6.11 Important examination traps**
+
+| Question concept       | Correct fact                 |
+| ---------------------- | ---------------------------- |
+| Hill cipher uses       | Matrix multiplication        |
+| Encryption formula     | \\(C=KP\bmod26\\)            |
+| Decryption formula     | \\(P=K^{-1}C\bmod26\\)       |
+| Alphabet mapping       | A = 0 through Z = 25         |
+| 2 × 2 key matrix       | Encrypts blocks of 2 letters |
+| 3 × 3 key matrix       | Encrypts blocks of 3 letters |
+| Inverse condition      | \\(\gcd(\det K,26)=1\\)      |
+| Identity matrix        | \\(KK^{-1}=I\pmod{26}\\)     |
+| Key recovery attack    | Known-plaintext attack       |
+| Key matrix determinant | Must have a modular inverse  |
+
+### **Most important formulas**
+
+\\[ \boxed{C=KP\pmod{26}} \\]
+
+\\[ \boxed{P=K^{-1}C\pmod{26}} \\]
+
+For a 2 × 2 matrix:
+
+\\[ \boxed{\det(K)=ad-bc} \\]
+
+\\[ \boxed{ K^{-1}=(\det K)^{-1} \begin{bmatrix} d&-b\\\ -c&a \end{bmatrix} \pmod{26} } \\]
+
+\\[ \boxed{\gcd(\det K,26)=1} \\]
+
+## **6.12 Module 6 MCQ test**
+
+**Module 6 test**
+
+0/14 answered
+
+Attempt all questions. The explanations and score will appear after submission.
+
+**1. Which mathematical operation is the foundation of the Hill cipher?**
+
+A. Modular exponentiation
+
+B. Matrix multiplication modulo 26
+
+C. Prime factorization
+
+D. Ordinary division
+
+
+
+**2. What is the Hill cipher encryption formula?**
+
+A. C = K + P mod 26
+
+B. C = KP mod 26
+
+C. C = K⁻¹P mod 26
+
+D. C = P − K mod 26
+
+
+
+**3. What is the decryption formula?**
+
+A. P = KC mod 26
+
+B. P = K⁻¹C mod 26
+
+C. P = K+C mod 26
+
+D. P = C⁻¹K mod 26
+
+
+
+**4. What condition must a square key matrix satisfy to be invertible modulo 26?**
+
+A. det(K) must be 0
+
+B. det(K) must be prime
+
+C. gcd(det(K),26)=1
+
+D. det(K) must be even
+
+
+
+**5. Which determinant is invalid for a Hill key matrix modulo 26?**
+
+A. 5
+
+B. 7
+
+C. 9
+
+D. 13
+
+
+
+**6. Find the determinant of [[3,3],[2,5]].**
+
+A. 6
+
+B. 9
+
+C. 12
+
+D. 21
+
+
+
+**7. What is the inverse of 9 modulo 26?**
+
+A. 3
+
+B. 5
+
+C. 9
+
+D. 17
+
+
+
+**8. What is the inverse of [[3,3],[2,5]] modulo 26?**
+
+A. [[5,3],[2,3]]
+
+B. [[15,17],[20,9]]
+
+C. [[9,2],[1,15]]
+
+D. [[15,9],[17,20]]
+
+
+
+**9. Using K=[[3,3],[2,5]], encrypt HI (H=7, I=8).**
+
+A. TC
+
+B. HI
+
+C. CT
+
+D. AT
+
+
+
+**10. A 3×3 Hill key matrix encrypts how many letters in each complete block?**
+
+A. 1
+
+B. 2
+
+C. 3
+
+D. 6
+
+
+
+**11. Which attack can recover a Hill cipher key when sufficient suitable plaintext-ciphertext pairs are known?**
+
+A. Known-plaintext attack
+
+B. Brute force over shift 0–25 only
+
+C. Frequency analysis of one letter only
+
+D. Trial division
+
+
+
+**12. If a 2×2 key matrix has determinant 10, can it be inverted modulo 26?**
+
+A. Yes, because 10 is nonzero
+
+B. Yes, because 10 is even
+
+C. No, because gcd(10,26)=2
+
+D. No, because 10 is composite
+
+
+
+**13. What is the identity property of a valid inverse key matrix?**
+
+A. KK⁻¹ = 0 mod 26
+
+B. KK⁻¹ = I mod 26
+
+C. KK⁻¹ = K mod 26
+
+D. KK⁻¹ = 26I mod 26
+
+
+
+**14. Why does the Hill cipher mix plaintext information?**
+
+A. It reverses the alphabet
+
+B. Each ciphertext entry depends on multiple plaintext entries
+
+C. It uses prime numbers as letters
+
+D. It removes modular arithmetic
+
+
+
+Submit answers
+
+## **Module 6 — Final revision sheet**
+
+**Encryption**
+
+\\[ C=KP\pmod{26} \\]
+
+**Decryption**
+
+\\[ P=K^{-1}C\pmod{26} \\]
+
+**Valid key condition**
+
+\\[ \gcd(\det K,26)=1 \\]
+
+**2 × 2 determinant**
+
+\\[ ad-bc \\]
+
+**2 × 2 inverse**
+
+\\[ K^{-1}=(\det K)^{-1} \begin{bmatrix}d&-b\\\\-c&a\end{bmatrix} \pmod{26} \\]
+
+**Important example**
+
+\\[ \begin{bmatrix}3&3\\\2&5\end{bmatrix}^{-1} = \begin{bmatrix}15&17\\\20&9\end{bmatrix} \pmod{26} \\]
+
+**Cryptanalysis:** Known-plaintext attack.
+
+Module 6 complete
+
+**Next: Module 7 — Permutation (Transposition) Cipher.**
+
+We'll study permutations, inverse permutations, block rearrangement, encryption/decryption and Rosen's worked example.
+
+Say **next** when ready.

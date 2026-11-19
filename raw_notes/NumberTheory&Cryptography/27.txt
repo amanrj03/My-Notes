@@ -1,0 +1,115 @@
+Welcome to **Module 2: The Diffie-Hellman Key Exchange**. 
+
+In Module 1, we learned that Private Key Cryptography has a major flaw: **How do Alice and Bob share the secret key securely in the first place?** If they send it over the internet, a hacker (Eve) can intercept it.
+
+The Diffie-Hellman Key Exchange (1976) was the first practical mathematical solution to this problem. It allows two parties to agree on a **shared secret key** over a public channel, without ever sending the key itself.
+
+---
+
+### 1. The Mathematics Behind Diffie-Hellman
+
+Diffie-Hellman relies on a mathematical trapdoor called the **Discrete Logarithm Problem (DLP)**. 
+
+Here is the core idea:
+*   **Easy:** Calculating \(g^a \pmod p\) is computationally easy (using fast modular exponentiation, which we learned in Module 1).
+*   **Hard:** If I give you \(g\), \(p\), and the result \(Y = g^a \pmod p\), it is practically impossible to find the exponent \(a\) (especially when \(p\) is a very large prime). This is because logarithms in modular arithmetic have no easy formula; you essentially have to guess and check.
+
+### 2. The Protocol (Step-by-Step for Exams)
+
+Before the exchange begins, Alice and Bob agree on two public numbers (they can shout these across the room):
+1.  **\(p\)**: A large prime number.
+2.  **\(g\)**: A primitive root modulo \(p\) (a generator). For exam purposes, \(g\) is just a small integer less than \(p\) (like 2, 3, or 5).
+
+**The Exchange:**
+1.  **Alice** chooses a secret private number \(a\) (she keeps this in her head).
+2.  **Bob** chooses a secret private number \(b\) (he keeps this in his head).
+3.  **Alice computes** her public value: \(A = g^a \pmod p\). She sends \(A\) to Bob.
+4.  **Bob computes** his public value: \(B = g^b \pmod p\). He sends \(B\) to Alice.
+
+*(Note: Even if a hacker intercepts \(A\) and \(B\), they cannot find \(a\) or \(b\) because of the Discrete Logarithm Problem).*
+
+5.  **Alice computes the Shared Secret Key (\(K\)):** She takes Bob's public value (\(B\)) and raises it to her private number (\(a\)):
+    \[
+K = B^a \pmod p
+\]
+6.  **Bob computes the Shared Secret Key (\(K\)):** He takes Alice's public value (\(A\)) and raises it to his private number (\(b\)):
+    \[
+K = A^b \pmod p
+\]
+
+**Why do they get the same key?** (You must write this proof in a 10-mark question!)
+Because of the laws of exponents:
+\(K = B^a = (g^b)^a = g^{ab} \pmod p\)
+\(K = A^b = (g^a)^b = g^{ab} \pmod p\)
+Both get \(g^{ab} \pmod p\). They now share the exact same key, and no one else knows it!
+
+---
+
+### 3. Solved Exam Questions
+
+Let's look at how this is tested.
+
+**Question 1 (MCQ - 1 Mark):**
+In the Diffie-Hellman protocol, if Alice's private key is \(a\), Bob's private key is \(b\), and the public base is \(g\) modulo prime \(p\), what is the shared secret key?
+*   A) \(g^a + g^b \pmod p\)
+*   B) \(g^{a+b} \pmod p\)
+*   C) \(g^{ab} \pmod p\)
+*   D) \(a \cdot b \pmod p\)
+**Answer: C**
+
+**Question 2 (Numerical - 5 Marks):**
+Alice and Bob use the Diffie-Hellman key exchange with prime \(p = 23\) and base \(g = 5\).
+*   Alice chooses private key \(a = 6\).
+*   Bob chooses private key \(b = 15\).
+Find the public keys exchanged and the shared secret key.
+**Solution:**
+1.  **Alice's Public Key (A):**
+    \(A = g^a \pmod p = 5^6 \pmod{23}\)
+    \(5^2 = 25 \equiv 2 \pmod{23}\)
+    \(5^4 = 2^2 = 4 \pmod{23}\)
+    \(5^6 = 5^4 \cdot 5^2 = 4 \cdot 2 = 8 \pmod{23}\). So, \(A = 8\).
+2.  **Bob's Public Key (B):**
+    \(B = g^b \pmod p = 5^{15} \pmod{23}\)
+    Binary for 15: \(8 + 4 + 2 + 1\)
+    \(5^1 = 5\)
+    \(5^2 = 2\)
+    \(5^4 = 4\)
+    \(5^8 = 4^2 = 16\)
+    \(5^{15} = 16 \cdot 4 \cdot 2 \cdot 5 = 640 \pmod{23}\).
+    Let's divide: \(23 \times 27 = 621\). \(640 - 621 = 19\). So, \(B = 19\).
+3.  **Shared Secret Key (Alice computes):**
+    \(K = B^a \pmod p = 19^6 \pmod{23}\)
+    \(19 \equiv -4 \pmod{23}\).
+    \((-4)^6 = 4^6 = (4^3)^2 = 64^2\).
+    \(64 \equiv 18 \pmod{23}\) (since \(23 \times 2 = 46\), \(64-46=18\)).
+    \(18^2 = 324\).
+    \(23 \times 14 = 322\). \(324 - 322 = 2\).
+    So, **\(K = 2\)**.
+4.  **Check (Bob computes):**
+    \(K = A^b \pmod p = 8^{15} \pmod{23}\).
+    Since \(8 \equiv 2^3\), \(8^{15} = (2^3)^{15} = 2^{45} \pmod{23}\).
+    By Fermat's Little Theorem (from Module 1), \(2^{22} \equiv 1 \pmod{23}\).
+    \(2^{45} = 2^{44} \cdot 2^1 = (2^{22})^2 \cdot 2 \equiv 1^2 \cdot 2 = 2 \pmod{23}\).
+    **\(K = 2\)**. Matches perfectly!
+
+---
+
+### 4. Security Analysis (For Theoretical Marks)
+
+**Why is it secure?**
+An attacker (Eve) knows \(p, g, A,\) and \(B\). She needs to find \(a\) or \(b\). 
+To find \(a\), she must solve \(A = g^a \pmod p\). This is the **Discrete Logarithm Problem**. For a large prime \(p\) (e.g., 2048 bits), this takes billions of years with current computers.
+
+**Vulnerability (Man-in-the-Middle Attack):**
+Diffie-Hellman is secure against eavesdropping, but it is **vulnerable to a Man-in-the-Middle (MITM) attack** because it lacks authentication. Eve can intercept Alice's public key and send her own to Bob, and vice versa. Alice and Bob will end up sharing a key with Eve, not each other. 
+*Exam Note:* If asked how to fix this, the answer is to use **Digital Signatures** (which we will not cover in detail here) or a **Public Key Infrastructure (PKI)** to authenticate the public keys.
+
+---
+
+### 🎯 Module 2 Checklist:
+1.  **Define** the Discrete Logarithm Problem.
+2.  **Write down the full protocol** and the mathematical proof that \(K = g^{ab} \pmod p\).
+3.  **Solve numerical problems** (very likely a 5 or 10-mark question). Practice calculating \(A\), \(B\), and \(K\) using fast modular exponentiation.
+4.  **Explain** the Man-in-the-Middle vulnerability.
+
+Take a moment to practice the calculations from Question 2. When you are ready to tackle the **RSA Cryptosystem** (the most important part of Unit V), just say **"next"**!

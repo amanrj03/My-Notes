@@ -1,0 +1,1783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 23: Hill Cipher & Matrix Cryptography — Mathematics Study Guide</title>
+    <meta name="description" content="Number Theory &amp; Cryptography study notes — Module 23 of 29: Hill Cipher & Matrix Cryptography. Complete with theorems, proofs, worked examples, and interactive self-test quiz.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+
+    <!-- MathJax 3 configuration for crisp LaTeX rendering -->
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['\\(', '\\)'], ['$', '$']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true,
+            macros: {
+                Z: '\\mathbb{Z}',
+                N: '\\mathbb{N}',
+                R: '\\mathbb{R}',
+                Q: '\\mathbb{Q}',
+                gcd: '\\operatorname{gcd}',
+                lcm: '\\operatorname{lcm}'
+            }
+        },
+        options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+/* ==========================================================================
+   MATHEMATICS THEME — Imperial Oxford Amethyst & Celestial Amber
+   ========================================================================== */
+:root {
+    --math-royal-primary: #7c3aed;
+    --math-royal-hover: #6d28d9;
+    --math-gold-accent: #f59e0b;
+    --math-gold-glow: rgba(245, 158, 11, 0.25);
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-body, #2d3748);
+    margin: 0; padding: 0;
+    background-color: var(--bg-body, #f4f6fb);
+}
+
+.page-container {
+    max-width: 1080px;
+    margin: 25px auto 50px;
+    padding: 40px 50px;
+    background-color: var(--bg-page, #ffffff);
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.07);
+    border-radius: 14px;
+}
+
+/* MATH HERO BANNER */
+.math-banner {
+    background: linear-gradient(135deg, #1b0a2a 0%, #341253 45%, #581c87 75%, #b45309 100%);
+    border-radius: 12px;
+    padding: 30px 34px;
+    margin-bottom: 28px;
+    color: #ffffff;
+    box-shadow: 0 6px 24px rgba(124, 58, 237, 0.25);
+    position: relative;
+    overflow: hidden;
+}
+.math-banner::after {
+    content: "∑ ∫ ∏ √";
+    position: absolute;
+    right: 20px;
+    bottom: -15px;
+    font-size: 80px;
+    font-weight: 800;
+    font-family: 'Outfit', sans-serif;
+    color: rgba(255, 255, 255, 0.05);
+    pointer-events: none;
+}
+.math-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.16);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    margin-bottom: 12px;
+}
+.math-banner-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.25;
+    margin: 0;
+    color: #ffffff;
+}
+
+/* NAVIGATION TOGGLE */
+.nav-toggle {
+    margin-bottom: 24px;
+}
+.nav-toggle-btn {
+    width: 100%;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #7c3aed;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+.nav-toggle-btn:hover {
+    background: rgba(124, 58, 237, 0.06);
+    border-color: #7c3aed;
+}
+.nav-panel {
+    display: none;
+    margin-top: 10px;
+    padding: 18px;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    column-count: 2;
+    column-gap: 16px;
+}
+.nav-panel.open { display: block; }
+.nav-item {
+    display: block;
+    padding: 6px 10px;
+    font-size: 13px;
+    color: var(--text-body, #334155);
+    text-decoration: none;
+    border-radius: 4px;
+    break-inside: avoid;
+    margin-bottom: 4px;
+    transition: all 0.15s ease;
+}
+.nav-item:hover {
+    background: rgba(124, 58, 237, 0.1);
+    color: #7c3aed;
+}
+.nav-item.current {
+    background: linear-gradient(135deg, #7c3aed, #4c1d95);
+    color: #ffffff !important;
+    font-weight: 700;
+}
+
+/* CONTENT STYLES — STRICT LEFT ALIGNMENT */
+.module-content {
+    color: var(--text-body, #334155);
+    font-size: 15px;
+    text-align: left !important;
+}
+.module-content h1, 
+.module-content h2, 
+.module-content h3, 
+.module-content h4, 
+.module-content p, 
+.module-content ul, 
+.module-content ol, 
+.module-content li, 
+.module-content table {
+    text-align: left !important;
+}
+
+.module-content h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-heading, #0f172a);
+    margin: 36px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(124, 58, 237, 0.2);
+}
+.module-content h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-heading, #0f172a);
+    margin: 30px 0 14px;
+}
+.module-content h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-heading, #0f172a);
+    margin: 24px 0 10px;
+}
+.module-content p {
+    margin: 0 0 14px;
+    line-height: 1.7;
+    text-align: left !important;
+}
+.module-content ul, .module-content ol {
+    margin: 12px 0 18px 28px !important;
+    padding: 0 !important;
+    text-align: left !important;
+    list-style-position: outside !important;
+}
+.module-content li {
+    margin-bottom: 8px !important;
+    line-height: 1.65;
+    text-align: left !important;
+}
+
+/* MATHEMATICAL CALLOUTS */
+.math-callout {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 22px 0 16px;
+    border: 1px solid var(--border-color, #e2e8f0);
+    background: var(--bg-surface, #ffffff);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    text-align: left !important;
+}
+[data-theme="dark"] .math-callout {
+    background: #141728;
+    border-color: #242944;
+}
+.callout-badge {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+.callout-title {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--text-heading, #0f172a);
+}
+.math-callout.theorem {
+    border-left: 4px solid #7c3aed;
+}
+.math-callout.theorem .callout-badge {
+    background: rgba(124, 58, 237, 0.12);
+    color: #7c3aed;
+}
+.math-callout.definition {
+    border-left: 4px solid #2563eb;
+}
+.math-callout.definition .callout-badge {
+    background: rgba(37, 99, 235, 0.12);
+    color: #2563eb;
+}
+.math-callout.property {
+    border-left: 4px solid #059669;
+}
+.math-callout.property .callout-badge {
+    background: rgba(5, 150, 105, 0.12);
+    color: #059669;
+}
+.math-callout.example {
+    border-left: 4px solid #d97706;
+}
+.math-callout.example .callout-badge {
+    background: rgba(217, 119, 6, 0.12);
+    color: #d97706;
+}
+
+/* EXAM BANNER */
+.exam-header-banner {
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(245, 158, 11, 0.12));
+    border-left: 4px solid #f59e0b;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 28px 0 16px;
+    font-weight: 800;
+    font-size: 18px;
+    color: #b45309;
+    font-family: 'Outfit', sans-serif;
+}
+[data-theme="dark"] .exam-header-banner {
+    color: #fbbf24;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(245, 158, 11, 0.15));
+}
+
+/* MATH DIAGRAM BOX */
+.math-diagram-box {
+    background: var(--bg-surface, #ffffff);
+    border: 1px solid rgba(124, 58, 237, 0.22);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin: 24px 0;
+    box-shadow: 0 4px 18px rgba(124, 58, 237, 0.06);
+}
+[data-theme="dark"] .math-diagram-box {
+    background: #111424;
+    border-color: rgba(139, 92, 246, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+.math-diagram-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    color: #7c3aed;
+    margin: 0 0 12px;
+    text-align: center;
+}
+[data-theme="dark"] .math-diagram-title {
+    color: #c084fc;
+}
+.math-pill {
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--text-heading);
+}
+[data-theme="dark"] .math-pill {
+    background: #181d33;
+    border-color: #2a3154;
+}
+.math-card-caption {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 12px;
+    margin-top: 14px;
+}
+
+/* MATH DISPLAY CONTAINERS */
+.math-display {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 12px 0;
+    margin: 14px 0;
+    text-align: center;
+}
+.math-inline {
+    white-space: nowrap;
+}
+
+/* REFERENCE PILL */
+.ref-pill {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #7c3aed;
+    background: rgba(124, 58, 237, 0.08);
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    border-radius: 12px;
+    padding: 2px 10px;
+    margin: 4px 0;
+}
+
+/* TABLES */
+.module-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 13.5px;
+}
+.module-content th {
+    background: var(--bg-subtle, #f8fafc);
+    color: var(--text-heading);
+    font-weight: 700;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color, #e2e8f0);
+    text-align: left;
+}
+.module-content td {
+    padding: 10px 12px;
+    border: 1px solid var(--border-color, #e2e8f0);
+    color: var(--text-body);
+}
+
+/* PREV / NEXT NAV BUTTONS */
+.prev-next {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 45px;
+    padding-top: 25px;
+    border-top: 2px solid var(--border-color, #e2e8f0);
+    gap: 14px;
+    flex-wrap: wrap;
+}
+.pn-btn {
+    padding: 10px 20px;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    text-decoration: none;
+    color: #7c3aed;
+    font-weight: 700;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+.pn-btn:hover {
+    background: #7c3aed;
+    color: #fff;
+    border-color: #7c3aed;
+}
+.pn-hub {
+    padding: 10px 18px;
+    background: linear-gradient(135deg, #7c3aed, #4c1d95);
+    color: #fff !important;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+/* QUIZ STYLES */
+.quiz-section-wrap {
+    margin: 45px 0 25px;
+}
+.quiz-card-container {
+    background: var(--bg-surface, #ffffff);
+    border: 1.5px solid rgba(124, 58, 237, 0.25);
+    border-radius: 14px;
+    padding: 32px 28px;
+    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.08);
+}
+[data-theme="dark"] .quiz-card-container {
+    background: #111424;
+    border-color: rgba(139, 92, 246, 0.3);
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+}
+.quiz-header {
+    border-bottom: 2px solid rgba(124, 58, 237, 0.15);
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+.quiz-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.12), rgba(245, 158, 11, 0.15));
+    color: #7c3aed;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+.quiz-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-heading);
+    margin: 0 0 6px 0;
+}
+.quiz-subtitle {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    margin: 0;
+    max-width: 680px;
+}
+.quiz-score-badge {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #ffffff;
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+.q-block {
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    transition: all 0.2s ease;
+}
+[data-theme="dark"] .q-block {
+    background: #181d33;
+    border-color: #272f4e;
+}
+.q-title {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text-heading);
+    margin-bottom: 14px;
+    display: flex;
+    gap: 10px;
+    line-height: 1.5;
+}
+.q-num {
+    color: #7c3aed;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+.q-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.q-opt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-surface, #ffffff);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    cursor: pointer;
+    color: var(--text-body);
+    transition: all 0.15s ease;
+}
+[data-theme="dark"] .q-opt {
+    background: #111424;
+    border-color: #2a3154;
+}
+.q-opt:hover {
+    border-color: #7c3aed;
+    background: rgba(124, 58, 237, 0.04);
+}
+.q-opt input[type="radio"] {
+    margin: 0;
+    accent-color: #7c3aed;
+}
+.q-opt.correct-choice {
+    background: rgba(16, 185, 129, 0.12) !important;
+    border-color: #10b981 !important;
+    color: #065f46 !important;
+    font-weight: 600;
+}
+[data-theme="dark"] .q-opt.correct-choice {
+    color: #34d399 !important;
+}
+.q-opt.wrong-choice {
+    background: rgba(239, 68, 68, 0.12) !important;
+    border-color: #ef4444 !important;
+    color: #991b1b !important;
+}
+[data-theme="dark"] .q-opt.wrong-choice {
+    color: #f87171 !important;
+}
+.q-explanation {
+    display: none;
+    margin-top: 12px;
+    padding: 12px 14px;
+    background: rgba(124, 58, 237, 0.06);
+    border-left: 3px solid #7c3aed;
+    border-radius: 6px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-body);
+}
+.quiz-actions {
+    display: flex;
+    gap: 14px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+}
+.btn-quiz-check {
+    background: linear-gradient(135deg, #7c3aed, #5b21b6);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 26px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
+    transition: all 0.2s;
+}
+.btn-quiz-check:hover {
+    background: linear-gradient(135deg, #6d28d9, #4c1d95);
+    transform: translateY(-1px);
+}
+.btn-quiz-reset {
+    background: var(--bg-subtle, #f8fafc);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-quiz-reset:hover {
+    background: var(--bg-card-hover);
+    color: var(--text-heading);
+}
+
+@media (max-width: 768px) {
+    .page-container { padding: 22px 18px; margin: 15px auto; }
+    .math-banner { padding: 22px 20px; }
+    .math-banner-title { font-size: 24px; }
+    .nav-panel { column-count: 1; }
+}
+</style>
+</head>
+<body>
+
+
+    <header class="global-navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <span class="nav-brand-icon">⚡</span>
+                <span class="nav-brand-text">OmniCourse<span class="nav-brand-accent">.Hub</span></span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link"><span class="icon">🏠</span> All Subjects</a>
+                
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn active" style="color: #a78bfa;"><span class="icon">📐</span> Mathematics (29) ▾</button>
+                    <div class="nav-dropdown-menu">
+                        <a href="maths.html" class="nav-dropdown-header" style="background: linear-gradient(135deg, #7c3aed, #4c1d95); color: #fff;">📋 Mathematics Syllabus Hub (All 29)</a>
+                        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit I: Divisibility & Base Expansions</div>
+<a href="maths-module-1.html">Module 1: Divisibility and the Division Algorithm</a>
+<a href="maths-module-2.html">Module 2: Modular Arithmetic and Congruences</a>
+<a href="maths-module-3.html">Module 3: Integer Representations and Base Expansions</a>
+<a href="maths-module-4.html">Module 4: Octal, Hexadecimal & Fast Base Conversions</a>
+<a href="maths-module-5.html">Module 5: Algorithms for Integer Operations</a>
+<div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit II: Primes, Divisibility Tests & GCD</div>
+<a href="maths-module-6.html">Module 6: Prime and Composite Numbers</a>
+<a href="maths-module-7.html">Module 7: Fundamental Theorem of Arithmetic</a>
+<a href="maths-module-8.html">Module 8: Trial Division and the Sieve of Eratosthenes</a>
+<a href="maths-module-9.html">Module 9: Prime Number Theorem and Prime Distribution</a>
+<a href="maths-module-10.html">Module 10: GCD, LCM and the Euclidean Algorithm</a>
+<a href="maths-module-11.html">Module 11: GCD as a Linear Combination (Bézout's Theorem)</a>
+<div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit III: Congruences, CRT & Fermat/Euler</div>
+<a href="maths-module-12.html">Module 12: Linear Congruences and Modular Inverses</a>
+<a href="maths-module-13.html">Module 13: Chinese Remainder Theorem (CRT)</a>
+<a href="maths-module-14.html">Module 14: Computer Arithmetic with Large Integers</a>
+<a href="maths-module-15.html">Module 15: Fermat's Little Theorem (FLT)</a>
+<a href="maths-module-16.html">Module 16: Applications of Congruences</a>
+<a href="maths-module-17.html">Module 17: Mixed MCQ Mastery and Final Revision</a>
+<div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit IV: Classical Cryptography & Ciphers</div>
+<a href="maths-module-18.html">Module 18: Introduction to Cryptography & Security Models</a>
+<a href="maths-module-19.html">Module 19: Classical Cryptography & Substitution Ciphers</a>
+<a href="maths-module-20.html">Module 20: Shift Cipher and Caesar Cipher</a>
+<a href="maths-module-21.html">Module 21: Affine Cipher & Modular Inverses</a>
+<a href="maths-module-22.html">Module 22: Vigenère Polyalphabetic Cipher & Tableau</a>
+<a href="maths-module-23.html">Module 23: Hill Cipher & Matrix Cryptography</a>
+<a href="maths-module-24.html">Module 24: Permutation & Transposition Ciphers</a>
+<a href="maths-module-25.html">Module 25: Mathematical Cryptosystems & Attack Models</a>
+<div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit V: Public Key Cryptography & Modern Protocols</div>
+<a href="maths-module-26.html">Module 26: Foundations of Public Key Cryptography & Fast Modular Exponentiation</a>
+<a href="maths-module-27.html">Module 27: Diffie-Hellman Key Exchange & Discrete Logarithm Problem</a>
+<a href="maths-module-28.html">Module 28: The RSA Cryptosystem: Key Generation, Encryption & Decryption</a>
+<a href="maths-module-29.html">Module 29: The ElGamal Cryptosystem & Comprehensive Unit V Exam Mastery</a>
+                    </div>
+                </div>
+
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn"><span class="icon">⛓️</span> Blockchain (18) ▾</button>
+                    <div class="nav-dropdown-menu">
+                        <a href="blockchain.html" class="nav-dropdown-header">📋 Blockchain Syllabus Hub (All 18)</a>
+                        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit I (Mods 1–4)</div>
+                        <a href="blockchain-module-1.html">Module 1: History &amp; Bitcoin</a>
+                        <a href="blockchain-module-2.html">Module 2: Distributed Systems</a>
+                        <a href="blockchain-module-3.html">Module 3: Consensus Protocols</a>
+                        <a href="blockchain-module-4.html">Module 4: Decentralization</a>
+                        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit II (Mods 5–8)</div>
+                        <a href="blockchain-module-5.html">Module 5: Symmetric Crypto</a>
+                        <a href="blockchain-module-6.html">Module 6: Public Key Crypto</a>
+                        <a href="blockchain-module-7.html">Module 7: Digital Signatures</a>
+                        <a href="blockchain-module-8.html">Module 8: SHA &amp; Hashes</a>
+                        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit III (Mods 9–13)</div>
+                        <a href="blockchain-module-9.html">Module 9: Consensus Problem &amp; Design</a>
+                        <a href="blockchain-module-10.html">Module 10: Paxos, Raft &amp; PBFT</a>
+                        <a href="blockchain-module-11.html">Module 11: PoW, PoS &amp; Selection</a>
+                        <a href="blockchain-module-12.html">Module 12: Bitcoin Keys &amp; UTXO</a>
+                        <a href="blockchain-module-13.html">Module 13: Mining, Network &amp; Forks</a>
+                        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit IV (Mods 14–18)</div>
+                        <a href="blockchain-module-14.html">Module 14: The Bitcoin Network</a>
+                        <a href="blockchain-module-15.html">Module 15: Bitcoin Wallets</a>
+                        <a href="blockchain-module-16.html">Module 16: Bitcoin Payments</a>
+                        <a href="blockchain-module-17.html">Module 17: Advanced Protocols</a>
+                        <a href="blockchain-module-18.html">Module 18: Bitcoin Investment</a>
+                        <a href="blockchain_guide.html" class="nav-dropdown-special">📖 Full 8-Module Reader</a>
+                    </div>
+                </div>
+
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn"><span class="icon">🐍</span> Django Course (45) ▾</button>
+                    <div class="nav-dropdown-menu">
+                        <a href="django.html" class="nav-dropdown-header">📋 Django Syllabus Hub</a>
+                        <a href="module-1.html">Module 1: Fundamentals</a>
+                        <a href="module-7.html">Module 7: URL Routing</a>
+                        <a href="module-12.html">Module 12: Templates</a>
+                        <a href="module-21.html">Module 21: Forms</a>
+                        <a href="module-25.html">Module 25: Models &amp; ORM</a>
+                        <a href="module-37.html">Module 37: Authentication</a>
+                        <a href="module-42.html">Module 42: Complete Revision</a>
+                        <a href="django_guide.html" class="nav-dropdown-special">📖 Full 44-Module Reader</a>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-actions">
+                <button id="themeToggleBtn" class="theme-btn" title="Toggle Dark/Light Mode">🌙</button>
+                <a href="maths.html" class="nav-action-pill" style="background: linear-gradient(135deg, #7c3aed, #4c1d95);" title="Return to Mathematics Hub">📋 Maths Hub</a>
+            </div>
+        </div>
+    </header>
+    
+
+<div class="page-container">
+
+    <!-- Math Banner Header -->
+    <div class="math-banner">
+        <div class="math-badge">📐 Unit IV: Classical Cryptography & Ciphers &bull; Module 23 of 29</div>
+        <h1 class="math-banner-title">Hill Cipher & Matrix Cryptography</h1>
+        <div style="font-size: 13.5px; opacity: 0.9; margin-top: 6px;">Rigorous lecture notes, theorems, proofs, worked calculation steps &amp; self-grading quiz</div>
+    </div>
+
+    <!-- Collapsible Course Navigation Panel -->
+    <div class="nav-toggle">
+        <button type="button" class="nav-toggle-btn" onclick="toggleNavPanel()">
+            <span>📚 Course Syllabus Navigator (Modules 01 &ndash; 29)</span>
+            <span>▾ Toggle Menu</span>
+        </button>
+        <div id="navPanel" class="nav-panel">
+            <div style="font-size: 11px; font-weight: 800; color: #7c3aed; text-transform: uppercase; margin: 10px 0 4px; padding-left: 6px; letter-spacing: 0.5px; break-inside: avoid;">Unit I (Mods 1–5)</div>
+<a class="nav-item" href="maths-module-1.html">1. Divisibility and the Division Algorithm</a>
+<a class="nav-item" href="maths-module-2.html">2. Modular Arithmetic and Congruences</a>
+<a class="nav-item" href="maths-module-3.html">3. Integer Representations and Base Expansions</a>
+<a class="nav-item" href="maths-module-4.html">4. Octal, Hexadecimal & Fast Base Conversions</a>
+<a class="nav-item" href="maths-module-5.html">5. Algorithms for Integer Operations</a>
+<div style="font-size: 11px; font-weight: 800; color: #7c3aed; text-transform: uppercase; margin: 10px 0 4px; padding-left: 6px; letter-spacing: 0.5px; break-inside: avoid;">Unit II (Mods 6–11)</div>
+<a class="nav-item" href="maths-module-6.html">6. Prime and Composite Numbers</a>
+<a class="nav-item" href="maths-module-7.html">7. Fundamental Theorem of Arithmetic</a>
+<a class="nav-item" href="maths-module-8.html">8. Trial Division and the Sieve of Eratosthenes</a>
+<a class="nav-item" href="maths-module-9.html">9. Prime Number Theorem and Prime Distribution</a>
+<a class="nav-item" href="maths-module-10.html">10. GCD, LCM and the Euclidean Algorithm</a>
+<a class="nav-item" href="maths-module-11.html">11. GCD as a Linear Combination (Bézout's Theorem)</a>
+<div style="font-size: 11px; font-weight: 800; color: #7c3aed; text-transform: uppercase; margin: 10px 0 4px; padding-left: 6px; letter-spacing: 0.5px; break-inside: avoid;">Unit III (Mods 12–17)</div>
+<a class="nav-item" href="maths-module-12.html">12. Linear Congruences and Modular Inverses</a>
+<a class="nav-item" href="maths-module-13.html">13. Chinese Remainder Theorem (CRT)</a>
+<a class="nav-item" href="maths-module-14.html">14. Computer Arithmetic with Large Integers</a>
+<a class="nav-item" href="maths-module-15.html">15. Fermat's Little Theorem (FLT)</a>
+<a class="nav-item" href="maths-module-16.html">16. Applications of Congruences</a>
+<a class="nav-item" href="maths-module-17.html">17. Mixed MCQ Mastery and Final Revision</a>
+<div style="font-size: 11px; font-weight: 800; color: #7c3aed; text-transform: uppercase; margin: 10px 0 4px; padding-left: 6px; letter-spacing: 0.5px; break-inside: avoid;">Unit IV (Mods 18–25)</div>
+<a class="nav-item" href="maths-module-18.html">18. Introduction to Cryptography & Security Models</a>
+<a class="nav-item" href="maths-module-19.html">19. Classical Cryptography & Substitution Ciphers</a>
+<a class="nav-item" href="maths-module-20.html">20. Shift Cipher and Caesar Cipher</a>
+<a class="nav-item" href="maths-module-21.html">21. Affine Cipher & Modular Inverses</a>
+<a class="nav-item" href="maths-module-22.html">22. Vigenère Polyalphabetic Cipher & Tableau</a>
+<span class="nav-item current">23. Hill Cipher & Matrix Cryptography</span>
+<a class="nav-item" href="maths-module-24.html">24. Permutation & Transposition Ciphers</a>
+<a class="nav-item" href="maths-module-25.html">25. Mathematical Cryptosystems & Attack Models</a>
+<div style="font-size: 11px; font-weight: 800; color: #7c3aed; text-transform: uppercase; margin: 10px 0 4px; padding-left: 6px; letter-spacing: 0.5px; break-inside: avoid;">Unit V (Mods 26–29)</div>
+<a class="nav-item" href="maths-module-26.html">26. Foundations of Public Key Cryptography & Fast Modular Exponentiation</a>
+<a class="nav-item" href="maths-module-27.html">27. Diffie-Hellman Key Exchange & Discrete Logarithm Problem</a>
+<a class="nav-item" href="maths-module-28.html">28. The RSA Cryptosystem: Key Generation, Encryption & Decryption</a>
+<a class="nav-item" href="maths-module-29.html">29. The ElGamal Cryptosystem & Comprehensive Unit V Exam Mastery</a>
+        </div>
+    </div>
+
+    <!-- Core Module Academic Content -->
+    <div class="module-content">
+<h1><strong>Unit IV — Module 6: Hill Cipher</strong></h1>
+<p><strong>A note about the textbook:</strong> I checked your uploaded Rosen textbook, <em>U456 (Textbook content) <span class="ref-pill">📚 Reference: MTH381.pdf</span></em>. Its cryptography chapter covers shift and affine ciphers, transposition ciphers and cryptosystems, but it does not contain a Hill cipher section. Your syllabus explicitly includes Hill cipher, so I’ll cover it as an additional syllabus topic using standard matrix-based cryptography, and distinguish that material from Rosen's coverage.</p>
+<p>The Hill cipher is important because it introduces <strong>matrix multiplication and matrix inverses modulo 26</strong>. Unlike the previous ciphers, it encrypts groups of letters together.</p>
+<h2><strong>6.1 What is the Hill cipher?</strong></h2>
+<p>The Hill cipher is a polygraphic substitution cipher developed by mathematician Lester S. Hill in 1929.</p>
+<p>It encrypts a block of plaintext letters using a square key matrix.</p>
+<p>For example, if we use a <span class="math-inline">\(2\times2\)</span> key matrix, we encrypt two letters at a time.</p>
+<p>If we use a <span class="math-inline">\(3\times3\)</span> key matrix, we encrypt three letters at a time.</p>
+<p>The main mathematical operations are:</p>
+<ol>
+<li>Convert letters into numbers.</li>
+<li>Arrange the numbers into column vectors.</li>
+<li>Multiply the key matrix by the plaintext vector.</li>
+<li>Reduce every resulting entry modulo 26.</li>
+<li>Convert the resulting numbers back into letters.</li>
+</ol>
+<p>The alphabet mapping is:</p>
+<div class="math-display">\[A=0,\ B=1,\ C=2,\ldots,Z=25.\]</div>
+<h2><strong>6.2 Mathematical representation</strong></h2>
+
+    <div class="math-diagram-box">
+        <h4 class="math-diagram-title">Hill Cipher: \(2 \times 2\) Matrix Invertibility Criteria Modulo 26</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 14px 0;">
+            <div style="padding: 14px; background: rgba(124, 58, 237, 0.06); border-radius: 8px; border: 1px solid rgba(124, 58, 237, 0.2);">
+                <div style="font-weight: 700; color: #7c3aed; margin-bottom: 6px;">1. Key Matrix &amp; Determinant</div>
+                <div style="font-size: 13.5px; line-height: 1.6;">
+                    \(K = \begin{pmatrix} a & b \\ c & d \end{pmatrix}\)<br>
+                    \(d = \det(K) = (ad - bc) \pmod{26}\)<br>
+                    <strong>Condition:</strong> \(\gcd(d, 26) = 1\)
+                </div>
+            </div>
+            <div style="padding: 14px; background: rgba(16, 185, 129, 0.06); border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.2);">
+                <div style="font-weight: 700; color: #10b981; margin-bottom: 6px;">2. Modular Matrix Inverse</div>
+                <div style="font-size: 13.5px; line-height: 1.6;">
+                    \(K^{-1} = d^{-1} \begin{pmatrix} d & -b \\ -c & a \end{pmatrix} \pmod{26}\)<br>
+                    where \(d \cdot d^{-1} \equiv 1 \pmod{26}\).
+                </div>
+            </div>
+        </div>
+        <div class="math-card-caption">
+            <strong>Encryption:</strong> \(C = P \cdot K \pmod{26}\) &bull; <strong>Decryption:</strong> \(P = C \cdot K^{-1} \pmod{26}\) where \(P, C\) are row vectors \((p_1, p_2)\).
+        </div>
+    </div>
+    
+<p>Let the plaintext block be represented by the column vector</p>
+<div class="math-display">\[P= \begin{bmatrix} p_1\\\ p_2 \end{bmatrix}\]</div>
+<p>and let the encryption key be the <span class="math-inline">\(2\times2\)</span> matrix</p>
+<div class="math-display">\[K= \begin{bmatrix} a&b\\\ c&d \end{bmatrix}.\]</div>
+<p>The ciphertext vector is</p>
+<div class="math-display">\[\boxed{C=KP\pmod{26}}\]</div>
+<p>This is the fundamental Hill cipher encryption formula.</p>
+<p>Expanded:</p>
+<div class="math-display">\[\begin{bmatrix} c_1\\\ c_2 \end{bmatrix} = \begin{bmatrix} a&b\\\ c&d \end{bmatrix} \begin{bmatrix} p_1\\\ p_2 \end{bmatrix} \pmod{26}.\]</div>
+<p>Therefore,</p>
+<div class="math-display">\[\boxed{c_1=(ap_1+bp_2)\bmod26}\]</div>
+<div class="math-display">\[\boxed{c_2=(cp_1+dp_2)\bmod26}\]</div>
+<p>Notice that each ciphertext letter depends on both plaintext letters. This is the main difference from the shift, affine and Vigenère ciphers.</p>
+<h2><strong>6.3 First worked example — Encrypt a two-letter block</strong></h2>
+<p>Given the key matrix:</p>
+<div class="math-display">\[K= \begin{bmatrix} 3&3\\\ 2&5 \end{bmatrix}\]</div>
+<p>Encrypt the plaintext block <code>HI</code>.</p>
+<p><strong>Step 1: Convert the plaintext into numbers.</strong></p>
+<div class="math-display">\[H=7,\qquad I=8.\]</div>
+<p>Thus,</p>
+<div class="math-display">\[P= \begin{bmatrix} 7\\\ 8 \end{bmatrix}.\]</div>
+<p><strong>Step 2: Write the encryption formula.</strong></p>
+<div class="math-display">\[C=KP\pmod{26}.\]</div>
+<p>Substitute:</p>
+<div class="math-display">\[C= \begin{bmatrix} 3&3\\\ 2&5 \end{bmatrix} \begin{bmatrix} 7\\\ 8 \end{bmatrix} \pmod{26}.\]</div>
+<p><strong>Step 3: Multiply the matrices.</strong></p>
+<p>First row:</p>
+<div class="math-display">\[3(7)+3(8)=21+24=45.\]</div>
+<p>Second row:</p>
+<div class="math-display">\[2(7)+5(8)=14+40=54.\]</div>
+<p>Therefore,</p>
+<div class="math-display">\[C= \begin{bmatrix} 45\\\ 54 \end{bmatrix} \pmod{26}.\]</div>
+<p><strong>Step 4: Reduce modulo 26.</strong></p>
+<div class="math-display">\[45\bmod26=19\]</div>
+<div class="math-display">\[54\bmod26=2.\]</div>
+<p>Hence,</p>
+<div class="math-display">\[C= \begin{bmatrix} 19\\\ 2 \end{bmatrix}.\]</div>
+<p><strong>Step 5: Convert numbers into letters.</strong></p>
+<div class="math-display">\[19=T,\qquad 2=C.\]</div>
+<p>ENCRYPTION RESULT</p>
+<h1><strong>HI → TC</strong></h1>
+<p>This is the complete mathematical procedure for encrypting a two-letter block.</p>
+<h2><strong>6.4 Why must the key matrix be invertible?</strong></h2>
+<p>Encryption alone is not sufficient. The receiver must be able to recover the original plaintext.</p>
+<p>From</p>
+<div class="math-display">\[C=KP\pmod{26},\]</div>
+<p>we want to recover <span class="math-inline">\(P\)</span>.</p>
+<p>If the inverse matrix <span class="math-inline">\(K^{-1}\)</span> exists modulo 26, multiply both sides by it:</p>
+<div class="math-display">\[K^{-1}C=K^{-1}KP\pmod{26}.\]</div>
+<p>Since</p>
+<div class="math-display">\[K^{-1}K=I,\]</div>
+<p>where <span class="math-inline">\(I\)</span> is the identity matrix,</p>
+<div class="math-display">\[\boxed{P=K^{-1}C\pmod{26}}.\]</div>
+<p>Thus, the key matrix must have an inverse modulo 26.</p>
+<h3><strong>Condition for a 2 × 2 key matrix</strong></h3>
+<p>For</p>
+<div class="math-display">\[K= \begin{bmatrix} a&b\\\ c&d \end{bmatrix},\]</div>
+<p>its determinant is</p>
+<div class="math-display">\[\boxed{\det(K)=ad-bc}.\]</div>
+<p>The matrix has an inverse modulo 26 if and only if</p>
+<div class="math-display">\[\boxed{\gcd(\det(K),26)=1}.\]</div>
+<p>This is a very important MCQ condition.</p>
+<p>Why?</p>
+<p>The ordinary matrix inverse formula involves division by the determinant. In modular arithmetic, division by a number is possible only when that number has a multiplicative inverse modulo 26.</p>
+<p>Therefore, the determinant must be relatively prime to 26.</p>
+<p>Since</p>
+<div class="math-display">\[26=2\times13,\]</div>
+<p>the determinant must be divisible by neither 2 nor 13.</p>
+<p><strong>Examples:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Determinant</th>
+<th>GCD with 26</th>
+<th>Matrix invertible?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5</td>
+<td>1</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>7</td>
+<td>1</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>9</td>
+<td>1</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>10</td>
+<td>2</td>
+<td>No</td>
+</tr>
+<tr>
+<td>13</td>
+<td>13</td>
+<td>No</td>
+</tr>
+<tr>
+<td>15</td>
+<td>1</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>26</td>
+<td>26</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<h2><strong>6.5 Finding the inverse of a 2 × 2 key matrix</strong></h2>
+<p>For a matrix</p>
+<div class="math-display">\[K= \begin{bmatrix} a&b\\\ c&d \end{bmatrix},\]</div>
+<p>the inverse modulo 26 is</p>
+<div class="math-display">\[\boxed{ K^{-1}=(\det K)^{-1} \begin{bmatrix} d&-b\\\ -c&a \end{bmatrix} \pmod{26} }\]</div>
+<p>This formula has two important parts:</p>
+<ol>
+<li>Find the determinant and its modular inverse.</li>
+<li>Multiply that inverse by the adjugate matrix.</li>
+</ol>
+<h3><strong>Worked example</strong></h3>
+<p>Find the inverse of</p>
+<div class="math-display">\[K= \begin{bmatrix} 3&3\\\ 2&5 \end{bmatrix} \pmod{26}.\]</div>
+<p><strong>Step 1: Calculate the determinant.</strong></p>
+<div class="math-display">\[\det(K)=(3)(5)-(3)(2)\]</div>
+<div class="math-display">\[=15-6=9.\]</div>
+<p><strong>Step 2: Check whether the inverse exists.</strong></p>
+<div class="math-display">\[\gcd(9,26)=1.\]</div>
+<p>Therefore, the inverse exists.</p>
+<p><strong>Step 3: Find the inverse of the determinant modulo 26.</strong></p>
+<p>We need:</p>
+<div class="math-display">\[9x\equiv1\pmod{26}.\]</div>
+<p>Since</p>
+<div class="math-display">\[9\times3=27\equiv1\pmod{26},\]</div>
+<p>we get</p>
+<div class="math-display">\[\boxed{9^{-1}=3\pmod{26}}.\]</div>
+<p><strong>Step 4: Form the adjugate matrix.</strong></p>
+<p>For a 2 × 2 matrix, interchange the diagonal elements and change the signs of the off-diagonal elements:</p>
+<div class="math-display">\[\operatorname{adj}(K)= \begin{bmatrix} 5&-3\\\ -2&3 \end{bmatrix}.\]</div>
+<p><strong>Step 5: Multiply by the inverse of the determinant.</strong></p>
+<div class="math-display">\[K^{-1} = 3 \begin{bmatrix} 5&-3\\\ -2&3 \end{bmatrix} \pmod{26}.\]</div>
+<div class="math-display">\[= \begin{bmatrix} 15&-9\\\ -6&9 \end{bmatrix} \pmod{26}.\]</div>
+<p>Convert negative entries to their nonnegative residues:</p>
+<div class="math-display">\[-9\bmod26=17\]</div>
+<div class="math-display">\[-6\bmod26=20.\]</div>
+<p>Therefore,</p>
+<div class="math-display">\[\boxed{ K^{-1}= \begin{bmatrix} 15&17\\\ 20&9 \end{bmatrix} \pmod{26} }\]</div>
+<p><strong>Verification:</strong> A valid inverse must satisfy</p>
+<div class="math-display">\[KK^{-1}\equiv I\pmod{26}.\]</div>
+<p>Indeed,</p>
+<div class="math-display">\[\begin{bmatrix} 3&3\\\ 2&5 \end{bmatrix} \begin{bmatrix} 15&17\\\ 20&9 \end{bmatrix} = \begin{bmatrix} 105&78\\\ 130&79 \end{bmatrix}.\]</div>
+<p>Taking each entry modulo 26:</p>
+<div class="math-display">\[\begin{bmatrix} 1&0\\\ 0&1 \end{bmatrix}.\]</div>
+<p>So the inverse is correct.</p>
+<h2><strong>6.6 Complete decryption example</strong></h2>
+<p>We previously encrypted:</p>
+<div class="math-display">\[\text{HI}\rightarrow\text{TC}\]</div>
+<p>using</p>
+<div class="math-display">\[K= \begin{bmatrix} 3&3\\\ 2&5 \end{bmatrix}.\]</div>
+<p>Now decrypt <code>TC</code>.</p>
+<p><strong>Step 1: Convert ciphertext into a vector.</strong></p>
+<div class="math-display">\[T=19,\qquad C=2.\]</div>
+<div class="math-display">\[C= \begin{bmatrix} 19\\\ 2 \end{bmatrix}.\]</div>
+<p><strong>Step 2: Use the inverse matrix.</strong></p>
+<div class="math-display">\[K^{-1}= \begin{bmatrix} 15&17\\\ 20&9 \end{bmatrix}.\]</div>
+<p><strong>Step 3: Apply the decryption formula.</strong></p>
+<div class="math-display">\[P=K^{-1}C\pmod{26}.\]</div>
+<div class="math-display">\[P= \begin{bmatrix} 15&17\\\ 20&9 \end{bmatrix} \begin{bmatrix} 19\\\ 2 \end{bmatrix} \pmod{26}.\]</div>
+<p>Multiply:</p>
+<div class="math-display">\[P= \begin{bmatrix} 15(19)+17(2)\\\ 20(19)+9(2) \end{bmatrix} \pmod{26}.\]</div>
+<div class="math-display">\[= \begin{bmatrix} 319\\\ 398 \end{bmatrix} \pmod{26}.\]</div>
+<p>Reduce:</p>
+<div class="math-display">\[319\bmod26=7\]</div>
+<div class="math-display">\[398\bmod26=8.\]</div>
+<p>Thus,</p>
+<div class="math-display">\[P= \begin{bmatrix} 7\\\ 8 \end{bmatrix}.\]</div>
+<p>Convert back to letters:</p>
+<div class="math-display">\[7=H,\qquad8=I.\]</div>
+<p>DECRYPTION RESULT</p>
+<h1><strong>TC → HI</strong></h1>
+<p>The original plaintext is successfully recovered.</p>
+<h2><strong>6.7 Hill cipher with a 3 × 3 key matrix</strong></h2>
+<p>The Hill cipher is not limited to two-letter blocks.</p>
+<p>For a three-letter block, use a <span class="math-inline">\(3\times3\)</span> key matrix:</p>
+<div class="math-display">\[K= \begin{bmatrix} a&b&c\\\ d&e&f\\\ g&h&i \end{bmatrix}\]</div>
+<p>The plaintext is represented as:</p>
+<div class="math-display">\[P= \begin{bmatrix} p_1\\\ p_2\\\ p_3 \end{bmatrix}.\]</div>
+<p>Encryption is still:</p>
+<div class="math-display">\[\boxed{C=KP\pmod{26}}.\]</div>
+<p>Expanded:</p>
+<div class="math-display">\[\begin{aligned} c_1&=(ap_1+bp_2+cp_3)\bmod26\\\ c_2&=(dp_1+ep_2+fp_3)\bmod26\\\ c_3&=(gp_1+hp_2+ip_3)\bmod26. \end{aligned}\]</div>
+<p>The determinant of a 3 × 3 matrix is</p>
+<div class="math-display">\[\begin{aligned} \det(K)={}&aei+bfg+cdh\\\ &-ceg-bdi-afh. \end{aligned}\]</div>
+<p>The key matrix is invertible modulo 26 precisely when</p>
+<div class="math-display">\[\boxed{\gcd(\det(K),26)=1}.\]</div>
+<p>The same condition applies to square key matrices of any size.</p>
+<p><strong>Important distinction:</strong> A matrix may have a nonzero determinant and still fail to have an inverse modulo 26. For example, determinant 2 is nonzero, but <span class="math-inline">\(\gcd(2,26)=2\)</span>, so it has no modular inverse.</p>
+<h2><strong>6.8 Encrypting a complete message</strong></h2>
+<p>Suppose the key matrix is</p>
+<div class="math-display">\[K= \begin{bmatrix} 3&3\\\ 2&5 \end{bmatrix}\]</div>
+<p>and the plaintext is:</p>
+<div class="math-display">\[\text{HELP}.\]</div>
+<p>Since the key is <span class="math-inline">\(2\times2\)</span>, divide the message into blocks of two letters:</p>
+<div class="math-display">\[\boxed{\text{HE}\quad\text{LP}}\]</div>
+<h3><strong>First block: HE</strong></h3>
+<div class="math-display">\[H=7,\quad E=4.\]</div>
+<div class="math-display">\[P_1= \begin{bmatrix} 7\\\ 4 \end{bmatrix}.\]</div>
+<div class="math-display">\[C_1= \begin{bmatrix} 3&3\\\ 2&5 \end{bmatrix} \begin{bmatrix} 7\\\ 4 \end{bmatrix} \pmod{26}.\]</div>
+<div class="math-display">\[= \begin{bmatrix} 33\\\ 34 \end{bmatrix} \pmod{26} = \begin{bmatrix} 7\\\ 8 \end{bmatrix}.\]</div>
+<p>This gives:</p>
+<div class="math-display">\[\text{HE}\rightarrow\text{HI}.\]</div>
+<h3><strong>Second block: LP</strong></h3>
+<div class="math-display">\[L=11,\quad P=15.\]</div>
+<div class="math-display">\[P_2= \begin{bmatrix} 11\\\ 15 \end{bmatrix}.\]</div>
+<div class="math-display">\[C_2= \begin{bmatrix} 3&3\\\ 2&5 \end{bmatrix} \begin{bmatrix} 11\\\ 15 \end{bmatrix} \pmod{26}.\]</div>
+<div class="math-display">\[= \begin{bmatrix} 78\\\ 97 \end{bmatrix} \pmod{26} = \begin{bmatrix} 0\\\ 19 \end{bmatrix}.\]</div>
+<p>This gives:</p>
+<div class="math-display">\[\text{LP}\rightarrow\text{AT}.\]</div>
+<p>Therefore:</p>
+<p>COMPLETE ENCRYPTION</p>
+<h1><strong>HELP → HIAT</strong></h1>
+<p>The message is encrypted block by block, using the same key matrix for each block.</p>
+<p><strong>What if the number of letters is not divisible by the block size?</strong></p>
+<p>The final block must be completed to the required size. A padding letter or agreed padding convention is used. For example, with a block size of 2, <code>CAT</code> can be padded as <code>CATX</code>. The receiver must know the padding convention to remove the extra letter correctly.</p>
+<h2><strong>6.9 Security and cryptanalysis of the Hill cipher</strong></h2>
+<p>The Hill cipher has an important advantage over simple monoalphabetic substitution ciphers: it encrypts groups of letters rather than individual letters.</p>
+<p>This mixes the numerical values of multiple plaintext letters into the ciphertext.</p>
+<p>However, the Hill cipher is vulnerable to a <strong>known-plaintext attack</strong>.</p>
+<h3><strong>Known-plaintext attack</strong></h3>
+<p>Suppose an attacker knows some plaintext blocks and their corresponding ciphertext blocks.</p>
+<p>For a two-dimensional Hill cipher:</p>
+<div class="math-display">\[C=KP\pmod{26}.\]</div>
+<p>If the attacker has two linearly independent plaintext vectors, they can form a plaintext matrix <span class="math-inline">\(P\)</span> and a corresponding ciphertext matrix <span class="math-inline">\(C\)</span>:</p>
+<div class="math-display">\[C=KP\pmod{26}.\]</div>
+<p>If <span class="math-inline">\(P\)</span> is invertible modulo 26, then:</p>
+<div class="math-display">\[\boxed{K=CP^{-1}\pmod{26}}.\]</div>
+<p>This allows the attacker to recover the key matrix.</p>
+<p><strong>Important:</strong> The plaintext matrix must itself be invertible modulo 26. Merely having two known plaintext blocks is not sufficient.</p>
+<h3><strong>Limitations of the Hill cipher</strong></h3>
+<ul>
+<li>The key matrix must be invertible modulo 26.</li>
+<li>It is vulnerable to known-plaintext attacks.</li>
+<li>It is a classical cipher and is not considered secure for modern communications.</li>
+<li>It requires matrix arithmetic modulo 26.</li>
+</ul>
+<h2><strong>6.10 Comparison of all classical ciphers covered so far</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Cipher</th>
+<th>Mathematical operation</th>
+<th>Encryption unit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shift</td>
+<td>Addition modulo 26</td>
+<td>One letter</td>
+</tr>
+<tr>
+<td>Affine</td>
+<td>Multiplication and addition modulo 26</td>
+<td>One letter</td>
+</tr>
+<tr>
+<td>Vigenère</td>
+<td>Position-dependent addition modulo 26</td>
+<td>Repeated-key positions</td>
+</tr>
+<tr>
+<td>Hill</td>
+<td>Matrix multiplication modulo 26</td>
+<td>Fixed-size letter blocks</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Remember these distinctions:</strong></p>
+<ul>
+<li>Shift cipher: one fixed shift.</li>
+<li>Affine cipher: one fixed multiplication and addition.</li>
+<li>Vigenère cipher: different shifts according to a repeating keyword.</li>
+<li>Hill cipher: matrix multiplication combines multiple plaintext letters.</li>
+</ul>
+<h2><strong>6.11 Important examination traps</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Question concept</th>
+<th>Correct fact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hill cipher uses</td>
+<td>Matrix multiplication</td>
+</tr>
+<tr>
+<td>Encryption formula</td>
+<td><span class="math-inline">\(C=KP\bmod26\)</span></td>
+</tr>
+<tr>
+<td>Decryption formula</td>
+<td><span class="math-inline">\(P=K^{-1}C\bmod26\)</span></td>
+</tr>
+<tr>
+<td>Alphabet mapping</td>
+<td>A = 0 through Z = 25</td>
+</tr>
+<tr>
+<td>2 × 2 key matrix</td>
+<td>Encrypts blocks of 2 letters</td>
+</tr>
+<tr>
+<td>3 × 3 key matrix</td>
+<td>Encrypts blocks of 3 letters</td>
+</tr>
+<tr>
+<td>Inverse condition</td>
+<td><span class="math-inline">\(\gcd(\det K,26)=1\)</span></td>
+</tr>
+<tr>
+<td>Identity matrix</td>
+<td><span class="math-inline">\(KK^{-1}=I\pmod{26}\)</span></td>
+</tr>
+<tr>
+<td>Key recovery attack</td>
+<td>Known-plaintext attack</td>
+</tr>
+<tr>
+<td>Key matrix determinant</td>
+<td>Must have a modular inverse</td>
+</tr>
+</tbody>
+</table>
+<h3><strong>Most important formulas</strong></h3>
+<div class="math-display">\[\boxed{C=KP\pmod{26}}\]</div>
+<div class="math-display">\[\boxed{P=K^{-1}C\pmod{26}}\]</div>
+<p>For a 2 × 2 matrix:</p>
+<div class="math-display">\[\boxed{\det(K)=ad-bc}\]</div>
+<div class="math-display">\[\boxed{ K^{-1}=(\det K)^{-1} \begin{bmatrix} d&-b\\\ -c&a \end{bmatrix} \pmod{26} }\]</div>
+<div class="math-display">\[\boxed{\gcd(\det K,26)=1}\]</div>
+
+    <div class="quiz-section-wrap" id="moduleQuizContainer_23">
+        <div class="quiz-card-container">
+            <div class="quiz-header">
+                <div>
+                    <div class="quiz-badge">🧠 Interactive Knowledge Check &bull; Module 23</div>
+                    <h3 class="quiz-title">Self-Grading Multiple Choice Examination</h3>
+                    <p class="quiz-subtitle">Attempt all 14 questions to test your mathematical comprehension and exam readiness. Solutions and step-by-step logic unlock instantly.</p>
+                </div>
+                <div class="quiz-score-badge" id="quizScoreBadge_23" style="display: none;">
+                    <span id="quizScoreVal_23">0</span>/14 &bull; <span id="quizScorePct_23">0%</span>
+                </div>
+            </div>
+
+            <div class="quiz-body">
+                
+        <div class="q-block" id="q_block_23_1" data-corr="1">
+            <div class="q-title"><span class="q-num">1.</span> <span>Which mathematical operation is the foundation of the Hill cipher?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_23_1_opt_0">
+                <input type="radio" name="math_q_23_1" value="0">
+                <span><strong>A.</strong> Modular exponentiation</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_1_opt_1">
+                <input type="radio" name="math_q_23_1" value="1">
+                <span><strong>B.</strong> Matrix multiplication modulo 26</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_1_opt_2">
+                <input type="radio" name="math_q_23_1" value="2">
+                <span><strong>C.</strong> Prime factorization</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_1_opt_3">
+                <input type="radio" name="math_q_23_1" value="3">
+                <span><strong>D.</strong> Ordinary division</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_23_1">
+                <strong>Mathematical Explanation:</strong> The Hill cipher is based on matrix multiplication and linear algebra modulo 26.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_23_2" data-corr="1">
+            <div class="q-title"><span class="q-num">2.</span> <span>What is the Hill cipher encryption formula?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_23_2_opt_0">
+                <input type="radio" name="math_q_23_2" value="0">
+                <span><strong>A.</strong> C = K + P mod 26</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_2_opt_1">
+                <input type="radio" name="math_q_23_2" value="1">
+                <span><strong>B.</strong> C = KP mod 26</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_2_opt_2">
+                <input type="radio" name="math_q_23_2" value="2">
+                <span><strong>C.</strong> C = K⁻¹P mod 26</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_2_opt_3">
+                <input type="radio" name="math_q_23_2" value="3">
+                <span><strong>D.</strong> C = P − K mod 26</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_23_2">
+                <strong>Mathematical Explanation:</strong> Block size m = 2 encrypts letters in consecutive digram pairs (two letters at a time).
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_23_3" data-corr="1">
+            <div class="q-title"><span class="q-num">3.</span> <span>What is the decryption formula?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_23_3_opt_0">
+                <input type="radio" name="math_q_23_3" value="0">
+                <span><strong>A.</strong> P = KC mod 26</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_3_opt_1">
+                <input type="radio" name="math_q_23_3" value="1">
+                <span><strong>B.</strong> P = K⁻¹C mod 26</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_3_opt_2">
+                <input type="radio" name="math_q_23_3" value="2">
+                <span><strong>C.</strong> P = K+C mod 26</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_3_opt_3">
+                <input type="radio" name="math_q_23_3" value="3">
+                <span><strong>D.</strong> P = C⁻¹K mod 26</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_23_3">
+                <strong>Mathematical Explanation:</strong> A key matrix K is invertible modulo 26 if and only if gcd(det(K), 26) = 1.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_23_4" data-corr="1">
+            <div class="q-title"><span class="q-num">4.</span> <span>What condition must a square key matrix satisfy to be invertible modulo 26?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_23_4_opt_0">
+                <input type="radio" name="math_q_23_4" value="0">
+                <span><strong>A.</strong> det(K) must be 0</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_4_opt_1">
+                <input type="radio" name="math_q_23_4" value="1">
+                <span><strong>B.</strong> det(K) must be prime</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_4_opt_2">
+                <input type="radio" name="math_q_23_4" value="2">
+                <span><strong>C.</strong> gcd(det(K),26)=1</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_4_opt_3">
+                <input type="radio" name="math_q_23_4" value="3">
+                <span><strong>D.</strong> det(K) must be even</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_23_4">
+                <strong>Mathematical Explanation:</strong> det([[3,3],[2,5]]) = (3·5 - 3·2) = 15 - 6 = 9.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_23_5" data-corr="1">
+            <div class="q-title"><span class="q-num">5.</span> <span>Which determinant is invalid for a Hill key matrix modulo 26?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_23_5_opt_0">
+                <input type="radio" name="math_q_23_5" value="0">
+                <span><strong>A.</strong> 5</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_5_opt_1">
+                <input type="radio" name="math_q_23_5" value="1">
+                <span><strong>B.</strong> 7</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_5_opt_2">
+                <input type="radio" name="math_q_23_5" value="2">
+                <span><strong>C.</strong> 9</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_5_opt_3">
+                <input type="radio" name="math_q_23_5" value="3">
+                <span><strong>D.</strong> 13</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_23_5">
+                <strong>Mathematical Explanation:</strong> gcd(9, 26) = 1, so 9 has an inverse modulo 26: 9 × 3 = 27 ≡ 1 mod 26.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_23_6" data-corr="1">
+            <div class="q-title"><span class="q-num">6.</span> <span>Find the determinant of [[3,3],[2,5]].</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_23_6_opt_0">
+                <input type="radio" name="math_q_23_6" value="0">
+                <span><strong>A.</strong> 6</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_6_opt_1">
+                <input type="radio" name="math_q_23_6" value="1">
+                <span><strong>B.</strong> 9</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_6_opt_2">
+                <input type="radio" name="math_q_23_6" value="2">
+                <span><strong>C.</strong> 12</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_6_opt_3">
+                <input type="radio" name="math_q_23_6" value="3">
+                <span><strong>D.</strong> 21</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_23_6">
+                <strong>Mathematical Explanation:</strong> The decryption key is K⁻¹ = det(K)⁻¹ · adj(K) mod 26.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_23_7" data-corr="2">
+            <div class="q-title"><span class="q-num">7.</span> <span>What is the inverse of 9 modulo 26?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_23_7_opt_0">
+                <input type="radio" name="math_q_23_7" value="0">
+                <span><strong>A.</strong> 3</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_7_opt_1">
+                <input type="radio" name="math_q_23_7" value="1">
+                <span><strong>B.</strong> 5</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_7_opt_2">
+                <input type="radio" name="math_q_23_7" value="2">
+                <span><strong>C.</strong> 9</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_7_opt_3">
+                <input type="radio" name="math_q_23_7" value="3">
+                <span><strong>D.</strong> 17</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_23_7">
+                <strong>Mathematical Explanation:</strong> K⁻¹ = 3 · [[5, -3], [-2, 3]] = [[15, -9], [-6, 9]] ≡ [[15, 17], [20, 9]] mod 26.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_23_8" data-corr="1">
+            <div class="q-title"><span class="q-num">8.</span> <span>What is the inverse of [[3,3],[2,5]] modulo 26?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_23_8_opt_0">
+                <input type="radio" name="math_q_23_8" value="0">
+                <span><strong>A.</strong> [[5,3],[2,3]]</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_8_opt_1">
+                <input type="radio" name="math_q_23_8" value="1">
+                <span><strong>B.</strong> [[15,17],[20,9]]</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_8_opt_2">
+                <input type="radio" name="math_q_23_8" value="2">
+                <span><strong>C.</strong> [[9,2],[1,15]]</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_8_opt_3">
+                <input type="radio" name="math_q_23_8" value="3">
+                <span><strong>D.</strong> [[15,9],[17,20]]</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_23_8">
+                <strong>Mathematical Explanation:</strong> K⁻¹ is [[15, 17], [20, 9]] modulo 26.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_23_9" data-corr="0">
+            <div class="q-title"><span class="q-num">9.</span> <span>Using K=[[3,3],[2,5]], encrypt HI (H=7, I=8).</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_23_9_opt_0">
+                <input type="radio" name="math_q_23_9" value="0">
+                <span><strong>A.</strong> TC</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_9_opt_1">
+                <input type="radio" name="math_q_23_9" value="1">
+                <span><strong>B.</strong> HI</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_9_opt_2">
+                <input type="radio" name="math_q_23_9" value="2">
+                <span><strong>C.</strong> CT</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_9_opt_3">
+                <input type="radio" name="math_q_23_9" value="3">
+                <span><strong>D.</strong> AT</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_23_9">
+                <strong>Mathematical Explanation:</strong> H=7, I=8. [7, 8] · [[3,3],[2,5]] = [7·3+8·2, 7·3+8·5] = [37, 61] ≡ [11, 9] (L, J) or for specific matrix TC.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_23_10" data-corr="2">
+            <div class="q-title"><span class="q-num">10.</span> <span>A 3×3 Hill key matrix encrypts how many letters in each complete block?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_23_10_opt_0">
+                <input type="radio" name="math_q_23_10" value="0">
+                <span><strong>A.</strong> 1</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_10_opt_1">
+                <input type="radio" name="math_q_23_10" value="1">
+                <span><strong>B.</strong> 2</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_10_opt_2">
+                <input type="radio" name="math_q_23_10" value="2">
+                <span><strong>C.</strong> 3</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_10_opt_3">
+                <input type="radio" name="math_q_23_10" value="3">
+                <span><strong>D.</strong> 6</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_23_10">
+                <strong>Mathematical Explanation:</strong> A 3×3 Hill matrix encrypts blocks of 3 letters (trigrams) at a time.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_23_11" data-corr="0">
+            <div class="q-title"><span class="q-num">11.</span> <span>Which attack can recover a Hill cipher key when sufficient suitable plaintext-ciphertext pairs are known?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_23_11_opt_0">
+                <input type="radio" name="math_q_23_11" value="0">
+                <span><strong>A.</strong> Known-plaintext attack</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_11_opt_1">
+                <input type="radio" name="math_q_23_11" value="1">
+                <span><strong>B.</strong> Brute force over shift 0–25 only</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_11_opt_2">
+                <input type="radio" name="math_q_23_11" value="2">
+                <span><strong>C.</strong> Frequency analysis of one letter only</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_11_opt_3">
+                <input type="radio" name="math_q_23_11" value="3">
+                <span><strong>D.</strong> Trial division</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_23_11">
+                <strong>Mathematical Explanation:</strong> The Hill cipher is completely vulnerable to a known-plaintext attack: m known linearly independent plaintext-ciphertext pairs reveal the entire key matrix.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_23_12" data-corr="2">
+            <div class="q-title"><span class="q-num">12.</span> <span>If a 2×2 key matrix has determinant 10, can it be inverted modulo 26?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_23_12_opt_0">
+                <input type="radio" name="math_q_23_12" value="0">
+                <span><strong>A.</strong> Yes, because 10 is nonzero</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_12_opt_1">
+                <input type="radio" name="math_q_23_12" value="1">
+                <span><strong>B.</strong> Yes, because 10 is even</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_12_opt_2">
+                <input type="radio" name="math_q_23_12" value="2">
+                <span><strong>C.</strong> No, because gcd(10,26)=2</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_12_opt_3">
+                <input type="radio" name="math_q_23_12" value="3">
+                <span><strong>D.</strong> No, because 10 is composite</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_23_12">
+                <strong>Mathematical Explanation:</strong> det = 10 is not coprime to 26 (gcd(10, 26) = 2 ≠ 1), so no modular inverse exists.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_23_13" data-corr="1">
+            <div class="q-title"><span class="q-num">13.</span> <span>What is the identity property of a valid inverse key matrix?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_23_13_opt_0">
+                <input type="radio" name="math_q_23_13" value="0">
+                <span><strong>A.</strong> KK⁻¹ = 0 mod 26</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_13_opt_1">
+                <input type="radio" name="math_q_23_13" value="1">
+                <span><strong>B.</strong> KK⁻¹ = I mod 26</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_13_opt_2">
+                <input type="radio" name="math_q_23_13" value="2">
+                <span><strong>C.</strong> KK⁻¹ = K mod 26</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_13_opt_3">
+                <input type="radio" name="math_q_23_13" value="3">
+                <span><strong>D.</strong> KK⁻¹ = 26I mod 26</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_23_13">
+                <strong>Mathematical Explanation:</strong> K · K⁻¹ ≡ I (mod 26), where I is the identity matrix.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_23_14" data-corr="1">
+            <div class="q-title"><span class="q-num">14.</span> <span>Why does the Hill cipher mix plaintext information?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_23_14_opt_0">
+                <input type="radio" name="math_q_23_14" value="0">
+                <span><strong>A.</strong> It reverses the alphabet</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_14_opt_1">
+                <input type="radio" name="math_q_23_14" value="1">
+                <span><strong>B.</strong> Each ciphertext entry depends on multiple plaintext entries</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_14_opt_2">
+                <input type="radio" name="math_q_23_14" value="2">
+                <span><strong>C.</strong> It uses prime numbers as letters</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_23_14_opt_3">
+                <input type="radio" name="math_q_23_14" value="3">
+                <span><strong>D.</strong> It removes modular arithmetic</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_23_14">
+                <strong>Mathematical Explanation:</strong> The Hill cipher achieves diffusion: changing a single plaintext character alters all characters in the ciphertext block.
+            </div>
+        </div>
+        
+            </div>
+
+            <div class="quiz-actions">
+                <button type="button" class="btn-quiz-check" onclick="checkMathQuiz(23, 14)">✓ Check Answers &amp; View Solutions</button>
+                <button type="button" class="btn-quiz-reset" onclick="resetMathQuiz(23, 14)">↺ Reset Quiz</button>
+            </div>
+        </div>
+    </div>
+    
+<h1><strong>Module 6 — Final revision sheet</strong></h1>
+<p><strong>Encryption</strong></p>
+<div class="math-display">\[C=KP\pmod{26}\]</div>
+<p><strong>Decryption</strong></p>
+<div class="math-display">\[P=K^{-1}C\pmod{26}\]</div>
+<p><strong>Valid key condition</strong></p>
+<div class="math-display">\[\gcd(\det K,26)=1\]</div>
+<p><strong>2 × 2 determinant</strong></p>
+<div class="math-display">\[ad-bc\]</div>
+<p><strong>2 × 2 inverse</strong></p>
+<div class="math-display">\[K^{-1}=(\det K)^{-1} \begin{bmatrix}d&-b\\\\-c&a\end{bmatrix} \pmod{26}\]</div>
+<p><strong>Important example</strong></p>
+<div class="math-display">\[\begin{bmatrix}3&3\\\2&5\end{bmatrix}^{-1} = \begin{bmatrix}15&17\\\20&9\end{bmatrix} \pmod{26}\]</div>
+<p><strong>Cryptanalysis:</strong> Known-plaintext attack.</p>
+<p>Module 6 complete</p>
+<p><strong>Next: Module 7 — Permutation (Transposition) Cipher.</strong></p>
+<p>We'll study permutations, inverse permutations, block rearrangement, encryption/decryption and Rosen's worked example.</p>
+<p>Say <strong>next</strong> when ready.</p>
+
+        <div style="margin-top: 35px; padding: 20px 24px; background: rgba(124, 58, 237, 0.05); border: 1.5px solid rgba(124, 58, 237, 0.25); border-radius: 12px;">
+            <h4 style="margin: 0 0 6px 0; color: #7c3aed; font-size: 16px;">🚀 Ready for the Next Step?</h4>
+            <p style="margin: 0; font-size: 14px; color: var(--text-body);">
+                You have completed <strong>Module 23: Hill Cipher & Matrix Cryptography</strong>. Test your knowledge with the interactive quiz above, review key theorems, and proceed to <a href="maths-module-24.html" style="color: #7c3aed; font-weight: 700;">Module 24: Permutation & Transposition Ciphers &rarr;</a>
+            </p>
+        </div>
+        
+    </div>
+
+    <!-- Prev / Next Footer Navigation -->
+    <div class="prev-next">
+        <a class="pn-btn" href="maths-module-22.html">&larr; Module 22</a>
+        <a class="pn-hub" href="maths.html">📋 Mathematics Hub (29 Modules)</a>
+        <a class="pn-btn" href="maths-module-24.html">Module 24 &rarr;</a>
+    </div>
+
+</div>
+
+<script src="shared.js"></script>
+<script>
+function toggleNavPanel() {
+    var panel = document.getElementById('navPanel');
+    if (panel) panel.classList.toggle('open');
+}
+
+function checkMathQuiz(modNum, total) {
+    let score = 0;
+    for (let i = 1; i <= total; i++) {
+        let block = document.getElementById("q_block_" + modNum + "_" + i);
+        if (!block) continue;
+        let corr = parseInt(block.getAttribute("data-corr"));
+        let radios = document.getElementsByName("math_q_" + modNum + "_" + i);
+        let selected = -1;
+        for (let r of radios) {
+            if (r.checked) {
+                selected = parseInt(r.value);
+                break;
+            }
+        }
+
+        for (let j = 0; j < 4; j++) {
+            let optEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + j);
+            if (optEl) {
+                optEl.classList.remove("correct-choice", "wrong-choice");
+            }
+        }
+
+        if (selected === corr) {
+            score++;
+            let correctEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + corr);
+            if (correctEl) correctEl.classList.add("correct-choice");
+        } else {
+            if (selected !== -1) {
+                let wrongEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + selected);
+                if (wrongEl) wrongEl.classList.add("wrong-choice");
+            }
+            let correctEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + corr);
+            if (correctEl) correctEl.classList.add("correct-choice");
+        }
+
+        let expl = document.getElementById("q_expl_" + modNum + "_" + i);
+        if (expl) expl.style.display = "block";
+    }
+
+    let badge = document.getElementById("quizScoreBadge_" + modNum);
+    let val = document.getElementById("quizScoreVal_" + modNum);
+    let pct = document.getElementById("quizScorePct_" + modNum);
+    if (badge && val && pct) {
+        val.innerText = score;
+        pct.innerText = Math.round((score / total) * 100) + "%";
+        badge.style.display = "inline-flex";
+        badge.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+}
+
+function resetMathQuiz(modNum, total) {
+    for (let i = 1; i <= total; i++) {
+        let radios = document.getElementsByName("math_q_" + modNum + "_" + i);
+        for (let r of radios) r.checked = false;
+
+        for (let j = 0; j < 4; j++) {
+            let optEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + j);
+            if (optEl) optEl.classList.remove("correct-choice", "wrong-choice");
+        }
+
+        let expl = document.getElementById("q_expl_" + modNum + "_" + i);
+        if (expl) expl.style.display = "none";
+    }
+
+    let badge = document.getElementById("quizScoreBadge_" + modNum);
+    if (badge) badge.style.display = "none";
+}
+</script>
+</body>
+</html>

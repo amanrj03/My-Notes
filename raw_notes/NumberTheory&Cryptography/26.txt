@@ -1,0 +1,154 @@
+You are absolutely right to ask for more detail. For a 10-mark exam, you need to see the **exact mathematical definitions, proofs, and step-by-step logic**, not just summaries.
+
+Let’s restart **Module 1** from the ground up, treating it like a proper university lecture. Grab a pen and paper; we are going to derive everything.
+
+---
+
+# 📘 MODULE 1 (Detailed): Foundations of Public Key Cryptography
+
+## 1. The Problem with Classical Cryptography (Why Public Key?)
+
+In Unit IV, you studied **Private Key Cryptography** (like the Shift or Affine cipher).
+*   **The Rule:** The encryption key and decryption key are mathematically linked. If you know \(k\), you can easily find \(k^{-1}\).
+*   **The Flaw:** If Alice wants to send a secret to Bob, she needs the key. But to get the key to Bob securely, she must send it over a channel. If a hacker intercepts the key, the entire system is broken.
+
+**The Public Key Solution (Diffie & Hellman, 1976):**
+What if the encryption key and decryption key are **different**? 
+*   Everyone has a **Public Key (\(E\))**. You can shout it to the world.
+*   Everyone has a **Private Key (\(D\))**. You keep it locked in a safe.
+*   Anyone can use your Public Key to encrypt a message, but **only you** can use your Private Key to decrypt it.
+
+Mathematically, this requires a **Trapdoor One-Way Function**:
+*   \(f(x) = y\) is easy to compute.
+*   \(f^{-1}(y) = x\) is practically impossible to compute... **UNLESS** you have a secret piece of information (the trapdoor).
+
+---
+
+## 2. The Number Theory Tools (The Engine of Unit V)
+
+To understand RSA and ElGamal (Modules 3 and 4), you must be a master of these four mathematical tools.
+
+### Tool 1: Greatest Common Divisor (GCD) & Bezout’s Identity
+The GCD of two numbers \(a\) and \(b\) (denoted \(\gcd(a,b)\)) is the largest number that divides both.
+*   **Bezout’s Identity:** For any integers \(a\) and \(b\), there exist integers \(x\) and \(y\) (which can be negative) such that:
+    \[
+a x + b y = \gcd(a, b)
+\]
+    *Exam Example:* Find \(\gcd(26, 7)\) and express it as \(26x + 7y\).
+    We use the **Euclidean Algorithm**:
+    \(26 = 3 \times 7 + 5\)
+    \(7 = 1 \times 5 + 2\)
+    \(5 = 2 \times 2 + 1\)
+    \(2 = 2 \times 1 + 0\)  \(\rightarrow\) \(\gcd = 1\).
+    
+    Now, substitute backwards to find \(x\) and \(y\):
+    \(1 = 5 - 2 \times 2\)
+    \(1 = 5 - 2 \times (7 - 1 \times 5) = 3 \times 5 - 2 \times 7\)
+    \(1 = 3 \times (26 - 3 \times 7) - 2 \times 7 = 3 \times 26 - 11 \times 7\)
+    So, \(x = 3\), \(y = -11\).
+
+### Tool 2: Modular Arithmetic & Congruence
+We say \(a \equiv b \pmod m\) if \(m\) divides \((a-b)\). 
+*   **Modular Inverse:** The inverse of \(a \pmod m\) is a number \(a^{-1}\) such that:
+    \[
+a \cdot a^{-1} \equiv 1 \pmod m
+\]
+    *Crucial Rule for Exams:* \(a\) has an inverse modulo \(m\) **if and only if** \(\gcd(a, m) = 1\).
+    *Using Bezout:* If \(ax + my = 1\), then \(ax = 1 - my\). Therefore, \(ax \equiv 1 \pmod m\). So, \(x\) is the modular inverse of \(a\).
+    In our example above: \(3 \times 26 - 11 \times 7 = 1\).
+    Taking modulo 26: \((-11 \times 7) \equiv 1 \pmod{26}\).
+    Thus, the inverse of \(7 \pmod{26}\) is \(-11\). To make it positive, we add 26: **\(-11 + 26 = 15\)**. (Check: \(7 \times 15 = 105 = 4 \times 26 + 1\)).
+
+### Tool 3: Euler’s Totient Function, \(\phi(n)\)
+\(\phi(n)\) is the count of integers from \(1\) to \(n\) that are relatively prime to \(n\) (i.e., \(\gcd(k, n) = 1\)).
+*   If \(n\) is prime (\(p\)), then all numbers from \(1\) to \(p-1\) are coprime to it. So, \(\phi(p) = p - 1\).
+*   If \(n = p \times q\) (where \(p\) and \(q\) are distinct primes), we use the formula:
+    \[
+\phi(n) = \phi(p) \times \phi(q) = (p - 1)(q - 1)
+\]
+
+### Tool 4: Fermat’s Little Theorem & Euler’s Theorem
+These theorems are the reason RSA decryption actually works.
+*   **Fermat’s Little Theorem:** If \(p\) is prime and \(\gcd(a, p) = 1\), then:
+    \[
+a^{p-1} \equiv 1 \pmod p
+\]
+*   **Euler’s Theorem (Generalization):** If \(\gcd(a, n) = 1\), then:
+    \[
+a^{\phi(n)} \equiv 1 \pmod n
+\]
+
+---
+
+## 3. Fast Modular Exponentiation (How to do \(a^b \bmod n\))
+
+In RSA, you will have to calculate things like \(1819^{13} \bmod 2537\). You cannot calculate \(1819^{13}\) directly; it is too large for a calculator.
+*Exam Rule:* You must break the exponent into powers of 2.
+
+**Example:** Calculate \(2^{13} \bmod 11\).
+*   Write \(13\) in binary: \(13 = 8 + 4 + 1\).
+*   So, \(2^{13} = 2^8 \cdot 2^4 \cdot 2^1\).
+*   Calculate powers of 2 modulo 11:
+    \(2^1 \equiv 2\)
+    \(2^2 = 4\)
+    \(2^4 = 4^2 = 16 \equiv 5 \pmod{11}\)
+    \(2^8 = 5^2 = 25 \equiv 3 \pmod{11}\)
+*   Multiply them: \(3 \times 5 \times 2 = 30 \equiv 8 \pmod{11}\).
+So, \(2^{13} \equiv 8 \pmod{11}\).
+
+---
+
+## 📝 Exam-Style Questions (Solved in Detail)
+
+**Q1. (MCQ - 1 Mark)**
+If \(n = 77\), what is \(\phi(n)\)?
+A) 76  B) 60  C) 70  D) 66
+*Solution:* \(77 = 7 \times 11\). \(\phi(77) = (7-1)(11-1) = 6 \times 10 = 60\).
+**Answer: B**
+
+**Q2. (Solving - 5 Marks)**
+Find the modular inverse of \(13 \pmod{42}\) using the Extended Euclidean Algorithm.
+*Solution:* We want \(13x \equiv 1 \pmod{42}\).
+Step 1: Apply Euclidean Algorithm to 42 and 13.
+\(42 = 3 \times 13 + 3\)
+\(13 = 4 \times 3 + 1\)
+\(3 = 3 \times 1 + 0\) (GCD is 1, so inverse exists).
+
+Step 2: Work backwards.
+\(1 = 13 - 4 \times 3\)
+Substitute \(3 = 42 - 3 \times 13\):
+\(1 = 13 - 4 \times (42 - 3 \times 13)\)
+\(1 = 13 - 4 \times 42 + 12 \times 13\)
+\(1 = 13 \times 13 - 4 \times 42\)
+
+Step 3: Read the coefficient of 13.
+\(13 \times 13 \equiv 1 \pmod{42}\).
+**Answer: The inverse is 13.** (Check: \(13 \times 13 = 169 = 4 \times 42 + 1\). Correct.)
+
+**Q3. (Solving - 4 Marks)**
+Calculate \(3^{17} \bmod 5\) using Fermat's Little Theorem and modular exponentiation.
+*Solution:*
+Method 1 (Fermat): Since 5 is prime, \(3^4 \equiv 1 \pmod 5\). 
+\(17 = 4 \times 4 + 1\). 
+So, \(3^{17} = (3^4)^4 \times 3^1 \equiv 1^4 \times 3 \equiv 3 \pmod 5\).
+
+Method 2 (Binary): \(17 = 16 + 1\).
+\(3^1 = 3\)
+\(3^2 = 9 \equiv 4\)
+\(3^4 = 4^2 = 16 \equiv 1\)
+\(3^8 = 1^2 = 1\)
+\(3^{16} = 1^2 = 1\)
+\(3^{17} = 3^{16} \cdot 3^1 = 1 \cdot 3 = 3\).
+**Answer: 3**
+
+---
+
+### 🎯 Module 1 Checklist (What you must know for the exam):
+1.  **Explain the difference** between private and public key cryptography.
+2.  **Calculate \(\phi(n)\)** quickly for any product of two primes.
+3.  **Find modular inverses** using the Extended Euclidean Algorithm (This is a guaranteed question in RSA).
+4.  **Reduce large exponents** using Fermat's Little Theorem or binary exponentiation.
+
+Take your time to practice the Extended Euclidean Algorithm; if you master it here, RSA will be a breeze.
+
+When you are ready to learn the Diffie-Hellman Key Exchange, just say **"next"**!

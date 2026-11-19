@@ -1,0 +1,2055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 22: Vigenère Polyalphabetic Cipher & Tableau — Mathematics Study Guide</title>
+    <meta name="description" content="Number Theory &amp; Cryptography study notes — Module 22 of 29: Vigenère Polyalphabetic Cipher & Tableau. Complete with theorems, proofs, worked examples, and interactive self-test quiz.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+
+    <!-- MathJax 3 configuration for crisp LaTeX rendering -->
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['\\(', '\\)'], ['$', '$']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true,
+            macros: {
+                Z: '\\mathbb{Z}',
+                N: '\\mathbb{N}',
+                R: '\\mathbb{R}',
+                Q: '\\mathbb{Q}',
+                gcd: '\\operatorname{gcd}',
+                lcm: '\\operatorname{lcm}'
+            }
+        },
+        options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+/* ==========================================================================
+   MATHEMATICS THEME — Imperial Oxford Amethyst & Celestial Amber
+   ========================================================================== */
+:root {
+    --math-royal-primary: #7c3aed;
+    --math-royal-hover: #6d28d9;
+    --math-gold-accent: #f59e0b;
+    --math-gold-glow: rgba(245, 158, 11, 0.25);
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-body, #2d3748);
+    margin: 0; padding: 0;
+    background-color: var(--bg-body, #f4f6fb);
+}
+
+.page-container {
+    max-width: 1080px;
+    margin: 25px auto 50px;
+    padding: 40px 50px;
+    background-color: var(--bg-page, #ffffff);
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.07);
+    border-radius: 14px;
+}
+
+/* MATH HERO BANNER */
+.math-banner {
+    background: linear-gradient(135deg, #1b0a2a 0%, #341253 45%, #581c87 75%, #b45309 100%);
+    border-radius: 12px;
+    padding: 30px 34px;
+    margin-bottom: 28px;
+    color: #ffffff;
+    box-shadow: 0 6px 24px rgba(124, 58, 237, 0.25);
+    position: relative;
+    overflow: hidden;
+}
+.math-banner::after {
+    content: "∑ ∫ ∏ √";
+    position: absolute;
+    right: 20px;
+    bottom: -15px;
+    font-size: 80px;
+    font-weight: 800;
+    font-family: 'Outfit', sans-serif;
+    color: rgba(255, 255, 255, 0.05);
+    pointer-events: none;
+}
+.math-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.16);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    margin-bottom: 12px;
+}
+.math-banner-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.25;
+    margin: 0;
+    color: #ffffff;
+}
+
+/* NAVIGATION TOGGLE */
+.nav-toggle {
+    margin-bottom: 24px;
+}
+.nav-toggle-btn {
+    width: 100%;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #7c3aed;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+.nav-toggle-btn:hover {
+    background: rgba(124, 58, 237, 0.06);
+    border-color: #7c3aed;
+}
+.nav-panel {
+    display: none;
+    margin-top: 10px;
+    padding: 18px;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    column-count: 2;
+    column-gap: 16px;
+}
+.nav-panel.open { display: block; }
+.nav-item {
+    display: block;
+    padding: 6px 10px;
+    font-size: 13px;
+    color: var(--text-body, #334155);
+    text-decoration: none;
+    border-radius: 4px;
+    break-inside: avoid;
+    margin-bottom: 4px;
+    transition: all 0.15s ease;
+}
+.nav-item:hover {
+    background: rgba(124, 58, 237, 0.1);
+    color: #7c3aed;
+}
+.nav-item.current {
+    background: linear-gradient(135deg, #7c3aed, #4c1d95);
+    color: #ffffff !important;
+    font-weight: 700;
+}
+
+/* CONTENT STYLES — STRICT LEFT ALIGNMENT */
+.module-content {
+    color: var(--text-body, #334155);
+    font-size: 15px;
+    text-align: left !important;
+}
+.module-content h1, 
+.module-content h2, 
+.module-content h3, 
+.module-content h4, 
+.module-content p, 
+.module-content ul, 
+.module-content ol, 
+.module-content li, 
+.module-content table {
+    text-align: left !important;
+}
+
+.module-content h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-heading, #0f172a);
+    margin: 36px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(124, 58, 237, 0.2);
+}
+.module-content h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-heading, #0f172a);
+    margin: 30px 0 14px;
+}
+.module-content h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-heading, #0f172a);
+    margin: 24px 0 10px;
+}
+.module-content p {
+    margin: 0 0 14px;
+    line-height: 1.7;
+    text-align: left !important;
+}
+.module-content ul, .module-content ol {
+    margin: 12px 0 18px 28px !important;
+    padding: 0 !important;
+    text-align: left !important;
+    list-style-position: outside !important;
+}
+.module-content li {
+    margin-bottom: 8px !important;
+    line-height: 1.65;
+    text-align: left !important;
+}
+
+/* MATHEMATICAL CALLOUTS */
+.math-callout {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 22px 0 16px;
+    border: 1px solid var(--border-color, #e2e8f0);
+    background: var(--bg-surface, #ffffff);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    text-align: left !important;
+}
+[data-theme="dark"] .math-callout {
+    background: #141728;
+    border-color: #242944;
+}
+.callout-badge {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+.callout-title {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--text-heading, #0f172a);
+}
+.math-callout.theorem {
+    border-left: 4px solid #7c3aed;
+}
+.math-callout.theorem .callout-badge {
+    background: rgba(124, 58, 237, 0.12);
+    color: #7c3aed;
+}
+.math-callout.definition {
+    border-left: 4px solid #2563eb;
+}
+.math-callout.definition .callout-badge {
+    background: rgba(37, 99, 235, 0.12);
+    color: #2563eb;
+}
+.math-callout.property {
+    border-left: 4px solid #059669;
+}
+.math-callout.property .callout-badge {
+    background: rgba(5, 150, 105, 0.12);
+    color: #059669;
+}
+.math-callout.example {
+    border-left: 4px solid #d97706;
+}
+.math-callout.example .callout-badge {
+    background: rgba(217, 119, 6, 0.12);
+    color: #d97706;
+}
+
+/* EXAM BANNER */
+.exam-header-banner {
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(245, 158, 11, 0.12));
+    border-left: 4px solid #f59e0b;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 28px 0 16px;
+    font-weight: 800;
+    font-size: 18px;
+    color: #b45309;
+    font-family: 'Outfit', sans-serif;
+}
+[data-theme="dark"] .exam-header-banner {
+    color: #fbbf24;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(245, 158, 11, 0.15));
+}
+
+/* MATH DIAGRAM BOX */
+.math-diagram-box {
+    background: var(--bg-surface, #ffffff);
+    border: 1px solid rgba(124, 58, 237, 0.22);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin: 24px 0;
+    box-shadow: 0 4px 18px rgba(124, 58, 237, 0.06);
+}
+[data-theme="dark"] .math-diagram-box {
+    background: #111424;
+    border-color: rgba(139, 92, 246, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+.math-diagram-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    color: #7c3aed;
+    margin: 0 0 12px;
+    text-align: center;
+}
+[data-theme="dark"] .math-diagram-title {
+    color: #c084fc;
+}
+.math-pill {
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--text-heading);
+}
+[data-theme="dark"] .math-pill {
+    background: #181d33;
+    border-color: #2a3154;
+}
+.math-card-caption {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 12px;
+    margin-top: 14px;
+}
+
+/* MATH DISPLAY CONTAINERS */
+.math-display {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 12px 0;
+    margin: 14px 0;
+    text-align: center;
+}
+.math-inline {
+    white-space: nowrap;
+}
+
+/* REFERENCE PILL */
+.ref-pill {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #7c3aed;
+    background: rgba(124, 58, 237, 0.08);
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    border-radius: 12px;
+    padding: 2px 10px;
+    margin: 4px 0;
+}
+
+/* TABLES */
+.module-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 13.5px;
+}
+.module-content th {
+    background: var(--bg-subtle, #f8fafc);
+    color: var(--text-heading);
+    font-weight: 700;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color, #e2e8f0);
+    text-align: left;
+}
+.module-content td {
+    padding: 10px 12px;
+    border: 1px solid var(--border-color, #e2e8f0);
+    color: var(--text-body);
+}
+
+/* PREV / NEXT NAV BUTTONS */
+.prev-next {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 45px;
+    padding-top: 25px;
+    border-top: 2px solid var(--border-color, #e2e8f0);
+    gap: 14px;
+    flex-wrap: wrap;
+}
+.pn-btn {
+    padding: 10px 20px;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    text-decoration: none;
+    color: #7c3aed;
+    font-weight: 700;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+.pn-btn:hover {
+    background: #7c3aed;
+    color: #fff;
+    border-color: #7c3aed;
+}
+.pn-hub {
+    padding: 10px 18px;
+    background: linear-gradient(135deg, #7c3aed, #4c1d95);
+    color: #fff !important;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+/* QUIZ STYLES */
+.quiz-section-wrap {
+    margin: 45px 0 25px;
+}
+.quiz-card-container {
+    background: var(--bg-surface, #ffffff);
+    border: 1.5px solid rgba(124, 58, 237, 0.25);
+    border-radius: 14px;
+    padding: 32px 28px;
+    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.08);
+}
+[data-theme="dark"] .quiz-card-container {
+    background: #111424;
+    border-color: rgba(139, 92, 246, 0.3);
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+}
+.quiz-header {
+    border-bottom: 2px solid rgba(124, 58, 237, 0.15);
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+.quiz-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.12), rgba(245, 158, 11, 0.15));
+    color: #7c3aed;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+.quiz-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-heading);
+    margin: 0 0 6px 0;
+}
+.quiz-subtitle {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    margin: 0;
+    max-width: 680px;
+}
+.quiz-score-badge {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #ffffff;
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+.q-block {
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    transition: all 0.2s ease;
+}
+[data-theme="dark"] .q-block {
+    background: #181d33;
+    border-color: #272f4e;
+}
+.q-title {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text-heading);
+    margin-bottom: 14px;
+    display: flex;
+    gap: 10px;
+    line-height: 1.5;
+}
+.q-num {
+    color: #7c3aed;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+.q-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.q-opt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-surface, #ffffff);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    cursor: pointer;
+    color: var(--text-body);
+    transition: all 0.15s ease;
+}
+[data-theme="dark"] .q-opt {
+    background: #111424;
+    border-color: #2a3154;
+}
+.q-opt:hover {
+    border-color: #7c3aed;
+    background: rgba(124, 58, 237, 0.04);
+}
+.q-opt input[type="radio"] {
+    margin: 0;
+    accent-color: #7c3aed;
+}
+.q-opt.correct-choice {
+    background: rgba(16, 185, 129, 0.12) !important;
+    border-color: #10b981 !important;
+    color: #065f46 !important;
+    font-weight: 600;
+}
+[data-theme="dark"] .q-opt.correct-choice {
+    color: #34d399 !important;
+}
+.q-opt.wrong-choice {
+    background: rgba(239, 68, 68, 0.12) !important;
+    border-color: #ef4444 !important;
+    color: #991b1b !important;
+}
+[data-theme="dark"] .q-opt.wrong-choice {
+    color: #f87171 !important;
+}
+.q-explanation {
+    display: none;
+    margin-top: 12px;
+    padding: 12px 14px;
+    background: rgba(124, 58, 237, 0.06);
+    border-left: 3px solid #7c3aed;
+    border-radius: 6px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-body);
+}
+.quiz-actions {
+    display: flex;
+    gap: 14px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+}
+.btn-quiz-check {
+    background: linear-gradient(135deg, #7c3aed, #5b21b6);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 26px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
+    transition: all 0.2s;
+}
+.btn-quiz-check:hover {
+    background: linear-gradient(135deg, #6d28d9, #4c1d95);
+    transform: translateY(-1px);
+}
+.btn-quiz-reset {
+    background: var(--bg-subtle, #f8fafc);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-quiz-reset:hover {
+    background: var(--bg-card-hover);
+    color: var(--text-heading);
+}
+
+@media (max-width: 768px) {
+    .page-container { padding: 22px 18px; margin: 15px auto; }
+    .math-banner { padding: 22px 20px; }
+    .math-banner-title { font-size: 24px; }
+    .nav-panel { column-count: 1; }
+}
+</style>
+</head>
+<body>
+
+
+    <header class="global-navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <span class="nav-brand-icon">⚡</span>
+                <span class="nav-brand-text">OmniCourse<span class="nav-brand-accent">.Hub</span></span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link"><span class="icon">🏠</span> All Subjects</a>
+                
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn active" style="color: #a78bfa;"><span class="icon">📐</span> Mathematics (29) ▾</button>
+                    <div class="nav-dropdown-menu">
+                        <a href="maths.html" class="nav-dropdown-header" style="background: linear-gradient(135deg, #7c3aed, #4c1d95); color: #fff;">📋 Mathematics Syllabus Hub (All 29)</a>
+                        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit I: Divisibility & Base Expansions</div>
+<a href="maths-module-1.html">Module 1: Divisibility and the Division Algorithm</a>
+<a href="maths-module-2.html">Module 2: Modular Arithmetic and Congruences</a>
+<a href="maths-module-3.html">Module 3: Integer Representations and Base Expansions</a>
+<a href="maths-module-4.html">Module 4: Octal, Hexadecimal & Fast Base Conversions</a>
+<a href="maths-module-5.html">Module 5: Algorithms for Integer Operations</a>
+<div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit II: Primes, Divisibility Tests & GCD</div>
+<a href="maths-module-6.html">Module 6: Prime and Composite Numbers</a>
+<a href="maths-module-7.html">Module 7: Fundamental Theorem of Arithmetic</a>
+<a href="maths-module-8.html">Module 8: Trial Division and the Sieve of Eratosthenes</a>
+<a href="maths-module-9.html">Module 9: Prime Number Theorem and Prime Distribution</a>
+<a href="maths-module-10.html">Module 10: GCD, LCM and the Euclidean Algorithm</a>
+<a href="maths-module-11.html">Module 11: GCD as a Linear Combination (Bézout's Theorem)</a>
+<div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit III: Congruences, CRT & Fermat/Euler</div>
+<a href="maths-module-12.html">Module 12: Linear Congruences and Modular Inverses</a>
+<a href="maths-module-13.html">Module 13: Chinese Remainder Theorem (CRT)</a>
+<a href="maths-module-14.html">Module 14: Computer Arithmetic with Large Integers</a>
+<a href="maths-module-15.html">Module 15: Fermat's Little Theorem (FLT)</a>
+<a href="maths-module-16.html">Module 16: Applications of Congruences</a>
+<a href="maths-module-17.html">Module 17: Mixed MCQ Mastery and Final Revision</a>
+<div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit IV: Classical Cryptography & Ciphers</div>
+<a href="maths-module-18.html">Module 18: Introduction to Cryptography & Security Models</a>
+<a href="maths-module-19.html">Module 19: Classical Cryptography & Substitution Ciphers</a>
+<a href="maths-module-20.html">Module 20: Shift Cipher and Caesar Cipher</a>
+<a href="maths-module-21.html">Module 21: Affine Cipher & Modular Inverses</a>
+<a href="maths-module-22.html">Module 22: Vigenère Polyalphabetic Cipher & Tableau</a>
+<a href="maths-module-23.html">Module 23: Hill Cipher & Matrix Cryptography</a>
+<a href="maths-module-24.html">Module 24: Permutation & Transposition Ciphers</a>
+<a href="maths-module-25.html">Module 25: Mathematical Cryptosystems & Attack Models</a>
+<div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit V: Public Key Cryptography & Modern Protocols</div>
+<a href="maths-module-26.html">Module 26: Foundations of Public Key Cryptography & Fast Modular Exponentiation</a>
+<a href="maths-module-27.html">Module 27: Diffie-Hellman Key Exchange & Discrete Logarithm Problem</a>
+<a href="maths-module-28.html">Module 28: The RSA Cryptosystem: Key Generation, Encryption & Decryption</a>
+<a href="maths-module-29.html">Module 29: The ElGamal Cryptosystem & Comprehensive Unit V Exam Mastery</a>
+                    </div>
+                </div>
+
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn"><span class="icon">⛓️</span> Blockchain (18) ▾</button>
+                    <div class="nav-dropdown-menu">
+                        <a href="blockchain.html" class="nav-dropdown-header">📋 Blockchain Syllabus Hub (All 18)</a>
+                        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit I (Mods 1–4)</div>
+                        <a href="blockchain-module-1.html">Module 1: History &amp; Bitcoin</a>
+                        <a href="blockchain-module-2.html">Module 2: Distributed Systems</a>
+                        <a href="blockchain-module-3.html">Module 3: Consensus Protocols</a>
+                        <a href="blockchain-module-4.html">Module 4: Decentralization</a>
+                        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit II (Mods 5–8)</div>
+                        <a href="blockchain-module-5.html">Module 5: Symmetric Crypto</a>
+                        <a href="blockchain-module-6.html">Module 6: Public Key Crypto</a>
+                        <a href="blockchain-module-7.html">Module 7: Digital Signatures</a>
+                        <a href="blockchain-module-8.html">Module 8: SHA &amp; Hashes</a>
+                        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit III (Mods 9–13)</div>
+                        <a href="blockchain-module-9.html">Module 9: Consensus Problem &amp; Design</a>
+                        <a href="blockchain-module-10.html">Module 10: Paxos, Raft &amp; PBFT</a>
+                        <a href="blockchain-module-11.html">Module 11: PoW, PoS &amp; Selection</a>
+                        <a href="blockchain-module-12.html">Module 12: Bitcoin Keys &amp; UTXO</a>
+                        <a href="blockchain-module-13.html">Module 13: Mining, Network &amp; Forks</a>
+                        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit IV (Mods 14–18)</div>
+                        <a href="blockchain-module-14.html">Module 14: The Bitcoin Network</a>
+                        <a href="blockchain-module-15.html">Module 15: Bitcoin Wallets</a>
+                        <a href="blockchain-module-16.html">Module 16: Bitcoin Payments</a>
+                        <a href="blockchain-module-17.html">Module 17: Advanced Protocols</a>
+                        <a href="blockchain-module-18.html">Module 18: Bitcoin Investment</a>
+                        <a href="blockchain_guide.html" class="nav-dropdown-special">📖 Full 8-Module Reader</a>
+                    </div>
+                </div>
+
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn"><span class="icon">🐍</span> Django Course (45) ▾</button>
+                    <div class="nav-dropdown-menu">
+                        <a href="django.html" class="nav-dropdown-header">📋 Django Syllabus Hub</a>
+                        <a href="module-1.html">Module 1: Fundamentals</a>
+                        <a href="module-7.html">Module 7: URL Routing</a>
+                        <a href="module-12.html">Module 12: Templates</a>
+                        <a href="module-21.html">Module 21: Forms</a>
+                        <a href="module-25.html">Module 25: Models &amp; ORM</a>
+                        <a href="module-37.html">Module 37: Authentication</a>
+                        <a href="module-42.html">Module 42: Complete Revision</a>
+                        <a href="django_guide.html" class="nav-dropdown-special">📖 Full 44-Module Reader</a>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-actions">
+                <button id="themeToggleBtn" class="theme-btn" title="Toggle Dark/Light Mode">🌙</button>
+                <a href="maths.html" class="nav-action-pill" style="background: linear-gradient(135deg, #7c3aed, #4c1d95);" title="Return to Mathematics Hub">📋 Maths Hub</a>
+            </div>
+        </div>
+    </header>
+    
+
+<div class="page-container">
+
+    <!-- Math Banner Header -->
+    <div class="math-banner">
+        <div class="math-badge">📐 Unit IV: Classical Cryptography & Ciphers &bull; Module 22 of 29</div>
+        <h1 class="math-banner-title">Vigenère Polyalphabetic Cipher & Tableau</h1>
+        <div style="font-size: 13.5px; opacity: 0.9; margin-top: 6px;">Rigorous lecture notes, theorems, proofs, worked calculation steps &amp; self-grading quiz</div>
+    </div>
+
+    <!-- Collapsible Course Navigation Panel -->
+    <div class="nav-toggle">
+        <button type="button" class="nav-toggle-btn" onclick="toggleNavPanel()">
+            <span>📚 Course Syllabus Navigator (Modules 01 &ndash; 29)</span>
+            <span>▾ Toggle Menu</span>
+        </button>
+        <div id="navPanel" class="nav-panel">
+            <div style="font-size: 11px; font-weight: 800; color: #7c3aed; text-transform: uppercase; margin: 10px 0 4px; padding-left: 6px; letter-spacing: 0.5px; break-inside: avoid;">Unit I (Mods 1–5)</div>
+<a class="nav-item" href="maths-module-1.html">1. Divisibility and the Division Algorithm</a>
+<a class="nav-item" href="maths-module-2.html">2. Modular Arithmetic and Congruences</a>
+<a class="nav-item" href="maths-module-3.html">3. Integer Representations and Base Expansions</a>
+<a class="nav-item" href="maths-module-4.html">4. Octal, Hexadecimal & Fast Base Conversions</a>
+<a class="nav-item" href="maths-module-5.html">5. Algorithms for Integer Operations</a>
+<div style="font-size: 11px; font-weight: 800; color: #7c3aed; text-transform: uppercase; margin: 10px 0 4px; padding-left: 6px; letter-spacing: 0.5px; break-inside: avoid;">Unit II (Mods 6–11)</div>
+<a class="nav-item" href="maths-module-6.html">6. Prime and Composite Numbers</a>
+<a class="nav-item" href="maths-module-7.html">7. Fundamental Theorem of Arithmetic</a>
+<a class="nav-item" href="maths-module-8.html">8. Trial Division and the Sieve of Eratosthenes</a>
+<a class="nav-item" href="maths-module-9.html">9. Prime Number Theorem and Prime Distribution</a>
+<a class="nav-item" href="maths-module-10.html">10. GCD, LCM and the Euclidean Algorithm</a>
+<a class="nav-item" href="maths-module-11.html">11. GCD as a Linear Combination (Bézout's Theorem)</a>
+<div style="font-size: 11px; font-weight: 800; color: #7c3aed; text-transform: uppercase; margin: 10px 0 4px; padding-left: 6px; letter-spacing: 0.5px; break-inside: avoid;">Unit III (Mods 12–17)</div>
+<a class="nav-item" href="maths-module-12.html">12. Linear Congruences and Modular Inverses</a>
+<a class="nav-item" href="maths-module-13.html">13. Chinese Remainder Theorem (CRT)</a>
+<a class="nav-item" href="maths-module-14.html">14. Computer Arithmetic with Large Integers</a>
+<a class="nav-item" href="maths-module-15.html">15. Fermat's Little Theorem (FLT)</a>
+<a class="nav-item" href="maths-module-16.html">16. Applications of Congruences</a>
+<a class="nav-item" href="maths-module-17.html">17. Mixed MCQ Mastery and Final Revision</a>
+<div style="font-size: 11px; font-weight: 800; color: #7c3aed; text-transform: uppercase; margin: 10px 0 4px; padding-left: 6px; letter-spacing: 0.5px; break-inside: avoid;">Unit IV (Mods 18–25)</div>
+<a class="nav-item" href="maths-module-18.html">18. Introduction to Cryptography & Security Models</a>
+<a class="nav-item" href="maths-module-19.html">19. Classical Cryptography & Substitution Ciphers</a>
+<a class="nav-item" href="maths-module-20.html">20. Shift Cipher and Caesar Cipher</a>
+<a class="nav-item" href="maths-module-21.html">21. Affine Cipher & Modular Inverses</a>
+<span class="nav-item current">22. Vigenère Polyalphabetic Cipher & Tableau</span>
+<a class="nav-item" href="maths-module-23.html">23. Hill Cipher & Matrix Cryptography</a>
+<a class="nav-item" href="maths-module-24.html">24. Permutation & Transposition Ciphers</a>
+<a class="nav-item" href="maths-module-25.html">25. Mathematical Cryptosystems & Attack Models</a>
+<div style="font-size: 11px; font-weight: 800; color: #7c3aed; text-transform: uppercase; margin: 10px 0 4px; padding-left: 6px; letter-spacing: 0.5px; break-inside: avoid;">Unit V (Mods 26–29)</div>
+<a class="nav-item" href="maths-module-26.html">26. Foundations of Public Key Cryptography & Fast Modular Exponentiation</a>
+<a class="nav-item" href="maths-module-27.html">27. Diffie-Hellman Key Exchange & Discrete Logarithm Problem</a>
+<a class="nav-item" href="maths-module-28.html">28. The RSA Cryptosystem: Key Generation, Encryption & Decryption</a>
+<a class="nav-item" href="maths-module-29.html">29. The ElGamal Cryptosystem & Comprehensive Unit V Exam Mastery</a>
+        </div>
+    </div>
+
+    <!-- Core Module Academic Content -->
+    <div class="module-content">
+<h1><strong>Unit IV — Module 5: Vigenère Cipher</strong></h1>
+<p>Primary reference: Rosen, <em>Number Theory and Cryptography</em>, Section 4.6, pages 297–298 and Exercises 18–22, page 305.</p>
+<p>The Vigenère cipher is an important extension of the shift cipher. Instead of using one fixed shift for every letter, it uses a <strong>keyword containing multiple shifts</strong>.</p>
+<p>This makes it a polyalphabetic substitution method: the same plaintext letter can be encrypted into different ciphertext letters depending on its position and the corresponding key letter.</p>
+<p>We'll follow Rosen's method, including its numerical example using the keyword RED and plaintext ORANGE.</p>
+<p>U456 (Textbook content) <span class="ref-pill">📚 Reference: MTH381.pdf</span></p>
+<h2><strong>5.1 What is the Vigenère cipher?</strong></h2>
+<p>The Vigenère cipher is a block cipher that uses a key string of letters.</p>
+<p>Suppose the key is:</p>
+<div class="math-display">\[\text{RED}\]</div>
+<p>Convert the key letters into numbers:</p>
+<div class="math-display">\[R=17,\quad E=4,\quad D=3.\]</div>
+<p>The key therefore represents the sequence:</p>
+<div class="math-display">\[\boxed{17,\ 4,\ 3}\]</div>
+<p>Each plaintext letter is shifted by the corresponding key number.</p>
+<ul>
+<li>First letter: shift by 17.</li>
+<li>Second letter: shift by 4.</li>
+<li>Third letter: shift by 3.</li>
+<li>Fourth letter: shift by 17 again.</li>
+<li>Fifth letter: shift by 4 again.</li>
+<li>Sixth letter: shift by 3 again.</li>
+</ul>
+<p>The key repeats until the entire plaintext is encrypted.</p>
+<p>This repetition is the central feature of the Vigenère cipher.</p>
+<h2><strong>5.2 Alphabet-to-number conversion</strong></h2>
+<p>As in the previous cipher modules, Rosen uses:</p>
+<div class="math-display">\[\mathbb Z_{26}=\{0,1,2,\ldots,25\}.\]</div>
+<table>
+<thead>
+<tr>
+<th>Letter</th>
+<th>Value</th>
+<th>Letter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>0</td>
+<td>N</td>
+<td>13</td>
+</tr>
+<tr>
+<td>B</td>
+<td>1</td>
+<td>O</td>
+<td>14</td>
+</tr>
+<tr>
+<td>C</td>
+<td>2</td>
+<td>P</td>
+<td>15</td>
+</tr>
+<tr>
+<td>D</td>
+<td>3</td>
+<td>Q</td>
+<td>16</td>
+</tr>
+<tr>
+<td>E</td>
+<td>4</td>
+<td>R</td>
+<td>17</td>
+</tr>
+<tr>
+<td>F</td>
+<td>5</td>
+<td>S</td>
+<td>18</td>
+</tr>
+<tr>
+<td>G</td>
+<td>6</td>
+<td>T</td>
+<td>19</td>
+</tr>
+<tr>
+<td>H</td>
+<td>7</td>
+<td>U</td>
+<td>20</td>
+</tr>
+<tr>
+<td>I</td>
+<td>8</td>
+<td>V</td>
+<td>21</td>
+</tr>
+<tr>
+<td>J</td>
+<td>9</td>
+<td>W</td>
+<td>22</td>
+</tr>
+<tr>
+<td>K</td>
+<td>10</td>
+<td>X</td>
+<td>23</td>
+</tr>
+<tr>
+<td>L</td>
+<td>11</td>
+<td>Y</td>
+<td>24</td>
+</tr>
+<tr>
+<td>M</td>
+<td>12</td>
+<td>Z</td>
+<td>25</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Remember:</strong> A = 0, not 1.</p>
+<h2><strong>5.3 Vigenère encryption formula</strong></h2>
+<p>Suppose:</p>
+<ul>
+<li>The plaintext block has numerical values <span class="math-inline">\(p_1,p_2,\ldots,p_m\)</span>.</li>
+<li>The key has numerical values <span class="math-inline">\(k_1,k_2,\ldots,k_m\)</span>.</li>
+<li>The ciphertext block has numerical values <span class="math-inline">\(c_1,c_2,\ldots,c_m\)</span>.</li>
+</ul>
+<p>Rosen defines the ciphertext block as:</p>
+<div class="math-display">\[\boxed{c_i=(p_i+k_i)\bmod26}\]</div>
+<p>for each position <span class="math-inline">\(i=1,2,\ldots,m\)</span>.</p>
+<p>In expanded form:</p>
+<div class="math-display">\[\boxed{ \begin{aligned} c_1&=(p_1+k_1)\bmod26\\\ c_2&=(p_2+k_2)\bmod26\\\ c_3&=(p_3+k_3)\bmod26\\\ &\ \vdots\\\ c_m&=(p_m+k_m)\bmod26 \end{aligned} }\]</div>
+<p>Each position uses its corresponding key value.</p>
+<h3><strong>How is this different from a shift cipher?</strong></h3>
+<p>In a shift cipher:</p>
+<div class="math-display">\[c_i=(p_i+k)\bmod26\]</div>
+<p>The same <span class="math-inline">\(k\)</span> is used at every position.</p>
+<p>In the Vigenère cipher:</p>
+<div class="math-display">\[c_i=(p_i+k_i)\bmod26\]</div>
+<p>The key value can change from one position to another.</p>
+<h2><strong>5.4 Key repetition</strong></h2>
+<p>Suppose the keyword is RED and the plaintext is ORANGE.</p>
+<p>The plaintext contains six letters, but the key contains only three.</p>
+<p>Therefore, repeat the key:</p>
+<h2><strong>Key alignment</strong></h2>
+<p><strong>O</strong></p>
+<p><strong>R</strong></p>
+<p><strong>A</strong></p>
+<p><strong>N</strong></p>
+<p><strong>G</strong></p>
+<p><strong>E</strong></p>
+<p><strong>R</strong></p>
+<p><strong>E</strong></p>
+<p><strong>D</strong></p>
+<p><strong>R</strong></p>
+<p><strong>E</strong></p>
+<p><strong>D</strong></p>
+<p>Plaintext</p>
+<p>Blue row</p>
+<p>Repeated key</p>
+<p>Green row</p>
+<p>The repeated key is:</p>
+<div class="math-display">\[\boxed{\text{REDRED}}\]</div>
+<p>The numerical key sequence is:</p>
+<div class="math-display">\[\boxed{17,\ 4,\ 3,\ 17,\ 4,\ 3}\]</div>
+<p><strong>Important:</strong> The key repeats from the beginning after its final letter. It does not restart after each word; spaces are normally preserved and do not consume key positions.</p>
+<h2><strong>5.5 Rosen's complete worked example: Encrypt ORANGE using RED</strong></h2>
+
+    <div class="math-diagram-box">
+        <h4 class="math-diagram-title">Vigenère Polyalphabetic Keyword Alignment &amp; Calculation</h4>
+        <div style="background: rgba(124, 58, 237, 0.05); border: 1px solid rgba(124, 58, 237, 0.2); border-radius: 8px; padding: 14px; margin: 12px 0;">
+            <div style="display: grid; grid-template-columns: 120px repeat(6, 1fr); gap: 6px; text-align: center; font-size: 13.5px; align-items: center;">
+                <div style="font-weight: 700; color: #7c3aed; text-align: left;">Plaintext \(P\):</div>
+                <div class="math-pill">O (14)</div><div class="math-pill">R (17)</div><div class="math-pill">A (0)</div><div class="math-pill">N (13)</div><div class="math-pill">G (6)</div><div class="math-pill">E (4)</div>
+
+                <div style="font-weight: 700; color: #d97706; text-align: left;">Repeated Key:</div>
+                <div class="math-pill" style="border-color: #f59e0b;">R (17)</div><div class="math-pill" style="border-color: #f59e0b;">E (4)</div><div class="math-pill" style="border-color: #f59e0b;">D (3)</div><div class="math-pill" style="border-color: #f59e0b;">R (17)</div><div class="math-pill" style="border-color: #f59e0b;">E (4)</div><div class="math-pill" style="border-color: #f59e0b;">D (3)</div>
+
+                <div style="font-weight: 700; color: var(--text-muted); text-align: left;">\((p + k) \bmod 26\):</div>
+                <div style="font-size: 11.5px; color: var(--text-secondary);">31 &equiv; 5</div><div style="font-size: 11.5px; color: var(--text-secondary);">21 &equiv; 21</div><div style="font-size: 11.5px; color: var(--text-secondary);">3 &equiv; 3</div><div style="font-size: 11.5px; color: var(--text-secondary);">30 &equiv; 4</div><div style="font-size: 11.5px; color: var(--text-secondary);">10 &equiv; 10</div><div style="font-size: 11.5px; color: var(--text-secondary);">7 &equiv; 7</div>
+
+                <div style="font-weight: 700; color: #10b981; text-align: left;">Ciphertext \(C\):</div>
+                <div class="math-pill" style="background: #10b981; color: #fff; font-weight: 800;">F</div>
+                <div class="math-pill" style="background: #10b981; color: #fff; font-weight: 800;">V</div>
+                <div class="math-pill" style="background: #10b981; color: #fff; font-weight: 800;">D</div>
+                <div class="math-pill" style="background: #10b981; color: #fff; font-weight: 800;">E</div>
+                <div class="math-pill" style="background: #10b981; color: #fff; font-weight: 800;">K</div>
+                <div class="math-pill" style="background: #10b981; color: #fff; font-weight: 800;">H</div>
+            </div>
+        </div>
+        <div class="math-card-caption">
+            <strong>Result:</strong> <code>ORANGE</code> encrypted with key <code>RED</code> produces ciphertext <code>FVDEKH</code>. Notice how the same plaintext letters encrypt to different cipher letters depending on position!
+        </div>
+    </div>
+    
+<p>This is the textbook's worked example.</p>
+<p><strong>Given:</strong></p>
+<p>Plaintext:</p>
+<div class="math-display">\[\text{ORANGE}\]</div>
+<p>Keyword:</p>
+<div class="math-display">\[\text{RED}\]</div>
+<h3><strong>Step 1: Convert plaintext into numbers</strong></h3>
+<div class="math-display">\[\begin{aligned} O&=14\\\ R&=17\\\ A&=0\\\ N&=13\\\ G&=6\\\ E&=4 \end{aligned}\]</div>
+<p>Therefore:</p>
+<div class="math-display">\[P=14,\ 17,\ 00,\ 13,\ 06,\ 04\]</div>
+<h3><strong>Step 2: Convert the keyword into numbers</strong></h3>
+<div class="math-display">\[R=17,\quad E=4,\quad D=3\]</div>
+<p>Repeat the key:</p>
+<div class="math-display">\[K=17,\ 04,\ 03,\ 17,\ 04,\ 03\]</div>
+<h3><strong>Step 3: Apply the encryption formula</strong></h3>
+<div class="math-display">\[c_i=(p_i+k_i)\bmod26\]</div>
+<p>Calculate each position:</p>
+<p><strong>First letter:</strong></p>
+<div class="math-display">\[c_1=(14+17)\bmod26\]</div>
+<div class="math-display">\[=31\bmod26=5\]</div>
+<p><strong>Second letter:</strong></p>
+<div class="math-display">\[c_2=(17+4)\bmod26=21\]</div>
+<p><strong>Third letter:</strong></p>
+<div class="math-display">\[c_3=(0+3)\bmod26=3\]</div>
+<p><strong>Fourth letter:</strong></p>
+<div class="math-display">\[c_4=(13+17)\bmod26=30\bmod26=4\]</div>
+<p><strong>Fifth letter:</strong></p>
+<div class="math-display">\[c_5=(6+4)\bmod26=10\]</div>
+<p><strong>Sixth letter:</strong></p>
+<div class="math-display">\[c_6=(4+3)\bmod26=7\]</div>
+<h3><strong>Step 4: Write the numerical ciphertext</strong></h3>
+<div class="math-display">\[C=5,\ 21,\ 03,\ 04,\ 10,\ 07\]</div>
+<h3><strong>Step 5: Convert the numbers back into letters</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Plaintext</th>
+<th>O</th>
+<th>R</th>
+<th>A</th>
+<th>N</th>
+<th>G</th>
+<th>E</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Plaintext number</td>
+<td>14</td>
+<td>17</td>
+<td>0</td>
+<td>13</td>
+<td>6</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Key</td>
+<td>R</td>
+<td>E</td>
+<td>D</td>
+<td>R</td>
+<td>E</td>
+<td>D</td>
+</tr>
+<tr>
+<td>Key number</td>
+<td>17</td>
+<td>4</td>
+<td>3</td>
+<td>17</td>
+<td>4</td>
+<td>3</td>
+</tr>
+<tr>
+<td>Cipher number</td>
+<td>5</td>
+<td>21</td>
+<td>3</td>
+<td>4</td>
+<td>10</td>
+<td>7</td>
+</tr>
+<tr>
+<td>Ciphertext</td>
+<td>F</td>
+<td>V</td>
+<td>D</td>
+<td>E</td>
+<td>K</td>
+<td>H</td>
+</tr>
+</tbody>
+</table>
+<p>FINAL CIPHERTEXT</p>
+<h1><strong>FVDEKH</strong></h1>
+<p>Plaintext ORANGE encrypted using keyword RED.</p>
+<p>This matches Rosen's result.</p>
+<p>U456 (Textbook content) <span class="ref-pill">📚 Reference: MTH381.pdf</span></p>
+<h2><strong>5.6 Vigenère decryption formula</strong></h2>
+<p>Encryption adds the key value:</p>
+<div class="math-display">\[c_i=(p_i+k_i)\bmod26.\]</div>
+<p>To recover the plaintext, subtract the corresponding key value:</p>
+<div class="math-display">\[\boxed{p_i=(c_i-k_i)\bmod26}\]</div>
+<p>This is the decryption formula.</p>
+<h3><strong>Why does subtraction work?</strong></h3>
+<p>Starting from:</p>
+<div class="math-display">\[c_i\equiv p_i+k_i\pmod{26}\]</div>
+<p>Subtract <span class="math-inline">\(k_i\)</span>:</p>
+<div class="math-display">\[c_i-k_i\equiv p_i\pmod{26}.\]</div>
+<p>Therefore:</p>
+<div class="math-display">\[\boxed{p_i=(c_i-k_i)\bmod26}.\]</div>
+<p>Unlike the affine cipher, the Vigenère cipher does not require finding a multiplicative inverse. It uses modular addition and subtraction.</p>
+<h2><strong>5.7 Complete decryption example: Decrypt FVDEKH using RED</strong></h2>
+<p>Given:</p>
+<div class="math-display">\[C=\text{FVDEKH}\]</div>
+<div class="math-display">\[K=\text{RED}\]</div>
+<p>Repeat the key:</p>
+<div class="math-display">\[\text{REDRED}\]</div>
+<h3><strong>Step 1: Convert ciphertext into numbers</strong></h3>
+<div class="math-display">\[F=5,\ V=21,\ D=3,\ E=4,\ K=10,\ H=7.\]</div>
+<p>So:</p>
+<div class="math-display">\[C=5,\ 21,\ 3,\ 4,\ 10,\ 7.\]</div>
+<h3><strong>Step 2: Convert the key into numbers</strong></h3>
+<div class="math-display">\[K=17,\ 4,\ 3,\ 17,\ 4,\ 3.\]</div>
+<h3><strong>Step 3: Apply decryption</strong></h3>
+<div class="math-display">\[p_i=(c_i-k_i)\bmod26.\]</div>
+<p>For the first letter:</p>
+<div class="math-display">\[p_1=(5-17)\bmod26\]</div>
+<div class="math-display">\[=-12\bmod26=14.\]</div>
+<p>14 represents O.</p>
+<p>For the second letter:</p>
+<div class="math-display">\[p_2=(21-4)\bmod26=17.\]</div>
+<p>17 represents R.</p>
+<p>For the third letter:</p>
+<div class="math-display">\[p_3=(3-3)\bmod26=0.\]</div>
+<p>0 represents A.</p>
+<p>For the fourth letter:</p>
+<div class="math-display">\[p_4=(4-17)\bmod26 =-13\bmod26=13.\]</div>
+<p>13 represents N.</p>
+<p>For the fifth letter:</p>
+<div class="math-display">\[p_5=(10-4)\bmod26=6.\]</div>
+<p>6 represents G.</p>
+<p>For the sixth letter:</p>
+<div class="math-display">\[p_6=(7-3)\bmod26=4.\]</div>
+<p>4 represents E.</p>
+<p>RECOVERED PLAINTEXT</p>
+<h1><strong>ORANGE</strong></h1>
+<p>Therefore:</p>
+<div class="math-display">\[\boxed{D_K(E_K(P))=P}\]</div>
+<p>The original message is recovered.</p>
+<h2><strong>5.8 Vigenère tableau</strong></h2>
+<p>The Vigenère tableau is a tabular method of performing the same modular addition.</p>
+<p>Each row represents a shift, and each column represents a plaintext letter.</p>
+<p>For example:</p>
+<ul>
+<li>Row A represents shift 0.</li>
+<li>Row B represents shift 1.</li>
+<li>Row C represents shift 2.</li>
+<li>Row R represents shift 17.</li>
+</ul>
+<p>To encrypt a letter, locate the row corresponding to the key letter and the column corresponding to the plaintext letter. The intersection gives the ciphertext letter.</p>
+<h3><strong>Example: Encrypt O using key R</strong></h3>
+<ul>
+<li>Plaintext O corresponds to column O.</li>
+<li>Key R corresponds to row R.</li>
+<li>The intersection is F.</li>
+</ul>
+<p>Therefore:</p>
+<div class="math-display">\[O+R\rightarrow F.\]</div>
+<p><strong>First few rows of the Vigenère tableau</strong></p>
+<p>Columns are plaintext letters; rows are key letters.</p>
+<table>
+<thead>
+<tr>
+<th>Key \ Plaintext</th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+<th>F</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>A</td>
+<td>B</td>
+<td>C</td>
+<td>D</td>
+<td>E</td>
+<td>F</td>
+</tr>
+<tr>
+<td>B</td>
+<td>B</td>
+<td>C</td>
+<td>D</td>
+<td>E</td>
+<td>F</td>
+<td>G</td>
+</tr>
+<tr>
+<td>C</td>
+<td>C</td>
+<td>D</td>
+<td>E</td>
+<td>F</td>
+<td>G</td>
+<td>H</td>
+</tr>
+<tr>
+<td>D</td>
+<td>D</td>
+<td>E</td>
+<td>F</td>
+<td>G</td>
+<td>H</td>
+<td>I</td>
+</tr>
+<tr>
+<td>E</td>
+<td>E</td>
+<td>F</td>
+<td>G</td>
+<td>H</td>
+<td>I</td>
+<td>J</td>
+</tr>
+<tr>
+<td>F</td>
+<td>F</td>
+<td>G</td>
+<td>H</td>
+<td>I</td>
+<td>J</td>
+<td>K</td>
+</tr>
+</tbody>
+</table>
+<p>The full tableau has 26 rows and 26 columns. It is simply a visual representation of addition modulo 26.</p>
+<h2><strong>5.9 Why is Vigenère stronger than a shift cipher?</strong></h2>
+<p>In a shift cipher, the same plaintext letter always becomes the same ciphertext letter.</p>
+<p>For example, with key 3:</p>
+<div class="math-display">\[A\rightarrow D\]</div>
+<p>Every occurrence of A becomes D.</p>
+<p>In the Vigenère cipher, the shift depends on the corresponding key letter.</p>
+<p>For example, plaintext A can become:</p>
+<ul>
+<li>R if the key letter is R.</li>
+<li>E if the key letter is E.</li>
+<li>D if the key letter is D.</li>
+</ul>
+<p>Thus, the same plaintext letter can produce different ciphertext letters.</p>
+<p><strong>The important consequence:</strong> The ordinary single-letter frequency pattern of the plaintext is obscured because one plaintext letter may be encrypted differently at different positions.</p>
+<p>Rosen notes that frequency information is obscured, but not all information about plaintext structure disappears.</p>
+<p><span class="ref-pill">📚 Reference: Cryptography-and-network-security-principles-and-practice.pdf</span></p>
+<h2><strong>5.10 Cryptanalysis of the Vigenère cipher</strong></h2>
+<p>Cryptanalysis means recovering the original plaintext without knowing the encryption key.</p>
+<p>Breaking the Vigenère cipher is more difficult than breaking a simple shift cipher because the key changes the shift from one position to another.</p>
+<p>Rosen describes two main stages:</p>
+<ol>
+<li>Determine the length of the key string.</li>
+<li>Determine each character of the key string by identifying its corresponding shift.</li>
+</ol>
+<p>U456 (Textbook content) <span class="ref-pill">📚 Reference: MTH381.pdf</span></p>
+<h3><strong>Stage 1: Determine the key length</strong></h3>
+<p>Suppose the same sequence of letters appears several times in a long ciphertext.</p>
+<p>This repetition can provide clues about the length of the repeating keyword.</p>
+<p>Why?</p>
+<p>Because the same plaintext sequence encrypted under the same sequence of key letters produces the same ciphertext sequence.</p>
+<p>If the repeated ciphertext sequence occurs at positions separated by a multiple of the key length, the distance between those positions may reveal information about the key length.</p>
+<p><strong>Illustrative example:</strong></p>
+<p>Suppose a repeated ciphertext sequence starts at positions 10 and 28.</p>
+<p>The distance is:</p>
+<div class="math-display">\[28-10=18.\]</div>
+<p>The key length may be a divisor of 18:</p>
+<div class="math-display">\[1,\ 2,\ 3,\ 6,\ 9,\ 18.\]</div>
+<p>Other repeated sequences and their distances can help narrow down the likely key length.</p>
+<p><strong>Important:</strong> One repeated sequence does not prove the key length. The distances provide clues, and several repetitions should be examined.</p>
+<h3><strong>Stage 2: Determine each key character</strong></h3>
+<p>Suppose we have established that the keyword has length 3.</p>
+<p>Then the ciphertext can be separated into three groups:</p>
+<ul>
+<li>Group 1: ciphertext letters encrypted with key position 1.</li>
+<li>Group 2: ciphertext letters encrypted with key position 2.</li>
+<li>Group 3: ciphertext letters encrypted with key position 3.</li>
+</ul>
+<p>Each group was encrypted using one fixed shift.</p>
+<p>Therefore, we can apply frequency analysis separately to each group.</p>
+<p>For example, if the first group appears to have been shifted by 5, the first key letter is F because:</p>
+<div class="math-display">\[F=5.\]</div>
+<p>Repeat the analysis for the other two groups to recover the remaining key letters.</p>
+<p>Rosen emphasizes that this method assumes the plaintext is sufficiently long for its letter frequencies to be reasonably close to typical English frequencies.</p>
+<p>U456 (Textbook content) <span class="ref-pill">📚 Reference: MTH381.pdf</span></p>
+<h3><strong>Why can frequency analysis work after finding the key length?</strong></h3>
+<p>The Vigenère cipher initially uses different shifts across the message.</p>
+<p>But after separating the ciphertext by key position, each group uses one fixed shift.</p>
+<p>This converts the problem into several ordinary shift-cipher cryptanalysis problems.</p>
+<p><strong>Vigenère cryptanalysis — overall process</strong></p>
+<p><strong>Intercepted ciphertext</strong></p>
+<p><strong>Find repeated sequences and their positions</strong></p>
+<p><strong>Estimate the key length</strong></p>
+<p><strong>Separate ciphertext into groups by key position</strong></p>
+<p><strong>Apply frequency analysis to each group</strong></p>
+<p><strong>Recover key characters and decrypt</strong></p>
+<h2><strong>5.11 Vigenère cipher versus shift and affine ciphers</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Shift</th>
+<th>Affine</th>
+<th>Vigenère</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Main operation</td>
+<td>Addition</td>
+<td>Multiplication and addition</td>
+<td>Repeated modular addition</td>
+</tr>
+<tr>
+<td>Key</td>
+<td>One integer</td>
+<td>Two integers</td>
+<td>String of letters</td>
+</tr>
+<tr>
+<td>Key changes by position?</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Encryption</td>
+<td><span class="math-inline">\(p+k\)</span></td>
+<td><span class="math-inline">\(ap+b\)</span></td>
+<td><span class="math-inline">\(p_i+k_i\)</span></td>
+</tr>
+<tr>
+<td>Modulus</td>
+<td>26</td>
+<td>26</td>
+<td>26</td>
+</tr>
+<tr>
+<td>Modular inverse needed?</td>
+<td>No</td>
+<td>Yes, for <span class="math-inline">\(a\)</span></td>
+<td>No</td>
+</tr>
+<tr>
+<td>Cipher type</td>
+<td>Character cipher</td>
+<td>Character cipher</td>
+<td>Block cipher in Rosen's terminology</td>
+</tr>
+<tr>
+<td>Frequency pattern</td>
+<td>Preserved</td>
+<td>Preserved</td>
+<td>Obscured</td>
+</tr>
+</tbody>
+</table>
+<p>All three use modular arithmetic, but they apply it differently.</p>
+<h2><strong>5.12 Important formulas and examination points</strong></h2>
+<p><strong>Vigenère encryption</strong></p>
+<div class="math-display">\[\boxed{c_i=(p_i+k_i)\bmod26}\]</div>
+<p><strong>Vigenère decryption</strong></p>
+<div class="math-display">\[\boxed{p_i=(c_i-k_i)\bmod26}\]</div>
+<p><strong>Key conversion</strong></p>
+<div class="math-display">\[A=0,\ B=1,\ldots,Z=25\]</div>
+<p><strong>Key repetition</strong></p>
+<p>If the keyword has length <span class="math-inline">\(m\)</span>, repeat its numerical sequence until the entire plaintext is covered.</p>
+<p><strong>Cryptanalysis</strong></p>
+<ol>
+<li>Estimate key length from repeated ciphertext sequences.</li>
+<li>Determine each key character by frequency analysis of the corresponding group.</li>
+</ol>
+<h3><strong>Common MCQ traps</strong></h3>
+<ol>
+<li>Vigenère uses a string of letters as its key.</li>
+<li>The key is repeated to cover the plaintext.</li>
+<li>Encryption uses addition modulo 26.</li>
+<li>Decryption uses subtraction modulo 26.</li>
+<li>The key values are aligned position by position.</li>
+<li>Spaces normally do not consume key positions.</li>
+<li>A Vigenère cipher can encrypt the same plaintext letter differently.</li>
+<li>It obscures ordinary single-letter frequency information.</li>
+<li>It is called a block cipher in Rosen's terminology.</li>
+<li>The Vigenère tableau implements modular addition.</li>
+<li>Finding the key length is the first stage of the cryptanalysis described by Rosen.</li>
+<li>Once the key length is known, each key position can be analyzed as a shift cipher.</li>
+</ol>
+<h2><strong>5.13 Additional textbook-style numerical problem</strong></h2>
+<p>Rosen includes the exercise: encrypt <code>SNOWFALL</code> using the Vigenère cipher with key <code>BLUE</code>.</p>
+<p>U456 (Textbook content) <span class="ref-pill">📚 Reference: MTH381.pdf</span></p>
+<p>Let's solve it.</p>
+<p><strong>Given:</strong></p>
+<p>Plaintext:</p>
+<div class="math-display">\[\text{SNOWFALL}\]</div>
+<p>Key:</p>
+<div class="math-display">\[\text{BLUE}\]</div>
+<p>Repeat the key:</p>
+<div class="math-display">\[\text{BLUEBLUE}\]</div>
+<p>Convert into numbers:</p>
+<table>
+<thead>
+<tr>
+<th>Plaintext</th>
+<th>S</th>
+<th>N</th>
+<th>O</th>
+<th>W</th>
+<th>F</th>
+<th>A</th>
+<th>L</th>
+<th>L</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Plaintext number</td>
+<td>18</td>
+<td>13</td>
+<td>14</td>
+<td>22</td>
+<td>5</td>
+<td>0</td>
+<td>11</td>
+<td>11</td>
+</tr>
+<tr>
+<td>Key</td>
+<td>B</td>
+<td>L</td>
+<td>U</td>
+<td>E</td>
+<td>B</td>
+<td>L</td>
+<td>U</td>
+<td>E</td>
+</tr>
+<tr>
+<td>Key number</td>
+<td>1</td>
+<td>11</td>
+<td>20</td>
+<td>4</td>
+<td>1</td>
+<td>11</td>
+<td>20</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+<p>Apply:</p>
+<div class="math-display">\[c_i=(p_i+k_i)\bmod26.\]</div>
+<div class="math-display">\[\begin{aligned} c_1&=19\\\ c_2&=24\\\ c_3&=8\\\ c_4&=0\\\ c_5&=6\\\ c_6&=11\\\ c_7&=5\\\ c_8&=15 \end{aligned}\]</div>
+<p>Convert back to letters:</p>
+<div class="math-display">\[\boxed{\text{TYIAGLFP}}\]</div>
+<p>This is a good example of a full-length keyword alignment and encryption question.</p>
+
+    <div class="quiz-section-wrap" id="moduleQuizContainer_22">
+        <div class="quiz-card-container">
+            <div class="quiz-header">
+                <div>
+                    <div class="quiz-badge">🧠 Interactive Knowledge Check &bull; Module 22</div>
+                    <h3 class="quiz-title">Self-Grading Multiple Choice Examination</h3>
+                    <p class="quiz-subtitle">Attempt all 14 questions to test your mathematical comprehension and exam readiness. Solutions and step-by-step logic unlock instantly.</p>
+                </div>
+                <div class="quiz-score-badge" id="quizScoreBadge_22" style="display: none;">
+                    <span id="quizScoreVal_22">0</span>/14 &bull; <span id="quizScorePct_22">0%</span>
+                </div>
+            </div>
+
+            <div class="quiz-body">
+                
+        <div class="q-block" id="q_block_22_1" data-corr="1">
+            <div class="q-title"><span class="q-num">1.</span> <span>What type of key is used in the Vigenère cipher?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_22_1_opt_0">
+                <input type="radio" name="math_q_22_1" value="0">
+                <span><strong>A.</strong> One integer</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_1_opt_1">
+                <input type="radio" name="math_q_22_1" value="1">
+                <span><strong>B.</strong> A string of letters</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_1_opt_2">
+                <input type="radio" name="math_q_22_1" value="2">
+                <span><strong>C.</strong> A prime number</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_1_opt_3">
+                <input type="radio" name="math_q_22_1" value="3">
+                <span><strong>D.</strong> A matrix only</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_22_1">
+                <strong>Mathematical Explanation:</strong> The Vigenère cipher uses a keyword or phrase of length m repeated periodically.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_22_2" data-corr="0">
+            <div class="q-title"><span class="q-num">2.</span> <span>What happens when the keyword is shorter than the plaintext?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_22_2_opt_0">
+                <input type="radio" name="math_q_22_2" value="0">
+                <span><strong>A.</strong> The plaintext is shortened</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_2_opt_1">
+                <input type="radio" name="math_q_22_2" value="1">
+                <span><strong>B.</strong> The key is repeated</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_2_opt_2">
+                <input type="radio" name="math_q_22_2" value="2">
+                <span><strong>C.</strong> The key is reversed</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_2_opt_3">
+                <input type="radio" name="math_q_22_2" value="3">
+                <span><strong>D.</strong> The message cannot be encrypted</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_22_2">
+                <strong>Mathematical Explanation:</strong> The encryption rule is c_i ≡ (p_i + k_{i mod m}) mod 26.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_22_3" data-corr="1">
+            <div class="q-title"><span class="q-num">3.</span> <span>What is the encryption formula?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_22_3_opt_0">
+                <input type="radio" name="math_q_22_3" value="0">
+                <span><strong>A.</strong> cᵢ = (pᵢ − kᵢ) mod 26</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_3_opt_1">
+                <input type="radio" name="math_q_22_3" value="1">
+                <span><strong>B.</strong> cᵢ = (pᵢ + kᵢ) mod 26</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_3_opt_2">
+                <input type="radio" name="math_q_22_3" value="2">
+                <span><strong>C.</strong> cᵢ = pᵢkᵢ mod 26</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_3_opt_3">
+                <input type="radio" name="math_q_22_3" value="3">
+                <span><strong>D.</strong> cᵢ = (pᵢ + k) mod 2</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_22_3">
+                <strong>Mathematical Explanation:</strong> The decryption rule is p_i ≡ (c_i - k_{i mod m}) mod 26.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_22_4" data-corr="1">
+            <div class="q-title"><span class="q-num">4.</span> <span>What is the decryption formula?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_22_4_opt_0">
+                <input type="radio" name="math_q_22_4" value="0">
+                <span><strong>A.</strong> pᵢ = (cᵢ − kᵢ) mod 26</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_4_opt_1">
+                <input type="radio" name="math_q_22_4" value="1">
+                <span><strong>B.</strong> pᵢ = (cᵢ + kᵢ) mod 26</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_4_opt_2">
+                <input type="radio" name="math_q_22_4" value="2">
+                <span><strong>C.</strong> pᵢ = cᵢkᵢ mod 26</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_4_opt_3">
+                <input type="radio" name="math_q_22_4" value="3">
+                <span><strong>D.</strong> pᵢ = (cᵢ − 26) mod kᵢ</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_22_4">
+                <strong>Mathematical Explanation:</strong> O is 14, R is 17. (14 + 17) mod 26 = 31 mod 26 = 5, which is F.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_22_5" data-corr="0">
+            <div class="q-title"><span class="q-num">5.</span> <span>What is the numerical value of the key RED?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_22_5_opt_0">
+                <input type="radio" name="math_q_22_5" value="0">
+                <span><strong>A.</strong> 16, 4, 3</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_5_opt_1">
+                <input type="radio" name="math_q_22_5" value="1">
+                <span><strong>B.</strong> 17, 4, 3</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_5_opt_2">
+                <input type="radio" name="math_q_22_5" value="2">
+                <span><strong>C.</strong> 17, 5, 3</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_5_opt_3">
+                <input type="radio" name="math_q_22_5" value="3">
+                <span><strong>D.</strong> 18, 4, 2</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_22_5">
+                <strong>Mathematical Explanation:</strong> The Vigenère square (tabula recta) consists of 26 rows of alphabets, each shifted by one position.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_22_6" data-corr="1">
+            <div class="q-title"><span class="q-num">6.</span> <span>Encrypt O using the first letter R of key RED.</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_22_6_opt_0">
+                <input type="radio" name="math_q_22_6" value="0">
+                <span><strong>A.</strong> E</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_6_opt_1">
+                <input type="radio" name="math_q_22_6" value="1">
+                <span><strong>B.</strong> F</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_6_opt_2">
+                <input type="radio" name="math_q_22_6" value="2">
+                <span><strong>C.</strong> G</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_6_opt_3">
+                <input type="radio" name="math_q_22_6" value="3">
+                <span><strong>D.</strong> H</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_22_6">
+                <strong>Mathematical Explanation:</strong> It is polyalphabetic because the same plaintext letter encrypts to different ciphertext letters depending on its position.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_22_7" data-corr="1">
+            <div class="q-title"><span class="q-num">7.</span> <span>What is the ciphertext when ORANGE is encrypted using RED?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_22_7_opt_0">
+                <input type="radio" name="math_q_22_7" value="0">
+                <span><strong>A.</strong> FVDEKH</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_7_opt_1">
+                <input type="radio" name="math_q_22_7" value="1">
+                <span><strong>B.</strong> FVDKHE</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_7_opt_2">
+                <input type="radio" name="math_q_22_7" value="2">
+                <span><strong>C.</strong> EVDEKH</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_7_opt_3">
+                <input type="radio" name="math_q_22_7" value="3">
+                <span><strong>D.</strong> FVCEKH</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_22_7">
+                <strong>Mathematical Explanation:</strong> The Kasiski examination finds repeated strings in the ciphertext; the greatest common divisor of distances between repetitions reveals the key length.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_22_8" data-corr="1">
+            <div class="q-title"><span class="q-num">8.</span> <span>What is the plaintext when FVDEKH is decrypted using RED?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_22_8_opt_0">
+                <input type="radio" name="math_q_22_8" value="0">
+                <span><strong>A.</strong> ORANGE</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_8_opt_1">
+                <input type="radio" name="math_q_22_8" value="1">
+                <span><strong>B.</strong> ORCHID</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_8_opt_2">
+                <input type="radio" name="math_q_22_8" value="2">
+                <span><strong>C.</strong> ORIGIN</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_8_opt_3">
+                <input type="radio" name="math_q_22_8" value="3">
+                <span><strong>D.</strong> ORATOR</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_22_8">
+                <strong>Mathematical Explanation:</strong> If key length is 1, the Vigenère cipher degenerates to a simple Caesar / shift cipher.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_22_9" data-corr="1">
+            <div class="q-title"><span class="q-num">9.</span> <span>Which statement correctly distinguishes Vigenère from a shift cipher?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_22_9_opt_0">
+                <input type="radio" name="math_q_22_9" value="0">
+                <span><strong>A.</strong> Vigenère uses no modular arithmetic</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_9_opt_1">
+                <input type="radio" name="math_q_22_9" value="1">
+                <span><strong>B.</strong> Vigenère can use different shifts at different positions</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_9_opt_2">
+                <input type="radio" name="math_q_22_9" value="2">
+                <span><strong>C.</strong> Vigenère only encrypts numbers</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_9_opt_3">
+                <input type="radio" name="math_q_22_9" value="3">
+                <span><strong>D.</strong> Vigenère uses one fixed shift throughout</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_22_9">
+                <strong>Mathematical Explanation:</strong> F(5) - R(17) = -12 ≡ 14 (O). Decryption correctly reverses encryption.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_22_10" data-corr="1">
+            <div class="q-title"><span class="q-num">10.</span> <span>In Rosen's terminology, the Vigenère cipher is a:</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_22_10_opt_0">
+                <input type="radio" name="math_q_22_10" value="0">
+                <span><strong>A.</strong> Character cipher</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_10_opt_1">
+                <input type="radio" name="math_q_22_10" value="1">
+                <span><strong>B.</strong> Block cipher</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_10_opt_2">
+                <input type="radio" name="math_q_22_10" value="2">
+                <span><strong>C.</strong> Public-key cipher</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_10_opt_3">
+                <input type="radio" name="math_q_22_10" value="3">
+                <span><strong>D.</strong> Transposition cipher</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_22_10">
+                <strong>Mathematical Explanation:</strong> The Vigenère cipher defeated monoalphabetic frequency analysis because each letter has multiple possible ciphertext representations.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_22_11" data-corr="1">
+            <div class="q-title"><span class="q-num">11.</span> <span>What is the first stage of the Vigenère cryptanalysis described by Rosen?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_22_11_opt_0">
+                <input type="radio" name="math_q_22_11" value="0">
+                <span><strong>A.</strong> Find the plaintext alphabet</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_11_opt_1">
+                <input type="radio" name="math_q_22_11" value="1">
+                <span><strong>B.</strong> Find the length of the key string</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_11_opt_2">
+                <input type="radio" name="math_q_22_11" value="2">
+                <span><strong>C.</strong> Find the modular inverse of 26</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_11_opt_3">
+                <input type="radio" name="math_q_22_11" value="3">
+                <span><strong>D.</strong> Change the modulus</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_22_11">
+                <strong>Mathematical Explanation:</strong> The Friedman test uses the Index of Coincidence (IC) to estimate key length.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_22_12" data-corr="1">
+            <div class="q-title"><span class="q-num">12.</span> <span>Once the key length is known, how can each key character be estimated?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_22_12_opt_0">
+                <input type="radio" name="math_q_22_12" value="0">
+                <span><strong>A.</strong> By prime factorization</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_12_opt_1">
+                <input type="radio" name="math_q_22_12" value="1">
+                <span><strong>B.</strong> By frequency analysis of the corresponding ciphertext group</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_12_opt_2">
+                <input type="radio" name="math_q_22_12" value="2">
+                <span><strong>C.</strong> By using RSA</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_12_opt_3">
+                <input type="radio" name="math_q_22_12" value="3">
+                <span><strong>D.</strong> By reversing the entire message</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_22_12">
+                <strong>Mathematical Explanation:</strong> If the key is as long as the message, completely random, and never reused, it becomes an unbreakable One-Time Pad (Vernam cipher).
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_22_13" data-corr="1">
+            <div class="q-title"><span class="q-num">13.</span> <span>Encrypt S using key letter B.</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_22_13_opt_0">
+                <input type="radio" name="math_q_22_13" value="0">
+                <span><strong>A.</strong> R</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_13_opt_1">
+                <input type="radio" name="math_q_22_13" value="1">
+                <span><strong>B.</strong> S</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_13_opt_2">
+                <input type="radio" name="math_q_22_13" value="2">
+                <span><strong>C.</strong> T</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_13_opt_3">
+                <input type="radio" name="math_q_22_13" value="3">
+                <span><strong>D.</strong> U</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_22_13">
+                <strong>Mathematical Explanation:</strong> If the keyword is KEY (length 3), the 4th letter is encrypted with K (index 0 of the key).
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_22_14" data-corr="1">
+            <div class="q-title"><span class="q-num">14.</span> <span>Decrypt ciphertext A using key letter E.</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_22_14_opt_0">
+                <input type="radio" name="math_q_22_14" value="0">
+                <span><strong>A.</strong> V</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_14_opt_1">
+                <input type="radio" name="math_q_22_14" value="1">
+                <span><strong>B.</strong> W</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_14_opt_2">
+                <input type="radio" name="math_q_22_14" value="2">
+                <span><strong>C.</strong> X</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_22_14_opt_3">
+                <input type="radio" name="math_q_22_14" value="3">
+                <span><strong>D.</strong> Y</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_22_14">
+                <strong>Mathematical Explanation:</strong> Polyalphabetic substitution flattens letter frequency peaks across multiple Caesar shifts.
+            </div>
+        </div>
+        
+            </div>
+
+            <div class="quiz-actions">
+                <button type="button" class="btn-quiz-check" onclick="checkMathQuiz(22, 14)">✓ Check Answers &amp; View Solutions</button>
+                <button type="button" class="btn-quiz-reset" onclick="resetMathQuiz(22, 14)">↺ Reset Quiz</button>
+            </div>
+        </div>
+    </div>
+    
+<h1><strong>Module 5 — Final revision sheet</strong></h1>
+<p><strong>Encryption</strong></p>
+<div class="math-display">\[\boxed{c_i=(p_i+k_i)\bmod26}\]</div>
+<p><strong>Decryption</strong></p>
+<div class="math-display">\[\boxed{p_i=(c_i-k_i)\bmod26}\]</div>
+<p><strong>Rosen's example</strong></p>
+<div class="math-display">\[\text{ORANGE}+\text{REDRED}\]</div>
+<div class="math-display">\[\boxed{\text{FVDEKH}}\]</div>
+<p><strong>Another textbook exercise</strong></p>
+<div class="math-display">\[\text{SNOWFALL}+\text{BLUEBLUE}\]</div>
+<div class="math-display">\[\boxed{\text{TYIAGLFP}}\]</div>
+<p><strong>Cryptanalysis</strong></p>
+<ol>
+<li>Find the key length.</li>
+<li>Determine each key character using frequency analysis.</li>
+</ol>
+<p><strong>Remember:</strong> Vigenère is a block cipher in Rosen's terminology.</p>
+<p>Quiz correction: Question 14's correct answer is B (W), because <span class="math-inline">\((0-4)\bmod26=22\)</span>. The displayed answer key mistakenly marks C.</p>
+<p>Module 5 complete</p>
+<p><strong>Next: Module 6 — Hill Cipher.</strong></p>
+<p>We'll cover matrix-based encryption, matrix multiplication modulo 26, determinant conditions, modular matrix inverses and complete numerical encryption/decryption examples.</p>
+<p>Say <strong>next</strong> when ready.</p>
+
+        <div style="margin-top: 35px; padding: 20px 24px; background: rgba(124, 58, 237, 0.05); border: 1.5px solid rgba(124, 58, 237, 0.25); border-radius: 12px;">
+            <h4 style="margin: 0 0 6px 0; color: #7c3aed; font-size: 16px;">🚀 Ready for the Next Step?</h4>
+            <p style="margin: 0; font-size: 14px; color: var(--text-body);">
+                You have completed <strong>Module 22: Vigenère Polyalphabetic Cipher & Tableau</strong>. Test your knowledge with the interactive quiz above, review key theorems, and proceed to <a href="maths-module-23.html" style="color: #7c3aed; font-weight: 700;">Module 23: Hill Cipher & Matrix Cryptography &rarr;</a>
+            </p>
+        </div>
+        
+    </div>
+
+    <!-- Prev / Next Footer Navigation -->
+    <div class="prev-next">
+        <a class="pn-btn" href="maths-module-21.html">&larr; Module 21</a>
+        <a class="pn-hub" href="maths.html">📋 Mathematics Hub (29 Modules)</a>
+        <a class="pn-btn" href="maths-module-23.html">Module 23 &rarr;</a>
+    </div>
+
+</div>
+
+<script src="shared.js"></script>
+<script>
+function toggleNavPanel() {
+    var panel = document.getElementById('navPanel');
+    if (panel) panel.classList.toggle('open');
+}
+
+function checkMathQuiz(modNum, total) {
+    let score = 0;
+    for (let i = 1; i <= total; i++) {
+        let block = document.getElementById("q_block_" + modNum + "_" + i);
+        if (!block) continue;
+        let corr = parseInt(block.getAttribute("data-corr"));
+        let radios = document.getElementsByName("math_q_" + modNum + "_" + i);
+        let selected = -1;
+        for (let r of radios) {
+            if (r.checked) {
+                selected = parseInt(r.value);
+                break;
+            }
+        }
+
+        for (let j = 0; j < 4; j++) {
+            let optEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + j);
+            if (optEl) {
+                optEl.classList.remove("correct-choice", "wrong-choice");
+            }
+        }
+
+        if (selected === corr) {
+            score++;
+            let correctEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + corr);
+            if (correctEl) correctEl.classList.add("correct-choice");
+        } else {
+            if (selected !== -1) {
+                let wrongEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + selected);
+                if (wrongEl) wrongEl.classList.add("wrong-choice");
+            }
+            let correctEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + corr);
+            if (correctEl) correctEl.classList.add("correct-choice");
+        }
+
+        let expl = document.getElementById("q_expl_" + modNum + "_" + i);
+        if (expl) expl.style.display = "block";
+    }
+
+    let badge = document.getElementById("quizScoreBadge_" + modNum);
+    let val = document.getElementById("quizScoreVal_" + modNum);
+    let pct = document.getElementById("quizScorePct_" + modNum);
+    if (badge && val && pct) {
+        val.innerText = score;
+        pct.innerText = Math.round((score / total) * 100) + "%";
+        badge.style.display = "inline-flex";
+        badge.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+}
+
+function resetMathQuiz(modNum, total) {
+    for (let i = 1; i <= total; i++) {
+        let radios = document.getElementsByName("math_q_" + modNum + "_" + i);
+        for (let r of radios) r.checked = false;
+
+        for (let j = 0; j < 4; j++) {
+            let optEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + j);
+            if (optEl) optEl.classList.remove("correct-choice", "wrong-choice");
+        }
+
+        let expl = document.getElementById("q_expl_" + modNum + "_" + i);
+        if (expl) expl.style.display = "none";
+    }
+
+    let badge = document.getElementById("quizScoreBadge_" + modNum);
+    if (badge) badge.style.display = "none";
+}
+</script>
+</body>
+</html>

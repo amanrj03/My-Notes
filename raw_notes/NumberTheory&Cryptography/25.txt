@@ -1,0 +1,565 @@
+# **Unit IV — Module 8: Cryptosystems**
+
+Primary source: Rosen, *Number Theory and Cryptography*, Section 4.6, Definition 1 and Example 7, page 298.
+
+This module is important because it brings the classical ciphers together under one mathematical framework. Instead of studying each cipher as a separate technique, we describe a complete family of encryption methods using sets, keys and functions.
+
+Rosen introduces the general definition of a cryptosystem immediately after the transposition cipher.&#x20;
+
+U456 (Textbook content) MTH381.pdf
+
+
+
+## **8.1 What is a cryptosystem?**
+
+A **cryptosystem** is a mathematical system used to encrypt plaintext into ciphertext and decrypt ciphertext back into plaintext.
+
+It consists of five components:
+
+\\[ \boxed{(P,C,K,E,D)} \\]
+
+Rosen calls this a five-tuple.
+
+The five components are:
+
+| Symbol  | Name                 | Meaning                                  |
+| ------- | -------------------- | ---------------------------------------- |
+| \\(P\\) | Plaintext space      | Set of all possible plaintext strings    |
+| \\(C\\) | Ciphertext space     | Set of all possible ciphertext strings   |
+| \\(K\\) | Keyspace             | Set of all possible keys                 |
+| \\(E\\) | Encryption functions | Set of all possible encryption functions |
+| \\(D\\) | Decryption functions | Set of all possible decryption functions |
+
+**Memorise the order:**
+
+\\[ \boxed{P,\ C,\ K,\ E,\ D} \\]
+
+A common MCQ asks which component represents the set of all possible keys. The answer is \\(K\\), the keyspace.
+
+## **8.2 Understanding each component**
+
+### **1. Plaintext space —&#x20;**\\(P\\)
+
+Plaintext is the original message before encryption.
+
+For example:
+
+\\[ P=\\{\text{all permitted messages}\\}. \\]
+
+If our messages consist of English letters, possible plaintexts include:
+
+- HELLO
+- ATTACK
+- MATHEMATICS
+- SECRET MESSAGE
+
+The set of all such permitted messages forms the plaintext space.
+
+### **2. Ciphertext space —&#x20;**\\(C\\)
+
+Ciphertext is the encrypted form of the original message.
+
+For example:
+
+\\[ \text{HELLO}\rightarrow\text{KHOOR} \\]
+
+Here, KHOOR is the ciphertext.
+
+The set of all permitted encrypted messages is called the ciphertext space.
+
+### **3. Keyspace —&#x20;**\\(K\\)
+
+The keyspace is the set of all possible encryption keys.
+
+For a shift cipher, the possible shifts are:
+
+\\[ K=\mathbb Z\_{26} \\]
+
+Therefore:
+
+\\[ K=\\{0,1,2,\ldots,25\\}. \\]
+
+There are 26 possible shift keys.
+
+For an affine cipher, the key consists of two integers:
+
+\\[ (a,b) \\]
+
+with the condition:
+
+\\[ \gcd(a,26)=1. \\]
+
+Thus, its keyspace consists of all valid pairs \\((a,b)\\).
+
+### **4. Encryption functions —&#x20;**\\(E\\)
+
+Encryption functions convert plaintext into ciphertext.
+
+For a particular key \\(k\\), Rosen denotes the corresponding encryption function by:
+
+\\[ \boxed{E_k} \\]
+
+For example, in a shift cipher:
+
+\\[ E_k(p)=(p+k)\bmod26. \\]
+
+Different keys produce different encryption functions.
+
+### **5. Decryption functions —&#x20;**\\(D\\)
+
+Decryption functions recover the original plaintext from ciphertext.
+
+For a particular key \\(k\\), the corresponding decryption function is:
+
+\\[ \boxed{D_k} \\]
+
+For a shift cipher:
+
+\\[ D_k(c)=(c-k)\bmod26. \\]
+
+The decryption function must reverse the effect of the corresponding encryption function.
+
+U456 (Textbook content) MTH381.pdf
+
+## **8.3 The most important condition of a cryptosystem**
+
+The fundamental correctness condition is:
+
+\\[ \boxed{D_k(E_k(p))=p} \\]
+
+for every plaintext string \\(p\\).
+
+This means:
+
+1. Start with plaintext \\(p\\).
+2. Encrypt it using key \\(k\\).
+3. Decrypt the resulting ciphertext using the corresponding decryption function.
+4. The original plaintext must be recovered.
+
+In mathematical notation:
+
+\\[ p\xrightarrow{E_k}E_k(p) \xrightarrow{D_k}D_k(E_k(p))=p. \\]
+
+This is the central condition in Rosen's definition.
+
+**Important MCQ trap:** The condition is not \\(E_k(D_k(p))=p\\) as the defining expression. Rosen specifically writes:
+
+\\[ D_k(E_k(p))=p. \\]
+
+**Cryptosystem correctness**
+
+**Plaintext&#x20;**\\(p\\)
+
+Encryption \\(E_k\\)
+
+**Ciphertext&#x20;**\\(E_k(p)\\)
+
+Decryption \\(D_k\\)
+
+**Original plaintext&#x20;**\\(p\\)
+
+## **8.4 Rosen's Example 7 — Describe the family of shift ciphers as a cryptosystem**
+
+This is a direct textbook example and is especially important for understanding the five-tuple.
+
+Rosen assumes that messages have already been converted into integers from 0 to 25.
+
+Thus, the alphabet-to-number conversion is considered outside the cryptosystem.
+
+### **Step 1: Define the plaintext space**
+
+The plaintext messages are strings of elements of:
+
+\\[ \mathbb Z\_{26}. \\]
+
+Therefore:
+
+\\[ \boxed{P=\text{strings of elements of }\mathbb Z\_{26}} \\]
+
+### **Step 2: Define the ciphertext space**
+
+The ciphertext messages are also strings of elements of:
+
+\\[ \mathbb Z\_{26}. \\]
+
+Therefore:
+
+\\[ \boxed{C=\text{strings of elements of }\mathbb Z\_{26}} \\]
+
+### **Step 3: Define the keyspace**
+
+The key is the amount by which the plaintext numbers are shifted.
+
+There are 26 possible shifts:
+
+\\[ \boxed{K=\mathbb Z\_{26}} \\]
+
+### **Step 4: Define the encryption functions**
+
+For a key \\(k\\), the encryption function is:
+
+\\[ \boxed{E_k(p)=(p+k)\bmod26} \\]
+
+### **Step 5: Define the decryption functions**
+
+The decryption function is:
+
+\\[ \boxed{D_k(c)=(c-k)\bmod26} \\]
+
+Therefore, the complete shift-cipher cryptosystem is:
+
+\\[ \boxed{ (P,C,K,E,D) } \\]
+
+where:
+
+\\[ \begin{aligned} P&=\text{strings of elements of }\mathbb Z\_{26}\\\ C&=\text{strings of elements of }\mathbb Z\_{26}\\\ K&=\mathbb Z\_{26}\\\ E_k(p)&=(p+k)\bmod26\\\ D_k(c)&=(c-k)\bmod26. \end{aligned} \\]
+
+U456 (Textbook content) MTH381.pdf
+
+### **Step 6: Verify the correctness condition**
+
+Start with:
+
+\\[ E_k(p)=(p+k)\bmod26. \\]
+
+Apply decryption:
+
+\\[ D_k(E_k(p)) = (E_k(p)-k)\bmod26. \\]
+
+Substitute:
+
+\\[ =((p+k)\bmod26-k)\bmod26. \\]
+
+Using modular arithmetic:
+
+\\[ =(p+k-k)\bmod26. \\]
+
+Hence:
+
+\\[ \boxed{D_k(E_k(p))=p} \\]
+
+The correctness condition is satisfied.
+
+## **8.5 Private-key cryptosystems**
+
+Rosen next introduces private-key cryptography.
+
+A **private-key cryptosystem** is one in which knowing the encryption key allows the decryption key to be found quickly.
+
+For example, consider the shift cipher:
+
+\\[ c=(p+k)\bmod26. \\]
+
+To decrypt:
+
+\\[ p=(c-k)\bmod26. \\]
+
+If you know \\(k\\), you immediately know how to decrypt.
+
+Therefore, the encryption and decryption keys are closely related.
+
+### **Important characteristics**
+
+1. The communicating parties must share a secret key.
+2. The key must be kept secret.
+3. Anyone who knows the key can encrypt and decrypt.
+4. The communicating parties need a secure way to exchange the key.
+
+Rosen identifies shift and affine ciphers as private-key cryptosystems.
+
+U456 (Textbook content) MTH381.pdf
+
+## **8.6 Public-key cryptosystems**
+
+In a **public-key cryptosystem**, the encryption key is public knowledge, but the decryption key is kept secret.
+
+This is the main difference from private-key cryptography.
+
+There are two different keys:
+
+- Public key: used to encrypt messages.
+- Private key: used to decrypt messages.
+
+A person can publish their public key so that other people can send them encrypted messages. Only the holder of the corresponding private key should be able to decrypt those messages.
+
+### **Private-key versus public-key cryptography**
+
+| Feature           | Private-key cryptography                                | Public-key cryptography                                                  |
+| ----------------- | ------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Encryption key    | Secret                                                  | Public                                                                   |
+| Decryption key    | Secret                                                  | Private                                                                  |
+| Key relationship  | Decryption key can be found quickly from encryption key | Designed so the private key cannot feasibly be found from the public key |
+| Key sharing       | Secret key must be shared securely                      | Public key can be distributed openly                                     |
+| Examples in Rosen | Shift and affine ciphers                                | RSA                                                                      |
+
+**Important distinction:** Public-key encryption does not mean that the encrypted message is public. The public key is public; the message remains encrypted.
+
+Rosen introduces public-key cryptography after the cryptosystem definition and later discusses RSA as an example.&#x20;
+
+U456 (Textbook content) MTH381.pdf
+
+
+
+## **8.7 Compare the classical ciphers as cryptosystems**
+
+| Cipher        | Key                             | Encryption function or operation      |
+| ------------- | ------------------------------- | ------------------------------------- |
+| Shift         | \\(k\in\mathbb Z\_{26}\\)       | \\((p+k)\bmod26\\)                    |
+| Affine        | \\((a,b)\\), \\(\gcd(a,26)=1\\) | \\((ap+b)\bmod26\\)                   |
+| Vigenère      | Repeating string of letters     | Position-dependent addition modulo 26 |
+| Hill          | Invertible matrix modulo 26     | \\(C=KP\bmod26\\)                     |
+| Transposition | Permutation of block positions  | Rearrangement of positions            |
+
+The five-tuple framework can describe all these cipher families.
+
+The mathematical structure remains the same:
+
+\\[ (P,C,K,E,D). \\]
+
+Only the sets of keys and the encryption/decryption functions change.
+
+## **8.8 Cryptanalysis**
+
+Rosen defines **cryptanalysis** as the process of recovering plaintext from ciphertext without knowledge of the encryption method, or with knowledge of the encryption method but without knowledge of the key.
+
+In simpler terms, cryptanalysis is the study of breaking encrypted messages.
+
+For example:
+
+- If the cipher is known but the key is unknown, an attacker attempts to recover the key or plaintext.
+- If both the cipher and key are unknown, the attacker must determine the encryption method as well.
+
+Rosen also discusses frequency analysis as a method of attacking shift ciphers.&#x20;
+
+U456 (Textbook content) MTH381.pdf
+
+
+
+## **8.9 Important MCQ concepts**
+
+| Concept                             | Correct answer                               |
+| ----------------------------------- | -------------------------------------------- |
+| Cryptosystem notation               | \\((P,C,K,E,D)\\)                            |
+| Number of components                | Five                                         |
+| Plaintext set                       | \\(P\\)                                      |
+| Ciphertext set                      | \\(C\\)                                      |
+| Keyspace                            | \\(K\\)                                      |
+| Encryption functions                | \\(E\\)                                      |
+| Decryption functions                | \\(D\\)                                      |
+| Encryption function for key \\(k\\) | \\(E_k\\)                                    |
+| Decryption function for key \\(k\\) | \\(D_k\\)                                    |
+| Correctness condition               | \\(D_k(E_k(p))=p\\)                          |
+| Shift cipher keyspace               | \\(\mathbb Z\_{26}\\)                        |
+| Shift encryption                    | \\((p+k)\bmod26\\)                           |
+| Shift decryption                    | \\((c-k)\bmod26\\)                           |
+| Shift and affine ciphers            | Private-key cryptosystems                    |
+| Public-key cryptography             | Encryption key public, decryption key secret |
+| Cryptanalysis                       | Recovering plaintext from ciphertext         |
+
+## **8.10 Module 8 MCQ test**
+
+**Module 8 test**
+
+0/14 answered
+
+Select one answer per question. Submit when all questions are answered.
+
+**1. A cryptosystem is represented by which five-tuple?**
+
+A. (P,K,E,D,C)
+
+B. (P,C,K,E,D)
+
+C. (C,P,E,K,D)
+
+D. (P,C,E,D)
+
+
+
+**2. What does P represent?**
+
+A. Permutation set
+
+B. Plaintext strings
+
+C. Public keys
+
+D. Prime numbers
+
+
+
+**3. What does C represent?**
+
+A. Ciphertext strings
+
+B. Cryptanalysis
+
+C. Common keys
+
+D. Character frequencies
+
+
+
+**4. What is the keyspace?**
+
+A. E
+
+B. D
+
+C. K
+
+D. P
+
+
+
+**5. Which component represents the set of encryption functions?**
+
+A. P
+
+B. C
+
+C. E
+
+D. D
+
+
+
+**6. What is the correct decryption function notation for key k?**
+
+A. Eₖ
+
+B. Dₖ
+
+C. Kₑ
+
+D. Pₖ
+
+
+
+**7. Which is the fundamental correctness condition?**
+
+A. Eₖ(Dₖ(p))=p
+
+B. Dₖ(Eₖ(p))=p
+
+C. Eₖ(p)=Dₖ(p)
+
+D. Dₖ(p)=k
+
+
+
+**8. In Rosen's shift-cipher example, what is the keyspace?**
+
+A. Z₂
+
+B. Z₁₃
+
+C. Z₂₆
+
+D. Z₅₂
+
+
+
+**9. What is the shift-cipher encryption function?**
+
+A. Eₖ(p)=(p−k) mod 26
+
+B. Eₖ(p)=(p+k) mod 26
+
+C. Eₖ(p)=pk mod 26
+
+D. Eₖ(p)=p² mod 26
+
+
+
+**10. What is the shift-cipher decryption function?**
+
+A. Dₖ(c)=(c−k) mod 26
+
+B. Dₖ(c)=(c+k) mod 26
+
+C. Dₖ(c)=ck mod 26
+
+D. Dₖ(c)=c² mod 26
+
+
+
+**11. Which are identified by Rosen as private-key cryptosystems?**
+
+A. Shift and affine ciphers
+
+B. RSA and Diffie–Hellman
+
+C. Only Hill cipher
+
+D. Only transposition cipher
+
+
+
+**12. In public-key cryptography, which key is publicly known?**
+
+A. Decryption key
+
+B. Private key
+
+C. Encryption key
+
+D. Both keys must be secret
+
+
+
+**13. What must two parties share securely in a private-key cryptosystem?**
+
+A. Plaintext
+
+B. Secret key
+
+C. Ciphertext alphabet
+
+D. Public key only
+
+
+
+**14. What is cryptanalysis?**
+
+A. Creating a plaintext message
+
+B. Recovering plaintext from ciphertext without the required encryption knowledge
+
+C. Converting decimal to binary
+
+D. Finding a matrix determinant
+
+
+
+Submit answers
+
+## **Module 8 — Final revision sheet**
+
+**Cryptosystem:**
+
+\\[ \boxed{(P,C,K,E,D)} \\]
+
+**Correctness condition:**
+
+\\[ \boxed{D_k(E_k(p))=p} \\]
+
+**Shift cipher:**
+
+\\[ E_k(p)=(p+k)\bmod26 \\]
+
+\\[ D_k(c)=(c-k)\bmod26 \\]
+
+**Private-key:** Encryption and decryption keys are closely related; secret key must be shared.
+
+**Public-key:** Encryption key is public; decryption key is secret.
+
+**Cryptanalysis:** Recovering plaintext from ciphertext without the required encryption information.
+
+Module 8 complete
+
+**Next: Module 9 — Introduction to Public-Key Cryptography.**
+
+We'll cover the idea, mathematical foundation, public versus private keys, requirements of a public-key system, and how it differs from classical private-key encryption.
+
+Say **next** when ready.

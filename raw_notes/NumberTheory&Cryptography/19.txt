@@ -1,0 +1,471 @@
+# **Unit IV — Module 2: Classical Cryptography and Substitution Ciphers**
+
+Primary reference: Rosen, *Number Theory and Cryptography*, Section 4.6 — Classical Cryptography.
+
+This module studies the basic idea behind classical ciphers, especially **substitution**: replacing plaintext letters with other letters according to a fixed rule.
+
+We'll distinguish general substitution from shift, affine and Vigenère ciphers, which we'll study in detail in later modules.
+
+## **2.1 What is classical cryptography?**
+
+Classical cryptography refers to older methods of securing messages, developed long before modern computer-based cryptography.
+
+Rosen explains that classical ciphers transform messages by changing individual letters or blocks of letters into other letters or blocks. These methods were used extensively until the 20th century.&#x20;
+
+U456 (Textbook content) MTH381.pdf
+
+
+
+Two fundamental methods are:
+
+1. **Substitution:** replace letters or groups of letters.
+2. **Transposition:** rearrange the positions of letters.
+
+The distinction is important because the two methods transform different properties of the message.
+
+## **2.2 Substitution cipher**
+
+A substitution cipher replaces each plaintext symbol with another symbol.
+
+For example, suppose the substitution rule is:
+
+\\[ A\rightarrow Q,\quad B\rightarrow W,\quad C\rightarrow E \\]
+
+Then the plaintext
+
+\\[ \text{CAB} \\]
+
+becomes
+
+\\[ \text{EQW}. \\]
+
+The original positions are preserved: the first plaintext letter becomes the first ciphertext letter, and so on.
+
+### **General mathematical representation**
+
+Let the plaintext alphabet be
+
+\\[ \mathcal{A}=\\{A,B,C,\ldots,Z\\}. \\]
+
+A substitution cipher defines a mapping
+
+\\[ S:\mathcal{A}\rightarrow\mathcal{A}. \\]
+
+For encryption to be reversible, every plaintext letter must map to a unique ciphertext letter, and every ciphertext letter must correspond to exactly one plaintext letter.
+
+In mathematical language, \\(S\\) must be a **bijection** (one-to-one and onto).
+
+Its inverse mapping \\(S^{-1}\\) performs decryption:
+
+\\[ C=S(P) \\]
+
+\\[ \boxed{P=S^{-1}(C)} \\]
+
+## **2.3 Monoalphabetic substitution cipher**
+
+A **monoalphabetic substitution cipher** uses one fixed substitution rule throughout the entire message.
+
+The word *monoalphabetic* means that each plaintext letter is always replaced by the same ciphertext letter.
+
+For example, suppose the substitution is:
+
+| Plaintext  | A | B | C | D | E | F |
+| ---------- | - | - | - | - | - | - |
+| Ciphertext | Q | W | E | R | T | Y |
+
+Then:
+
+- A always becomes Q.
+- B always becomes W.
+- C always becomes E.
+- The same mapping is used wherever that letter appears.
+
+If plaintext contains `ABCA`, its ciphertext is `QWEQ`.
+
+Notice that the first and fourth ciphertext letters are identical because the first and fourth plaintext letters are both A.
+
+### **Mathematical representation**
+
+Let the alphabet be represented by the set
+
+\\[ \mathbb Z\_{26}=\\{0,1,2,\ldots,25\\}. \\]
+
+A monoalphabetic substitution is a permutation of these 26 symbols.
+
+For encryption, we use a bijection:
+
+\\[ S:\mathbb Z\_{26}\rightarrow\mathbb Z\_{26}. \\]
+
+For decryption, we use its inverse:
+
+\\[ S^{-1}:\mathbb Z\_{26}\rightarrow\mathbb Z\_{26}. \\]
+
+Thus,
+
+\\[ \boxed{C=S(P)} \\]
+
+and
+
+\\[ \boxed{P=S^{-1}(C)}. \\]
+
+The requirement that \\(S\\) be one-to-one is essential. If two different plaintext letters were mapped to the same ciphertext letter, decryption could become ambiguous.
+
+### **How many possible substitution keys exist?**
+
+There are 26 choices for the ciphertext symbol replacing A, 25 remaining choices for B, 24 for C, and so on.
+
+Therefore, the number of possible monoalphabetic substitution keys is
+
+\\[ \boxed{26!} \\]
+
+\\[ 26!=403291461126605635584000000. \\]
+
+This is approximately
+
+\\[ 4.03\times10^{26}. \\]
+
+This is a very large keyspace. However, a large keyspace alone does not guarantee security.
+
+Why? Because monoalphabetic substitution preserves the frequency pattern of letters.
+
+## **2.4 Why monoalphabetic substitution is vulnerable**
+
+Suppose a plaintext contains the letter E many times.
+
+Since a monoalphabetic substitution always replaces E with the same ciphertext letter, that ciphertext letter will also occur many times.
+
+Therefore, even if the attacker does not know the substitution key, the statistical characteristics of the original language remain visible.
+
+This is the basis of **frequency analysis**.
+
+### **English letter frequency**
+
+Rosen gives the following approximate frequencies for the nine most common English letters:
+
+| Letter | Approximate frequency |
+| ------ | --------------------- |
+| E      | 13%                   |
+| T      | 9%                    |
+| A      | 8%                    |
+| O      | 8%                    |
+| I      | 7%                    |
+| N      | 7%                    |
+| S      | 7%                    |
+| H      | 6%                    |
+| R      | 6%                    |
+
+These are approximate frequencies, not fixed percentages for every text.&#x20;
+
+U456 (Textbook content) MTH381.pdf
+
+
+
+### **Frequency analysis procedure**
+
+Suppose an attacker intercepts a long ciphertext.
+
+1. Count how many times each ciphertext letter appears.
+2. Calculate or compare their relative frequencies.
+3. Identify the most frequent ciphertext letters.
+4. Hypothesize which common plaintext letters they represent.
+5. Attempt decryption using the hypothesized mappings.
+6. Check whether the resulting text is meaningful.
+7. Test alternative hypotheses if necessary.
+
+**Important:** Frequency analysis gives hypotheses, not guaranteed answers. A short message may not contain enough data for reliable frequency estimates.
+
+## **2.5 Rosen's worked cryptanalysis example**
+
+Rosen gives the following intercepted ciphertext, known to have been encrypted using a shift cipher:
+
+INTERCEPTED CIPHERTEXT
+
+# **ZNK KGXRE HOXJ MKZY ZNK CUXS**
+
+We are told that the encryption method is a shift cipher.
+
+**Step 1: Identify the most frequent ciphertext letter.**
+
+The most frequent letter is K.
+
+**Step 2: Make a hypothesis.**
+
+Since E is the most common English letter, hypothesize that plaintext E was encrypted as ciphertext K.
+
+Using the mapping \\(A=0,B=1,\ldots,Z=25\\):
+
+\\[ E=4,\qquad K=10. \\]
+
+**Step 3: Find the shift.**
+
+The shift is
+
+\\[ k\equiv10-4\pmod{26}. \\]
+
+Therefore,
+
+\\[ \boxed{k=6}. \\]
+
+**Step 4: Decrypt by shifting backward by six.**
+
+The ciphertext becomes:
+
+\\[ \boxed{\text{THE EARLY BIRD GETS THE WORM.}} \\]
+
+The recovered message makes sense, supporting the hypothesis that the key is 6.&#x20;
+
+U456 (Textbook content) MTH381.pdf
+
+
+
+Notice that this example demonstrates frequency analysis against a shift cipher. The same general idea can be used against monoalphabetic substitution, although a general substitution cipher requires identifying a larger set of letter mappings.
+
+## **2.6 Character ciphers and block ciphers**
+
+Rosen distinguishes between methods that replace individual characters and methods that replace blocks of characters.
+
+### **A. Character / monoalphabetic ciphers**
+
+These replace each individual letter with another letter.
+
+Examples:
+
+- Shift cipher
+- Affine cipher
+
+They are vulnerable to attacks based on letter-frequency analysis.
+
+### **B. Block ciphers**
+
+These replace blocks of letters with other blocks of letters rather than replacing each character individually.
+
+For example, a block of four letters might be transformed as one unit.
+
+Rosen introduces the transposition cipher as a simple block cipher.&#x20;
+
+U456 (Textbook content) MTH381.pdf
+
+
+
+| Feature                   | Character cipher                                 | Block cipher                                               |
+| ------------------------- | ------------------------------------------------ | ---------------------------------------------------------- |
+| Input                     | Individual letters                               | Groups of letters                                          |
+| Transformation            | One character at a time                          | One block at a time                                        |
+| Example in Rosen          | Shift and affine                                 | Transposition                                              |
+| Frequency characteristics | Individual letter frequencies may remain visible | Individual character patterns may be changed or rearranged |
+
+Do not confuse the textbook's use of *block cipher* here with the much more advanced modern block-cipher designs. We'll study the specific permutation cipher in Module 7.
+
+## **2.7 Substitution versus transposition — Important comparison**
+
+| Property         | Substitution cipher  | Transposition cipher |
+| ---------------- | -------------------- | -------------------- |
+| Operation        | Replaces symbols     | Rearranges positions |
+| Original letters | May change           | Remain unchanged     |
+| Letter order     | Usually preserved    | Changed              |
+| Key              | Substitution mapping | Permutation          |
+| Example          | ABC → QWE            | ABC → CAB            |
+| Decryption       | Inverse substitution | Inverse permutation  |
+
+A useful way to remember:
+
+- Substitution: **Which symbol?**
+- Transposition: **Which position?**
+
+## **2.8 Important examination points**
+
+1. A monoalphabetic cipher uses one fixed substitution throughout the message.
+2. A substitution key must define a bijection for unambiguous decryption.
+3. The number of possible general monoalphabetic substitution keys is \\(26!\\).
+4. A large keyspace does not automatically make a cipher secure.
+5. Monoalphabetic substitution preserves individual letter frequencies.
+6. Frequency analysis uses the statistical characteristics of language.
+7. E is approximately 13% of English letters in Rosen's frequency table.
+8. Cryptanalysis attempts to recover plaintext without the secret encryption information.
+9. Shift and affine ciphers are character / monoalphabetic ciphers.
+10. Transposition rearranges letters rather than replacing them.
+
+## **2.9 Module 2 MCQ test**
+
+**Module 2 test**
+
+0/12 answered
+
+Choose one answer for each question.
+
+**1. What is a monoalphabetic substitution cipher?**
+
+A. A cipher that changes its substitution rule for every occurrence
+
+B. A cipher that uses one fixed substitution mapping throughout the message
+
+C. A cipher that only reverses words
+
+D. A cipher that uses matrix multiplication
+
+
+
+**2. What mathematical property must a reversible substitution mapping have?**
+
+A. It must be constant
+
+B. It must be one-to-one and onto
+
+C. It must map every letter to A
+
+D. It must be increasing
+
+
+
+**3. How many possible monoalphabetic substitution keys are there for 26 letters?**
+
+A. 26²
+
+B. 26!
+
+C. 2²⁶
+
+D. 26×25
+
+
+
+**4. What is the main weakness of a simple monoalphabetic substitution cipher?**
+
+A. It cannot encrypt vowels
+
+B. It preserves the frequency pattern of plaintext letters
+
+C. It has only one possible key
+
+D. It cannot be decrypted
+
+
+
+**5. Which letter is the most frequent in Rosen's approximate English frequency table?**
+
+A. T
+
+B. A
+
+C. E
+
+D. R
+
+
+
+**6. What is frequency analysis?**
+
+A. Counting the number of keys
+
+B. Studying letter occurrence frequencies to infer plaintext mappings
+
+C. Rearranging ciphertext blocks
+
+D. Calculating a matrix determinant
+
+
+
+**7. In Rosen's intercepted message ZNK KGXRE HOXJ MKZY ZNK CUXS, what is the most frequent ciphertext letter?**
+
+A. Z
+
+B. N
+
+C. K
+
+D. X
+
+
+
+**8. In that example, if plaintext E is hypothesized to map to ciphertext K, what is the shift?**
+
+A. 3
+
+B. 4
+
+C. 6
+
+D. 10
+
+
+
+**9. What is the recovered plaintext in Rosen's example?**
+
+A. THE EARLY BIRD GETS THE WORM
+
+B. THE QUICK BROWN FOX
+
+C. MEET YOU IN THE PARK
+
+D. STOP GLOBAL WARMING
+
+
+
+**10. Which statement correctly describes transposition?**
+
+A. It replaces every letter with a new letter
+
+B. It rearranges the positions of letters
+
+C. It changes the alphabet size
+
+D. It uses only prime numbers
+
+
+
+**11. Which pair consists of character / monoalphabetic ciphers in Rosen's discussion?**
+
+A. Shift and affine
+
+B. RSA and ElGamal
+
+C. Diffie–Hellman and RSA
+
+D. Hill and RSA
+
+
+
+**12. Why can a short ciphertext be difficult to analyze using frequency analysis?**
+
+A. It always has no repeated letters
+
+B. It may not contain enough text for reliable frequency estimates
+
+C. It cannot contain vowels
+
+D. Frequency analysis works only on numbers
+
+
+
+Submit answers
+
+## **Module 2 — Final revision sheet**
+
+**Substitution**
+
+\\[ C=S(P),\qquad P=S^{-1}(C) \\]
+
+**Number of monoalphabetic substitution keys**
+
+\\[ \boxed{26!} \\]
+
+**Frequency analysis**
+
+- E ≈ 13%
+- T ≈ 9%
+- A ≈ 8%
+- O ≈ 8%
+
+**Remember**
+
+- Substitution = replacement.
+- Transposition = rearrangement.
+- Monoalphabetic = one fixed mapping.
+- Cryptanalysis = recovering information without the secret encryption information.
+- Frequency analysis = exploiting language statistics.
+
+Module 2 complete
+
+**Next: Module 3 — Shift Cipher and Caesar Cipher.**
+
+We'll cover the complete mathematical encryption and decryption process, modular arithmetic, key selection, brute-force attacks, and multiple numerical problems. Say **next** when you're ready.

@@ -1,0 +1,223 @@
+Welcome to **Module 4: The ElGamal Cryptosystem & Final Exam Preparation**. 
+
+In this final module, we will cover the ElGamal public-key system (which is based on the Diffie-Hellman math you learned in Module 2), and then we will do a comprehensive review of the entire unit with MCQs and 10-mark solving questions.
+
+---
+
+# 📘 MODULE 4: The ElGamal Cryptosystem
+
+### 1. The Mathematical Foundation
+The ElGamal cryptosystem (invented by Taher ElGamal in 1985) is based on the **Discrete Logarithm Problem** (just like Diffie-Hellman). 
+*   **Easy:** Given \(g\), \(p\), and \(x\), calculating \(y = g^x \bmod p\) is easy.
+*   **Hard:** Given \(g\), \(p\), and \(y\), finding \(x\) is practically impossible.
+
+Unlike RSA, where a single message can be encrypted to a single ciphertext block, ElGamal is **probabilistic**. This means that encrypting the same message twice will result in two completely different ciphertexts. This provides extra security but makes the ciphertext twice as large as the plaintext.
+
+---
+
+### 2. ElGamal Key Generation (Step-by-Step)
+
+1.  **Choose a large prime \(p\)** and a **generator \(g\)** (a primitive root modulo \(p\)).
+2.  **Choose a private key \(x\)** such that \(1 < x < p-1\).
+3.  **Compute the public key \(y\):**
+    \[
+y = g^x \bmod p
+\]
+    *   **Public Key:** \((p, g, y)\)
+    *   **Private Key:** \(x\)
+
+---
+
+### 3. ElGamal Encryption
+
+To encrypt a message \(M\) (where \(M\) is an integer \(0 \le M < p\)):
+1.  The sender chooses a **random secret number \(k\)** such that \(1 < k < p-1\).
+2.  The sender computes **two** values (the ciphertext is a pair \((C_1, C_2)\)):
+    \[
+C_1 = g^k \bmod p
+\]
+    \[
+C_2 = (M \cdot y^k) \bmod p
+\]
+3.  The sender sends the pair \((C_1, C_2)\) to the receiver.
+
+---
+
+### 4. ElGamal Decryption
+
+The receiver uses their private key \(x\) to recover the message:
+1.  Compute the shared secret: \(S = C_1^x \bmod p\).
+2.  Compute the modular inverse of \(S\): \(S^{-1} \bmod p\).
+3.  Recover the message:
+    \[
+M = (C_2 \cdot S^{-1}) \bmod p
+\]
+
+**Mathematical Proof of Decryption (Why it works):**
+\(S = C_1^x = (g^k)^x = g^{kx} \bmod p\).
+\(C_2 = M \cdot y^k = M \cdot (g^x)^k = M \cdot g^{xk} \bmod p\).
+Therefore, \(C_2 \cdot S^{-1} = (M \cdot g^{xk}) \cdot (g^{xk})^{-1} = M \bmod p\). 
+
+---
+
+### 📝 Solved Exam Questions for ElGamal
+
+**Question 1 (Numerical - 5 Marks):**
+Let \(p = 23\), \(g = 5\). Bob chooses private key \(x = 6\). 
+(a) Find Bob's public key \(y\).
+(b) Alice wants to send the message \(M = 10\). She chooses random \(k = 3\). Find the ciphertext \((C_1, C_2)\).
+(c) Show how Bob decrypts it.
+**Solution:**
+(a) \(y = g^x \bmod p = 5^6 \bmod 23\).
+From Module 2, we know \(5^2 \equiv 2\), \(5^4 \equiv 4\). So \(5^6 = 4 \times 2 = 8\). 
+**Public Key:** \((p=23, g=5, y=8)\).
+
+(b) Alice encrypts \(M = 10\) with \(k = 3\):
+\(C_1 = g^k \bmod p = 5^3 \bmod 23 = 125 \bmod 23\). (\(23 \times 5 = 115\), so \(125 - 115 = 10\)).
+**\(C_1 = 10\)**.
+\(C_2 = (M \cdot y^k) \bmod p = (10 \cdot 8^3) \bmod 23\).
+\(8^3 = 512\). \(512 \bmod 23\): \(23 \times 22 = 506\). \(512 - 506 = 6\).
+\(C_2 = (10 \cdot 6) \bmod 23 = 60 \bmod 23\). (\(23 \times 2 = 46\), \(60 - 46 = 14\)).
+**\(C_2 = 14\)**.
+**Ciphertext:** \((10, 14)\).
+
+(c) Bob decrypts \((10, 14)\) with private key \(x = 6\):
+\(S = C_1^x \bmod p = 10^6 \bmod 23\).
+\(10^2 = 100 \equiv 8 \pmod{23}\).
+\(10^4 = 8^2 = 64 \equiv 18 \pmod{23}\).
+\(10^6 = 10^4 \cdot 10^2 = 18 \cdot 8 = 144 \pmod{23}\).
+\(23 \times 6 = 138\). \(144 - 138 = 6\).
+So, **\(S = 6\)**.
+
+Now we need the inverse of \(6 \pmod{23}\). We need \(6z \equiv 1 \pmod{23}\).
+\(6 \times 4 = 24 \equiv 1 \pmod{23}\). So, \(S^{-1} = 4\).
+
+\(M = (C_2 \cdot S^{-1}) \bmod p = (14 \cdot 4) \bmod 23 = 56 \bmod 23\).
+\(23 \times 2 = 46\). \(56 - 46 = 10\).
+**Decrypted Message:** \(M = 10\). (Matches!)
+
+---
+
+# 🎓 UNIT V: Final Exam Preparation
+
+Here is a mix of MCQs and 10-mark questions covering Modules 1-4. Treat this as your mock exam.
+
+### Part A: Multiple Choice Questions (1 Mark Each)
+
+1.  Public key cryptography is based on:
+    A) Symmetric keys
+    B) Trapdoor one-way functions
+    C) The Caesar cipher
+    D) Linear equations
+    *Answer: B*
+
+2.  If \(p = 7\) and \(q = 13\), what is \(\phi(n)\) where \(n = pq\)?
+    A) 91
+    B) 84
+    C) 72
+    D) 78
+    *Answer: C (\(6 \times 12 = 72\))*
+
+3.  In RSA, the public key is \((n, e)\). What is the private key?
+    A) \(p\)
+    B) \(q\)
+    C) \(d\), where \(ed \equiv 1 \pmod{\phi(n)}\)
+    D) \(\phi(n)\)
+    *Answer: C*
+
+4.  In Diffie-Hellman, if Alice's private key is \(a\), Bob's is \(b\), and the base is \(g \bmod p\), what is the shared key?
+    A) \(g^a + g^b \bmod p\)
+    B) \(g^{ab} \bmod p\)
+    C) \(g^{a+b} \bmod p\)
+    D) \(a \cdot b \bmod p\)
+    *Answer: B*
+
+5.  Which cryptosystem is probabilistic (produces different ciphertexts for the same message)?
+    A) RSA
+    B) ElGamal
+    C) Shift Cipher
+    D) Affine Cipher
+    *Answer: B*
+
+---
+
+### Part B: 10-Mark Solving Questions
+
+**Question 2: RSA Full Cycle (10 Marks)**
+Given primes \(p = 5\) and \(q = 11\).
+(a) Generate the public and private keys using \(e = 3\). (3 marks)
+(b) Encrypt the message \(M = 7\). (3 marks)
+(c) Decrypt the ciphertext to verify your answer. (4 marks)
+
+**Solution:**
+(a) 
+\(n = 5 \times 11 = 55\).
+\(\phi(n) = 4 \times 10 = 40\).
+Check \(\gcd(3, 40) = 1\). (Valid).
+Public Key = \((55, 3)\).
+Find \(d\): \(3d \equiv 1 \pmod{40}\).
+\(3 \times 27 = 81 = 2 \times 40 + 1\). So \(d = 27\).
+Private Key = \(27\).
+
+(b) 
+\(C = M^e \bmod n = 7^3 \bmod 55\).
+\(7^3 = 343\).
+\(55 \times 6 = 330\). \(343 - 330 = 13\).
+**Ciphertext \(C = 13\).**
+
+(c) 
+\(M = C^d \bmod n = 13^{27} \bmod 55\). 
+*(Exam tip: Use fast modular exponentiation. Let's do it step-by-step).*
+\(13^1 = 13\)
+\(13^2 = 169 \equiv 4 \pmod{55}\) (since \(55 \times 3 = 165\), \(169-165=4\))
+\(13^4 = 4^2 = 16\)
+\(13^8 = 16^2 = 256 \equiv 36 \pmod{55}\) (since \(55 \times 4 = 220\), \(256-220=36\))
+\(13^{16} = 36^2 = 1296\). \(55 \times 23 = 1265\). \(1296 - 1265 = 31\).
+
+\(27 = 16 + 8 + 2 + 1\).
+\(M = 13^{27} = 13^{16} \cdot 13^8 \cdot 13^2 \cdot 13^1 \pmod{55}\).
+\(M = 31 \cdot 36 \cdot 4 \cdot 13 \pmod{55}\).
+\(31 \cdot 36 = 1116\). \(55 \times 20 = 1100\). \(1116 - 1100 = 16\).
+\(16 \cdot 4 = 64 \equiv 9 \pmod{55}\).
+\(9 \cdot 13 = 117\). \(55 \times 2 = 110\). \(117 - 110 = 7\).
+**Decrypted Message \(M = 7\).** (Verified!)
+
+**Question 3: ElGamal Numerical (10 Marks)**
+Let \(p = 19\), \(g = 2\). Bob's private key is \(x = 5\). Alice wants to send \(M = 8\) using random \(k = 3\).
+(a) Find Bob's public key \(y\). (2 marks)
+(b) Find the ciphertext \((C_1, C_2)\). (4 marks)
+(c) Show the decryption process. (4 marks)
+
+**Solution:**
+(a) \(y = g^x \bmod p = 2^5 \bmod 19 = 32 \bmod 19 = 13\).
+Public Key: \((19, 2, 13)\).
+
+(b) \(C_1 = g^k \bmod p = 2^3 \bmod 19 = 8\).
+\(C_2 = (M \cdot y^k) \bmod p = (8 \cdot 13^3) \bmod 19\).
+\(13^2 = 169 \equiv 17 \pmod{19}\) (since \(19 \times 8 = 152\), \(169-152=17\)).
+\(13^3 = 17 \cdot 13 = 221 \equiv 12 \pmod{19}\) (since \(19 \times 11 = 209\), \(221-209=12\)).
+\(C_2 = (8 \cdot 12) \bmod 19 = 96 \bmod 19\). \(19 \times 5 = 95\). \(96-95 = 1\).
+Ciphertext: \((C_1, C_2) = (8, 1)\).
+
+(c) Bob decrypts:
+\(S = C_1^x \bmod p = 8^5 \bmod 19\).
+\(8^2 = 64 \equiv 7 \pmod{19}\).
+\(8^4 = 7^2 = 49 \equiv 11 \pmod{19}\).
+\(8^5 = 11 \cdot 8 = 88 \equiv 12 \pmod{19}\) (since \(19 \times 4 = 76\), \(88-76=12\)).
+So \(S = 12\).
+
+Find \(S^{-1} \bmod 19\): We need \(12z \equiv 1 \pmod{19}\).
+\(12 \times 8 = 96\). \(19 \times 5 = 95\). \(96 - 95 = 1\). So \(S^{-1} = 8\).
+
+\(M = (C_2 \cdot S^{-1}) \bmod p = (1 \cdot 8) \bmod 19 = 8\).
+Decrypted Message: \(M = 8\). (Matches!)
+
+---
+
+### 🎯 Final Unit V Revision Checklist:
+1.  **Formulas:** Know the RSA encryption \(C = M^e \bmod n\) and decryption \(M = C^d \bmod n\).
+2.  **ElGamal Pairs:** Remember that ElGamal ciphertext is always a pair \((C_1, C_2)\).
+3.  **Math Proofs:** Be able to write the short proof for why RSA decryption works (using Fermat's Little Theorem).
+4.  **Key Generation:** Know how to find \(d\) using the Extended Euclidean Algorithm.
+
+You now have the complete mathematical blueprint for Unit V. If you can solve the 10-mark questions in this module without looking at the answers, you are fully prepared for your exam. Good luck!

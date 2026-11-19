@@ -1,0 +1,1776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 25: Mathematical Cryptosystems & Attack Models — Mathematics Study Guide</title>
+    <meta name="description" content="Number Theory &amp; Cryptography study notes — Module 25 of 29: Mathematical Cryptosystems & Attack Models. Complete with theorems, proofs, worked examples, and interactive self-test quiz.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+
+    <!-- MathJax 3 configuration for crisp LaTeX rendering -->
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['\\(', '\\)'], ['$', '$']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true,
+            macros: {
+                Z: '\\mathbb{Z}',
+                N: '\\mathbb{N}',
+                R: '\\mathbb{R}',
+                Q: '\\mathbb{Q}',
+                gcd: '\\operatorname{gcd}',
+                lcm: '\\operatorname{lcm}'
+            }
+        },
+        options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+/* ==========================================================================
+   MATHEMATICS THEME — Imperial Oxford Amethyst & Celestial Amber
+   ========================================================================== */
+:root {
+    --math-royal-primary: #7c3aed;
+    --math-royal-hover: #6d28d9;
+    --math-gold-accent: #f59e0b;
+    --math-gold-glow: rgba(245, 158, 11, 0.25);
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-body, #2d3748);
+    margin: 0; padding: 0;
+    background-color: var(--bg-body, #f4f6fb);
+}
+
+.page-container {
+    max-width: 1080px;
+    margin: 25px auto 50px;
+    padding: 40px 50px;
+    background-color: var(--bg-page, #ffffff);
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.07);
+    border-radius: 14px;
+}
+
+/* MATH HERO BANNER */
+.math-banner {
+    background: linear-gradient(135deg, #1b0a2a 0%, #341253 45%, #581c87 75%, #b45309 100%);
+    border-radius: 12px;
+    padding: 30px 34px;
+    margin-bottom: 28px;
+    color: #ffffff;
+    box-shadow: 0 6px 24px rgba(124, 58, 237, 0.25);
+    position: relative;
+    overflow: hidden;
+}
+.math-banner::after {
+    content: "∑ ∫ ∏ √";
+    position: absolute;
+    right: 20px;
+    bottom: -15px;
+    font-size: 80px;
+    font-weight: 800;
+    font-family: 'Outfit', sans-serif;
+    color: rgba(255, 255, 255, 0.05);
+    pointer-events: none;
+}
+.math-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.16);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    margin-bottom: 12px;
+}
+.math-banner-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.25;
+    margin: 0;
+    color: #ffffff;
+}
+
+/* NAVIGATION TOGGLE */
+.nav-toggle {
+    margin-bottom: 24px;
+}
+.nav-toggle-btn {
+    width: 100%;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #7c3aed;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+.nav-toggle-btn:hover {
+    background: rgba(124, 58, 237, 0.06);
+    border-color: #7c3aed;
+}
+.nav-panel {
+    display: none;
+    margin-top: 10px;
+    padding: 18px;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    column-count: 2;
+    column-gap: 16px;
+}
+.nav-panel.open { display: block; }
+.nav-item {
+    display: block;
+    padding: 6px 10px;
+    font-size: 13px;
+    color: var(--text-body, #334155);
+    text-decoration: none;
+    border-radius: 4px;
+    break-inside: avoid;
+    margin-bottom: 4px;
+    transition: all 0.15s ease;
+}
+.nav-item:hover {
+    background: rgba(124, 58, 237, 0.1);
+    color: #7c3aed;
+}
+.nav-item.current {
+    background: linear-gradient(135deg, #7c3aed, #4c1d95);
+    color: #ffffff !important;
+    font-weight: 700;
+}
+
+/* CONTENT STYLES — STRICT LEFT ALIGNMENT */
+.module-content {
+    color: var(--text-body, #334155);
+    font-size: 15px;
+    text-align: left !important;
+}
+.module-content h1, 
+.module-content h2, 
+.module-content h3, 
+.module-content h4, 
+.module-content p, 
+.module-content ul, 
+.module-content ol, 
+.module-content li, 
+.module-content table {
+    text-align: left !important;
+}
+
+.module-content h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-heading, #0f172a);
+    margin: 36px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(124, 58, 237, 0.2);
+}
+.module-content h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-heading, #0f172a);
+    margin: 30px 0 14px;
+}
+.module-content h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-heading, #0f172a);
+    margin: 24px 0 10px;
+}
+.module-content p {
+    margin: 0 0 14px;
+    line-height: 1.7;
+    text-align: left !important;
+}
+.module-content ul, .module-content ol {
+    margin: 12px 0 18px 28px !important;
+    padding: 0 !important;
+    text-align: left !important;
+    list-style-position: outside !important;
+}
+.module-content li {
+    margin-bottom: 8px !important;
+    line-height: 1.65;
+    text-align: left !important;
+}
+
+/* MATHEMATICAL CALLOUTS */
+.math-callout {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 22px 0 16px;
+    border: 1px solid var(--border-color, #e2e8f0);
+    background: var(--bg-surface, #ffffff);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    text-align: left !important;
+}
+[data-theme="dark"] .math-callout {
+    background: #141728;
+    border-color: #242944;
+}
+.callout-badge {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+.callout-title {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--text-heading, #0f172a);
+}
+.math-callout.theorem {
+    border-left: 4px solid #7c3aed;
+}
+.math-callout.theorem .callout-badge {
+    background: rgba(124, 58, 237, 0.12);
+    color: #7c3aed;
+}
+.math-callout.definition {
+    border-left: 4px solid #2563eb;
+}
+.math-callout.definition .callout-badge {
+    background: rgba(37, 99, 235, 0.12);
+    color: #2563eb;
+}
+.math-callout.property {
+    border-left: 4px solid #059669;
+}
+.math-callout.property .callout-badge {
+    background: rgba(5, 150, 105, 0.12);
+    color: #059669;
+}
+.math-callout.example {
+    border-left: 4px solid #d97706;
+}
+.math-callout.example .callout-badge {
+    background: rgba(217, 119, 6, 0.12);
+    color: #d97706;
+}
+
+/* EXAM BANNER */
+.exam-header-banner {
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(245, 158, 11, 0.12));
+    border-left: 4px solid #f59e0b;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 28px 0 16px;
+    font-weight: 800;
+    font-size: 18px;
+    color: #b45309;
+    font-family: 'Outfit', sans-serif;
+}
+[data-theme="dark"] .exam-header-banner {
+    color: #fbbf24;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(245, 158, 11, 0.15));
+}
+
+/* MATH DIAGRAM BOX */
+.math-diagram-box {
+    background: var(--bg-surface, #ffffff);
+    border: 1px solid rgba(124, 58, 237, 0.22);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin: 24px 0;
+    box-shadow: 0 4px 18px rgba(124, 58, 237, 0.06);
+}
+[data-theme="dark"] .math-diagram-box {
+    background: #111424;
+    border-color: rgba(139, 92, 246, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+.math-diagram-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    color: #7c3aed;
+    margin: 0 0 12px;
+    text-align: center;
+}
+[data-theme="dark"] .math-diagram-title {
+    color: #c084fc;
+}
+.math-pill {
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--text-heading);
+}
+[data-theme="dark"] .math-pill {
+    background: #181d33;
+    border-color: #2a3154;
+}
+.math-card-caption {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 12px;
+    margin-top: 14px;
+}
+
+/* MATH DISPLAY CONTAINERS */
+.math-display {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 12px 0;
+    margin: 14px 0;
+    text-align: center;
+}
+.math-inline {
+    white-space: nowrap;
+}
+
+/* REFERENCE PILL */
+.ref-pill {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #7c3aed;
+    background: rgba(124, 58, 237, 0.08);
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    border-radius: 12px;
+    padding: 2px 10px;
+    margin: 4px 0;
+}
+
+/* TABLES */
+.module-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 13.5px;
+}
+.module-content th {
+    background: var(--bg-subtle, #f8fafc);
+    color: var(--text-heading);
+    font-weight: 700;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color, #e2e8f0);
+    text-align: left;
+}
+.module-content td {
+    padding: 10px 12px;
+    border: 1px solid var(--border-color, #e2e8f0);
+    color: var(--text-body);
+}
+
+/* PREV / NEXT NAV BUTTONS */
+.prev-next {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 45px;
+    padding-top: 25px;
+    border-top: 2px solid var(--border-color, #e2e8f0);
+    gap: 14px;
+    flex-wrap: wrap;
+}
+.pn-btn {
+    padding: 10px 20px;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    text-decoration: none;
+    color: #7c3aed;
+    font-weight: 700;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+.pn-btn:hover {
+    background: #7c3aed;
+    color: #fff;
+    border-color: #7c3aed;
+}
+.pn-hub {
+    padding: 10px 18px;
+    background: linear-gradient(135deg, #7c3aed, #4c1d95);
+    color: #fff !important;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+/* QUIZ STYLES */
+.quiz-section-wrap {
+    margin: 45px 0 25px;
+}
+.quiz-card-container {
+    background: var(--bg-surface, #ffffff);
+    border: 1.5px solid rgba(124, 58, 237, 0.25);
+    border-radius: 14px;
+    padding: 32px 28px;
+    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.08);
+}
+[data-theme="dark"] .quiz-card-container {
+    background: #111424;
+    border-color: rgba(139, 92, 246, 0.3);
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+}
+.quiz-header {
+    border-bottom: 2px solid rgba(124, 58, 237, 0.15);
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+.quiz-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.12), rgba(245, 158, 11, 0.15));
+    color: #7c3aed;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+.quiz-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-heading);
+    margin: 0 0 6px 0;
+}
+.quiz-subtitle {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    margin: 0;
+    max-width: 680px;
+}
+.quiz-score-badge {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #ffffff;
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+.q-block {
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    transition: all 0.2s ease;
+}
+[data-theme="dark"] .q-block {
+    background: #181d33;
+    border-color: #272f4e;
+}
+.q-title {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text-heading);
+    margin-bottom: 14px;
+    display: flex;
+    gap: 10px;
+    line-height: 1.5;
+}
+.q-num {
+    color: #7c3aed;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+.q-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.q-opt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-surface, #ffffff);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    cursor: pointer;
+    color: var(--text-body);
+    transition: all 0.15s ease;
+}
+[data-theme="dark"] .q-opt {
+    background: #111424;
+    border-color: #2a3154;
+}
+.q-opt:hover {
+    border-color: #7c3aed;
+    background: rgba(124, 58, 237, 0.04);
+}
+.q-opt input[type="radio"] {
+    margin: 0;
+    accent-color: #7c3aed;
+}
+.q-opt.correct-choice {
+    background: rgba(16, 185, 129, 0.12) !important;
+    border-color: #10b981 !important;
+    color: #065f46 !important;
+    font-weight: 600;
+}
+[data-theme="dark"] .q-opt.correct-choice {
+    color: #34d399 !important;
+}
+.q-opt.wrong-choice {
+    background: rgba(239, 68, 68, 0.12) !important;
+    border-color: #ef4444 !important;
+    color: #991b1b !important;
+}
+[data-theme="dark"] .q-opt.wrong-choice {
+    color: #f87171 !important;
+}
+.q-explanation {
+    display: none;
+    margin-top: 12px;
+    padding: 12px 14px;
+    background: rgba(124, 58, 237, 0.06);
+    border-left: 3px solid #7c3aed;
+    border-radius: 6px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-body);
+}
+.quiz-actions {
+    display: flex;
+    gap: 14px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+}
+.btn-quiz-check {
+    background: linear-gradient(135deg, #7c3aed, #5b21b6);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 26px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
+    transition: all 0.2s;
+}
+.btn-quiz-check:hover {
+    background: linear-gradient(135deg, #6d28d9, #4c1d95);
+    transform: translateY(-1px);
+}
+.btn-quiz-reset {
+    background: var(--bg-subtle, #f8fafc);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-quiz-reset:hover {
+    background: var(--bg-card-hover);
+    color: var(--text-heading);
+}
+
+@media (max-width: 768px) {
+    .page-container { padding: 22px 18px; margin: 15px auto; }
+    .math-banner { padding: 22px 20px; }
+    .math-banner-title { font-size: 24px; }
+    .nav-panel { column-count: 1; }
+}
+</style>
+</head>
+<body>
+
+
+    <header class="global-navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <span class="nav-brand-icon">⚡</span>
+                <span class="nav-brand-text">OmniCourse<span class="nav-brand-accent">.Hub</span></span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link"><span class="icon">🏠</span> All Subjects</a>
+                
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn active" style="color: #a78bfa;"><span class="icon">📐</span> Mathematics (29) ▾</button>
+                    <div class="nav-dropdown-menu">
+                        <a href="maths.html" class="nav-dropdown-header" style="background: linear-gradient(135deg, #7c3aed, #4c1d95); color: #fff;">📋 Mathematics Syllabus Hub (All 29)</a>
+                        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit I: Divisibility & Base Expansions</div>
+<a href="maths-module-1.html">Module 1: Divisibility and the Division Algorithm</a>
+<a href="maths-module-2.html">Module 2: Modular Arithmetic and Congruences</a>
+<a href="maths-module-3.html">Module 3: Integer Representations and Base Expansions</a>
+<a href="maths-module-4.html">Module 4: Octal, Hexadecimal & Fast Base Conversions</a>
+<a href="maths-module-5.html">Module 5: Algorithms for Integer Operations</a>
+<div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit II: Primes, Divisibility Tests & GCD</div>
+<a href="maths-module-6.html">Module 6: Prime and Composite Numbers</a>
+<a href="maths-module-7.html">Module 7: Fundamental Theorem of Arithmetic</a>
+<a href="maths-module-8.html">Module 8: Trial Division and the Sieve of Eratosthenes</a>
+<a href="maths-module-9.html">Module 9: Prime Number Theorem and Prime Distribution</a>
+<a href="maths-module-10.html">Module 10: GCD, LCM and the Euclidean Algorithm</a>
+<a href="maths-module-11.html">Module 11: GCD as a Linear Combination (Bézout's Theorem)</a>
+<div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit III: Congruences, CRT & Fermat/Euler</div>
+<a href="maths-module-12.html">Module 12: Linear Congruences and Modular Inverses</a>
+<a href="maths-module-13.html">Module 13: Chinese Remainder Theorem (CRT)</a>
+<a href="maths-module-14.html">Module 14: Computer Arithmetic with Large Integers</a>
+<a href="maths-module-15.html">Module 15: Fermat's Little Theorem (FLT)</a>
+<a href="maths-module-16.html">Module 16: Applications of Congruences</a>
+<a href="maths-module-17.html">Module 17: Mixed MCQ Mastery and Final Revision</a>
+<div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit IV: Classical Cryptography & Ciphers</div>
+<a href="maths-module-18.html">Module 18: Introduction to Cryptography & Security Models</a>
+<a href="maths-module-19.html">Module 19: Classical Cryptography & Substitution Ciphers</a>
+<a href="maths-module-20.html">Module 20: Shift Cipher and Caesar Cipher</a>
+<a href="maths-module-21.html">Module 21: Affine Cipher & Modular Inverses</a>
+<a href="maths-module-22.html">Module 22: Vigenère Polyalphabetic Cipher & Tableau</a>
+<a href="maths-module-23.html">Module 23: Hill Cipher & Matrix Cryptography</a>
+<a href="maths-module-24.html">Module 24: Permutation & Transposition Ciphers</a>
+<a href="maths-module-25.html">Module 25: Mathematical Cryptosystems & Attack Models</a>
+<div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit V: Public Key Cryptography & Modern Protocols</div>
+<a href="maths-module-26.html">Module 26: Foundations of Public Key Cryptography & Fast Modular Exponentiation</a>
+<a href="maths-module-27.html">Module 27: Diffie-Hellman Key Exchange & Discrete Logarithm Problem</a>
+<a href="maths-module-28.html">Module 28: The RSA Cryptosystem: Key Generation, Encryption & Decryption</a>
+<a href="maths-module-29.html">Module 29: The ElGamal Cryptosystem & Comprehensive Unit V Exam Mastery</a>
+                    </div>
+                </div>
+
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn"><span class="icon">⛓️</span> Blockchain (18) ▾</button>
+                    <div class="nav-dropdown-menu">
+                        <a href="blockchain.html" class="nav-dropdown-header">📋 Blockchain Syllabus Hub (All 18)</a>
+                        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit I (Mods 1–4)</div>
+                        <a href="blockchain-module-1.html">Module 1: History &amp; Bitcoin</a>
+                        <a href="blockchain-module-2.html">Module 2: Distributed Systems</a>
+                        <a href="blockchain-module-3.html">Module 3: Consensus Protocols</a>
+                        <a href="blockchain-module-4.html">Module 4: Decentralization</a>
+                        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit II (Mods 5–8)</div>
+                        <a href="blockchain-module-5.html">Module 5: Symmetric Crypto</a>
+                        <a href="blockchain-module-6.html">Module 6: Public Key Crypto</a>
+                        <a href="blockchain-module-7.html">Module 7: Digital Signatures</a>
+                        <a href="blockchain-module-8.html">Module 8: SHA &amp; Hashes</a>
+                        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit III (Mods 9–13)</div>
+                        <a href="blockchain-module-9.html">Module 9: Consensus Problem &amp; Design</a>
+                        <a href="blockchain-module-10.html">Module 10: Paxos, Raft &amp; PBFT</a>
+                        <a href="blockchain-module-11.html">Module 11: PoW, PoS &amp; Selection</a>
+                        <a href="blockchain-module-12.html">Module 12: Bitcoin Keys &amp; UTXO</a>
+                        <a href="blockchain-module-13.html">Module 13: Mining, Network &amp; Forks</a>
+                        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit IV (Mods 14–18)</div>
+                        <a href="blockchain-module-14.html">Module 14: The Bitcoin Network</a>
+                        <a href="blockchain-module-15.html">Module 15: Bitcoin Wallets</a>
+                        <a href="blockchain-module-16.html">Module 16: Bitcoin Payments</a>
+                        <a href="blockchain-module-17.html">Module 17: Advanced Protocols</a>
+                        <a href="blockchain-module-18.html">Module 18: Bitcoin Investment</a>
+                        <a href="blockchain_guide.html" class="nav-dropdown-special">📖 Full 8-Module Reader</a>
+                    </div>
+                </div>
+
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn"><span class="icon">🐍</span> Django Course (45) ▾</button>
+                    <div class="nav-dropdown-menu">
+                        <a href="django.html" class="nav-dropdown-header">📋 Django Syllabus Hub</a>
+                        <a href="module-1.html">Module 1: Fundamentals</a>
+                        <a href="module-7.html">Module 7: URL Routing</a>
+                        <a href="module-12.html">Module 12: Templates</a>
+                        <a href="module-21.html">Module 21: Forms</a>
+                        <a href="module-25.html">Module 25: Models &amp; ORM</a>
+                        <a href="module-37.html">Module 37: Authentication</a>
+                        <a href="module-42.html">Module 42: Complete Revision</a>
+                        <a href="django_guide.html" class="nav-dropdown-special">📖 Full 44-Module Reader</a>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-actions">
+                <button id="themeToggleBtn" class="theme-btn" title="Toggle Dark/Light Mode">🌙</button>
+                <a href="maths.html" class="nav-action-pill" style="background: linear-gradient(135deg, #7c3aed, #4c1d95);" title="Return to Mathematics Hub">📋 Maths Hub</a>
+            </div>
+        </div>
+    </header>
+    
+
+<div class="page-container">
+
+    <!-- Math Banner Header -->
+    <div class="math-banner">
+        <div class="math-badge">📐 Unit IV: Classical Cryptography & Ciphers &bull; Module 25 of 29</div>
+        <h1 class="math-banner-title">Mathematical Cryptosystems & Attack Models</h1>
+        <div style="font-size: 13.5px; opacity: 0.9; margin-top: 6px;">Rigorous lecture notes, theorems, proofs, worked calculation steps &amp; self-grading quiz</div>
+    </div>
+
+    <!-- Collapsible Course Navigation Panel -->
+    <div class="nav-toggle">
+        <button type="button" class="nav-toggle-btn" onclick="toggleNavPanel()">
+            <span>📚 Course Syllabus Navigator (Modules 01 &ndash; 29)</span>
+            <span>▾ Toggle Menu</span>
+        </button>
+        <div id="navPanel" class="nav-panel">
+            <div style="font-size: 11px; font-weight: 800; color: #7c3aed; text-transform: uppercase; margin: 10px 0 4px; padding-left: 6px; letter-spacing: 0.5px; break-inside: avoid;">Unit I (Mods 1–5)</div>
+<a class="nav-item" href="maths-module-1.html">1. Divisibility and the Division Algorithm</a>
+<a class="nav-item" href="maths-module-2.html">2. Modular Arithmetic and Congruences</a>
+<a class="nav-item" href="maths-module-3.html">3. Integer Representations and Base Expansions</a>
+<a class="nav-item" href="maths-module-4.html">4. Octal, Hexadecimal & Fast Base Conversions</a>
+<a class="nav-item" href="maths-module-5.html">5. Algorithms for Integer Operations</a>
+<div style="font-size: 11px; font-weight: 800; color: #7c3aed; text-transform: uppercase; margin: 10px 0 4px; padding-left: 6px; letter-spacing: 0.5px; break-inside: avoid;">Unit II (Mods 6–11)</div>
+<a class="nav-item" href="maths-module-6.html">6. Prime and Composite Numbers</a>
+<a class="nav-item" href="maths-module-7.html">7. Fundamental Theorem of Arithmetic</a>
+<a class="nav-item" href="maths-module-8.html">8. Trial Division and the Sieve of Eratosthenes</a>
+<a class="nav-item" href="maths-module-9.html">9. Prime Number Theorem and Prime Distribution</a>
+<a class="nav-item" href="maths-module-10.html">10. GCD, LCM and the Euclidean Algorithm</a>
+<a class="nav-item" href="maths-module-11.html">11. GCD as a Linear Combination (Bézout's Theorem)</a>
+<div style="font-size: 11px; font-weight: 800; color: #7c3aed; text-transform: uppercase; margin: 10px 0 4px; padding-left: 6px; letter-spacing: 0.5px; break-inside: avoid;">Unit III (Mods 12–17)</div>
+<a class="nav-item" href="maths-module-12.html">12. Linear Congruences and Modular Inverses</a>
+<a class="nav-item" href="maths-module-13.html">13. Chinese Remainder Theorem (CRT)</a>
+<a class="nav-item" href="maths-module-14.html">14. Computer Arithmetic with Large Integers</a>
+<a class="nav-item" href="maths-module-15.html">15. Fermat's Little Theorem (FLT)</a>
+<a class="nav-item" href="maths-module-16.html">16. Applications of Congruences</a>
+<a class="nav-item" href="maths-module-17.html">17. Mixed MCQ Mastery and Final Revision</a>
+<div style="font-size: 11px; font-weight: 800; color: #7c3aed; text-transform: uppercase; margin: 10px 0 4px; padding-left: 6px; letter-spacing: 0.5px; break-inside: avoid;">Unit IV (Mods 18–25)</div>
+<a class="nav-item" href="maths-module-18.html">18. Introduction to Cryptography & Security Models</a>
+<a class="nav-item" href="maths-module-19.html">19. Classical Cryptography & Substitution Ciphers</a>
+<a class="nav-item" href="maths-module-20.html">20. Shift Cipher and Caesar Cipher</a>
+<a class="nav-item" href="maths-module-21.html">21. Affine Cipher & Modular Inverses</a>
+<a class="nav-item" href="maths-module-22.html">22. Vigenère Polyalphabetic Cipher & Tableau</a>
+<a class="nav-item" href="maths-module-23.html">23. Hill Cipher & Matrix Cryptography</a>
+<a class="nav-item" href="maths-module-24.html">24. Permutation & Transposition Ciphers</a>
+<span class="nav-item current">25. Mathematical Cryptosystems & Attack Models</span>
+<div style="font-size: 11px; font-weight: 800; color: #7c3aed; text-transform: uppercase; margin: 10px 0 4px; padding-left: 6px; letter-spacing: 0.5px; break-inside: avoid;">Unit V (Mods 26–29)</div>
+<a class="nav-item" href="maths-module-26.html">26. Foundations of Public Key Cryptography & Fast Modular Exponentiation</a>
+<a class="nav-item" href="maths-module-27.html">27. Diffie-Hellman Key Exchange & Discrete Logarithm Problem</a>
+<a class="nav-item" href="maths-module-28.html">28. The RSA Cryptosystem: Key Generation, Encryption & Decryption</a>
+<a class="nav-item" href="maths-module-29.html">29. The ElGamal Cryptosystem & Comprehensive Unit V Exam Mastery</a>
+        </div>
+    </div>
+
+    <!-- Core Module Academic Content -->
+    <div class="module-content">
+<h1><strong>Unit IV — Module 8: Cryptosystems</strong></h1>
+<p>Primary source: Rosen, <em>Number Theory and Cryptography</em>, Section 4.6, Definition 1 and Example 7, page 298.</p>
+<p>This module is important because it brings the classical ciphers together under one mathematical framework. Instead of studying each cipher as a separate technique, we describe a complete family of encryption methods using sets, keys and functions.</p>
+<p>Rosen introduces the general definition of a cryptosystem immediately after the transposition cipher.</p>
+<p>U456 (Textbook content) <span class="ref-pill">📚 Reference: MTH381.pdf</span></p>
+<h2><strong>8.1 What is a cryptosystem?</strong></h2>
+
+    <div class="math-diagram-box">
+        <h4 class="math-diagram-title">Mathematical Formal Definition of a Cryptosystem \((P, C, K, E, D)\)</h4>
+        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 16px 0; text-align: center;">
+            <div class="math-pill" style="border-color: #7c3aed;">
+                <div style="font-size: 18px; font-weight: 800; color: #7c3aed;">\(\mathcal{P}\)</div>
+                <div style="font-size: 11px; font-weight: 700; color: var(--text-heading); margin-top: 4px;">Plaintext Space</div>
+                <div style="font-size: 10.5px; color: var(--text-secondary);">Set of all unencrypted strings</div>
+            </div>
+            <div class="math-pill" style="border-color: #8b5cf6;">
+                <div style="font-size: 18px; font-weight: 800; color: #8b5cf6;">\(\mathcal{C}\)</div>
+                <div style="font-size: 11px; font-weight: 700; color: var(--text-heading); margin-top: 4px;">Ciphertext Space</div>
+                <div style="font-size: 10.5px; color: var(--text-secondary);">Set of all encrypted strings</div>
+            </div>
+            <div class="math-pill" style="border-color: #f59e0b;">
+                <div style="font-size: 18px; font-weight: 800; color: #d97706;">\(\mathcal{K}\)</div>
+                <div style="font-size: 11px; font-weight: 700; color: var(--text-heading); margin-top: 4px;">Keyspace</div>
+                <div style="font-size: 10.5px; color: var(--text-secondary);">Set of all valid secret keys</div>
+            </div>
+            <div class="math-pill" style="border-color: #3b82f6;">
+                <div style="font-size: 18px; font-weight: 800; color: #2563eb;">\(\mathcal{E}\)</div>
+                <div style="font-size: 11px; font-weight: 700; color: var(--text-heading); margin-top: 4px;">Encryption Rule</div>
+                <div style="font-size: 10.5px; color: var(--text-secondary);">\(E_k: \mathcal{P} \to \mathcal{C}\)</div>
+            </div>
+            <div class="math-pill" style="border-color: #10b981;">
+                <div style="font-size: 18px; font-weight: 800; color: #059669;">\(\mathcal{D}\)</div>
+                <div style="font-size: 11px; font-weight: 700; color: var(--text-heading); margin-top: 4px;">Decryption Rule</div>
+                <div style="font-size: 10.5px; color: var(--text-secondary);">\(D_k: \mathcal{C} \to \mathcal{P}\)</div>
+            </div>
+        </div>
+        <div style="text-align: center; padding: 10px; background: rgba(16, 185, 129, 0.08); border-radius: 8px; border: 1px solid #10b981; font-weight: 700; color: #065f46;">
+            Fundamental Decryption Condition: \(\forall k \in \mathcal{K},\; \forall p \in \mathcal{P}:\quad D_k(E_k(p)) = p\)
+        </div>
+    </div>
+    
+<p>A <strong>cryptosystem</strong> is a mathematical system used to encrypt plaintext into ciphertext and decrypt ciphertext back into plaintext.</p>
+<p>It consists of five components:</p>
+<div class="math-display">\[\boxed{(P,C,K,E,D)}\]</div>
+<p>Rosen calls this a five-tuple.</p>
+<p>The five components are:</p>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Name</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math-inline">\(P\)</span></td>
+<td>Plaintext space</td>
+<td>Set of all possible plaintext strings</td>
+</tr>
+<tr>
+<td><span class="math-inline">\(C\)</span></td>
+<td>Ciphertext space</td>
+<td>Set of all possible ciphertext strings</td>
+</tr>
+<tr>
+<td><span class="math-inline">\(K\)</span></td>
+<td>Keyspace</td>
+<td>Set of all possible keys</td>
+</tr>
+<tr>
+<td><span class="math-inline">\(E\)</span></td>
+<td>Encryption functions</td>
+<td>Set of all possible encryption functions</td>
+</tr>
+<tr>
+<td><span class="math-inline">\(D\)</span></td>
+<td>Decryption functions</td>
+<td>Set of all possible decryption functions</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Memorise the order:</strong></p>
+<div class="math-display">\[\boxed{P,\ C,\ K,\ E,\ D}\]</div>
+<p>A common MCQ asks which component represents the set of all possible keys. The answer is <span class="math-inline">\(K\)</span>, the keyspace.</p>
+<h2><strong>8.2 Understanding each component</strong></h2>
+<h3>**1. Plaintext space —**<span class="math-inline">\(P\)</span></h3>
+<p>Plaintext is the original message before encryption.</p>
+<p>For example:</p>
+<div class="math-display">\[P=\{\text{all permitted messages}\}.\]</div>
+<p>If our messages consist of English letters, possible plaintexts include:</p>
+<ul>
+<li>HELLO</li>
+<li>ATTACK</li>
+<li>MATHEMATICS</li>
+<li>SECRET MESSAGE</li>
+</ul>
+<p>The set of all such permitted messages forms the plaintext space.</p>
+<h3>**2. Ciphertext space —**<span class="math-inline">\(C\)</span></h3>
+<p>Ciphertext is the encrypted form of the original message.</p>
+<p>For example:</p>
+<div class="math-display">\[\text{HELLO}\rightarrow\text{KHOOR}\]</div>
+<p>Here, KHOOR is the ciphertext.</p>
+<p>The set of all permitted encrypted messages is called the ciphertext space.</p>
+<h3>**3. Keyspace —**<span class="math-inline">\(K\)</span></h3>
+<p>The keyspace is the set of all possible encryption keys.</p>
+<p>For a shift cipher, the possible shifts are:</p>
+<div class="math-display">\[K=\mathbb Z_{26}\]</div>
+<p>Therefore:</p>
+<div class="math-display">\[K=\{0,1,2,\ldots,25\}.\]</div>
+<p>There are 26 possible shift keys.</p>
+<p>For an affine cipher, the key consists of two integers:</p>
+<div class="math-display">\[(a,b)\]</div>
+<p>with the condition:</p>
+<div class="math-display">\[\gcd(a,26)=1.\]</div>
+<p>Thus, its keyspace consists of all valid pairs <span class="math-inline">\((a,b)\)</span>.</p>
+<h3>**4. Encryption functions —**<span class="math-inline">\(E\)</span></h3>
+<p>Encryption functions convert plaintext into ciphertext.</p>
+<p>For a particular key <span class="math-inline">\(k\)</span>, Rosen denotes the corresponding encryption function by:</p>
+<div class="math-display">\[\boxed{E_k}\]</div>
+<p>For example, in a shift cipher:</p>
+<div class="math-display">\[E_k(p)=(p+k)\bmod26.\]</div>
+<p>Different keys produce different encryption functions.</p>
+<h3>**5. Decryption functions —**<span class="math-inline">\(D\)</span></h3>
+<p>Decryption functions recover the original plaintext from ciphertext.</p>
+<p>For a particular key <span class="math-inline">\(k\)</span>, the corresponding decryption function is:</p>
+<div class="math-display">\[\boxed{D_k}\]</div>
+<p>For a shift cipher:</p>
+<div class="math-display">\[D_k(c)=(c-k)\bmod26.\]</div>
+<p>The decryption function must reverse the effect of the corresponding encryption function.</p>
+<p>U456 (Textbook content) <span class="ref-pill">📚 Reference: MTH381.pdf</span></p>
+<h2><strong>8.3 The most important condition of a cryptosystem</strong></h2>
+<p>The fundamental correctness condition is:</p>
+<div class="math-display">\[\boxed{D_k(E_k(p))=p}\]</div>
+<p>for every plaintext string <span class="math-inline">\(p\)</span>.</p>
+<p>This means:</p>
+<ol>
+<li>Start with plaintext <span class="math-inline">\(p\)</span>.</li>
+<li>Encrypt it using key <span class="math-inline">\(k\)</span>.</li>
+<li>Decrypt the resulting ciphertext using the corresponding decryption function.</li>
+<li>The original plaintext must be recovered.</li>
+</ol>
+<p>In mathematical notation:</p>
+<div class="math-display">\[p\xrightarrow{E_k}E_k(p) \xrightarrow{D_k}D_k(E_k(p))=p.\]</div>
+<p>This is the central condition in Rosen's definition.</p>
+<p><strong>Important MCQ trap:</strong> The condition is not <span class="math-inline">\(E_k(D_k(p))=p\)</span> as the defining expression. Rosen specifically writes:</p>
+<div class="math-display">\[D_k(E_k(p))=p.\]</div>
+<p><strong>Cryptosystem correctness</strong></p>
+<p><strong>Plaintext</strong><span class="math-inline">\(p\)</span></p>
+<p>Encryption <span class="math-inline">\(E_k\)</span></p>
+<p><strong>Ciphertext</strong><span class="math-inline">\(E_k(p)\)</span></p>
+<p>Decryption <span class="math-inline">\(D_k\)</span></p>
+<p><strong>Original plaintext</strong><span class="math-inline">\(p\)</span></p>
+<h2><strong>8.4 Rosen's Example 7 — Describe the family of shift ciphers as a cryptosystem</strong></h2>
+<p>This is a direct textbook example and is especially important for understanding the five-tuple.</p>
+<p>Rosen assumes that messages have already been converted into integers from 0 to 25.</p>
+<p>Thus, the alphabet-to-number conversion is considered outside the cryptosystem.</p>
+<h3><strong>Step 1: Define the plaintext space</strong></h3>
+<p>The plaintext messages are strings of elements of:</p>
+<div class="math-display">\[\mathbb Z_{26}.\]</div>
+<p>Therefore:</p>
+<div class="math-display">\[\boxed{P=\text{strings of elements of }\mathbb Z_{26}}\]</div>
+<h3><strong>Step 2: Define the ciphertext space</strong></h3>
+<p>The ciphertext messages are also strings of elements of:</p>
+<div class="math-display">\[\mathbb Z_{26}.\]</div>
+<p>Therefore:</p>
+<div class="math-display">\[\boxed{C=\text{strings of elements of }\mathbb Z_{26}}\]</div>
+<h3><strong>Step 3: Define the keyspace</strong></h3>
+<p>The key is the amount by which the plaintext numbers are shifted.</p>
+<p>There are 26 possible shifts:</p>
+<div class="math-display">\[\boxed{K=\mathbb Z_{26}}\]</div>
+<h3><strong>Step 4: Define the encryption functions</strong></h3>
+<p>For a key <span class="math-inline">\(k\)</span>, the encryption function is:</p>
+<div class="math-display">\[\boxed{E_k(p)=(p+k)\bmod26}\]</div>
+<h3><strong>Step 5: Define the decryption functions</strong></h3>
+<p>The decryption function is:</p>
+<div class="math-display">\[\boxed{D_k(c)=(c-k)\bmod26}\]</div>
+<p>Therefore, the complete shift-cipher cryptosystem is:</p>
+<div class="math-display">\[\boxed{ (P,C,K,E,D) }\]</div>
+<p>where:</p>
+<div class="math-display">\[\begin{aligned} P&=\text{strings of elements of }\mathbb Z_{26}\\\ C&=\text{strings of elements of }\mathbb Z_{26}\\\ K&=\mathbb Z_{26}\\\ E_k(p)&=(p+k)\bmod26\\\ D_k(c)&=(c-k)\bmod26. \end{aligned}\]</div>
+<p>U456 (Textbook content) <span class="ref-pill">📚 Reference: MTH381.pdf</span></p>
+<h3><strong>Step 6: Verify the correctness condition</strong></h3>
+<p>Start with:</p>
+<div class="math-display">\[E_k(p)=(p+k)\bmod26.\]</div>
+<p>Apply decryption:</p>
+<div class="math-display">\[D_k(E_k(p)) = (E_k(p)-k)\bmod26.\]</div>
+<p>Substitute:</p>
+<div class="math-display">\[=((p+k)\bmod26-k)\bmod26.\]</div>
+<p>Using modular arithmetic:</p>
+<div class="math-display">\[=(p+k-k)\bmod26.\]</div>
+<p>Hence:</p>
+<div class="math-display">\[\boxed{D_k(E_k(p))=p}\]</div>
+<p>The correctness condition is satisfied.</p>
+<h2><strong>8.5 Private-key cryptosystems</strong></h2>
+<p>Rosen next introduces private-key cryptography.</p>
+<p>A <strong>private-key cryptosystem</strong> is one in which knowing the encryption key allows the decryption key to be found quickly.</p>
+<p>For example, consider the shift cipher:</p>
+<div class="math-display">\[c=(p+k)\bmod26.\]</div>
+<p>To decrypt:</p>
+<div class="math-display">\[p=(c-k)\bmod26.\]</div>
+<p>If you know <span class="math-inline">\(k\)</span>, you immediately know how to decrypt.</p>
+<p>Therefore, the encryption and decryption keys are closely related.</p>
+<h3><strong>Important characteristics</strong></h3>
+<ol>
+<li>The communicating parties must share a secret key.</li>
+<li>The key must be kept secret.</li>
+<li>Anyone who knows the key can encrypt and decrypt.</li>
+<li>The communicating parties need a secure way to exchange the key.</li>
+</ol>
+<p>Rosen identifies shift and affine ciphers as private-key cryptosystems.</p>
+<p>U456 (Textbook content) <span class="ref-pill">📚 Reference: MTH381.pdf</span></p>
+<h2><strong>8.6 Public-key cryptosystems</strong></h2>
+<p>In a <strong>public-key cryptosystem</strong>, the encryption key is public knowledge, but the decryption key is kept secret.</p>
+<p>This is the main difference from private-key cryptography.</p>
+<p>There are two different keys:</p>
+<ul>
+<li>Public key: used to encrypt messages.</li>
+<li>Private key: used to decrypt messages.</li>
+</ul>
+<p>A person can publish their public key so that other people can send them encrypted messages. Only the holder of the corresponding private key should be able to decrypt those messages.</p>
+<h3><strong>Private-key versus public-key cryptography</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Private-key cryptography</th>
+<th>Public-key cryptography</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Encryption key</td>
+<td>Secret</td>
+<td>Public</td>
+</tr>
+<tr>
+<td>Decryption key</td>
+<td>Secret</td>
+<td>Private</td>
+</tr>
+<tr>
+<td>Key relationship</td>
+<td>Decryption key can be found quickly from encryption key</td>
+<td>Designed so the private key cannot feasibly be found from the public key</td>
+</tr>
+<tr>
+<td>Key sharing</td>
+<td>Secret key must be shared securely</td>
+<td>Public key can be distributed openly</td>
+</tr>
+<tr>
+<td>Examples in Rosen</td>
+<td>Shift and affine ciphers</td>
+<td>RSA</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Important distinction:</strong> Public-key encryption does not mean that the encrypted message is public. The public key is public; the message remains encrypted.</p>
+<p>Rosen introduces public-key cryptography after the cryptosystem definition and later discusses RSA as an example.</p>
+<p>U456 (Textbook content) <span class="ref-pill">📚 Reference: MTH381.pdf</span></p>
+<h2><strong>8.7 Compare the classical ciphers as cryptosystems</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Cipher</th>
+<th>Key</th>
+<th>Encryption function or operation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shift</td>
+<td><span class="math-inline">\(k\in\mathbb Z_{26}\)</span></td>
+<td><span class="math-inline">\((p+k)\bmod26\)</span></td>
+</tr>
+<tr>
+<td>Affine</td>
+<td><span class="math-inline">\((a,b)\)</span>, <span class="math-inline">\(\gcd(a,26)=1\)</span></td>
+<td><span class="math-inline">\((ap+b)\bmod26\)</span></td>
+</tr>
+<tr>
+<td>Vigenère</td>
+<td>Repeating string of letters</td>
+<td>Position-dependent addition modulo 26</td>
+</tr>
+<tr>
+<td>Hill</td>
+<td>Invertible matrix modulo 26</td>
+<td><span class="math-inline">\(C=KP\bmod26\)</span></td>
+</tr>
+<tr>
+<td>Transposition</td>
+<td>Permutation of block positions</td>
+<td>Rearrangement of positions</td>
+</tr>
+</tbody>
+</table>
+<p>The five-tuple framework can describe all these cipher families.</p>
+<p>The mathematical structure remains the same:</p>
+<div class="math-display">\[(P,C,K,E,D).\]</div>
+<p>Only the sets of keys and the encryption/decryption functions change.</p>
+<h2><strong>8.8 Cryptanalysis</strong></h2>
+<p>Rosen defines <strong>cryptanalysis</strong> as the process of recovering plaintext from ciphertext without knowledge of the encryption method, or with knowledge of the encryption method but without knowledge of the key.</p>
+<p>In simpler terms, cryptanalysis is the study of breaking encrypted messages.</p>
+<p>For example:</p>
+<ul>
+<li>If the cipher is known but the key is unknown, an attacker attempts to recover the key or plaintext.</li>
+<li>If both the cipher and key are unknown, the attacker must determine the encryption method as well.</li>
+</ul>
+<p>Rosen also discusses frequency analysis as a method of attacking shift ciphers.</p>
+<p>U456 (Textbook content) <span class="ref-pill">📚 Reference: MTH381.pdf</span></p>
+<h2><strong>8.9 Important MCQ concepts</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Correct answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cryptosystem notation</td>
+<td><span class="math-inline">\((P,C,K,E,D)\)</span></td>
+</tr>
+<tr>
+<td>Number of components</td>
+<td>Five</td>
+</tr>
+<tr>
+<td>Plaintext set</td>
+<td><span class="math-inline">\(P\)</span></td>
+</tr>
+<tr>
+<td>Ciphertext set</td>
+<td><span class="math-inline">\(C\)</span></td>
+</tr>
+<tr>
+<td>Keyspace</td>
+<td><span class="math-inline">\(K\)</span></td>
+</tr>
+<tr>
+<td>Encryption functions</td>
+<td><span class="math-inline">\(E\)</span></td>
+</tr>
+<tr>
+<td>Decryption functions</td>
+<td><span class="math-inline">\(D\)</span></td>
+</tr>
+<tr>
+<td>Encryption function for key <span class="math-inline">\(k\)</span></td>
+<td><span class="math-inline">\(E_k\)</span></td>
+</tr>
+<tr>
+<td>Decryption function for key <span class="math-inline">\(k\)</span></td>
+<td><span class="math-inline">\(D_k\)</span></td>
+</tr>
+<tr>
+<td>Correctness condition</td>
+<td><span class="math-inline">\(D_k(E_k(p))=p\)</span></td>
+</tr>
+<tr>
+<td>Shift cipher keyspace</td>
+<td><span class="math-inline">\(\mathbb Z_{26}\)</span></td>
+</tr>
+<tr>
+<td>Shift encryption</td>
+<td><span class="math-inline">\((p+k)\bmod26\)</span></td>
+</tr>
+<tr>
+<td>Shift decryption</td>
+<td><span class="math-inline">\((c-k)\bmod26\)</span></td>
+</tr>
+<tr>
+<td>Shift and affine ciphers</td>
+<td>Private-key cryptosystems</td>
+</tr>
+<tr>
+<td>Public-key cryptography</td>
+<td>Encryption key public, decryption key secret</td>
+</tr>
+<tr>
+<td>Cryptanalysis</td>
+<td>Recovering plaintext from ciphertext</td>
+</tr>
+</tbody>
+</table>
+
+    <div class="quiz-section-wrap" id="moduleQuizContainer_25">
+        <div class="quiz-card-container">
+            <div class="quiz-header">
+                <div>
+                    <div class="quiz-badge">🧠 Interactive Knowledge Check &bull; Module 25</div>
+                    <h3 class="quiz-title">Self-Grading Multiple Choice Examination</h3>
+                    <p class="quiz-subtitle">Attempt all 14 questions to test your mathematical comprehension and exam readiness. Solutions and step-by-step logic unlock instantly.</p>
+                </div>
+                <div class="quiz-score-badge" id="quizScoreBadge_25" style="display: none;">
+                    <span id="quizScoreVal_25">0</span>/14 &bull; <span id="quizScorePct_25">0%</span>
+                </div>
+            </div>
+
+            <div class="quiz-body">
+                
+        <div class="q-block" id="q_block_25_1" data-corr="1">
+            <div class="q-title"><span class="q-num">1.</span> <span>A cryptosystem is represented by which five-tuple?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_25_1_opt_0">
+                <input type="radio" name="math_q_25_1" value="0">
+                <span><strong>A.</strong> (P,K,E,D,C)</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_1_opt_1">
+                <input type="radio" name="math_q_25_1" value="1">
+                <span><strong>B.</strong> (P,C,K,E,D)</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_1_opt_2">
+                <input type="radio" name="math_q_25_1" value="2">
+                <span><strong>C.</strong> (C,P,E,K,D)</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_1_opt_3">
+                <input type="radio" name="math_q_25_1" value="3">
+                <span><strong>D.</strong> (P,C,E,D)</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_25_1">
+                <strong>Mathematical Explanation:</strong> A formal cryptosystem is defined as a 5-tuple (P, C, K, E, D).
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_25_2" data-corr="1">
+            <div class="q-title"><span class="q-num">2.</span> <span>What does P represent?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_25_2_opt_0">
+                <input type="radio" name="math_q_25_2" value="0">
+                <span><strong>A.</strong> Permutation set</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_2_opt_1">
+                <input type="radio" name="math_q_25_2" value="1">
+                <span><strong>B.</strong> Plaintext strings</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_2_opt_2">
+                <input type="radio" name="math_q_25_2" value="2">
+                <span><strong>C.</strong> Public keys</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_2_opt_3">
+                <input type="radio" name="math_q_25_2" value="3">
+                <span><strong>D.</strong> Prime numbers</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_25_2">
+                <strong>Mathematical Explanation:</strong> P denotes the Plaintext space: the set of all possible unencrypted messages.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_25_3" data-corr="0">
+            <div class="q-title"><span class="q-num">3.</span> <span>What does C represent?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_25_3_opt_0">
+                <input type="radio" name="math_q_25_3" value="0">
+                <span><strong>A.</strong> Ciphertext strings</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_3_opt_1">
+                <input type="radio" name="math_q_25_3" value="1">
+                <span><strong>B.</strong> Cryptanalysis</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_3_opt_2">
+                <input type="radio" name="math_q_25_3" value="2">
+                <span><strong>C.</strong> Common keys</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_3_opt_3">
+                <input type="radio" name="math_q_25_3" value="3">
+                <span><strong>D.</strong> Character frequencies</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_25_3">
+                <strong>Mathematical Explanation:</strong> C denotes the Ciphertext space: the set of all possible encrypted messages.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_25_4" data-corr="2">
+            <div class="q-title"><span class="q-num">4.</span> <span>What is the keyspace?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_25_4_opt_0">
+                <input type="radio" name="math_q_25_4" value="0">
+                <span><strong>A.</strong> E</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_4_opt_1">
+                <input type="radio" name="math_q_25_4" value="1">
+                <span><strong>B.</strong> D</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_4_opt_2">
+                <input type="radio" name="math_q_25_4" value="2">
+                <span><strong>C.</strong> K</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_4_opt_3">
+                <input type="radio" name="math_q_25_4" value="3">
+                <span><strong>D.</strong> P</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_25_4">
+                <strong>Mathematical Explanation:</strong> K denotes the Keyspace: the set of all permissible keys.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_25_5" data-corr="2">
+            <div class="q-title"><span class="q-num">5.</span> <span>Which component represents the set of encryption functions?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_25_5_opt_0">
+                <input type="radio" name="math_q_25_5" value="0">
+                <span><strong>A.</strong> P</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_5_opt_1">
+                <input type="radio" name="math_q_25_5" value="1">
+                <span><strong>B.</strong> C</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_5_opt_2">
+                <input type="radio" name="math_q_25_5" value="2">
+                <span><strong>C.</strong> E</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_5_opt_3">
+                <input type="radio" name="math_q_25_5" value="3">
+                <span><strong>D.</strong> D</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_25_5">
+                <strong>Mathematical Explanation:</strong> E is the family of encryption transformations {E_k : k ∈ K}.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_25_6" data-corr="1">
+            <div class="q-title"><span class="q-num">6.</span> <span>What is the correct decryption function notation for key k?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_25_6_opt_0">
+                <input type="radio" name="math_q_25_6" value="0">
+                <span><strong>A.</strong> Eₖ</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_6_opt_1">
+                <input type="radio" name="math_q_25_6" value="1">
+                <span><strong>B.</strong> Dₖ</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_6_opt_2">
+                <input type="radio" name="math_q_25_6" value="2">
+                <span><strong>C.</strong> Kₑ</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_6_opt_3">
+                <input type="radio" name="math_q_25_6" value="3">
+                <span><strong>D.</strong> Pₖ</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_25_6">
+                <strong>Mathematical Explanation:</strong> D_k denotes the decryption transformation associated with key k.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_25_7" data-corr="1">
+            <div class="q-title"><span class="q-num">7.</span> <span>Which is the fundamental correctness condition?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_25_7_opt_0">
+                <input type="radio" name="math_q_25_7" value="0">
+                <span><strong>A.</strong> Eₖ(Dₖ(p))=p</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_7_opt_1">
+                <input type="radio" name="math_q_25_7" value="1">
+                <span><strong>B.</strong> Dₖ(Eₖ(p))=p</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_7_opt_2">
+                <input type="radio" name="math_q_25_7" value="2">
+                <span><strong>C.</strong> Eₖ(p)=Dₖ(p)</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_7_opt_3">
+                <input type="radio" name="math_q_25_7" value="3">
+                <span><strong>D.</strong> Dₖ(p)=k</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_25_7">
+                <strong>Mathematical Explanation:</strong> The core correctness condition is D_k(E_k(p)) = p for all plaintexts p and keys k.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_25_8" data-corr="2">
+            <div class="q-title"><span class="q-num">8.</span> <span>In Rosen's shift-cipher example, what is the keyspace?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_25_8_opt_0">
+                <input type="radio" name="math_q_25_8" value="0">
+                <span><strong>A.</strong> Z₂</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_8_opt_1">
+                <input type="radio" name="math_q_25_8" value="1">
+                <span><strong>B.</strong> Z₁₃</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_8_opt_2">
+                <input type="radio" name="math_q_25_8" value="2">
+                <span><strong>C.</strong> Z₂₆</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_8_opt_3">
+                <input type="radio" name="math_q_25_8" value="3">
+                <span><strong>D.</strong> Z₅₂</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_25_8">
+                <strong>Mathematical Explanation:</strong> In a shift cipher over the English alphabet, the keyspace K is ℤ₂₆ = {0, 1, ..., 25}.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_25_9" data-corr="1">
+            <div class="q-title"><span class="q-num">9.</span> <span>What is the shift-cipher encryption function?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_25_9_opt_0">
+                <input type="radio" name="math_q_25_9" value="0">
+                <span><strong>A.</strong> Eₖ(p)=(p−k) mod 26</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_9_opt_1">
+                <input type="radio" name="math_q_25_9" value="1">
+                <span><strong>B.</strong> Eₖ(p)=(p+k) mod 26</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_9_opt_2">
+                <input type="radio" name="math_q_25_9" value="2">
+                <span><strong>C.</strong> Eₖ(p)=pk mod 26</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_9_opt_3">
+                <input type="radio" name="math_q_25_9" value="3">
+                <span><strong>D.</strong> Eₖ(p)=p² mod 26</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_25_9">
+                <strong>Mathematical Explanation:</strong> The shift cipher encryption function is E_k(p) = (p + k) mod 26.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_25_10" data-corr="0">
+            <div class="q-title"><span class="q-num">10.</span> <span>What is the shift-cipher decryption function?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_25_10_opt_0">
+                <input type="radio" name="math_q_25_10" value="0">
+                <span><strong>A.</strong> Dₖ(c)=(c−k) mod 26</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_10_opt_1">
+                <input type="radio" name="math_q_25_10" value="1">
+                <span><strong>B.</strong> Dₖ(c)=(c+k) mod 26</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_10_opt_2">
+                <input type="radio" name="math_q_25_10" value="2">
+                <span><strong>C.</strong> Dₖ(c)=ck mod 26</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_10_opt_3">
+                <input type="radio" name="math_q_25_10" value="3">
+                <span><strong>D.</strong> Dₖ(c)=c² mod 26</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_25_10">
+                <strong>Mathematical Explanation:</strong> The shift cipher decryption function is D_k(c) = (c - k) mod 26.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_25_11" data-corr="0">
+            <div class="q-title"><span class="q-num">11.</span> <span>Which are identified by Rosen as private-key cryptosystems?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_25_11_opt_0">
+                <input type="radio" name="math_q_25_11" value="0">
+                <span><strong>A.</strong> Shift and affine ciphers</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_11_opt_1">
+                <input type="radio" name="math_q_25_11" value="1">
+                <span><strong>B.</strong> RSA and Diffie–Hellman</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_11_opt_2">
+                <input type="radio" name="math_q_25_11" value="2">
+                <span><strong>C.</strong> Only Hill cipher</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_11_opt_3">
+                <input type="radio" name="math_q_25_11" value="3">
+                <span><strong>D.</strong> Only transposition cipher</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_25_11">
+                <strong>Mathematical Explanation:</strong> Classical ciphers like Shift and Affine are private-key (symmetric) cryptosystems.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_25_12" data-corr="2">
+            <div class="q-title"><span class="q-num">12.</span> <span>In public-key cryptography, which key is publicly known?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_25_12_opt_0">
+                <input type="radio" name="math_q_25_12" value="0">
+                <span><strong>A.</strong> Decryption key</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_12_opt_1">
+                <input type="radio" name="math_q_25_12" value="1">
+                <span><strong>B.</strong> Private key</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_12_opt_2">
+                <input type="radio" name="math_q_25_12" value="2">
+                <span><strong>C.</strong> Encryption key</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_12_opt_3">
+                <input type="radio" name="math_q_25_12" value="3">
+                <span><strong>D.</strong> Both keys must be secret</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_25_12">
+                <strong>Mathematical Explanation:</strong> In public-key cryptography, the encryption key is made publicly accessible to all users.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_25_13" data-corr="1">
+            <div class="q-title"><span class="q-num">13.</span> <span>What must two parties share securely in a private-key cryptosystem?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_25_13_opt_0">
+                <input type="radio" name="math_q_25_13" value="0">
+                <span><strong>A.</strong> Plaintext</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_13_opt_1">
+                <input type="radio" name="math_q_25_13" value="1">
+                <span><strong>B.</strong> Secret key</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_13_opt_2">
+                <input type="radio" name="math_q_25_13" value="2">
+                <span><strong>C.</strong> Ciphertext alphabet</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_13_opt_3">
+                <input type="radio" name="math_q_25_13" value="3">
+                <span><strong>D.</strong> Public key only</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_25_13">
+                <strong>Mathematical Explanation:</strong> In private-key cryptography, sender and receiver must securely share the secret key beforehand.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_25_14" data-corr="1">
+            <div class="q-title"><span class="q-num">14.</span> <span>What is cryptanalysis?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_25_14_opt_0">
+                <input type="radio" name="math_q_25_14" value="0">
+                <span><strong>A.</strong> Creating a plaintext message</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_14_opt_1">
+                <input type="radio" name="math_q_25_14" value="1">
+                <span><strong>B.</strong> Recovering plaintext from ciphertext without the required encryption knowledge</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_14_opt_2">
+                <input type="radio" name="math_q_25_14" value="2">
+                <span><strong>C.</strong> Converting decimal to binary</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_25_14_opt_3">
+                <input type="radio" name="math_q_25_14" value="3">
+                <span><strong>D.</strong> Finding a matrix determinant</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_25_14">
+                <strong>Mathematical Explanation:</strong> Cryptanalysis is the study and practice of recovering plaintexts without knowledge of the secret key.
+            </div>
+        </div>
+        
+            </div>
+
+            <div class="quiz-actions">
+                <button type="button" class="btn-quiz-check" onclick="checkMathQuiz(25, 14)">✓ Check Answers &amp; View Solutions</button>
+                <button type="button" class="btn-quiz-reset" onclick="resetMathQuiz(25, 14)">↺ Reset Quiz</button>
+            </div>
+        </div>
+    </div>
+    
+<h1><strong>Module 8 — Final revision sheet</strong></h1>
+<p><strong>Cryptosystem:</strong></p>
+<div class="math-display">\[\boxed{(P,C,K,E,D)}\]</div>
+<p><strong>Correctness condition:</strong></p>
+<div class="math-display">\[\boxed{D_k(E_k(p))=p}\]</div>
+<p><strong>Shift cipher:</strong></p>
+<div class="math-display">\[E_k(p)=(p+k)\bmod26\]</div>
+<div class="math-display">\[D_k(c)=(c-k)\bmod26\]</div>
+<p><strong>Private-key:</strong> Encryption and decryption keys are closely related; secret key must be shared.</p>
+<p><strong>Public-key:</strong> Encryption key is public; decryption key is secret.</p>
+<p><strong>Cryptanalysis:</strong> Recovering plaintext from ciphertext without the required encryption information.</p>
+<p>Module 8 complete</p>
+<p><strong>Next: Module 9 — Introduction to Public-Key Cryptography.</strong></p>
+<p>We'll cover the idea, mathematical foundation, public versus private keys, requirements of a public-key system, and how it differs from classical private-key encryption.</p>
+<p>Say <strong>next</strong> when ready.</p>
+
+        <div style="margin-top: 35px; padding: 20px 24px; background: rgba(124, 58, 237, 0.05); border: 1.5px solid rgba(124, 58, 237, 0.25); border-radius: 12px;">
+            <h4 style="margin: 0 0 6px 0; color: #7c3aed; font-size: 16px;">🚀 Ready for the Next Step?</h4>
+            <p style="margin: 0; font-size: 14px; color: var(--text-body);">
+                You have completed <strong>Module 25: Mathematical Cryptosystems & Attack Models</strong>. Test your knowledge with the interactive quiz above, review key theorems, and proceed to <a href="maths-module-26.html" style="color: #7c3aed; font-weight: 700;">Module 26: Foundations of Public Key Cryptography & Fast Modular Exponentiation &rarr;</a>
+            </p>
+        </div>
+        
+    </div>
+
+    <!-- Prev / Next Footer Navigation -->
+    <div class="prev-next">
+        <a class="pn-btn" href="maths-module-24.html">&larr; Module 24</a>
+        <a class="pn-hub" href="maths.html">📋 Mathematics Hub (29 Modules)</a>
+        <a class="pn-btn" href="maths-module-26.html">Module 26 &rarr;</a>
+    </div>
+
+</div>
+
+<script src="shared.js"></script>
+<script>
+function toggleNavPanel() {
+    var panel = document.getElementById('navPanel');
+    if (panel) panel.classList.toggle('open');
+}
+
+function checkMathQuiz(modNum, total) {
+    let score = 0;
+    for (let i = 1; i <= total; i++) {
+        let block = document.getElementById("q_block_" + modNum + "_" + i);
+        if (!block) continue;
+        let corr = parseInt(block.getAttribute("data-corr"));
+        let radios = document.getElementsByName("math_q_" + modNum + "_" + i);
+        let selected = -1;
+        for (let r of radios) {
+            if (r.checked) {
+                selected = parseInt(r.value);
+                break;
+            }
+        }
+
+        for (let j = 0; j < 4; j++) {
+            let optEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + j);
+            if (optEl) {
+                optEl.classList.remove("correct-choice", "wrong-choice");
+            }
+        }
+
+        if (selected === corr) {
+            score++;
+            let correctEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + corr);
+            if (correctEl) correctEl.classList.add("correct-choice");
+        } else {
+            if (selected !== -1) {
+                let wrongEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + selected);
+                if (wrongEl) wrongEl.classList.add("wrong-choice");
+            }
+            let correctEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + corr);
+            if (correctEl) correctEl.classList.add("correct-choice");
+        }
+
+        let expl = document.getElementById("q_expl_" + modNum + "_" + i);
+        if (expl) expl.style.display = "block";
+    }
+
+    let badge = document.getElementById("quizScoreBadge_" + modNum);
+    let val = document.getElementById("quizScoreVal_" + modNum);
+    let pct = document.getElementById("quizScorePct_" + modNum);
+    if (badge && val && pct) {
+        val.innerText = score;
+        pct.innerText = Math.round((score / total) * 100) + "%";
+        badge.style.display = "inline-flex";
+        badge.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+}
+
+function resetMathQuiz(modNum, total) {
+    for (let i = 1; i <= total; i++) {
+        let radios = document.getElementsByName("math_q_" + modNum + "_" + i);
+        for (let r of radios) r.checked = false;
+
+        for (let j = 0; j < 4; j++) {
+            let optEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + j);
+            if (optEl) optEl.classList.remove("correct-choice", "wrong-choice");
+        }
+
+        let expl = document.getElementById("q_expl_" + modNum + "_" + i);
+        if (expl) expl.style.display = "none";
+    }
+
+    let badge = document.getElementById("quizScoreBadge_" + modNum);
+    if (badge) badge.style.display = "none";
+}
+</script>
+</body>
+</html>

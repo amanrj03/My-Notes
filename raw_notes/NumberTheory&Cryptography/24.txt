@@ -1,0 +1,668 @@
+# **Unit IV — Module 7: Permutation (Transposition) Cipher**
+
+Primary reference: Rosen, *Number Theory and Cryptography*, Section 4.6, page 297, Example 6 and Exercises 14–15.
+
+This module covers the **transposition cipher**, also called the permutation cipher in your syllabus.
+
+Unlike shift, affine and Vigenère ciphers, a transposition cipher does not replace letters with different letters. It rearranges the positions of letters within fixed-size blocks.
+
+Rosen introduces it as a type of block cipher.&#x20;
+
+U456 (Textbook content) MTH381.pdf
+
+
+
+## **7.1 What is a transposition cipher?**
+
+A transposition cipher encrypts a message by changing the positions of its letters according to a fixed permutation.
+
+For example, consider the block:
+
+\\[ \text{ABCD} \\]
+
+Suppose the permutation rearranges the positions as:
+
+\\[ 3,\ 1,\ 4,\ 2. \\]
+
+Then:
+
+- The third letter goes to the first position.
+- The first letter goes to the second position.
+- The fourth letter goes to the third position.
+- The second letter goes to the fourth position.
+
+The result is:
+
+\\[ \boxed{\text{ABCD}\rightarrow\text{CADB}} \\]
+
+Notice that all original letters remain present. Only their positions change.
+
+**Key distinction:**
+
+- Substitution cipher: changes the letters.
+- Transposition cipher: changes the positions of the letters.
+
+## **7.2 Mathematical definition of a permutation**
+
+Rosen uses a permutation of the set
+
+\\[ \\{1,2,\ldots,m\\} \\]
+
+as the encryption key.
+
+A permutation \\(\sigma\\) is a one-to-one function from this set to itself.
+
+For example, for \\(m=4\\):
+
+\\[ \sigma(1)=3,\quad \sigma(2)=1,\quad \sigma(3)=4,\quad \sigma(4)=2. \\]
+
+This means the permutation is:
+
+\\[ \boxed{\sigma=(3,1,4,2)} \\]
+
+Every position from 1 to 4 must appear exactly once in the permutation.
+
+### **Important properties**
+
+A valid permutation must satisfy:
+
+1. Every position is mapped to a position in the same set.
+2. No two positions have the same image.
+3. Every position appears exactly once as an image.
+4. The permutation has an inverse permutation.
+
+For example:
+
+\\[ (3,1,4,2) \\]
+
+is valid because it contains 1, 2, 3 and 4 exactly once.
+
+But
+
+\\[ (3,1,3,2) \\]
+
+is not valid because 3 appears twice and 4 is missing.
+
+## **7.3 Encryption formula**
+
+Suppose the plaintext block contains \\(m\\) letters:
+
+\\[ p_1p_2\cdots p_m. \\]
+
+Let \\(\sigma\\) be the encryption permutation.
+
+Rosen defines the encrypted block as:
+
+\\[ \boxed{ c_1c_2\cdots c_m = p\_{\sigma(1)}p\_{\sigma(2)}\cdots p\_{\sigma(m)} } \\]
+
+In simple terms, the ciphertext positions are filled using the plaintext positions specified by the permutation.
+
+### **Example**
+
+Suppose:
+
+\\[ P=\text{WXYZ} \\]
+
+and
+
+\\[ \sigma=(3,1,4,2). \\]
+
+Then:
+
+\\[ \begin{aligned} c_1&=p_3=Y\\\ c_2&=p_1=W\\\ c_3&=p_4=Z\\\ c_4&=p_2=X. \end{aligned} \\]
+
+Therefore:
+
+\\[ \boxed{\text{WXYZ}\rightarrow\text{YWZX}} \\]
+
+**Remember:** The permutation \\((3,1,4,2)\\) tells us the source position of each ciphertext letter.
+
+## **7.4 Dividing the plaintext into blocks**
+
+Rosen's method divides the message into blocks of size \\(m\\), where \\(m\\) is the number of positions in the permutation.
+
+Suppose:
+
+- Plaintext: `MATHEMATICS`
+- Block size: 4
+
+Divide it into:
+
+\\[ \text{MATH}\quad\text{EMAT}\quad\text{ICS} \\]
+
+The final block has only three letters.
+
+Rosen's method is to add random letters at the end to complete the final block.
+
+For example, adding X gives:
+
+\\[ \boxed{\text{MATH}\quad\text{EMAT}\quad\text{ICSX}} \\]
+
+Each block is then encrypted independently using the same permutation.
+
+The added letters are padding and are not part of the original plaintext.
+
+## **7.5 Rosen's Example 6 — Complete encryption**
+
+This is the textbook's worked example.
+
+Given the permutation of the set \\(\\{1,2,3,4\\}\\):
+
+\\[ \begin{aligned} \sigma(1)&=3\\\ \sigma(2)&=1\\\ \sigma(3)&=4\\\ \sigma(4)&=2 \end{aligned} \\]
+
+Encrypt the plaintext:
+
+\\[ \text{PIRATE ATTACK} \\]
+
+### **Step 1: Remove spaces and divide into blocks of four**
+
+\\[ \text{PIRATEATTACK} \\]
+
+Divide into blocks:
+
+\\[ \boxed{\text{PIRA}\quad\text{TEAT}\quad\text{TACK}} \\]
+
+### **Step 2: Understand the permutation**
+
+The permutation is:
+
+\\[ \sigma=(3,1,4,2). \\]
+
+For every block:
+
+| Ciphertext position | Plaintext position |
+| ------------------- | ------------------ |
+| 1                   | 3                  |
+| 2                   | 1                  |
+| 3                   | 4                  |
+| 4                   | 2                  |
+
+### **Step 3: Encrypt the first block PIRA**
+
+Original:
+
+\\[ P\quad I\quad R\quad A \\]
+
+Rearrange according to the permutation:
+
+\\[ p_3,\ p_1,\ p_4,\ p_2 \\]
+
+\\[ R,\ P,\ A,\ I \\]
+
+Therefore:
+
+\\[ \text{PIRA}\rightarrow\text{RPAI} \\]
+
+### **Step 4: Encrypt the second block TEAT**
+
+Original:
+
+\\[ T\quad E\quad A\quad T \\]
+
+Rearrange:
+
+\\[ p_3,\ p_1,\ p_4,\ p_2 \\]
+
+\\[ A,\ T,\ T,\ E \\]
+
+Therefore:
+
+\\[ \text{TEAT}\rightarrow\text{ATTE} \\]
+
+### **Step 5: Encrypt the third block TACK**
+
+Original:
+
+\\[ T\quad A\quad C\quad K \\]
+
+Rearrange:
+
+\\[ p_3,\ p_1,\ p_4,\ p_2 \\]
+
+\\[ C,\ T,\ K,\ A \\]
+
+Therefore:
+
+\\[ \text{TACK}\rightarrow\text{CTKA} \\]
+
+### **Final ciphertext**
+
+ROSEN EXAMPLE 6 — ENCRYPTION
+
+# **RPAI ATTE CTKA**
+
+Plaintext: PIRATE ATTACK
+
+Key permutation: (3, 1, 4, 2)
+
+The key idea is that the same permutation is applied independently to every block.&#x20;
+
+U456 (Textbook content) MTH381.pdf
+
+
+
+**Important notation clarification:** Rosen's worked example defines the permutation by where each original letter is sent. Thus, \\(\sigma(1)=3\\) means the first plaintext letter moves to the third ciphertext position. It does **not** mean that the third plaintext letter becomes the first ciphertext letter. We must follow this position-movement convention in the worked example below.
+
+For the permutation
+
+\\[ \sigma=(3,1,4,2), \\]
+
+the correct rearrangement is:
+
+\\[ \boxed{p_1p_2p_3p_4\rightarrow p_2p_4p_1p_3} \\]
+
+This convention gives Rosen's result `PIRA → IAPR`, not `RPAI`.
+
+## **7.6 Encryption using the destination-position convention**
+
+For Rosen's permutation:
+
+\\[ \sigma(1)=3,\quad \sigma(2)=1,\quad \sigma(3)=4,\quad \sigma(4)=2, \\]
+
+the original letters move as follows:
+
+| Original position | Letter    | Destination position |
+| ----------------- | --------- | -------------------- |
+| 1                 | \\(p_1\\) | 3                    |
+| 2                 | \\(p_2\\) | 1                    |
+| 3                 | \\(p_3\\) | 4                    |
+| 4                 | \\(p_4\\) | 2                    |
+
+Therefore, the ciphertext positions are filled in this order:
+
+\\[ \begin{aligned} c_1&=p_2\\\ c_2&=p_4\\\ c_3&=p_1\\\ c_4&=p_3. \end{aligned} \\]
+
+So the correct encryption rule under this convention is:
+
+\\[ \boxed{c_1c_2c_3c_4=p_2p_4p_1p_3} \\]
+
+Applying it to the three blocks:
+
+| Plaintext block | Rearranged ciphertext |
+| --------------- | --------------------- |
+| PIRA            | IAPR                  |
+| TEAT            | ETTA                  |
+| TACK            | AKTC                  |
+
+Hence Rosen's exact result is:
+
+\\[ \boxed{\text{PIRATE ATTACK}\rightarrow \text{IAPR ETTA AKTC}} \\]
+
+U456 (Textbook content) MTH381.pdf
+
+## **7.7 Inverse permutation and decryption**
+
+To decrypt a transposition cipher, Rosen uses the inverse permutation:
+
+\\[ \boxed{\sigma^{-1}} \\]
+
+The inverse permutation reverses the movement made during encryption.
+
+For our example:
+
+\\[ \begin{aligned} \sigma(1)&=3\\\ \sigma(2)&=1\\\ \sigma(3)&=4\\\ \sigma(4)&=2 \end{aligned} \\]
+
+The inverse is:
+
+\\[ \boxed{ \begin{aligned} \sigma^{-1}(1)&=2\\\ \sigma^{-1}(2)&=4\\\ \sigma^{-1}(3)&=1\\\ \sigma^{-1}(4)&=3 \end{aligned} } \\]
+
+In sequence form:
+
+\\[ \boxed{\sigma^{-1}=(2,4,1,3)} \\]
+
+### **How to calculate the inverse permutation**
+
+Use the original mappings:
+
+- Since \\(1\rightarrow3\\), the inverse sends \\(3\rightarrow1\\).
+- Since \\(2\rightarrow1\\), the inverse sends \\(1\rightarrow2\\).
+- Since \\(3\rightarrow4\\), the inverse sends \\(4\rightarrow3\\).
+- Since \\(4\rightarrow2\\), the inverse sends \\(2\rightarrow4\\).
+
+Rearranging by the input position of the inverse gives:
+
+\\[ 1\rightarrow2,\quad 2\rightarrow4,\quad 3\rightarrow1,\quad 4\rightarrow3. \\]
+
+### **Important property**
+
+\\[ \boxed{\sigma^{-1}(\sigma(i))=i} \\]
+
+and
+
+\\[ \boxed{\sigma(\sigma^{-1}(i))=i}. \\]
+
+Applying a permutation and then its inverse restores every original position.
+
+## **7.8 Rosen's Example 6 — Complete decryption**
+
+Rosen asks us to decrypt:
+
+\\[ \text{SWUE TRAE OEHS} \\]
+
+using blocks of four letters and the same permutation:
+
+\\[ \sigma=(3,1,4,2). \\]
+
+**Step 1: Divide the ciphertext into blocks.**
+
+\\[ \text{SWUE}\quad\text{TRAE}\quad\text{OEHS} \\]
+
+**Step 2: Find the inverse permutation.**
+
+\\[ \sigma^{-1}=(2,4,1,3). \\]
+
+This means the original letters are recovered from the ciphertext positions as:
+
+\\[ \begin{aligned} p_1&=c_3\\\ p_2&=c_1\\\ p_3&=c_4\\\ p_4&=c_2. \end{aligned} \\]
+
+**Step 3: Decrypt each block.**
+
+For `SWUE`:
+
+\\[ \begin{aligned} p_1&=c_3=U\\\ p_2&=c_1=S\\\ p_3&=c_4=E\\\ p_4&=c_2=W \end{aligned} \\]
+
+Therefore:
+
+\\[ \text{SWUE}\rightarrow\text{USEW}. \\]
+
+For `TRAE`:
+
+\\[ \text{TRAE}\rightarrow\text{ATER}. \\]
+
+For `OEHS`:
+
+\\[ \text{OEHS}\rightarrow\text{HOSE}. \\]
+
+The recovered sequence is:
+
+\\[ \boxed{\text{USEW ATER HOSE}} \\]
+
+Regrouping the letters into meaningful words gives:
+
+ROSEN EXAMPLE 6 — DECRYPTION
+
+# **USE WATER HOSE**
+
+The spaces were not part of the encrypted blocks; the meaningful plaintext is reconstructed by regrouping the letters.
+
+U456 (Textbook content) MTH381.pdf
+
+## **7.9 Properties of a transposition cipher**
+
+**1. It preserves the original letters.**
+
+No letter is replaced by another letter. Only its position changes.
+
+**2. It preserves letter frequencies.**
+
+For example, if a plaintext contains four A's, its ciphertext will also contain four A's.
+
+This is different from substitution ciphers, where letters are replaced.
+
+**3. It operates on fixed-size blocks.**
+
+The block size is determined by the number of elements in the permutation.
+
+**4. It uses an inverse permutation for decryption.**
+
+The inverse permutation restores the original arrangement.
+
+**5. It is a block cipher.**
+
+Rosen introduces transposition as a block cipher because it transforms groups of letters rather than individual letters.&#x20;
+
+U456 (Textbook content) MTH381.pdf
+
+
+
+## **7.10 Number of possible permutations and keys**
+
+For a block size of \\(m\\), the key is a permutation of \\(m\\) positions.
+
+The number of possible permutations is:
+
+\\[ \boxed{m!} \\]
+
+For example:
+
+| Block size \\(m\\) | Number of possible keys |
+| ------------------ | ----------------------- |
+| 2                  | \\(2!=2\\)              |
+| 3                  | \\(3!=6\\)              |
+| 4                  | \\(4!=24\\)             |
+| 5                  | \\(5!=120\\)            |
+| 6                  | \\(6!=720\\)            |
+| 7                  | \\(7!=5040\\)           |
+| 8                  | \\(8!=40320\\)          |
+
+For a block size of 4, there are only 24 possible permutations.
+
+**MCQ example:** How many possible transposition keys exist for a block size of 5?
+
+\\[ 5!=5\times4\times3\times2\times1 \\]
+
+\\[ \boxed{120} \\]
+
+## **7.11 Cryptanalysis and limitations**
+
+A transposition cipher rearranges letters but preserves the frequency of every letter.
+
+For example, if a ciphertext contains:
+
+- 5 occurrences of A,
+- 3 occurrences of E,
+- 2 occurrences of T,
+
+the plaintext has exactly the same counts.
+
+This is useful to an attacker because the usual letter-frequency information is not destroyed.
+
+However, the original order of the letters is hidden, so recovering the message requires determining the permutation or using other structural clues.
+
+The important distinction from Rosen's earlier shift and affine ciphers is:
+
+- Shift and affine ciphers replace individual letters and preserve monoalphabetic substitution patterns.
+- Transposition ciphers rearrange blocks and preserve the original letter frequencies.
+
+## **7.12 Important examination traps**
+
+| Question                                       | Correct answer                |
+| ---------------------------------------------- | ----------------------------- |
+| What does a transposition cipher change?       | Positions of letters          |
+| Does it replace letters?                       | No                            |
+| What is its key?                               | A permutation                 |
+| What is the key's domain?                      | \\(\\{1,2,\ldots,m\\}\\)      |
+| What is the block size?                        | \\(m\\)                       |
+| How many keys for block size \\(m\\)?          | \\(m!\\)                      |
+| How is decryption performed?                   | Using \\(\sigma^{-1}\\)       |
+| What happens if the final block is incomplete? | Add random letters to fill it |
+| Does it preserve letter frequencies?           | Yes                           |
+| What kind of cipher is it in Rosen?            | Block cipher                  |
+
+## **7.13 Module 7 MCQ test**
+
+**Module 7 test**
+
+0/12 answered
+
+Answer all 12 questions to see your score and explanations.
+
+**1. What does a transposition cipher change?**
+
+A. The identity of each letter
+
+B. The positions of letters
+
+C. The numerical value of every letter
+
+D. The alphabet size
+
+
+
+**2. What is the key in Rosen's transposition cipher?**
+
+A. A prime number
+
+B. A permutation of {1,2,...,m}
+
+C. A modular inverse
+
+D. A keyword
+
+
+
+**3. Which sequence is a valid permutation of {1,2,3,4}?**
+
+A. (1,2,2,4)
+
+B. (3,1,4,2)
+
+C. (4,3,2,2)
+
+D. (1,3,5,2)
+
+
+
+**4. If the block size is 5, how many possible permutation keys exist?**
+
+A. 25
+
+B. 25!
+
+C. 120
+
+D. 60
+
+
+
+**5. For σ=(3,1,4,2), where does the first plaintext letter move?**
+
+A. Position 1
+
+B. Position 2
+
+C. Position 3
+
+D. Position 4
+
+
+
+**6. Using σ=(3,1,4,2), what is the encryption of PIRA under Rosen's convention?**
+
+A. RPAI
+
+B. IAPR
+
+C. PAIR
+
+D. IRAP
+
+
+
+**7. What is the inverse of σ=(3,1,4,2)?**
+
+A. (3,1,4,2)
+
+B. (2,4,1,3)
+
+C. (4,2,3,1)
+
+D. (1,3,2,4)
+
+
+
+**8. Which permutation is used for decryption?**
+
+A. σ²
+
+B. σ⁻¹
+
+C. 2σ
+
+D. The identity only
+
+
+
+**9. Using Rosen's permutation, decrypt the block SWUE.**
+
+A. WUSE
+
+B. USEW
+
+C. SEUW
+
+D. EWSU
+
+
+
+**10. What happens to letter frequencies after transposition?**
+
+A. They are reversed
+
+B. They remain unchanged
+
+C. They become uniform
+
+D. They are doubled
+
+
+
+**11. What does Rosen recommend if the message length is not divisible by the block size?**
+
+A. Delete the remaining letters
+
+B. Add random letters to complete the final block
+
+C. Change the modulus
+
+D. Repeat the first block
+
+
+
+**12. What type of cipher is the transposition cipher in Rosen's terminology?**
+
+A. Character cipher
+
+B. Block cipher
+
+C. Public-key cipher
+
+D. Affine cipher
+
+
+
+Submit answers
+
+## **Module 7 — Final revision sheet**
+
+**Key:** A permutation of \\(\\{1,2,\ldots,m\\}\\).
+
+**Block encryption:** Rearrange letters according to their destination positions.
+
+**Decryption:** Use the inverse permutation.
+
+\\[ \boxed{\sigma^{-1}(\sigma(i))=i} \\]
+
+**Number of possible keys:**
+
+\\[ \boxed{m!} \\]
+
+**Rosen's example:**
+
+\\[ \sigma=(3,1,4,2) \\]
+
+\\[ \text{PIRATE ATTACK} \rightarrow \boxed{\text{IAPR ETTA AKTC}} \\]
+
+**Decryption example:**
+
+\\[ \text{SWUE TRAE OEHS} \rightarrow \boxed{\text{USE WATER HOSE}} \\]
+
+**Key property:** Letter frequencies remain unchanged.
+
+Module 7 complete
+
+**Next: Module 8 — Cryptosystems: Definition, Components and Mathematical Structure.**
+
+We'll cover Rosen's five-tuple definition, plaintext space, ciphertext space, keyspace, encryption functions, decryption functions and the correctness condition.
+
+Say **next** when ready.

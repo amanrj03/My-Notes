@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mathematics: Number Theory &amp; Cryptography — 17 Modules Course Hub</title>
-    <meta name="description" content="Comprehensive 17-module course hub for Number Theory and Cryptography: Divisibility, Base-b expansions, Primes, Euclidean Algorithm, Bézout's Identity, Linear Congruences, CRT, Fermat, Euler, and RSA.">
+    <title>Mathematics: Number Theory &amp; Cryptography — 29 Modules Course Hub</title>
+    <meta name="description" content="Comprehensive 29-module course hub for Number Theory and Cryptography across 5 Units: Divisibility, Base-b expansions, Primes, Euclidean Algorithm, Bézout's Identity, Linear Congruences, CRT, Fermat, Euler, Classical Ciphers (Caesar, Affine, Vigenère, Hill, Permutations), and Public-Key Cryptography (Diffie-Hellman, RSA, ElGamal).">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800&family=Cinzel:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="shared.css">
@@ -59,7 +59,7 @@ body {
 }
 
 .hub-hero::before {
-    content: "∀x∈ℤ ∃q,r a=dq+r gcd(a,b)=as+bt a^(p-1)≡1 mod p φ(n) c=m^e mod n";
+    content: "∀x∈ℤ ∃q,r a=dq+r gcd(a,b)=as+bt a^(p-1)≡1 mod p c=m^e mod n g^ab mod p";
     position: absolute;
     top: 10px;
     right: 20px;
@@ -84,90 +84,89 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    padding: 6px 16px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: 20px;
+    padding: 6px 16px;
     font-size: 13px;
     font-weight: 700;
-    margin-bottom: 18px;
-    letter-spacing: 0.6px;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
+    margin-bottom: 20px;
     backdrop-filter: blur(8px);
 }
 
 .hub-hero-title {
     font-family: 'Outfit', sans-serif;
-    font-size: 42px;
+    font-size: 46px;
     font-weight: 800;
-    line-height: 1.2;
+    line-height: 1.15;
     margin: 0 0 16px;
     letter-spacing: -0.5px;
 }
 
-.hub-hero-title .accent-gold {
-    color: #fbbf24;
-    text-shadow: 0 0 25px rgba(251, 191, 36, 0.4);
+.accent-gold {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #fde68a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .hub-hero-desc {
-    font-size: 17.5px;
+    font-size: 16px;
     line-height: 1.65;
-    max-width: 820px;
-    opacity: 0.95;
-    margin-bottom: 30px;
-    color: #f1f5f9;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 860px;
+    margin: 0 0 28px;
 }
 
 .hub-hero-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 14px;
+    gap: 12px;
 }
 
 .btn-hero-primary {
+    background: linear-gradient(135deg, #fbbf24, #d97706);
+    color: #0f0c29;
+    font-weight: 800;
+    padding: 12px 24px;
+    border-radius: 10px;
+    text-decoration: none;
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 13px 26px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #fbbf24, #d97706);
-    color: #1e1b4b;
-    font-size: 15px;
-    font-weight: 800;
-    text-decoration: none;
-    box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4);
+    font-size: 14.5px;
+    box-shadow: 0 6px 18px rgba(245, 158, 11, 0.35);
     transition: transform 0.2s, box-shadow 0.2s;
 }
+
 .btn-hero-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(217, 119, 6, 0.6);
+    box-shadow: 0 8px 24px rgba(245, 158, 11, 0.5);
 }
 
 .btn-hero-secondary {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 22px;
-    border-radius: 10px;
     background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.28);
-    color: #ffffff;
-    font-size: 14.5px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: white;
     font-weight: 600;
+    padding: 12px 20px;
+    border-radius: 10px;
     text-decoration: none;
+    font-size: 14px;
     backdrop-filter: blur(8px);
-    transition: background 0.2s, transform 0.2s;
-}
-.btn-hero-secondary:hover {
-    background: rgba(255, 255, 255, 0.22);
-    transform: translateY(-2px);
+    transition: background 0.2s, border-color 0.2s;
 }
 
-/* Controls Bar (Filter & Search) */
+.btn-hero-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Controls Bar */
 .controls-container {
     max-width: 1240px;
-    margin: -30px auto 40px;
+    margin: -30px auto 35px;
     padding: 0 24px;
     position: relative;
     z-index: 10;
@@ -195,7 +194,7 @@ body {
 .filter-btn {
     padding: 8px 16px;
     border-radius: 20px;
-    font-size: 13.5px;
+    font-size: 13px;
     font-weight: 600;
     border: 1px solid var(--border-color);
     background: var(--bg-subtle);
@@ -218,9 +217,9 @@ body {
 
 .search-box-wrapper {
     position: relative;
-    min-width: 280px;
+    min-width: 260px;
     flex-grow: 1;
-    max-width: 380px;
+    max-width: 360px;
 }
 
 .search-box-input {
@@ -256,7 +255,7 @@ body {
     margin: 0 auto 35px;
     padding: 0 24px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 16px;
 }
 
@@ -307,7 +306,7 @@ body {
 
 .unit-section-title {
     font-family: 'Outfit', sans-serif;
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 800;
     color: var(--text-heading);
     margin: 36px 0 20px;
@@ -323,15 +322,17 @@ body {
     font-weight: 700;
     background: rgba(124, 58, 237, 0.15);
     color: #7c3aed;
-    padding: 4px 10px;
-    border-radius: 20px;
+    padding: 3px 10px;
+    border-radius: 6px;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .modules-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-    gap: 24px;
+    gap: 22px;
+    margin-bottom: 20px;
 }
 
 .mod-card {
@@ -339,24 +340,24 @@ body {
     border: 1px solid var(--border-color);
     border-radius: 14px;
     padding: 24px;
+    box-shadow: var(--shadow-sm);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    box-shadow: var(--shadow-sm);
     transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
     position: relative;
 }
 
 .mod-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 28px rgba(124, 58, 237, 0.15);
-    border-color: #7c3aed;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(124, 58, 237, 0.12);
+    border-color: rgba(124, 58, 237, 0.4);
 }
 
 .mod-card-top {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     margin-bottom: 12px;
 }
 
@@ -366,24 +367,23 @@ body {
     font-weight: 700;
     color: #7c3aed;
     background: rgba(124, 58, 237, 0.1);
-    padding: 4px 10px;
+    padding: 3px 8px;
     border-radius: 6px;
+    letter-spacing: 0.5px;
 }
 
 .mod-badge {
-    font-size: 11px;
+    font-size: 11.5px;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 3px 8px;
-    border-radius: 4px;
-    background: rgba(217, 119, 6, 0.12);
     color: #d97706;
+    background: rgba(245, 158, 11, 0.12);
+    padding: 3px 8px;
+    border-radius: 6px;
 }
 
 .mod-title {
     font-family: 'Outfit', sans-serif;
-    font-size: 19px;
+    font-size: 18px;
     font-weight: 700;
     color: var(--text-heading);
     margin: 0 0 10px;
@@ -392,35 +392,34 @@ body {
 
 .mod-desc {
     font-size: 13.5px;
+    line-height: 1.6;
     color: var(--text-secondary);
-    line-height: 1.55;
-    margin: 0 0 16px;
+    margin: 0 0 14px;
 }
 
-/* Formula Callout in Card */
 .mod-formula-preview {
-    background: rgba(124, 58, 237, 0.05);
-    border: 1px dashed rgba(124, 58, 237, 0.3);
-    border-radius: 8px;
-    padding: 10px 12px;
-    margin-bottom: 16px;
-    font-size: 13.5px;
-    text-align: center;
-    color: var(--text-heading);
+    background: var(--bg-subtle);
+    border-left: 3px solid #7c3aed;
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-bottom: 14px;
+    font-size: 13px;
     overflow-x: auto;
+    color: var(--text-heading);
 }
 
-/* Topics list in Card */
 .mod-topics {
     list-style: none;
     padding: 0;
-    margin: 0 0 20px;
+    margin: 0 0 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 .mod-topics li {
     font-size: 12.5px;
-    color: var(--text-body);
-    margin-bottom: 6px;
+    color: var(--text-muted);
     display: flex;
     align-items: center;
     gap: 8px;
@@ -431,7 +430,6 @@ body {
     font-size: 10px;
 }
 
-/* Card Button */
 .mod-card-btn {
     display: flex;
     align-items: center;
@@ -536,52 +534,74 @@ body {
         <div class="nav-links">
             <a href="index.html" class="nav-link"><span class="icon">🏠</span> All Subjects</a>
             <div class="nav-dropdown">
-                <button class="nav-dropdown-btn active"><span class="icon">📐</span> Mathematics (17) ▾</button>
+                <button class="nav-dropdown-btn active" style="color: #a78bfa;"><span class="icon">📐</span> Mathematics (29) ▾</button>
                 <div class="nav-dropdown-menu">
-                    <a href="maths.html" class="nav-dropdown-header">📋 Mathematics Syllabus Hub</a>
-                    <a href="maths-module-1.html">Module 1: Division &amp; Divisibility</a>
-                    <a href="maths-module-2.html">Module 2: Modular Arithmetic</a>
-                    <a href="maths-module-6.html">Module 6: Primes &amp; Sieve</a>
-                    <a href="maths-module-9.html">Module 9: GCD &amp; LCM</a>
-                    <a href="maths-module-10.html">Module 10: Euclidean Algorithm</a>
-                    <a href="maths-module-11.html">Module 11: Extended GCD &amp; Bézout</a>
-                    <a href="maths-module-12.html">Module 12: Linear Congruences</a>
-                    <a href="maths-module-13.html">Module 13: Chinese Remainder Theorem</a>
-                    <a href="maths-module-14.html">Module 14: Fermat's Little Theorem</a>
-                    <a href="maths-module-15.html">Module 15: Euler's Totient &amp; Theorem</a>
-                    <a href="maths-module-16.html">Module 16: RSA Cryptosystem</a>
-                    <a href="maths-module-17.html">Module 17: Comprehensive Mastery Exam</a>
+                    <a href="maths.html" class="nav-dropdown-header" style="background: linear-gradient(135deg, #7c3aed, #4c1d95); color: #fff;">📋 Mathematics Syllabus Hub (All 29)</a>
+                    <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit I: Divisibility & Base Expansions</div>
+                    <a href="maths-module-1.html">Module 1: Divisibility and the Division Algorithm</a>
+                    <a href="maths-module-2.html">Module 2: Modular Arithmetic and Congruences</a>
+                    <a href="maths-module-3.html">Module 3: Integer Representations and Base Expansions</a>
+                    <a href="maths-module-4.html">Module 4: Octal, Hexadecimal & Fast Base Conversions</a>
+                    <a href="maths-module-5.html">Module 5: Algorithms for Integer Operations</a>
+                    <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit II: Primes, Divisibility Tests & GCD</div>
+                    <a href="maths-module-6.html">Module 6: Prime and Composite Numbers</a>
+                    <a href="maths-module-7.html">Module 7: Fundamental Theorem of Arithmetic</a>
+                    <a href="maths-module-8.html">Module 8: Trial Division and the Sieve of Eratosthenes</a>
+                    <a href="maths-module-9.html">Module 9: Prime Number Theorem and Prime Distribution</a>
+                    <a href="maths-module-10.html">Module 10: GCD, LCM and the Euclidean Algorithm</a>
+                    <a href="maths-module-11.html">Module 11: GCD as a Linear Combination (Bézout's Theorem)</a>
+                    <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit III: Congruences, CRT & Fermat/Euler</div>
+                    <a href="maths-module-12.html">Module 12: Linear Congruences and Modular Inverses</a>
+                    <a href="maths-module-13.html">Module 13: Chinese Remainder Theorem (CRT)</a>
+                    <a href="maths-module-14.html">Module 14: Computer Arithmetic with Large Integers</a>
+                    <a href="maths-module-15.html">Module 15: Fermat's Little Theorem (FLT)</a>
+                    <a href="maths-module-16.html">Module 16: Applications of Congruences</a>
+                    <a href="maths-module-17.html">Module 17: Mixed MCQ Mastery and Final Revision</a>
+                    <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit IV: Classical Cryptography & Ciphers</div>
+                    <a href="maths-module-18.html">Module 18: Introduction to Cryptography & Security Models</a>
+                    <a href="maths-module-19.html">Module 19: Classical Cryptography & Substitution Ciphers</a>
+                    <a href="maths-module-20.html">Module 20: Shift Cipher and Caesar Cipher</a>
+                    <a href="maths-module-21.html">Module 21: Affine Cipher & Modular Inverses</a>
+                    <a href="maths-module-22.html">Module 22: Vigenère Polyalphabetic Cipher & Tableau</a>
+                    <a href="maths-module-23.html">Module 23: Hill Cipher & Matrix Cryptography</a>
+                    <a href="maths-module-24.html">Module 24: Permutation & Transposition Ciphers</a>
+                    <a href="maths-module-25.html">Module 25: Mathematical Cryptosystems & Attack Models</a>
+                    <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit V: Public Key Cryptography & Modern Protocols</div>
+                    <a href="maths-module-26.html">Module 26: Foundations of Public Key Cryptography & Fast Modular Exponentiation</a>
+                    <a href="maths-module-27.html">Module 27: Diffie-Hellman Key Exchange & Discrete Logarithm Problem</a>
+                    <a href="maths-module-28.html">Module 28: The RSA Cryptosystem: Key Generation, Encryption & Decryption</a>
+                    <a href="maths-module-29.html">Module 29: The ElGamal Cryptosystem & Comprehensive Unit V Exam Mastery</a>
                 </div>
             </div>
             <div class="nav-dropdown">
-    <button class="nav-dropdown-btn"><span class="icon">⛓️</span> Blockchain (18) ▾</button>
-    <div class="nav-dropdown-menu">
-        <a href="blockchain.html" class="nav-dropdown-header">📋 Blockchain Syllabus Hub (All 18)</a>
-        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit I (Mods 1–4)</div>
-        <a href="blockchain-module-1.html">Module 1: Growth, History of Blockchain & Bitcoin</a>
-        <a href="blockchain-module-2.html">Module 2: Distributed Systems & Blockchain</a>
-        <a href="blockchain-module-3.html">Module 3: Consensus Protocols</a>
-        <a href="blockchain-module-4.html">Module 4: Decentralization</a>
-        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit II (Mods 5–8)</div>
-        <a href="blockchain-module-5.html">Module 5: Symmetric Cryptography</a>
-        <a href="blockchain-module-6.html">Module 6: Public Key Cryptography</a>
-        <a href="blockchain-module-7.html">Module 7: Digital Signatures + Cryptographic Constructs</a>
-        <a href="blockchain-module-8.html">Module 8: SHA & Cryptographic Hash Functions</a>
-        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit III (Mods 9–13)</div>
-        <a href="blockchain-module-9.html">Module 9: Consensus Problem, Analysis & Design</a>
-        <a href="blockchain-module-10.html">Module 10: Classification & Traditional Consensus (Paxos, Raft, PBFT)</a>
-        <a href="blockchain-module-11.html">Module 11: Blockchain Consensus (PoW, PoS, DPoS) & Selection</a>
-        <a href="blockchain-module-12.html">Module 12: Bitcoin Architecture, Keys & Transactions</a>
-        <a href="blockchain-module-13.html">Module 13: Bitcoin Blockchain, Network, Mining & Forks</a>
-        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit IV (Mods 14–18)</div>
-        <a href="blockchain-module-14.html">Module 14: The Bitcoin Network</a>
-        <a href="blockchain-module-15.html">Module 15: Bitcoin Wallets</a>
-        <a href="blockchain-module-16.html">Module 16: Bitcoin Payments</a>
-        <a href="blockchain-module-17.html">Module 17: Innovation in Bitcoin and Advanced Protocols</a>
-        <a href="blockchain-module-18.html">Module 18: Bitcoin Investment, Buying and Selling Bitcoin</a>
-        <a href="blockchain_guide.html" class="nav-dropdown-special">📖 Full 8-Module Reader</a>
-    </div>
-</div>
+                <button class="nav-dropdown-btn"><span class="icon">⛓️</span> Blockchain (18) ▾</button>
+                <div class="nav-dropdown-menu">
+                    <a href="blockchain.html" class="nav-dropdown-header">📋 Blockchain Syllabus Hub (All 18)</a>
+                    <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit I (Mods 1–4)</div>
+                    <a href="blockchain-module-1.html">Module 1: History &amp; Bitcoin</a>
+                    <a href="blockchain-module-2.html">Module 2: Distributed Systems</a>
+                    <a href="blockchain-module-3.html">Module 3: Consensus Protocols</a>
+                    <a href="blockchain-module-4.html">Module 4: Decentralization</a>
+                    <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit II (Mods 5–8)</div>
+                    <a href="blockchain-module-5.html">Module 5: Symmetric Crypto</a>
+                    <a href="blockchain-module-6.html">Module 6: Public Key Crypto</a>
+                    <a href="blockchain-module-7.html">Module 7: Digital Signatures</a>
+                    <a href="blockchain-module-8.html">Module 8: SHA &amp; Hashes</a>
+                    <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit III (Mods 9–13)</div>
+                    <a href="blockchain-module-9.html">Module 9: Consensus Problem &amp; Design</a>
+                    <a href="blockchain-module-10.html">Module 10: Paxos, Raft &amp; PBFT</a>
+                    <a href="blockchain-module-11.html">Module 11: PoW, PoS &amp; Selection</a>
+                    <a href="blockchain-module-12.html">Module 12: Bitcoin Keys &amp; UTXO</a>
+                    <a href="blockchain-module-13.html">Module 13: Mining, Network &amp; Forks</a>
+                    <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit IV (Mods 14–18)</div>
+                    <a href="blockchain-module-14.html">Module 14: The Bitcoin Network</a>
+                    <a href="blockchain-module-15.html">Module 15: Bitcoin Wallets</a>
+                    <a href="blockchain-module-16.html">Module 16: Bitcoin Payments</a>
+                    <a href="blockchain-module-17.html">Module 17: Advanced Protocols</a>
+                    <a href="blockchain-module-18.html">Module 18: Bitcoin Investment</a>
+                    <a href="blockchain_guide.html" class="nav-dropdown-special">📖 Full 8-Module Reader</a>
+                </div>
+            </div>
             <div class="nav-dropdown">
                 <button class="nav-dropdown-btn"><span class="icon">🐍</span> Django Course (45) ▾</button>
                 <div class="nav-dropdown-menu">
@@ -609,13 +629,14 @@ body {
     <div class="hub-hero-container">
         <div class="hub-badge">📐 Discrete Mathematics &bull; Number Theory &amp; Cryptography</div>
         <h1 class="hub-hero-title">Number Theory &amp; <span class="accent-gold">Cryptographic Foundations</span></h1>
-        <p class="hub-hero-desc">An exhaustive 17-module academic reference covering Integer Divisibility, Base-b Radix Expansions, Prime Factorization, Euclidean &amp; Extended GCD Algorithms, Bézout's Identity, Linear Congruences, Chinese Remainder Theorem, Fermat's Little Theorem, Euler's Totient, and the RSA Cryptosystem. Formatted with rigorous LaTeX formulas and interactive self-grading quizzes.</p>
+        <p class="hub-hero-desc">An exhaustive 29-module academic reference covering Integer Divisibility, Base-b Radix Expansions, Prime Factorization, Euclidean &amp; Extended GCD Algorithms, Bézout's Identity, Linear Congruences, Chinese Remainder Theorem, Fermat's Little Theorem, Classical Ciphers (Caesar, Affine, Vigenère, Hill, Permutations), and Modern Public-Key Cryptography (Diffie-Hellman, RSA, and ElGamal). Formatted with rigorous LaTeX formulas and interactive self-grading quizzes.</p>
         <div class="hub-hero-actions">
             <a href="maths-module-1.html" class="btn-hero-primary">Start Module 01 &rarr;</a>
             <a href="maths-module-11.html" class="btn-hero-secondary">⚡ Bézout &amp; Extended GCD (Mod 11)</a>
-            <a href="maths-module-13.html" class="btn-hero-secondary">📜 Chinese Remainder Theorem (Mod 13)</a>
-            <a href="maths-module-16.html" class="btn-hero-secondary">🔐 RSA Cryptosystem (Mod 16)</a>
-            <a href="maths-module-17.html" class="btn-hero-secondary">🎯 Comprehensive Exam (Mod 17)</a>
+            <a href="maths-module-18.html" class="btn-hero-secondary">🔐 Classical Cryptography (Mod 18)</a>
+            <a href="maths-module-27.html" class="btn-hero-secondary">🔑 Diffie-Hellman Key Exchange (Mod 27)</a>
+            <a href="maths-module-28.html" class="btn-hero-secondary">🛡️ RSA Deep Architecture (Mod 28)</a>
+            <a href="maths-module-29.html" class="btn-hero-secondary">🎯 Course Capstone (Mod 29)</a>
         </div>
     </div>
 </section>
@@ -624,15 +645,16 @@ body {
 <div class="controls-container">
     <div class="controls-card">
         <div class="unit-filters" id="unitFilters">
-            <button class="filter-btn active" data-unit="all">All 17 Modules</button>
-            <button class="filter-btn" data-unit="1">Unit 1: Divisibility &amp; Bases (1–5)</button>
+            <button class="filter-btn active" data-unit="all">All 29 Modules</button>
+            <button class="filter-btn" data-unit="1">Unit 1: Divisibility (1–5)</button>
             <button class="filter-btn" data-unit="2">Unit 2: Primes &amp; GCD (6–11)</button>
-            <button class="filter-btn" data-unit="3">Unit 3: Congruences &amp; CRT (12–15)</button>
-            <button class="filter-btn" data-unit="4">Unit 4: RSA &amp; Mastery (16–17)</button>
+            <button class="filter-btn" data-unit="3">Unit 3: Congruences (12–17)</button>
+            <button class="filter-btn" data-unit="4">Unit 4: Classical Crypto (18–25)</button>
+            <button class="filter-btn" data-unit="5">Unit 5: Public Key Crypto (26–29)</button>
         </div>
         <div class="search-box-wrapper">
             <span class="search-icon-inside">🔍</span>
-            <input type="text" id="mathSearchInput" class="search-box-input" placeholder="Filter math modules &amp; theorems...">
+            <input type="text" id="mathSearchInput" class="search-box-input" placeholder="Filter math modules, ciphers &amp; theorems...">
         </div>
     </div>
 </div>
@@ -642,29 +664,29 @@ body {
     <div class="stat-pill">
         <div class="stat-pill-icon">📐</div>
         <div>
-            <div class="stat-pill-val">17</div>
+            <div class="stat-pill-val">29</div>
             <div class="stat-pill-lbl">Interactive Modules</div>
         </div>
     </div>
     <div class="stat-pill">
         <div class="stat-pill-icon">🧠</div>
         <div>
-            <div class="stat-pill-val">17</div>
+            <div class="stat-pill-val">29</div>
             <div class="stat-pill-lbl">Self-Grading Quizzes</div>
         </div>
     </div>
     <div class="stat-pill">
-        <div class="stat-pill-icon">✨</div>
+        <div class="stat-pill-icon">📚</div>
         <div>
-            <div class="stat-pill-val">100%</div>
-            <div class="stat-pill-lbl">LaTeX MathJax Rendered</div>
+            <div class="stat-pill-val">5</div>
+            <div class="stat-pill-lbl">Course Units</div>
         </div>
     </div>
     <div class="stat-pill">
         <div class="stat-pill-icon">🔐</div>
         <div>
-            <div class="stat-pill-val">RSA</div>
-            <div class="stat-pill-lbl">Applied Public Key Protocol</div>
+            <div class="stat-pill-val">100%</div>
+            <div class="stat-pill-lbl">LaTeX &amp; Visual Cards</div>
         </div>
     </div>
 </div>
@@ -675,17 +697,17 @@ body {
     <div class="unit-group" data-unit-group="1">
         <h2 class="unit-section-title">
             <span class="tag">Unit 01</span>
-            Unit 1: Divisibility, Modular Arithmetic & Base Expansions
+            Unit 1: Divisibility, Modular Arithmetic & Base Expansions (Mods 01–05)
         </h2>
         <div class="modules-grid">
 
-            <div class="mod-card" data-unit="1" data-search="the division algorithm & integer divisibility divisibility relation a | b the division theorem quotient & remainder floor & ceiling arithmetic transitivity & linearity of divisibility">
+            <div class="mod-card" data-unit="1" data-search="divisibility and the division algorithm divisibility relation a | b the division theorem quotient & remainder floor & ceiling arithmetic transitivity & linearity of divisibility">
                 <div>
                     <div class="mod-card-top">
                         <span class="mod-number">MODULE 01</span>
-                        <span class="mod-badge">Core Foundation</span>
+                        <span class="mod-badge">Unit I Opener</span>
                     </div>
-                    <h3 class="mod-title">The Division Algorithm & Integer Divisibility</h3>
+                    <h3 class="mod-title">Divisibility and the Division Algorithm</h3>
                     <p class="mod-desc">The foundational bedrock of number theory: definitions of divisibility, division algorithm with unique quotient & remainder, properties of divisibility, and floor/ceiling functions.</p>
                     <div class="mod-formula-preview">
                         \[ a = d \cdot q + r \quad \text{where } 0 \le r < d, \quad q = \lfloor a/d \rfloor, \; r = a \bmod d \]
@@ -699,13 +721,13 @@ body {
                 </a>
             </div>
 
-            <div class="mod-card" data-unit="1" data-search="modular arithmetic operations & clock math equivalence modulo m residue classes z_m modular addition & multiplication compatibility with arithmetic clock ring z_12 and z_24">
+            <div class="mod-card" data-unit="1" data-search="modular arithmetic and congruences equivalence modulo m residue classes z_m modular addition & multiplication compatibility with arithmetic clock ring z_12 and z_24">
                 <div>
                     <div class="mod-card-top">
                         <span class="mod-number">MODULE 02</span>
                         <span class="mod-badge">Core Foundation</span>
                     </div>
-                    <h3 class="mod-title">Modular Arithmetic Operations & Clock Math</h3>
+                    <h3 class="mod-title">Modular Arithmetic and Congruences</h3>
                     <p class="mod-desc">Congruence modulo m as an equivalence relation, clock arithmetic, modular addition, subtraction, multiplication, and algebraic residue classes in Z_m.</p>
                     <div class="mod-formula-preview">
                         \[ a \equiv b \pmod m \iff m \mid (a - b) \iff a \bmod m = b \bmod m \]
@@ -719,13 +741,13 @@ body {
                 </a>
             </div>
 
-            <div class="mod-card" data-unit="1" data-search="binary & decimal base-b integer expansions base-b expansion theorem binary (base 2) successive division algorithm reversing remainders radix conversion">
+            <div class="mod-card" data-unit="1" data-search="integer representations and base expansions base-b expansion theorem binary (base 2) successive division algorithm reversing remainders radix conversion">
                 <div>
                     <div class="mod-card-top">
                         <span class="mod-number">MODULE 03</span>
                         <span class="mod-badge">Algorithms</span>
                     </div>
-                    <h3 class="mod-title">Binary & Decimal Base-b Integer Expansions</h3>
+                    <h3 class="mod-title">Integer Representations and Base Expansions</h3>
                     <p class="mod-desc">Positional numeral systems, base-b expansions, radix representations, binary, decimal, and step-by-step algorithms using successive division by b.</p>
                     <div class="mod-formula-preview">
                         \[ n = \sum_{i=0}^{k-1} a_i b^i = (a_{k-1} \dots a_1 a_0)_b, \quad 0 \le a_i < b \]
@@ -739,13 +761,13 @@ body {
                 </a>
             </div>
 
-            <div class="mod-card" data-unit="1" data-search="octal, hexadecimal & fast base conversion hexadecimal digits 0-f octal radix 8 3-bit & 4-bit grouping direct power-of-2 conversion hex to binary table">
+            <div class="mod-card" data-unit="1" data-search="octal, hexadecimal & fast base conversions hexadecimal digits 0-f octal radix 8 3-bit & 4-bit grouping direct power-of-2 conversion hex to binary table">
                 <div>
                     <div class="mod-card-top">
                         <span class="mod-number">MODULE 04</span>
-                        <span class="mod-badge">Algorithms</span>
+                        <span class="mod-badge">Fast Radix</span>
                     </div>
-                    <h3 class="mod-title">Octal, Hexadecimal & Fast Base Conversion</h3>
+                    <h3 class="mod-title">Octal, Hexadecimal & Fast Base Conversions</h3>
                     <p class="mod-desc">Power-of-two bases, octal (base 8), hexadecimal (base 16), direct bit-grouping (3-bit and 4-bit chunks), fast conversions without decimal intermediate.</p>
                     <div class="mod-formula-preview">
                         \[ (110111101011)_2 = (\underbrace{1101}_{\text{D}}\,\underbrace{1110}_{\text{E}}\,\underbrace{1011}_{\text{B}})_{16} = (\text{DEB})_{16} \]
@@ -759,16 +781,16 @@ body {
                 </a>
             </div>
 
-            <div class="mod-card" data-unit="1" data-search="addition & multiplication algorithms for base-b algorithmic column addition carry bit propagation base-b multiplication o(n^2) bit complexity pseudocode verification">
+            <div class="mod-card" data-unit="1" data-search="algorithms for integer operations algorithmic column addition carry bit propagation base-b multiplication o(n^2) bit complexity pseudocode verification">
                 <div>
                     <div class="mod-card-top">
                         <span class="mod-number">MODULE 05</span>
                         <span class="mod-badge">Complexity</span>
                     </div>
-                    <h3 class="mod-title">Addition & Multiplication Algorithms for Base-b</h3>
+                    <h3 class="mod-title">Algorithms for Integer Operations</h3>
                     <p class="mod-desc">Formal algorithmic implementation of addition, subtraction, and multiplication for arbitrary base-b integers with full carry propagation and bit complexity analysis.</p>
                     <div class="mod-formula-preview">
-                        \[ s_j = (a_j + b_j + c_j) \bmod b, \quad c_{j+1} = \lfloor (a_j + b_j + c_j) / b \rfloor, \quad O(n) \text{ Addition} \]
+                        \[ s_j = (a_j + b_j + c_j) \bmod b, \quad c_{j+1} = \lfloor (a_j + b_j + c_j) / b \rfloor, \quad \mathcal{O}(n) \text{ Addition} \]
                     </div>
                     <ul class="mod-topics">
                         <li>Algorithmic Column Addition</li><li>Carry Bit Propagation</li><li>Base-b Multiplication O(n^2)</li><li>Bit Complexity</li><li>Pseudocode Verification</li>
@@ -785,17 +807,17 @@ body {
     <div class="unit-group" data-unit-group="2">
         <h2 class="unit-section-title">
             <span class="tag">Unit 02</span>
-            Unit 2: Prime Numbers, GCD, Euclidean Algorithm & Bézout's Identity
+            Unit 2: Prime Numbers, GCD, Euclidean Algorithm & Bézout's Identity (Mods 06–11)
         </h2>
         <div class="modules-grid">
 
-            <div class="mod-card" data-unit="2" data-search="prime numbers & the sieve of eratosthenes prime vs composite trial division bound sqrt(n) sieve of eratosthenes prime number theorem prime density">
+            <div class="mod-card" data-unit="2" data-search="prime and composite numbers prime vs composite trial division bound sqrt(n) sieve of eratosthenes prime number theorem prime density">
                 <div>
                     <div class="mod-card-top">
                         <span class="mod-number">MODULE 06</span>
-                        <span class="mod-badge">Primes</span>
+                        <span class="mod-badge">Unit II Opener</span>
                     </div>
-                    <h3 class="mod-title">Prime Numbers & The Sieve of Eratosthenes</h3>
+                    <h3 class="mod-title">Prime and Composite Numbers</h3>
                     <p class="mod-desc">Definition of primes and composites, trial division up to sqrt(n), the ancient Sieve of Eratosthenes algorithm, and prime counting function pi(x).</p>
                     <div class="mod-formula-preview">
                         \[ n \text{ is composite} \implies \exists \text{ prime } p \mid n \text{ with } p \le \sqrt{n}; \quad \pi(x) \sim \frac{x}{\ln x} \]
@@ -809,13 +831,13 @@ body {
                 </a>
             </div>
 
-            <div class="mod-card" data-unit="2" data-search="fundamental theorem of arithmetic & factorization fundamental theorem of arithmetic canonical decomposition euclid's lemma exponent divisibility test number of divisors d(n)">
+            <div class="mod-card" data-unit="2" data-search="fundamental theorem of arithmetic fundamental theorem of arithmetic canonical decomposition euclid's lemma exponent divisibility test number of divisors d(n)">
                 <div>
                     <div class="mod-card-top">
                         <span class="mod-number">MODULE 07</span>
-                        <span class="mod-badge">Theorem</span>
+                        <span class="mod-badge">Master Theorem</span>
                     </div>
-                    <h3 class="mod-title">Fundamental Theorem of Arithmetic & Factorization</h3>
+                    <h3 class="mod-title">Fundamental Theorem of Arithmetic</h3>
                     <p class="mod-desc">Unique factorization of every positive integer greater than 1 into primes, canonical prime-power decomposition, and divisibility criterion via exponents.</p>
                     <div class="mod-formula-preview">
                         \[ n = p_1^{a_1} p_2^{a_2} \dots p_k^{a_k} \quad (\text{unique up to order}), \quad a \mid b \iff \alpha_i \le \beta_i \; \forall i \]
@@ -829,13 +851,13 @@ body {
                 </a>
             </div>
 
-            <div class="mod-card" data-unit="2" data-search="infinitude of primes & famous conjectures euclid's infinitude proof mersenne primes 2^p - 1 fermat primes 2^{2^k} + 1 goldbach's conjecture twin prime conjecture">
+            <div class="mod-card" data-unit="2" data-search="trial division and the sieve of eratosthenes euclid's infinitude proof mersenne primes 2^p - 1 fermat primes 2^{2^k} + 1 goldbach's conjecture twin prime conjecture">
                 <div>
                     <div class="mod-card-top">
                         <span class="mod-number">MODULE 08</span>
                         <span class="mod-badge">Open Problems</span>
                     </div>
-                    <h3 class="mod-title">Infinitude of Primes & Famous Conjectures</h3>
+                    <h3 class="mod-title">Trial Division and the Sieve of Eratosthenes</h3>
                     <p class="mod-desc">Euclid's classic proof of the infinitude of primes, Mersenne primes, Fermat primes, Goldbach's conjecture, and the Twin Prime conjecture.</p>
                     <div class="mod-formula-preview">
                         \[ N = p_1 p_2 \dots p_n + 1 \implies \text{every prime factor } q \notin \{p_1, \dots, p_n\} \implies \text{infinite primes} \]
@@ -849,19 +871,19 @@ body {
                 </a>
             </div>
 
-            <div class="mod-card" data-unit="2" data-search="greatest common divisor (gcd) & lcm definition of gcd & lcm relatively prime (coprime) pairwise relatively prime prime exponent formula product duality identity">
+            <div class="mod-card" data-unit="2" data-search="prime number theorem and prime distribution prime distribution asymptotics dirichlet's theorem average prime gap ln(x) chebyshev's bounds probabilistic primality testing">
                 <div>
                     <div class="mod-card-top">
                         <span class="mod-number">MODULE 09</span>
-                        <span class="mod-badge">Core GCD</span>
+                        <span class="mod-badge">Distribution</span>
                     </div>
-                    <h3 class="mod-title">Greatest Common Divisor (GCD) & LCM</h3>
-                    <p class="mod-desc">Greatest common divisor, coprime (relatively prime) integers, pairwise coprime sets, least common multiple, and the fundamental product identity.</p>
+                    <h3 class="mod-title">Prime Number Theorem and Prime Distribution</h3>
+                    <p class="mod-desc">Prime distribution asymptotic law pi(x) ~ x/ln(x), gaps between primes, Dirichlet's Theorem on primes in arithmetic progressions, and cryptographic prime hunting.</p>
                     <div class="mod-formula-preview">
-                        \[ \gcd(a, b) \cdot \operatorname{lcm}(a, b) = |a \cdot b|, \quad \gcd(a,b) = \prod p_i^{\min(a_i, b_i)} \]
+                        \[ \lim_{x \to \infty} \frac{\pi(x)}{x / \ln x} = 1, \quad P(\text{random } n \le x \text{ is prime}) \approx \frac{1}{\ln x} \]
                     </div>
                     <ul class="mod-topics">
-                        <li>Definition of GCD & LCM</li><li>Relatively Prime (Coprime)</li><li>Pairwise Relatively Prime</li><li>Prime Exponent Formula</li><li>Product Duality Identity</li>
+                        <li>Prime Distribution Asymptotics</li><li>Dirichlet's Theorem</li><li>Average Prime Gap ln(x)</li><li>Chebyshev's Bounds</li><li>Probabilistic Primality Testing</li>
                     </ul>
                 </div>
                 <a href="maths-module-9.html" class="mod-card-btn">
@@ -869,13 +891,13 @@ body {
                 </a>
             </div>
 
-            <div class="mod-card" data-unit="2" data-search="the euclidean algorithm for fast gcd euclidean lemma gcd(a,b)=gcd(b,r) successive division chain last nonzero remainder lamé's theorem & fibonacci logarithmic complexity o(log b)">
+            <div class="mod-card" data-unit="2" data-search="gcd, lcm and the euclidean algorithm euclidean lemma gcd(a,b)=gcd(b,r) successive division chain last nonzero remainder lamé's theorem & fibonacci logarithmic complexity o(log b)">
                 <div>
                     <div class="mod-card-top">
                         <span class="mod-number">MODULE 10</span>
-                        <span class="mod-badge">Algorithms</span>
+                        <span class="mod-badge">Core Algorithm</span>
                     </div>
-                    <h3 class="mod-title">The Euclidean Algorithm for Fast GCD</h3>
+                    <h3 class="mod-title">GCD, LCM and the Euclidean Algorithm</h3>
                     <p class="mod-desc">The Euclidean algorithm based on gcd(a, b) = gcd(b, a mod b), step-by-step division chains, and Lamé's Theorem bounding steps by 5 times digits.</p>
                     <div class="mod-formula-preview">
                         \[ \gcd(a, b) = \gcd(b, a \bmod b) \implies r_{k-2} = q_k r_{k-1} + r_k, \quad \gcd(a, b) = r_n \]
@@ -889,13 +911,13 @@ body {
                 </a>
             </div>
 
-            <div class="mod-card" data-unit="2" data-search="bézout's identity & extended euclidean algorithm bézout's theorem bézout coefficients (s, t) back-substitution method tabular extended algorithm application to modular inverses">
+            <div class="mod-card" data-unit="2" data-search="gcd as a linear combination (bézout's theorem) bézout's theorem bézout coefficients (s, t) back-substitution method tabular extended algorithm application to modular inverses">
                 <div>
                     <div class="mod-card-top">
                         <span class="mod-number">MODULE 11</span>
                         <span class="mod-badge">High Yield</span>
                     </div>
-                    <h3 class="mod-title">Bézout's Identity & Extended Euclidean Algorithm</h3>
+                    <h3 class="mod-title">GCD as a Linear Combination (Bézout's Theorem)</h3>
                     <p class="mod-desc">Expressing gcd(a, b) as a linear combination as + bt, Bézout coefficients, the Extended Euclidean Algorithm forward & backward substitution, and table method.</p>
                     <div class="mod-formula-preview">
                         \[ \exists s, t \in \mathbb{Z} : a \cdot s + b \cdot t = \gcd(a, b); \quad \text{if } \gcd(a,m)=1 \implies as \equiv 1 \pmod m \]
@@ -915,17 +937,17 @@ body {
     <div class="unit-group" data-unit-group="3">
         <h2 class="unit-section-title">
             <span class="tag">Unit 03</span>
-            Unit 3: Linear Congruences, Chinese Remainder Theorem & Euler's Totient
+            Unit 3: Linear Congruences, Chinese Remainder Theorem & Euler (Mods 12–17)
         </h2>
         <div class="modules-grid">
 
-            <div class="mod-card" data-unit="3" data-search="linear congruences & modular inverses modular inverse existence inverse via extended gcd solving linear congruences number of solutions gcd(a,m) systematic steps">
+            <div class="mod-card" data-unit="3" data-search="linear congruences and modular inverses modular inverse existence inverse via extended gcd solving linear congruences number of solutions gcd(a,m) systematic steps">
                 <div>
                     <div class="mod-card-top">
                         <span class="mod-number">MODULE 12</span>
-                        <span class="mod-badge">Cryptographic Core</span>
+                        <span class="mod-badge">Unit III Opener</span>
                     </div>
-                    <h3 class="mod-title">Linear Congruences & Modular Inverses</h3>
+                    <h3 class="mod-title">Linear Congruences and Modular Inverses</h3>
                     <p class="mod-desc">Solving ax = b (mod m), modular inverse a^-1 (mod m) existence criterion gcd(a, m) = 1, computation via Extended Euclidean Algorithm, and general solution sets.</p>
                     <div class="mod-formula-preview">
                         \[ a \bar{a} \equiv 1 \pmod m \iff \gcd(a, m) = 1; \quad ax \equiv b \pmod m \implies x \equiv \bar{a}b \pmod m \]
@@ -939,13 +961,13 @@ body {
                 </a>
             </div>
 
-            <div class="mod-card" data-unit="3" data-search="solving systems with chinese remainder theorem crt statement & moduli conditions constructive solution formula uniqueness modulo m multi-modular computer arithmetic back-substitution alternative">
+            <div class="mod-card" data-unit="3" data-search="chinese remainder theorem (crt) crt statement & moduli conditions constructive solution formula uniqueness modulo m multi-modular computer arithmetic back-substitution alternative">
                 <div>
                     <div class="mod-card-top">
                         <span class="mod-number">MODULE 13</span>
                         <span class="mod-badge">Major Theorem</span>
                     </div>
-                    <h3 class="mod-title">Solving Systems with Chinese Remainder Theorem</h3>
+                    <h3 class="mod-title">Chinese Remainder Theorem (CRT)</h3>
                     <p class="mod-desc">The Chinese Remainder Theorem (CRT) for simultaneous congruences with pairwise coprime moduli, the constructive formula, and applications in fast computer arithmetic.</p>
                     <div class="mod-formula-preview">
                         \[ x \equiv \sum_{i=1}^n a_i M_i y_i \pmod M, \quad M = \prod m_i, \; M_i = \frac{M}{m_i}, \; M_i y_i \equiv 1 \pmod{m_i} \]
@@ -959,13 +981,33 @@ body {
                 </a>
             </div>
 
-            <div class="mod-card" data-unit="3" data-search="fermat's little theorem & modular exponentiation fermat's little theorem (flt) reducing massive exponents fast repeated squaring algorithm fermat pseudoprimes to base b carmichael numbers">
+            <div class="mod-card" data-unit="3" data-search="computer arithmetic with large integers residue number system (rns) parallel addition & multiplication carry-free hardware architectures dynamic range m reconstruction via crt">
                 <div>
                     <div class="mod-card-top">
                         <span class="mod-number">MODULE 14</span>
-                        <span class="mod-badge">Cryptographic Core</span>
+                        <span class="mod-badge">Computer Architecture</span>
                     </div>
-                    <h3 class="mod-title">Fermat's Little Theorem & Modular Exponentiation</h3>
+                    <h3 class="mod-title">Computer Arithmetic with Large Integers</h3>
+                    <p class="mod-desc">Multi-modular representation of large integers across pairwise coprime moduli, carry-free parallel arithmetic, and reconstruction via Chinese Remainder Theorem.</p>
+                    <div class="mod-formula-preview">
+                        \[ x \longleftrightarrow (x \bmod m_1, x \bmod m_2, \dots, x \bmod m_k), \quad 0 \le x < M = \prod m_i \]
+                    </div>
+                    <ul class="mod-topics">
+                        <li>Residue Number System (RNS)</li><li>Parallel Addition & Multiplication</li><li>Carry-Free Hardware Architectures</li><li>Dynamic Range M</li><li>Reconstruction via CRT</li>
+                    </ul>
+                </div>
+                <a href="maths-module-14.html" class="mod-card-btn">
+                    <span>Read Module &amp; Take Quiz</span> &rarr;
+                </a>
+            </div>
+
+            <div class="mod-card" data-unit="3" data-search="fermat's little theorem (flt) fermat's little theorem (flt) reducing massive exponents fast repeated squaring algorithm fermat pseudoprimes to base b carmichael numbers">
+                <div>
+                    <div class="mod-card-top">
+                        <span class="mod-number">MODULE 15</span>
+                        <span class="mod-badge">Major Theorem</span>
+                    </div>
+                    <h3 class="mod-title">Fermat's Little Theorem (FLT)</h3>
                     <p class="mod-desc">Fermat's Little Theorem, computing huge powers a^k mod p, pseudoprimes, Carmichael numbers, and the Fast Repeated Squaring algorithm (O(log k)).</p>
                     <div class="mod-formula-preview">
                         \[ p \text{ prime}, \; p \nmid a \implies a^{p-1} \equiv 1 \pmod p \implies a^p \equiv a \pmod p \]
@@ -974,27 +1016,47 @@ body {
                         <li>Fermat's Little Theorem (FLT)</li><li>Reducing Massive Exponents</li><li>Fast Repeated Squaring Algorithm</li><li>Fermat Pseudoprimes to Base b</li><li>Carmichael Numbers</li>
                     </ul>
                 </div>
-                <a href="maths-module-14.html" class="mod-card-btn">
+                <a href="maths-module-15.html" class="mod-card-btn">
                     <span>Read Module &amp; Take Quiz</span> &rarr;
                 </a>
             </div>
 
-            <div class="mod-card" data-unit="3" data-search="euler's totient function & euler's theorem definition of totient phi(n) multiplicative property phi(mn) prime power formula phi(p^k) euler's totient theorem exponent reduction mod composite">
+            <div class="mod-card" data-unit="3" data-search="applications of congruences check digit detection (isbn & upc) linear congruential generators (lcg) hashing division method modular error detection collision resolution">
                 <div>
                     <div class="mod-card-top">
-                        <span class="mod-number">MODULE 15</span>
-                        <span class="mod-badge">Major Theorem</span>
+                        <span class="mod-number">MODULE 16</span>
+                        <span class="mod-badge">Applied Math</span>
                     </div>
-                    <h3 class="mod-title">Euler's Totient Function & Euler's Theorem</h3>
-                    <p class="mod-desc">Euler's totient function phi(n), formula for prime powers and multiplicativity, Euler's Generalization of Fermat's Theorem, and exponent reduction for composite moduli.</p>
+                    <h3 class="mod-title">Applications of Congruences</h3>
+                    <p class="mod-desc">Practical implementations of congruences: check digit systems (UPC, ISBN-10, ISBN-13), pseudorandom number generators (Linear Congruential Method), and hash functions.</p>
                     <div class="mod-formula-preview">
-                        \[ \phi(n) = n \prod_{p \mid n} \left(1 - \frac{1}{p}\right); \quad \gcd(a, m) = 1 \implies a^{\phi(m)} \equiv 1 \pmod m \]
+                        \[ x_{n+1} = (a x_n + c) \bmod m, \quad \sum_{i=1}^{10} i \cdot x_i \equiv 0 \pmod{11} \]
                     </div>
                     <ul class="mod-topics">
-                        <li>Definition of Totient phi(n)</li><li>Multiplicative Property phi(mn)</li><li>Prime Power Formula phi(p^k)</li><li>Euler's Totient Theorem</li><li>Exponent Reduction Mod Composite</li>
+                        <li>Check Digit Detection (ISBN & UPC)</li><li>Linear Congruential Generators (LCG)</li><li>Hashing Division Method</li><li>Modular Error Detection</li><li>Collision Resolution</li>
                     </ul>
                 </div>
-                <a href="maths-module-15.html" class="mod-card-btn">
+                <a href="maths-module-16.html" class="mod-card-btn">
+                    <span>Read Module &amp; Take Quiz</span> &rarr;
+                </a>
+            </div>
+
+            <div class="mod-card" data-unit="3" data-search="mixed mcq mastery and final revision 16 core theorems quick reference algorithm comparison matrix exam viva master traps formula summary cheat sheet 20 high-yield exam mcqs">
+                <div>
+                    <div class="mod-card-top">
+                        <span class="mod-number">MODULE 17</span>
+                        <span class="mod-badge">Unit III Capstone</span>
+                    </div>
+                    <h3 class="mod-title">Mixed MCQ Mastery and Final Revision</h3>
+                    <p class="mod-desc">Exhaustive review of Units I-III: 16 core theorems quick reference, comparison tables, high-yield exam traps, formulas cheat-sheet, and comprehensive self-grading examination.</p>
+                    <div class="mod-formula-preview">
+                        \[ \gcd(a, b) \cdot \operatorname{lcm}(a, b) = |ab|, \quad as + bt = \gcd(a, b), \quad a^{p-1} \equiv 1 \pmod p \]
+                    </div>
+                    <ul class="mod-topics">
+                        <li>16 Core Theorems Quick Reference</li><li>Algorithm Comparison Matrix</li><li>Exam Viva Master Traps</li><li>Formula Summary Cheat Sheet</li><li>20 High-Yield Exam MCQs</li>
+                    </ul>
+                </div>
+                <a href="maths-module-17.html" class="mod-card-btn">
                     <span>Read Module &amp; Take Quiz</span> &rarr;
                 </a>
             </div>
@@ -1005,46 +1067,256 @@ body {
     <div class="unit-group" data-unit-group="4">
         <h2 class="unit-section-title">
             <span class="tag">Unit 04</span>
-            Unit 4: Public-Key Cryptography (RSA) & Course Mastery Exam
+            Unit 4: Classical Cryptography, Ciphers & Cryptosystems (Mods 18–25)
         </h2>
         <div class="modules-grid">
 
-            <div class="mod-card" data-unit="4" data-search="public-key cryptography & the rsa cryptosystem public vs private keys rsa key generation algorithm encryption & decryption math correctness proof via euler's theorem computational hardness of factoring">
+            <div class="mod-card" data-unit="4" data-search="introduction to cryptography & security models communication model (alice, bob, eve) kerckhoffs's principle symmetric cryptosystems attack models (coa, kpa, cpa, cca) computational vs unconditional security">
                 <div>
                     <div class="mod-card-top">
-                        <span class="mod-number">MODULE 16</span>
-                        <span class="mod-badge">Cryptography Star</span>
+                        <span class="mod-number">MODULE 18</span>
+                        <span class="mod-badge">Unit IV Opener</span>
                     </div>
-                    <h3 class="mod-title">Public-Key Cryptography & The RSA Cryptosystem</h3>
-                    <p class="mod-desc">Asymmetric cryptography, RSA key generation (p, q, n, phi(n), e, d), encryption c = m^e mod n, decryption m = c^d mod n, mathematical proof via Euler's Theorem, and digital signatures.</p>
+                    <h3 class="mod-title">Introduction to Cryptography & Security Models</h3>
+                    <p class="mod-desc">Communication security models, Alice, Bob, and Eve, Kerckhoffs's Principle, passive eavesdropping vs active tampering, and types of cryptanalytic attacks (COA, KPA, CPA, CCA).</p>
                     <div class="mod-formula-preview">
-                        \[ n = pq, \; \phi(n) = (p-1)(q-1), \; ed \equiv 1 \pmod{\phi(n)} \implies c = m^e \bmod n, \; m = c^d \bmod n \]
+                        \[ \mathcal{C} = E_K(\mathcal{P}), \quad \mathcal{P} = D_K(\mathcal{C}), \quad D_K(E_K(\mathcal{P})) = \mathcal{P} \]
                     </div>
                     <ul class="mod-topics">
-                        <li>Public vs Private Keys</li><li>RSA Key Generation Algorithm</li><li>Encryption & Decryption Math</li><li>Correctness Proof via Euler's Theorem</li><li>Computational Hardness of Factoring</li>
+                        <li>Communication Model (Alice, Bob, Eve)</li><li>Kerckhoffs's Principle</li><li>Symmetric Cryptosystems</li><li>Attack Models (COA, KPA, CPA, CCA)</li><li>Computational vs Unconditional Security</li>
                     </ul>
                 </div>
-                <a href="maths-module-16.html" class="mod-card-btn">
+                <a href="maths-module-18.html" class="mod-card-btn">
                     <span>Read Module &amp; Take Quiz</span> &rarr;
                 </a>
             </div>
 
-            <div class="mod-card" data-unit="4" data-search="comprehensive mastery exam & quick revision 16 core theorems quick reference algorithm comparison matrix exam viva master traps formula summary cheat sheet final comprehensive mastery exam">
+            <div class="mod-card" data-unit="4" data-search="classical cryptography & substitution ciphers substitution permutations astronomical key space 26! english letter frequency distribution digram & trigram characteristics cryptanalysis via frequency attacks">
                 <div>
                     <div class="mod-card-top">
-                        <span class="mod-number">MODULE 17</span>
-                        <span class="mod-badge">Final Exam</span>
+                        <span class="mod-number">MODULE 19</span>
+                        <span class="mod-badge">Substitution</span>
                     </div>
-                    <h3 class="mod-title">Comprehensive Mastery Exam & Quick Revision</h3>
-                    <p class="mod-desc">Full syllabus master revision: 16 core theorems quick reference, comparison tables, high-yield exam traps, formulas cheat-sheet, and comprehensive final mastery exam.</p>
+                    <h3 class="mod-title">Classical Cryptography & Substitution Ciphers</h3>
+                    <p class="mod-desc">Arbitrary letter permutations, key space size 26! ≈ 4 × 10^26, vulnerability to frequency analysis, single-letter frequencies (E, T, A, O, I, N), digrams, and trigrams.</p>
                     <div class="mod-formula-preview">
-                        \[ \text{Complete Review: } \gcd \cdot \operatorname{lcm} = ab \quad|\quad as + bt = \gcd \quad|\quad a^{\phi(m)} \equiv 1 \pmod m \quad|\quad c^d \equiv m \pmod n \]
+                        \[ f: \Sigma \to \Sigma, \quad |\mathcal{K}| = 26! \approx 4.03 \times 10^{26}, \quad f_E \approx 12.7\% \]
                     </div>
                     <ul class="mod-topics">
-                        <li>16 Core Theorems Quick Reference</li><li>Algorithm Comparison Matrix</li><li>Exam Viva Master Traps</li><li>Formula Summary Cheat Sheet</li><li>Final Comprehensive Mastery Exam</li>
+                        <li>Substitution Permutations</li><li>Astronomical Key Space 26!</li><li>English Letter Frequency Distribution</li><li>Digram & Trigram Characteristics</li><li>Cryptanalysis via Frequency Attacks</li>
                     </ul>
                 </div>
-                <a href="maths-module-17.html" class="mod-card-btn">
+                <a href="maths-module-19.html" class="mod-card-btn">
+                    <span>Read Module &amp; Take Quiz</span> &rarr;
+                </a>
+            </div>
+
+            <div class="mod-card" data-unit="4" data-search="shift cipher and caesar cipher alphabet-number mapping z_26 caesar cipher (k=3) general shift formula brute-force key exhaustion modular subtraction">
+                <div>
+                    <div class="mod-card-top">
+                        <span class="mod-number">MODULE 20</span>
+                        <span class="mod-badge">Classical Cipher</span>
+                    </div>
+                    <h3 class="mod-title">Shift Cipher and Caesar Cipher</h3>
+                    <p class="mod-desc">Rosen's numerical mapping A=0..Z=25, shift encryption c ≡ p + k (mod 26), decryption p ≡ c - k (mod 26), Caesar's shift k=3, and exhaustive key-search over 25 non-trivial keys.</p>
+                    <div class="mod-formula-preview">
+                        \[ c = (p + k) \bmod 26, \quad p = (c - k) \bmod 26, \quad k \in \{0, 1, \dots, 25\} \]
+                    </div>
+                    <ul class="mod-topics">
+                        <li>Alphabet-Number Mapping Z_26</li><li>Caesar Cipher (k=3)</li><li>General Shift Formula</li><li>Brute-Force Key Exhaustion</li><li>Modular Subtraction</li>
+                    </ul>
+                </div>
+                <a href="maths-module-20.html" class="mod-card-btn">
+                    <span>Read Module &amp; Take Quiz</span> &rarr;
+                </a>
+            </div>
+
+            <div class="mod-card" data-unit="4" data-search="affine cipher & modular inverses affine encryption formula coprimality condition gcd(a, 26)=1 finding modular inverses a^-1 decryption derivation known-plaintext attack on 2 letters">
+                <div>
+                    <div class="mod-card-top">
+                        <span class="mod-number">MODULE 21</span>
+                        <span class="mod-badge">Modular Algebra</span>
+                    </div>
+                    <h3 class="mod-title">Affine Cipher & Modular Inverses</h3>
+                    <p class="mod-desc">Two-parameter linear transformation c ≡ ap + b (mod 26), invertibility condition gcd(a, 26)=1, modular inverse a^-1, decryption p ≡ a^-1(c - b) (mod 26), and key space 12 × 26 = 312.</p>
+                    <div class="mod-formula-preview">
+                        \[ c \equiv ap + b \pmod{26}, \quad p \equiv a^{-1}(c - b) \pmod{26}, \quad \gcd(a, 26) = 1 \]
+                    </div>
+                    <ul class="mod-topics">
+                        <li>Affine Encryption Formula</li><li>Coprimality Condition gcd(a, 26)=1</li><li>Finding Modular Inverses a^-1</li><li>Decryption Derivation</li><li>Known-Plaintext Attack on 2 Letters</li>
+                    </ul>
+                </div>
+                <a href="maths-module-21.html" class="mod-card-btn">
+                    <span>Read Module &amp; Take Quiz</span> &rarr;
+                </a>
+            </div>
+
+            <div class="mod-card" data-unit="4" data-search="vigenère polyalphabetic cipher & tableau polyalphabetic principle keyword stream alignment vigenère table / tabula recta periodicity & kasiski examination index of coincidence">
+                <div>
+                    <div class="mod-card-top">
+                        <span class="mod-number">MODULE 22</span>
+                        <span class="mod-badge">Polyalphabetic</span>
+                    </div>
+                    <h3 class="mod-title">Vigenère Polyalphabetic Cipher & Tableau</h3>
+                    <p class="mod-desc">Polyalphabetic substitution using keyword repetition, period d, shifts c_i ≡ p_i + k_(i mod d) (mod 26), resistance to simple frequency analysis, and Kasiski examination.</p>
+                    <div class="mod-formula-preview">
+                        \[ c_i = (p_i + k_{i \bmod d}) \bmod 26, \quad p_i = (c_i - k_{i \bmod d}) \bmod 26 \]
+                    </div>
+                    <ul class="mod-topics">
+                        <li>Polyalphabetic Principle</li><li>Keyword Stream Alignment</li><li>Vigenère Table / Tabula Recta</li><li>Periodicity & Kasiski Examination</li><li>Index of Coincidence</li>
+                    </ul>
+                </div>
+                <a href="maths-module-22.html" class="mod-card-btn">
+                    <span>Read Module &amp; Take Quiz</span> &rarr;
+                </a>
+            </div>
+
+            <div class="mod-card" data-unit="4" data-search="hill cipher & matrix cryptography block matrix encryption invertibility criteria gcd(det(k), 26)=1 modular matrix inverse formula 2x2 hill decryption known-plaintext matrix recovery">
+                <div>
+                    <div class="mod-card-top">
+                        <span class="mod-number">MODULE 23</span>
+                        <span class="mod-badge">Matrix Algebra</span>
+                    </div>
+                    <h3 class="mod-title">Hill Cipher & Matrix Cryptography</h3>
+                    <p class="mod-desc">Polygraphic substitution cipher encrypting blocks of m letters using matrix multiplication modulo 26: C = P K (mod 26). Invertibility condition gcd(det(K), 26) = 1 and modular matrix inversion.</p>
+                    <div class="mod-formula-preview">
+                        \[ \mathbf{C} \equiv \mathbf{P} K \pmod{26}, \quad \mathbf{P} \equiv \mathbf{C} K^{-1} \pmod{26}, \quad \gcd(\det(K), 26) = 1 \]
+                    </div>
+                    <ul class="mod-topics">
+                        <li>Block Matrix Encryption</li><li>Invertibility Criteria gcd(det(K), 26)=1</li><li>Modular Matrix Inverse Formula</li><li>2x2 Hill Decryption</li><li>Known-Plaintext Matrix Recovery</li>
+                    </ul>
+                </div>
+                <a href="maths-module-23.html" class="mod-card-btn">
+                    <span>Read Module &amp; Take Quiz</span> &rarr;
+                </a>
+            </div>
+
+            <div class="mod-card" data-unit="4" data-search="permutation & transposition ciphers permutation functions sigma block transpositions columnar transposition & key ordering inverse permutation sigma^-1 substitution-permutation networks (spn)">
+                <div>
+                    <div class="mod-card-top">
+                        <span class="mod-number">MODULE 24</span>
+                        <span class="mod-badge">Permutation</span>
+                    </div>
+                    <h3 class="mod-title">Permutation & Transposition Ciphers</h3>
+                    <p class="mod-desc">Reordering plaintext letter positions without altering their identities: permutation functions σ, block permutations, rail fence cipher, columnar transposition, and product ciphers.</p>
+                    <div class="mod-formula-preview">
+                        \[ c_i = p_{\sigma(i)}, \quad p_i = c_{\sigma^{-1}(i)}, \quad \sigma \in S_m \]
+                    </div>
+                    <ul class="mod-topics">
+                        <li>Permutation Functions sigma</li><li>Block Transpositions</li><li>Columnar Transposition & Key Ordering</li><li>Inverse Permutation sigma^-1</li><li>Substitution-Permutation Networks (SPN)</li>
+                    </ul>
+                </div>
+                <a href="maths-module-24.html" class="mod-card-btn">
+                    <span>Read Module &amp; Take Quiz</span> &rarr;
+                </a>
+            </div>
+
+            <div class="mod-card" data-unit="4" data-search="mathematical cryptosystems & attack models 5-tuple formal definition bijective encryption mappings symmetric vs asymmetric criteria shannon's perfect secrecy vernam cipher / one-time pad">
+                <div>
+                    <div class="mod-card-top">
+                        <span class="mod-number">MODULE 25</span>
+                        <span class="mod-badge">Unit IV Capstone</span>
+                    </div>
+                    <h3 class="mod-title">Mathematical Cryptosystems & Attack Models</h3>
+                    <p class="mod-desc">The rigorous 5-tuple (P, C, K, E, D), requirement d_K(e_K(x)) = x, symmetric vs asymmetric cryptosystems, Shannon's perfect secrecy, and one-time pad (OTP).</p>
+                    <div class="mod-formula-preview">
+                        \[ (\mathcal{P}, \mathcal{C}, \mathcal{K}, \mathcal{E}, \mathcal{D}) \quad \text{s.t.} \quad \forall e_K \in \mathcal{E}, \exists d_K \in \mathcal{D}: d_K(e_K(x)) = x \]
+                    </div>
+                    <ul class="mod-topics">
+                        <li>5-Tuple Formal Definition</li><li>Bijective Encryption Mappings</li><li>Symmetric vs Asymmetric Criteria</li><li>Shannon's Perfect Secrecy</li><li>Vernam Cipher / One-Time Pad</li>
+                    </ul>
+                </div>
+                <a href="maths-module-25.html" class="mod-card-btn">
+                    <span>Read Module &amp; Take Quiz</span> &rarr;
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="unit-group" data-unit-group="5">
+        <h2 class="unit-section-title">
+            <span class="tag">Unit 05</span>
+            Unit 5: Public-Key Cryptography, Diffie-Hellman, RSA & ElGamal (Mods 26–29)
+        </h2>
+        <div class="modules-grid">
+
+            <div class="mod-card" data-unit="5" data-search="foundations of public key cryptography & fast modular exponentiation symmetric key distribution bottleneck one-way functions f(x) trapdoor one-way functions repeated squaring algorithm complexity analysis o(log k)">
+                <div>
+                    <div class="mod-card-top">
+                        <span class="mod-number">MODULE 26</span>
+                        <span class="mod-badge">Unit V Opener</span>
+                    </div>
+                    <h3 class="mod-title">Foundations of Public Key Cryptography & Fast Modular Exponentiation</h3>
+                    <p class="mod-desc">The symmetric key distribution problem (O(n^2) keys), one-way functions, trapdoor one-way functions, and the repeated squaring algorithm (O(log k) steps) for massive powers.</p>
+                    <div class="mod-formula-preview">
+                        \[ a^k \bmod m \quad \text{computed in } \mathcal{O}(\log k) \text{ multiplications via binary expansion of } k \]
+                    </div>
+                    <ul class="mod-topics">
+                        <li>Symmetric Key Distribution Bottleneck</li><li>One-Way Functions f(x)</li><li>Trapdoor One-Way Functions</li><li>Repeated Squaring Algorithm</li><li>Complexity Analysis O(log k)</li>
+                    </ul>
+                </div>
+                <a href="maths-module-26.html" class="mod-card-btn">
+                    <span>Read Module &amp; Take Quiz</span> &rarr;
+                </a>
+            </div>
+
+            <div class="mod-card" data-unit="5" data-search="diffie-hellman key exchange & discrete logarithm problem key exchange over insecure channels protocol message sequence discrete logarithm problem (dlp) diffie-hellman problem (cdh/ddh) man-in-the-middle attack vulnerability">
+                <div>
+                    <div class="mod-card-top">
+                        <span class="mod-number">MODULE 27</span>
+                        <span class="mod-badge">Key Exchange</span>
+                    </div>
+                    <h3 class="mod-title">Diffie-Hellman Key Exchange & Discrete Logarithm Problem</h3>
+                    <p class="mod-desc">Establishing a shared secret over an insecure channel: generator g modulo prime p, private keys a, b, public keys A = g^a mod p, B = g^b mod p, shared secret S = g^(ab) mod p, and DLP.</p>
+                    <div class="mod-formula-preview">
+                        \[ S \equiv (g^b)^a \equiv (g^a)^b \equiv g^{ab} \pmod p, \quad \text{Hardness: } \log_g(A) \bmod p \]
+                    </div>
+                    <ul class="mod-topics">
+                        <li>Key Exchange Over Insecure Channels</li><li>Protocol Message Sequence</li><li>Discrete Logarithm Problem (DLP)</li><li>Diffie-Hellman Problem (CDH/DDH)</li><li>Man-in-the-Middle Attack Vulnerability</li>
+                    </ul>
+                </div>
+                <a href="maths-module-27.html" class="mod-card-btn">
+                    <span>Read Module &amp; Take Quiz</span> &rarr;
+                </a>
+            </div>
+
+            <div class="mod-card" data-unit="5" data-search="the rsa cryptosystem: key generation, encryption & decryption full 5-stage rsa pipeline euler's totient proof extended gcd key inversion proof when gcd(m, n) > 1 via crt factoring attacks & parameter sizes">
+                <div>
+                    <div class="mod-card-top">
+                        <span class="mod-number">MODULE 28</span>
+                        <span class="mod-badge">Asymmetric Star</span>
+                    </div>
+                    <h3 class="mod-title">The RSA Cryptosystem: Key Generation, Encryption & Decryption</h3>
+                    <p class="mod-desc">Exhaustive mathematical analysis of RSA: prime generation, n = pq, phi(n) = (p-1)(q-1), encryption exponent e, decryption key d = e^-1 mod phi(n), full proof via Euler's Theorem & CRT.</p>
+                    <div class="mod-formula-preview">
+                        \[ c = m^e \bmod n, \quad m = c^d \bmod n, \quad ed \equiv 1 \pmod{\phi(n)} \implies m^{ed} \equiv m \pmod n \]
+                    </div>
+                    <ul class="mod-topics">
+                        <li>Full 5-Stage RSA Pipeline</li><li>Euler's Totient Proof</li><li>Extended GCD Key Inversion</li><li>Proof when gcd(m, n) > 1 via CRT</li><li>Factoring Attacks & Parameter Sizes</li>
+                    </ul>
+                </div>
+                <a href="maths-module-28.html" class="mod-card-btn">
+                    <span>Read Module &amp; Take Quiz</span> &rarr;
+                </a>
+            </div>
+
+            <div class="mod-card" data-unit="5" data-search="the elgamal cryptosystem & comprehensive unit v exam mastery elgamal key generation ephemeral random key k decryption math via fermat's theorem probabilistic encryption properties comparative cryptosystems matrix">
+                <div>
+                    <div class="mod-card-top">
+                        <span class="mod-number">MODULE 29</span>
+                        <span class="mod-badge">Course Capstone</span>
+                    </div>
+                    <h3 class="mod-title">The ElGamal Cryptosystem & Comprehensive Unit V Exam Mastery</h3>
+                    <p class="mod-desc">The ElGamal public key cryptosystem based on discrete logarithms, ephemeral keys k, probabilistic encryption (c1, c2), decryption via modular inverse, and comprehensive comparison of modern protocols.</p>
+                    <div class="mod-formula-preview">
+                        \[ c_1 = g^k \bmod p, \quad c_2 = m \cdot y^k \bmod p, \quad m = c_2 \cdot (c_1^x)^{-1} \bmod p \]
+                    </div>
+                    <ul class="mod-topics">
+                        <li>ElGamal Key Generation</li><li>Ephemeral Random Key k</li><li>Decryption Math via Fermat's Theorem</li><li>Probabilistic Encryption Properties</li><li>Comparative Cryptosystems Matrix</li>
+                    </ul>
+                </div>
+                <a href="maths-module-29.html" class="mod-card-btn">
                     <span>Read Module &amp; Take Quiz</span> &rarr;
                 </a>
             </div>
@@ -1057,15 +1329,15 @@ body {
 <!-- THEOREMS QUICK LOOKUP SECTION -->
 <div class="theorems-section">
     <div class="theorems-box">
-        <h2>⚡ 6 Fundamental Theorems Quick-Lookup</h2>
-        <p>The definitive mathematical theorems tested in discrete mathematics and modern cryptographic protocols:</p>
+        <h2>⚡ Core Theorems &amp; Cryptosystems Quick-Lookup</h2>
+        <p>The definitive mathematical theorems and cryptosystems tested in discrete mathematics and modern cryptography:</p>
         <div class="theorems-table-wrapper">
             <table class="theorems-table">
                 <thead>
                     <tr>
-                        <th>Theorem Name</th>
-                        <th>Mathematical Statement</th>
-                        <th>Core Condition</th>
+                        <th>Theorem / Protocol</th>
+                        <th>Mathematical Statement / Formula</th>
+                        <th>Core Invariant / Hardness</th>
                         <th>Module Link</th>
                     </tr>
                 </thead>
@@ -1098,13 +1370,37 @@ body {
                         <td><strong>Fermat's Little Theorem</strong></td>
                         <td>\( a^{p-1} \equiv 1 \pmod p \)</td>
                         <td>\( p \text{ is prime}, \; p \nmid a \)</td>
-                        <td><a href="maths-module-14.html">Module 14 &rarr;</a></td>
+                        <td><a href="maths-module-15.html">Module 15 &rarr;</a></td>
                     </tr>
                     <tr>
-                        <td><strong>Euler's Totient Generalization</strong></td>
-                        <td>\( a^{\phi(m)} \equiv 1 \pmod m \)</td>
-                        <td>\( \gcd(a, m) = 1 \)</td>
-                        <td><a href="maths-module-15.html">Module 15 &rarr;</a></td>
+                        <td><strong>Affine Cipher Invertibility</strong></td>
+                        <td>\( c \equiv ap + b \pmod{26} \implies p \equiv a^{-1}(c - b) \)</td>
+                        <td>Invertible multiplier \( \gcd(a, 26) = 1 \)</td>
+                        <td><a href="maths-module-21.html">Module 21 &rarr;</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Hill Cipher Invertibility</strong></td>
+                        <td>\( \mathbf{C} \equiv \mathbf{P} K \pmod{26} \implies \mathbf{P} \equiv \mathbf{C} K^{-1} \)</td>
+                        <td>Invertible matrix \( \gcd(\det(K), 26) = 1 \)</td>
+                        <td><a href="maths-module-23.html">Module 23 &rarr;</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Diffie-Hellman Key Exchange</strong></td>
+                        <td>\( S \equiv (g^b)^a \equiv (g^a)^b \equiv g^{ab} \pmod p \)</td>
+                        <td>Discrete Logarithm Problem (DLP)</td>
+                        <td><a href="maths-module-27.html">Module 27 &rarr;</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>The RSA Cryptosystem</strong></td>
+                        <td>\( c = m^e \bmod n, \quad m = c^d \bmod n \)</td>
+                        <td>Integer Factorization of \( n = pq \)</td>
+                        <td><a href="maths-module-28.html">Module 28 &rarr;</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>The ElGamal Cryptosystem</strong></td>
+                        <td>\( (c_1, c_2) = (g^k \bmod p, \; m \cdot y^k \bmod p) \)</td>
+                        <td>Diffie-Hellman Problem &amp; DLP</td>
+                        <td><a href="maths-module-29.html">Module 29 &rarr;</a></td>
                     </tr>
                 </tbody>
             </table>
@@ -1122,7 +1418,7 @@ body {
         <div class="footer-col">
             <h4>Courses</h4>
             <ul>
-                <li><a href="maths.html">Mathematics: Number Theory (17 Modules)</a></li>
+                <li><a href="maths.html">Mathematics: Number Theory &amp; Cryptography (29 Modules)</a></li>
                 <li><a href="blockchain.html">Blockchain &amp; Cryptography (18 Modules)</a></li>
                 <li><a href="django.html">Django Web Framework (45 Modules)</a></li>
             </ul>
@@ -1130,9 +1426,9 @@ body {
         <div class="footer-col">
             <h4>Special Links</h4>
             <ul>
-                <li><a href="maths-module-16.html">RSA Cryptosystem Masterclass</a></li>
-                <li><a href="maths-module-17.html">Comprehensive Mastery Exam</a></li>
-                <li><a href="blockchain-module-6.html">Public Key Cryptography in Blockchain</a></li>
+                <li><a href="maths-module-27.html">Diffie-Hellman Key Exchange Masterclass</a></li>
+                <li><a href="maths-module-28.html">RSA Cryptosystem Deep Architecture</a></li>
+                <li><a href="maths-module-29.html">Course Capstone &amp; Final Exam</a></li>
             </ul>
         </div>
         <div class="footer-col">

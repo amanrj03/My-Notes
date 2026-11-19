@@ -1,0 +1,778 @@
+Unit IV — Module 4: Affine Cipher
+Primary reference: Rosen, Number Theory and Cryptography, Section 4.6, pages 295–297.
+
+The affine cipher is a mathematical generalization of the shift cipher. It is especially important because it combines modular multiplication, modular addition and multiplicative inverses.
+
+Unlike the shift cipher, which only adds a fixed key, the affine cipher multiplies the plaintext number by one key and then adds another.
+
+We'll cover the complete encryption and decryption derivation, valid keys, modular inverses, worked examples and exam-style problems.
+4.1 What is an affine cipher?
+An affine cipher is a substitution cipher that encrypts a plaintext letter \(p\) using the function
+\[
+\boxed{f(p)=(ap+b)\bmod26}
+\]
+
+where:
+- \(p\) = numerical value of the plaintext letter.
+- \(a\) = multiplicative key.
+- \(b\) = additive key.
+- 26 = number of letters in the English alphabet.
+The result \(f(p)\) is the numerical value of the ciphertext letter.
+
+The alphabet mapping remains:
+\[
+A=0,\ B=1,\ C=2,\ldots,Z=25.
+\]
+
+Rosen's important condition:
+\[
+\boxed{\gcd(a,26)=1}
+\]
+
+This condition is necessary and sufficient for the encryption function to be a bijection, meaning that the ciphertext can be decrypted uniquely. 
+U456 (Textbook content) MTH381.pdf
+
+4.2 Encryption formula
+The affine encryption function is
+\[
+\boxed{c=(ap+b)\bmod26}
+\]
+
+There are two operations:
+1. Multiply the plaintext number by \(a\).
+2. Add \(b\) and take the remainder modulo 26.
+Example 1: Encrypt K using \(a=7,\ b=3\)
+This is Rosen's Example 4.
+
+Given:
+\[
+f(p)=(7p+3)\bmod26
+\]
+
+We know:
+\[
+K=10.
+\]
+
+Substitute \(p=10\):
+\[
+\begin{aligned}
+c&=(7(10)+3)\bmod26\\
+&=(70+3)\bmod26\\
+&=73\bmod26\\
+&=21.
+\end{aligned}
+\]
+
+Since 21 represents V,
+\[
+\boxed{K\rightarrow V}
+\]
+
+This is the exact type of direct numerical question you should expect in an MCQ. 
+U456 (Textbook content) MTH381.pdf
+
+4.3 Why must gcd(a, 26) = 1?
+This is one of the most important theoretical questions in the affine cipher.
+
+For decryption to work, every ciphertext letter must correspond to exactly one plaintext letter.
+
+The encryption function is:
+\[
+c=(ap+b)\bmod26.
+\]
+
+Suppose two plaintext values \(p_1\) and \(p_2\) produce the same ciphertext:
+\[
+ap_1+b\equiv ap_2+b\pmod{26}.
+\]
+
+Subtract \(b\) from both sides:
+\[
+ap_1\equiv ap_2\pmod{26}.
+\]
+
+Therefore,
+\[
+a(p_1-p_2)\equiv0\pmod{26}.
+\]
+
+If \(\gcd(a,26)=1\), we can cancel \(a\) modulo 26:
+\[
+p_1-p_2\equiv0\pmod{26}.
+\]
+
+Thus,
+\[
+p_1\equiv p_2\pmod{26}.
+\]
+
+Since both plaintext values belong to \(\mathbb Z_{26}\), they must be equal.
+
+Therefore, the mapping is one-to-one. Since the domain and codomain are finite sets of the same size, it is also onto.
+
+Hence:
+\[
+\boxed{f\text{ is bijective}\iff\gcd(a,26)=1}
+\]
+
+Which values of a are allowed?
+We need:
+\[
+\gcd(a,26)=1.
+\]
+
+Since
+\[
+26=2\times13,
+\]
+
+\(a\) must not be divisible by 2 or 13.
+
+For \(a\) chosen from 0 to 25, the valid values are:
+\[
+\boxed{1,3,5,7,9,11,15,17,19,21,23,25}
+\]
+
+12 valid values
+The additive key \(b\) can be any element of \(\mathbb Z_{26}\).
+
+Therefore, there are
+\[
+12\times26=\boxed{312}
+\]
+
+possible affine keys when \(a,b\) are represented modulo 26.
+
+MCQ trap: It is not enough that \(a\ne0\). It must be relatively prime to 26.
+
+For example:
+a	gcd(a,26)	Valid?
+2	2	No
+3	1	Yes
+5	1	Yes
+7	1	Yes
+13	13	No
+15	1	Yes
+26	26	No
+
+4.4 Decryption formula — Most important part
+Suppose the encryption formula is
+\[
+c=(ap+b)\bmod26.
+\]
+
+We need to recover \(p\) from \(c\).
+
+Step 1: Write the congruence.
+\[
+c\equiv ap+b\pmod{26}
+\]
+
+Step 2: Subtract \(b\) from both sides.
+\[
+c-b\equiv ap\pmod{26}
+\]
+
+Step 3: Multiply by the modular inverse of \(a\).
+
+Because
+\[
+\gcd(a,26)=1,
+\]
+
+the inverse of \(a\) modulo 26 exists.
+
+Let this inverse be \(a^{-1}\). Then:
+\[
+a^{-1}(c-b)\equiv a^{-1}ap\pmod{26}.
+\]
+
+Since
+\[
+a^{-1}a\equiv1\pmod{26},
+\]
+
+we get
+\[
+p\equiv a^{-1}(c-b)\pmod{26}.
+\]
+
+Therefore, the decryption formula is
+\[
+\boxed{p=a^{-1}(c-b)\bmod26}
+\]
+
+Here, \(a^{-1}\) means the multiplicative inverse of \(a\) modulo 26, not the ordinary reciprocal \(1/a\).
+
+This is exactly the derivation used in Rosen. 
+U456 (Textbook content) MTH381.pdf
+
+4.5 How to find the modular inverse of a
+The inverse \(a^{-1}\) satisfies:
+\[
+\boxed{aa^{-1}\equiv1\pmod{26}}
+\]
+
+You can find it by inspection or by using the extended Euclidean algorithm.
+Example: Find the inverse of 7 modulo 26
+We need a number \(x\) such that
+\[
+7x\equiv1\pmod{26}.
+\]
+
+Try multiples of 7:
+\[
+7\times1=7
+\]
+
+\[
+7\times2=14
+\]
+
+\[
+7\times3=21
+\]
+
+\[
+7\times4=28\equiv2
+\]
+
+Continue until:
+\[
+7\times15=105.
+\]
+
+Since
+\[
+105=4(26)+1,
+\]
+
+we have
+\[
+105\equiv1\pmod{26}.
+\]
+
+Therefore,
+\[
+\boxed{7^{-1}\equiv15\pmod{26}}
+\]
+
+Verify
+\[
+7\times15=105
+\]
+
+\[
+105\bmod26=1.
+\]
+
+So 15 is the correct inverse.
+4.6 Complete decryption example
+Suppose the encryption function is
+\[
+c=(7p+3)\bmod26.
+\]
+
+Decrypt the ciphertext letter V.
+
+Step 1: Convert V into a number.
+\[
+V=21.
+\]
+
+Step 2: Identify the parameters.
+\[
+a=7,\quad b=3,\quad c=21.
+\]
+
+Step 3: Find the inverse of 7 modulo 26.
+
+From the previous calculation:
+\[
+7^{-1}=15.
+\]
+
+Step 4: Apply the decryption formula.
+\[
+p=15(21-3)\bmod26
+\]
+
+\[
+p=15(18)\bmod26
+\]
+
+\[
+p=270\bmod26.
+\]
+
+Now,
+\[
+270=10(26)+10.
+\]
+
+Therefore,
+\[
+p=10.
+\]
+
+Number 10 represents K.
+Decryption result
+Verified
+
+V → K
+The original plaintext letter is K.
+
+4.7 Complete message encryption and decryption
+Let's work through a complete example using
+\[
+E(p)=(7p+3)\bmod26.
+\]
+
+Encrypt the word:
+\[
+\text{MATH}
+\]
+
+Step 1: Convert letters into numbers
+Letter	M	A	T	H
+Number	12	0	19	7
+
+Step 2: Apply the encryption formula
+\[
+c=(7p+3)\bmod26.
+\]
+
+For M:
+\[
+(7(12)+3)\bmod26
+=87\bmod26=9.
+\]
+
+For A:
+\[
+(7(0)+3)\bmod26=3.
+\]
+
+For T:
+\[
+(7(19)+3)\bmod26
+=136\bmod26=6.
+\]
+
+For H:
+\[
+(7(7)+3)\bmod26
+=52\bmod26=0.
+\]
+
+Step 3: Convert back into letters
+Plaintext	M	A	T	H
+Number	12	0	19	7
+Cipher number	9	3	6	0
+Ciphertext	J	D	G	A
+
+ENCRYPTED MESSAGE
+JDGA
+
+Step 4: Decrypt JDGA
+We know:
+\[
+a^{-1}=15,\quad b=3.
+\]
+
+The decryption formula is:
+\[
+p=15(c-3)\bmod26.
+\]
+
+For J:
+\[
+p=15(9-3)\bmod26
+\]
+
+\[
+=90\bmod26=12=M.
+\]
+
+For D:
+\[
+p=15(3-3)\bmod26=0=A.
+\]
+
+For G:
+\[
+p=15(6-3)\bmod26
+=45\bmod26=19=T.
+\]
+
+For A:
+\[
+p=15(0-3)\bmod26
+=-45\bmod26=7=H.
+\]
+
+Therefore,
+\[
+\boxed{\text{JDGA}\rightarrow\text{MATH}}
+\]
+
+This confirms that the decryption function correctly reverses the encryption.
+4.8 Finding the encryption key from known plaintext and ciphertext
+An MCQ may give a plaintext letter, its ciphertext equivalent, and one of the two key values. You may need to calculate the other value.
+
+The encryption equation is:
+\[
+c\equiv ap+b\pmod{26}.
+\]
+
+Case 1: Find b when a is known
+Suppose:
+- Plaintext A becomes ciphertext D.
+- \(a=5\).
+Convert the letters:
+\[
+A=0,\quad D=3.
+\]
+
+Substitute:
+\[
+3\equiv5(0)+b\pmod{26}.
+\]
+
+Therefore,
+\[
+\boxed{b=3}.
+\]
+
+Case 2: Find a when b is known
+Suppose:
+- Plaintext B becomes ciphertext K.
+- \(b=3\).
+Convert:
+\[
+B=1,\quad K=10.
+\]
+
+Substitute:
+\[
+10\equiv a(1)+3\pmod{26}.
+\]
+
+Thus,
+\[
+a\equiv7\pmod{26}.
+\]
+
+Therefore,
+\[
+\boxed{a=7}.
+\]
+
+Check the validity condition:
+\[
+\gcd(7,26)=1.
+\]
+
+So the key is valid.
+Case 3: Find both a and b
+Suppose two known letter mappings are:
+\[
+A\rightarrow D
+\]
+
+and
+\[
+B\rightarrow K.
+\]
+
+The first mapping gives:
+\[
+0a+b\equiv3\pmod{26}
+\]
+
+so \(b=3\).
+
+The second gives:
+\[
+1a+3\equiv10\pmod{26}.
+\]
+
+Thus,
+\[
+a=7.
+\]
+
+The encryption function is
+\[
+\boxed{c=(7p+3)\bmod26}.
+\]
+
+Exam tip: Two distinct plaintext-ciphertext mappings can help determine the two affine parameters. Always check that the resulting \(a\) is relatively prime to 26.
+4.9 Affine cipher versus shift cipher
+The affine cipher generalizes the shift cipher.
+Feature	Shift cipher	Affine cipher
+Encryption	\(c=(p+k)\bmod26\)	\(c=(ap+b)\bmod26\)
+Keys	One parameter \(k\)	Two parameters \(a,b\)
+Multiplication	No	Yes
+Modular inverse needed for decryption?	No	Yes, inverse of \(a\)
+Key condition	Any shift modulo 26	\(\gcd(a,26)=1\)
+Number of possible keys	26 including zero shift	312
+Cipher type	Character / monoalphabetic	Character / monoalphabetic
+
+Important connection: A shift cipher is a special case of an affine cipher when
+\[
+a=1.
+\]
+
+Then:
+\[
+c=(p+b)\bmod26.
+\]
+
+This is exactly the shift cipher with key \(b\).
+4.10 Common MCQ traps
+1. The affine encryption formula is \((ap+b)\bmod26\), not \((a+b)p\bmod26\).
+2. \(a\) must be relatively prime to 26.
+3. \(b\) can be any integer modulo 26.
+4. A modular inverse is needed for \(a\), not for \(b\).
+5. The inverse of 7 modulo 26 is 15.
+6. \(7\times15=105\equiv1\pmod{26}\).
+7. The decryption formula is \(a^{-1}(c-b)\bmod26\).
+8. A nonzero \(a\) is not necessarily a valid key.
+9. If \(\gcd(a,26)\ne1\), the mapping is not one-to-one.
+10. The shift cipher is the affine cipher with \(a=1\).
+11. There are 12 valid choices for \(a\) and 26 choices for \(b\), giving 312 keys.
+12. Rosen's example uses \(a=7,b=3\), and encrypts K as V.
+4.11 Module 4 MCQ test
+Module 4 test
+0/14 answered
+
+Choose one answer per question. Explanations appear after submission.
+1. Which is the affine encryption formula?
+
+A. c = (p + k) mod 26
+
+B. c = (ap + b) mod 26
+
+C. c = (a + b)p mod 26
+
+D. c = (p − b)/a
+
+
+
+
+2. What condition makes the affine encryption function bijective modulo 26?
+
+A. a = b
+
+B. gcd(a,26) = 1
+
+C. gcd(b,26) = 1
+
+D. a must be even
+
+
+
+
+3. Which value of a is invalid?
+
+A. 3
+
+B. 5
+
+C. 7
+
+D. 13
+
+
+
+
+4. In Rosen's example f(p) = (7p+3) mod 26, what does K become?
+
+A. R
+
+B. S
+
+C. V
+
+D. W
+
+
+
+
+5. What is the inverse of 7 modulo 26?
+
+A. 7
+
+B. 11
+
+C. 15
+
+D. 21
+
+
+
+
+6. What is the correct affine decryption formula?
+
+A. p = a(c+b) mod 26
+
+B. p = a⁻¹(c−b) mod 26
+
+C. p = (ac+b) mod 26
+
+D. p = (c−a)b mod 26
+
+
+
+
+7. How many valid values of a are there modulo 26?
+
+A. 6
+
+B. 12
+
+C. 13
+
+D. 26
+
+
+
+
+8. How many affine keys are there when a and b are taken modulo 26?
+
+A. 26
+
+B. 52
+
+C. 312
+
+D. 676
+
+
+
+
+9. Which affine cipher is equivalent to the shift cipher with key 5?
+
+A. (5p+1) mod 26
+
+B. (p+5) mod 26
+
+C. (5p+5) mod 26
+
+D. (p−5) mod 26
+
+
+
+
+10. Find the encryption of A under c=(7p+3) mod 26.
+
+A. A
+
+B. C
+
+C. D
+
+D. G
+
+
+
+
+11. If a=5, plaintext A maps to ciphertext D. Find b.
+
+A. 0
+
+B. 3
+
+C. 5
+
+D. 8
+
+
+
+
+12. If a=7, b=3 and ciphertext V is given, what is the plaintext?
+
+A. K
+
+B. M
+
+C. P
+
+D. R
+
+
+
+
+13. Which statement about b is correct?
+
+A. b must be relatively prime to 26
+
+B. b must be prime
+
+C. b can be any residue modulo 26
+
+D. b must equal a
+
+
+
+
+14. What happens if gcd(a,26) is not 1?
+
+A. The encryption function is always bijective
+
+B. The encryption function is not bijective
+
+C. The key becomes a shift cipher
+
+D. The modulus changes to a
+
+
+
+Submit answers
+Module 4 — Final revision sheet
+Encryption
+\[
+\boxed{c=(ap+b)\bmod26}
+\]
+
+Valid key condition
+\[
+\boxed{\gcd(a,26)=1}
+\]
+
+Decryption
+\[
+\boxed{p=a^{-1}(c-b)\bmod26}
+\]
+
+Modular inverse condition
+\[
+aa^{-1}\equiv1\pmod{26}
+\]
+
+Important example
+\[
+7^{-1}\equiv15\pmod{26}
+\]
+
+\[
+E(p)=(7p+3)\bmod26
+\]
+
+\[
+D(c)=15(c-3)\bmod26
+\]
+
+Key counts
+- Valid values of \(a\): 12
+- Possible values of \(b\): 26
+- Total affine keys: 312
+
+Module 4 complete
+Next: Module 5 — Vigenère Cipher.
+
+We'll study polyalphabetic substitution, keyword-based encryption, the Vigenère tableau, numerical encryption/decryption and cryptanalysis.
+
+Say next when you're ready.

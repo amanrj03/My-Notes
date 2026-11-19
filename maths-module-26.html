@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 26: Foundations of Public Key Cryptography & Fast Modular Exponentiation — Mathematics Study Guide</title>
+    <meta name="description" content="Number Theory &amp; Cryptography study notes — Module 26 of 29: Foundations of Public Key Cryptography & Fast Modular Exponentiation. Complete with theorems, proofs, worked examples, and interactive self-test quiz.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+
+    <!-- MathJax 3 configuration for crisp LaTeX rendering -->
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['\\(', '\\)'], ['$', '$']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true,
+            macros: {
+                Z: '\\mathbb{Z}',
+                N: '\\mathbb{N}',
+                R: '\\mathbb{R}',
+                Q: '\\mathbb{Q}',
+                gcd: '\\operatorname{gcd}',
+                lcm: '\\operatorname{lcm}'
+            }
+        },
+        options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+/* ==========================================================================
+   MATHEMATICS THEME — Imperial Oxford Amethyst & Celestial Amber
+   ========================================================================== */
+:root {
+    --math-royal-primary: #7c3aed;
+    --math-royal-hover: #6d28d9;
+    --math-gold-accent: #f59e0b;
+    --math-gold-glow: rgba(245, 158, 11, 0.25);
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-body, #2d3748);
+    margin: 0; padding: 0;
+    background-color: var(--bg-body, #f4f6fb);
+}
+
+.page-container {
+    max-width: 1080px;
+    margin: 25px auto 50px;
+    padding: 40px 50px;
+    background-color: var(--bg-page, #ffffff);
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.07);
+    border-radius: 14px;
+}
+
+/* MATH HERO BANNER */
+.math-banner {
+    background: linear-gradient(135deg, #1b0a2a 0%, #341253 45%, #581c87 75%, #b45309 100%);
+    border-radius: 12px;
+    padding: 30px 34px;
+    margin-bottom: 28px;
+    color: #ffffff;
+    box-shadow: 0 6px 24px rgba(124, 58, 237, 0.25);
+    position: relative;
+    overflow: hidden;
+}
+.math-banner::after {
+    content: "∑ ∫ ∏ √";
+    position: absolute;
+    right: 20px;
+    bottom: -15px;
+    font-size: 80px;
+    font-weight: 800;
+    font-family: 'Outfit', sans-serif;
+    color: rgba(255, 255, 255, 0.05);
+    pointer-events: none;
+}
+.math-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.16);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    margin-bottom: 12px;
+}
+.math-banner-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.25;
+    margin: 0;
+    color: #ffffff;
+}
+
+/* NAVIGATION TOGGLE */
+.nav-toggle {
+    margin-bottom: 24px;
+}
+.nav-toggle-btn {
+    width: 100%;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #7c3aed;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+.nav-toggle-btn:hover {
+    background: rgba(124, 58, 237, 0.06);
+    border-color: #7c3aed;
+}
+.nav-panel {
+    display: none;
+    margin-top: 10px;
+    padding: 18px;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    column-count: 2;
+    column-gap: 16px;
+}
+.nav-panel.open { display: block; }
+.nav-item {
+    display: block;
+    padding: 6px 10px;
+    font-size: 13px;
+    color: var(--text-body, #334155);
+    text-decoration: none;
+    border-radius: 4px;
+    break-inside: avoid;
+    margin-bottom: 4px;
+    transition: all 0.15s ease;
+}
+.nav-item:hover {
+    background: rgba(124, 58, 237, 0.1);
+    color: #7c3aed;
+}
+.nav-item.current {
+    background: linear-gradient(135deg, #7c3aed, #4c1d95);
+    color: #ffffff !important;
+    font-weight: 700;
+}
+
+/* CONTENT STYLES — STRICT LEFT ALIGNMENT */
+.module-content {
+    color: var(--text-body, #334155);
+    font-size: 15px;
+    text-align: left !important;
+}
+.module-content h1, 
+.module-content h2, 
+.module-content h3, 
+.module-content h4, 
+.module-content p, 
+.module-content ul, 
+.module-content ol, 
+.module-content li, 
+.module-content table {
+    text-align: left !important;
+}
+
+.module-content h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-heading, #0f172a);
+    margin: 36px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(124, 58, 237, 0.2);
+}
+.module-content h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-heading, #0f172a);
+    margin: 30px 0 14px;
+}
+.module-content h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-heading, #0f172a);
+    margin: 24px 0 10px;
+}
+.module-content p {
+    margin: 0 0 14px;
+    line-height: 1.7;
+    text-align: left !important;
+}
+.module-content ul, .module-content ol {
+    margin: 12px 0 18px 28px !important;
+    padding: 0 !important;
+    text-align: left !important;
+    list-style-position: outside !important;
+}
+.module-content li {
+    margin-bottom: 8px !important;
+    line-height: 1.65;
+    text-align: left !important;
+}
+
+/* MATHEMATICAL CALLOUTS */
+.math-callout {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 22px 0 16px;
+    border: 1px solid var(--border-color, #e2e8f0);
+    background: var(--bg-surface, #ffffff);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    text-align: left !important;
+}
+[data-theme="dark"] .math-callout {
+    background: #141728;
+    border-color: #242944;
+}
+.callout-badge {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+.callout-title {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--text-heading, #0f172a);
+}
+.math-callout.theorem {
+    border-left: 4px solid #7c3aed;
+}
+.math-callout.theorem .callout-badge {
+    background: rgba(124, 58, 237, 0.12);
+    color: #7c3aed;
+}
+.math-callout.definition {
+    border-left: 4px solid #2563eb;
+}
+.math-callout.definition .callout-badge {
+    background: rgba(37, 99, 235, 0.12);
+    color: #2563eb;
+}
+.math-callout.property {
+    border-left: 4px solid #059669;
+}
+.math-callout.property .callout-badge {
+    background: rgba(5, 150, 105, 0.12);
+    color: #059669;
+}
+.math-callout.example {
+    border-left: 4px solid #d97706;
+}
+.math-callout.example .callout-badge {
+    background: rgba(217, 119, 6, 0.12);
+    color: #d97706;
+}
+
+/* EXAM BANNER */
+.exam-header-banner {
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(245, 158, 11, 0.12));
+    border-left: 4px solid #f59e0b;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 28px 0 16px;
+    font-weight: 800;
+    font-size: 18px;
+    color: #b45309;
+    font-family: 'Outfit', sans-serif;
+}
+[data-theme="dark"] .exam-header-banner {
+    color: #fbbf24;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(245, 158, 11, 0.15));
+}
+
+/* MATH DIAGRAM BOX */
+.math-diagram-box {
+    background: var(--bg-surface, #ffffff);
+    border: 1px solid rgba(124, 58, 237, 0.22);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin: 24px 0;
+    box-shadow: 0 4px 18px rgba(124, 58, 237, 0.06);
+}
+[data-theme="dark"] .math-diagram-box {
+    background: #111424;
+    border-color: rgba(139, 92, 246, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+.math-diagram-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    color: #7c3aed;
+    margin: 0 0 12px;
+    text-align: center;
+}
+[data-theme="dark"] .math-diagram-title {
+    color: #c084fc;
+}
+.math-pill {
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--text-heading);
+}
+[data-theme="dark"] .math-pill {
+    background: #181d33;
+    border-color: #2a3154;
+}
+.math-card-caption {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 12px;
+    margin-top: 14px;
+}
+
+/* MATH DISPLAY CONTAINERS */
+.math-display {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 12px 0;
+    margin: 14px 0;
+    text-align: center;
+}
+.math-inline {
+    white-space: nowrap;
+}
+
+/* REFERENCE PILL */
+.ref-pill {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #7c3aed;
+    background: rgba(124, 58, 237, 0.08);
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    border-radius: 12px;
+    padding: 2px 10px;
+    margin: 4px 0;
+}
+
+/* TABLES */
+.module-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 13.5px;
+}
+.module-content th {
+    background: var(--bg-subtle, #f8fafc);
+    color: var(--text-heading);
+    font-weight: 700;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color, #e2e8f0);
+    text-align: left;
+}
+.module-content td {
+    padding: 10px 12px;
+    border: 1px solid var(--border-color, #e2e8f0);
+    color: var(--text-body);
+}
+
+/* PREV / NEXT NAV BUTTONS */
+.prev-next {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 45px;
+    padding-top: 25px;
+    border-top: 2px solid var(--border-color, #e2e8f0);
+    gap: 14px;
+    flex-wrap: wrap;
+}
+.pn-btn {
+    padding: 10px 20px;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    text-decoration: none;
+    color: #7c3aed;
+    font-weight: 700;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+.pn-btn:hover {
+    background: #7c3aed;
+    color: #fff;
+    border-color: #7c3aed;
+}
+.pn-hub {
+    padding: 10px 18px;
+    background: linear-gradient(135deg, #7c3aed, #4c1d95);
+    color: #fff !important;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+/* QUIZ STYLES */
+.quiz-section-wrap {
+    margin: 45px 0 25px;
+}
+.quiz-card-container {
+    background: var(--bg-surface, #ffffff);
+    border: 1.5px solid rgba(124, 58, 237, 0.25);
+    border-radius: 14px;
+    padding: 32px 28px;
+    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.08);
+}
+[data-theme="dark"] .quiz-card-container {
+    background: #111424;
+    border-color: rgba(139, 92, 246, 0.3);
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+}
+.quiz-header {
+    border-bottom: 2px solid rgba(124, 58, 237, 0.15);
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+.quiz-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.12), rgba(245, 158, 11, 0.15));
+    color: #7c3aed;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+.quiz-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-heading);
+    margin: 0 0 6px 0;
+}
+.quiz-subtitle {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    margin: 0;
+    max-width: 680px;
+}
+.quiz-score-badge {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #ffffff;
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+.q-block {
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    transition: all 0.2s ease;
+}
+[data-theme="dark"] .q-block {
+    background: #181d33;
+    border-color: #272f4e;
+}
+.q-title {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text-heading);
+    margin-bottom: 14px;
+    display: flex;
+    gap: 10px;
+    line-height: 1.5;
+}
+.q-num {
+    color: #7c3aed;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+.q-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.q-opt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-surface, #ffffff);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    cursor: pointer;
+    color: var(--text-body);
+    transition: all 0.15s ease;
+}
+[data-theme="dark"] .q-opt {
+    background: #111424;
+    border-color: #2a3154;
+}
+.q-opt:hover {
+    border-color: #7c3aed;
+    background: rgba(124, 58, 237, 0.04);
+}
+.q-opt input[type="radio"] {
+    margin: 0;
+    accent-color: #7c3aed;
+}
+.q-opt.correct-choice {
+    background: rgba(16, 185, 129, 0.12) !important;
+    border-color: #10b981 !important;
+    color: #065f46 !important;
+    font-weight: 600;
+}
+[data-theme="dark"] .q-opt.correct-choice {
+    color: #34d399 !important;
+}
+.q-opt.wrong-choice {
+    background: rgba(239, 68, 68, 0.12) !important;
+    border-color: #ef4444 !important;
+    color: #991b1b !important;
+}
+[data-theme="dark"] .q-opt.wrong-choice {
+    color: #f87171 !important;
+}
+.q-explanation {
+    display: none;
+    margin-top: 12px;
+    padding: 12px 14px;
+    background: rgba(124, 58, 237, 0.06);
+    border-left: 3px solid #7c3aed;
+    border-radius: 6px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-body);
+}
+.quiz-actions {
+    display: flex;
+    gap: 14px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+}
+.btn-quiz-check {
+    background: linear-gradient(135deg, #7c3aed, #5b21b6);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 26px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
+    transition: all 0.2s;
+}
+.btn-quiz-check:hover {
+    background: linear-gradient(135deg, #6d28d9, #4c1d95);
+    transform: translateY(-1px);
+}
+.btn-quiz-reset {
+    background: var(--bg-subtle, #f8fafc);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-quiz-reset:hover {
+    background: var(--bg-card-hover);
+    color: var(--text-heading);
+}
+
+@media (max-width: 768px) {
+    .page-container { padding: 22px 18px; margin: 15px auto; }
+    .math-banner { padding: 22px 20px; }
+    .math-banner-title { font-size: 24px; }
+    .nav-panel { column-count: 1; }
+}
+</style>
+</head>
+<body>
+
+
+    <header class="global-navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <span class="nav-brand-icon">⚡</span>
+                <span class="nav-brand-text">OmniCourse<span class="nav-brand-accent">.Hub</span></span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link"><span class="icon">🏠</span> All Subjects</a>
+                
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn active" style="color: #a78bfa;"><span class="icon">📐</span> Mathematics (29) ▾</button>
+                    <div class="nav-dropdown-menu">
+                        <a href="maths.html" class="nav-dropdown-header" style="background: linear-gradient(135deg, #7c3aed, #4c1d95); color: #fff;">📋 Mathematics Syllabus Hub (All 29)</a>
+                        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit I: Divisibility & Base Expansions</div>
+<a href="maths-module-1.html">Module 1: Divisibility and the Division Algorithm</a>
+<a href="maths-module-2.html">Module 2: Modular Arithmetic and Congruences</a>
+<a href="maths-module-3.html">Module 3: Integer Representations and Base Expansions</a>
+<a href="maths-module-4.html">Module 4: Octal, Hexadecimal & Fast Base Conversions</a>
+<a href="maths-module-5.html">Module 5: Algorithms for Integer Operations</a>
+<div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit II: Primes, Divisibility Tests & GCD</div>
+<a href="maths-module-6.html">Module 6: Prime and Composite Numbers</a>
+<a href="maths-module-7.html">Module 7: Fundamental Theorem of Arithmetic</a>
+<a href="maths-module-8.html">Module 8: Trial Division and the Sieve of Eratosthenes</a>
+<a href="maths-module-9.html">Module 9: Prime Number Theorem and Prime Distribution</a>
+<a href="maths-module-10.html">Module 10: GCD, LCM and the Euclidean Algorithm</a>
+<a href="maths-module-11.html">Module 11: GCD as a Linear Combination (Bézout's Theorem)</a>
+<div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit III: Congruences, CRT & Fermat/Euler</div>
+<a href="maths-module-12.html">Module 12: Linear Congruences and Modular Inverses</a>
+<a href="maths-module-13.html">Module 13: Chinese Remainder Theorem (CRT)</a>
+<a href="maths-module-14.html">Module 14: Computer Arithmetic with Large Integers</a>
+<a href="maths-module-15.html">Module 15: Fermat's Little Theorem (FLT)</a>
+<a href="maths-module-16.html">Module 16: Applications of Congruences</a>
+<a href="maths-module-17.html">Module 17: Mixed MCQ Mastery and Final Revision</a>
+<div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit IV: Classical Cryptography & Ciphers</div>
+<a href="maths-module-18.html">Module 18: Introduction to Cryptography & Security Models</a>
+<a href="maths-module-19.html">Module 19: Classical Cryptography & Substitution Ciphers</a>
+<a href="maths-module-20.html">Module 20: Shift Cipher and Caesar Cipher</a>
+<a href="maths-module-21.html">Module 21: Affine Cipher & Modular Inverses</a>
+<a href="maths-module-22.html">Module 22: Vigenère Polyalphabetic Cipher & Tableau</a>
+<a href="maths-module-23.html">Module 23: Hill Cipher & Matrix Cryptography</a>
+<a href="maths-module-24.html">Module 24: Permutation & Transposition Ciphers</a>
+<a href="maths-module-25.html">Module 25: Mathematical Cryptosystems & Attack Models</a>
+<div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit V: Public Key Cryptography & Modern Protocols</div>
+<a href="maths-module-26.html">Module 26: Foundations of Public Key Cryptography & Fast Modular Exponentiation</a>
+<a href="maths-module-27.html">Module 27: Diffie-Hellman Key Exchange & Discrete Logarithm Problem</a>
+<a href="maths-module-28.html">Module 28: The RSA Cryptosystem: Key Generation, Encryption & Decryption</a>
+<a href="maths-module-29.html">Module 29: The ElGamal Cryptosystem & Comprehensive Unit V Exam Mastery</a>
+                    </div>
+                </div>
+
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn"><span class="icon">⛓️</span> Blockchain (18) ▾</button>
+                    <div class="nav-dropdown-menu">
+                        <a href="blockchain.html" class="nav-dropdown-header">📋 Blockchain Syllabus Hub (All 18)</a>
+                        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit I (Mods 1–4)</div>
+                        <a href="blockchain-module-1.html">Module 1: History &amp; Bitcoin</a>
+                        <a href="blockchain-module-2.html">Module 2: Distributed Systems</a>
+                        <a href="blockchain-module-3.html">Module 3: Consensus Protocols</a>
+                        <a href="blockchain-module-4.html">Module 4: Decentralization</a>
+                        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit II (Mods 5–8)</div>
+                        <a href="blockchain-module-5.html">Module 5: Symmetric Crypto</a>
+                        <a href="blockchain-module-6.html">Module 6: Public Key Crypto</a>
+                        <a href="blockchain-module-7.html">Module 7: Digital Signatures</a>
+                        <a href="blockchain-module-8.html">Module 8: SHA &amp; Hashes</a>
+                        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit III (Mods 9–13)</div>
+                        <a href="blockchain-module-9.html">Module 9: Consensus Problem &amp; Design</a>
+                        <a href="blockchain-module-10.html">Module 10: Paxos, Raft &amp; PBFT</a>
+                        <a href="blockchain-module-11.html">Module 11: PoW, PoS &amp; Selection</a>
+                        <a href="blockchain-module-12.html">Module 12: Bitcoin Keys &amp; UTXO</a>
+                        <a href="blockchain-module-13.html">Module 13: Mining, Network &amp; Forks</a>
+                        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit IV (Mods 14–18)</div>
+                        <a href="blockchain-module-14.html">Module 14: The Bitcoin Network</a>
+                        <a href="blockchain-module-15.html">Module 15: Bitcoin Wallets</a>
+                        <a href="blockchain-module-16.html">Module 16: Bitcoin Payments</a>
+                        <a href="blockchain-module-17.html">Module 17: Advanced Protocols</a>
+                        <a href="blockchain-module-18.html">Module 18: Bitcoin Investment</a>
+                        <a href="blockchain_guide.html" class="nav-dropdown-special">📖 Full 8-Module Reader</a>
+                    </div>
+                </div>
+
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn"><span class="icon">🐍</span> Django Course (45) ▾</button>
+                    <div class="nav-dropdown-menu">
+                        <a href="django.html" class="nav-dropdown-header">📋 Django Syllabus Hub</a>
+                        <a href="module-1.html">Module 1: Fundamentals</a>
+                        <a href="module-7.html">Module 7: URL Routing</a>
+                        <a href="module-12.html">Module 12: Templates</a>
+                        <a href="module-21.html">Module 21: Forms</a>
+                        <a href="module-25.html">Module 25: Models &amp; ORM</a>
+                        <a href="module-37.html">Module 37: Authentication</a>
+                        <a href="module-42.html">Module 42: Complete Revision</a>
+                        <a href="django_guide.html" class="nav-dropdown-special">📖 Full 44-Module Reader</a>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-actions">
+                <button id="themeToggleBtn" class="theme-btn" title="Toggle Dark/Light Mode">🌙</button>
+                <a href="maths.html" class="nav-action-pill" style="background: linear-gradient(135deg, #7c3aed, #4c1d95);" title="Return to Mathematics Hub">📋 Maths Hub</a>
+            </div>
+        </div>
+    </header>
+    
+
+<div class="page-container">
+
+    <!-- Math Banner Header -->
+    <div class="math-banner">
+        <div class="math-badge">📐 Unit V: Public Key Cryptography & Modern Protocols &bull; Module 26 of 29</div>
+        <h1 class="math-banner-title">Foundations of Public Key Cryptography & Fast Modular Exponentiation</h1>
+        <div style="font-size: 13.5px; opacity: 0.9; margin-top: 6px;">Rigorous lecture notes, theorems, proofs, worked calculation steps &amp; self-grading quiz</div>
+    </div>
+
+    <!-- Collapsible Course Navigation Panel -->
+    <div class="nav-toggle">
+        <button type="button" class="nav-toggle-btn" onclick="toggleNavPanel()">
+            <span>📚 Course Syllabus Navigator (Modules 01 &ndash; 29)</span>
+            <span>▾ Toggle Menu</span>
+        </button>
+        <div id="navPanel" class="nav-panel">
+            <div style="font-size: 11px; font-weight: 800; color: #7c3aed; text-transform: uppercase; margin: 10px 0 4px; padding-left: 6px; letter-spacing: 0.5px; break-inside: avoid;">Unit I (Mods 1–5)</div>
+<a class="nav-item" href="maths-module-1.html">1. Divisibility and the Division Algorithm</a>
+<a class="nav-item" href="maths-module-2.html">2. Modular Arithmetic and Congruences</a>
+<a class="nav-item" href="maths-module-3.html">3. Integer Representations and Base Expansions</a>
+<a class="nav-item" href="maths-module-4.html">4. Octal, Hexadecimal & Fast Base Conversions</a>
+<a class="nav-item" href="maths-module-5.html">5. Algorithms for Integer Operations</a>
+<div style="font-size: 11px; font-weight: 800; color: #7c3aed; text-transform: uppercase; margin: 10px 0 4px; padding-left: 6px; letter-spacing: 0.5px; break-inside: avoid;">Unit II (Mods 6–11)</div>
+<a class="nav-item" href="maths-module-6.html">6. Prime and Composite Numbers</a>
+<a class="nav-item" href="maths-module-7.html">7. Fundamental Theorem of Arithmetic</a>
+<a class="nav-item" href="maths-module-8.html">8. Trial Division and the Sieve of Eratosthenes</a>
+<a class="nav-item" href="maths-module-9.html">9. Prime Number Theorem and Prime Distribution</a>
+<a class="nav-item" href="maths-module-10.html">10. GCD, LCM and the Euclidean Algorithm</a>
+<a class="nav-item" href="maths-module-11.html">11. GCD as a Linear Combination (Bézout's Theorem)</a>
+<div style="font-size: 11px; font-weight: 800; color: #7c3aed; text-transform: uppercase; margin: 10px 0 4px; padding-left: 6px; letter-spacing: 0.5px; break-inside: avoid;">Unit III (Mods 12–17)</div>
+<a class="nav-item" href="maths-module-12.html">12. Linear Congruences and Modular Inverses</a>
+<a class="nav-item" href="maths-module-13.html">13. Chinese Remainder Theorem (CRT)</a>
+<a class="nav-item" href="maths-module-14.html">14. Computer Arithmetic with Large Integers</a>
+<a class="nav-item" href="maths-module-15.html">15. Fermat's Little Theorem (FLT)</a>
+<a class="nav-item" href="maths-module-16.html">16. Applications of Congruences</a>
+<a class="nav-item" href="maths-module-17.html">17. Mixed MCQ Mastery and Final Revision</a>
+<div style="font-size: 11px; font-weight: 800; color: #7c3aed; text-transform: uppercase; margin: 10px 0 4px; padding-left: 6px; letter-spacing: 0.5px; break-inside: avoid;">Unit IV (Mods 18–25)</div>
+<a class="nav-item" href="maths-module-18.html">18. Introduction to Cryptography & Security Models</a>
+<a class="nav-item" href="maths-module-19.html">19. Classical Cryptography & Substitution Ciphers</a>
+<a class="nav-item" href="maths-module-20.html">20. Shift Cipher and Caesar Cipher</a>
+<a class="nav-item" href="maths-module-21.html">21. Affine Cipher & Modular Inverses</a>
+<a class="nav-item" href="maths-module-22.html">22. Vigenère Polyalphabetic Cipher & Tableau</a>
+<a class="nav-item" href="maths-module-23.html">23. Hill Cipher & Matrix Cryptography</a>
+<a class="nav-item" href="maths-module-24.html">24. Permutation & Transposition Ciphers</a>
+<a class="nav-item" href="maths-module-25.html">25. Mathematical Cryptosystems & Attack Models</a>
+<div style="font-size: 11px; font-weight: 800; color: #7c3aed; text-transform: uppercase; margin: 10px 0 4px; padding-left: 6px; letter-spacing: 0.5px; break-inside: avoid;">Unit V (Mods 26–29)</div>
+<span class="nav-item current">26. Foundations of Public Key Cryptography & Fast Modular Exponentiation</span>
+<a class="nav-item" href="maths-module-27.html">27. Diffie-Hellman Key Exchange & Discrete Logarithm Problem</a>
+<a class="nav-item" href="maths-module-28.html">28. The RSA Cryptosystem: Key Generation, Encryption & Decryption</a>
+<a class="nav-item" href="maths-module-29.html">29. The ElGamal Cryptosystem & Comprehensive Unit V Exam Mastery</a>
+        </div>
+    </div>
+
+    <!-- Core Module Academic Content -->
+    <div class="module-content">
+<p>You are absolutely right to ask for more detail. For a 10-mark exam, you need to see the <strong>exact mathematical definitions, proofs, and step-by-step logic</strong>, not just summaries.</p>
+<p>Let’s restart <strong>Module 1</strong> from the ground up, treating it like a proper university lecture. Grab a pen and paper; we are going to derive everything.</p>
+<hr />
+<h1>📘 MODULE 1 (Detailed): Foundations of Public Key Cryptography</h1>
+<h2>1. The Problem with Classical Cryptography (Why Public Key?)</h2>
+<p>In Unit IV, you studied <strong>Private Key Cryptography</strong> (like the Shift or Affine cipher).
+*   <strong>The Rule:</strong> The encryption key and decryption key are mathematically linked. If you know <span class="math-inline">\(k\)</span>, you can easily find <span class="math-inline">\(k^{-1}\)</span>.
+*   <strong>The Flaw:</strong> If Alice wants to send a secret to Bob, she needs the key. But to get the key to Bob securely, she must send it over a channel. If a hacker intercepts the key, the entire system is broken.</p>
+<p><strong>The Public Key Solution (Diffie &amp; Hellman, 1976):</strong>
+What if the encryption key and decryption key are <strong>different</strong>? 
+*   Everyone has a <strong>Public Key (<span class="math-inline">\(E\)</span>)</strong>. You can shout it to the world.
+*   Everyone has a <strong>Private Key (<span class="math-inline">\(D\)</span>)</strong>. You keep it locked in a safe.
+*   Anyone can use your Public Key to encrypt a message, but <strong>only you</strong> can use your Private Key to decrypt it.</p>
+<p>Mathematically, this requires a <strong>Trapdoor One-Way Function</strong>:
+*   <span class="math-inline">\(f(x) = y\)</span> is easy to compute.
+*   <span class="math-inline">\(f^{-1}(y) = x\)</span> is practically impossible to compute... <strong>UNLESS</strong> you have a secret piece of information (the trapdoor).</p>
+<hr />
+<h2>2. The Number Theory Tools (The Engine of Unit V)</h2>
+
+    <div class="math-diagram-box">
+        <h4 class="math-diagram-title">One-Way Trapdoor Functions &amp; Fast Modular Exponentiation</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0;">
+            <div style="padding: 14px; background: rgba(124, 58, 237, 0.06); border-radius: 8px; border: 1px solid rgba(124, 58, 237, 0.2);">
+                <div style="font-weight: 700; color: #7c3aed; margin-bottom: 6px;">🚪 The Trapdoor Mechanism</div>
+                <div style="font-size: 13px; line-height: 1.6; color: var(--text-body);">
+                    <strong>Easy:</strong> Computing \(y = f(x)\) in polynomial time \(O(\log^3 n)\).<br>
+                    <strong>Hard:</strong> Finding \(x\) given \(y\) without special knowledge (infeasible).<br>
+                    <strong>Trapdoor:</strong> With private key \(K_{priv}\), inverting \(x = f^{-1}(y)\) becomes computationally easy.
+                </div>
+            </div>
+            <div style="padding: 14px; background: rgba(245, 158, 11, 0.06); border-radius: 8px; border: 1px solid rgba(245, 158, 11, 0.2);">
+                <div style="font-weight: 700; color: #d97706; margin-bottom: 6px;">⚡ Fast Repeated Squaring</div>
+                <div style="font-size: 13px; line-height: 1.6; color: var(--text-body);">
+                    To calculate \(a^b \bmod n\):<br>
+                    Convert exponent \(b\) into binary: \(b = \sum b_i 2^i\).<br>
+                    Square intermediate results at each step and multiply by \(a\) only when bit \(b_i = 1\).<br>
+                    Reduces \(O(b)\) naive multiplications to \(O(\log b)\)!
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<p>To understand RSA and ElGamal (Modules 3 and 4), you must be a master of these four mathematical tools.</p>
+<h3>Tool 1: Greatest Common Divisor (GCD) &amp; Bezout’s Identity</h3>
+<p>The GCD of two numbers <span class="math-inline">\(a\)</span> and <span class="math-inline">\(b\)</span> (denoted <span class="math-inline">\(\gcd(a,b)\)</span>) is the largest number that divides both.
+*   <strong>Bezout’s Identity:</strong> For any integers <span class="math-inline">\(a\)</span> and <span class="math-inline">\(b\)</span>, there exist integers <span class="math-inline">\(x\)</span> and <span class="math-inline">\(y\)</span> (which can be negative) such that:</p>
+<div class="math-display">\[a x + b y = \gcd(a, b)\]</div>
+<pre><code>*Exam Example:* Find <span class="math-inline">\(\gcd(26, 7)\)</span> and express it as <span class="math-inline">\(26x + 7y\)</span>.
+We use the **Euclidean Algorithm**:
+<span class="math-inline">\(26 = 3 \times 7 + 5\)</span>
+<span class="math-inline">\(7 = 1 \times 5 + 2\)</span>
+<span class="math-inline">\(5 = 2 \times 2 + 1\)</span>
+<span class="math-inline">\(2 = 2 \times 1 + 0\)</span>  <span class="math-inline">\(\rightarrow\)</span> <span class="math-inline">\(\gcd = 1\)</span>.
+
+Now, substitute backwards to find <span class="math-inline">\(x\)</span> and <span class="math-inline">\(y\)</span>:
+<span class="math-inline">\(1 = 5 - 2 \times 2\)</span>
+<span class="math-inline">\(1 = 5 - 2 \times (7 - 1 \times 5) = 3 \times 5 - 2 \times 7\)</span>
+<span class="math-inline">\(1 = 3 \times (26 - 3 \times 7) - 2 \times 7 = 3 \times 26 - 11 \times 7\)</span>
+So, <span class="math-inline">\(x = 3\)</span>, <span class="math-inline">\(y = -11\)</span>.
+</code></pre>
+<h3>Tool 2: Modular Arithmetic &amp; Congruence</h3>
+<p>We say <span class="math-inline">\(a \equiv b \pmod m\)</span> if <span class="math-inline">\(m\)</span> divides <span class="math-inline">\((a-b)\)</span>. 
+*   <strong>Modular Inverse:</strong> The inverse of <span class="math-inline">\(a \pmod m\)</span> is a number <span class="math-inline">\(a^{-1}\)</span> such that:</p>
+<div class="math-display">\[a \cdot a^{-1} \equiv 1 \pmod m\]</div>
+<pre><code>*Crucial Rule for Exams:* <span class="math-inline">\(a\)</span> has an inverse modulo <span class="math-inline">\(m\)</span> **if and only if** <span class="math-inline">\(\gcd(a, m) = 1\)</span>.
+*Using Bezout:* If <span class="math-inline">\(ax + my = 1\)</span>, then <span class="math-inline">\(ax = 1 - my\)</span>. Therefore, <span class="math-inline">\(ax \equiv 1 \pmod m\)</span>. So, <span class="math-inline">\(x\)</span> is the modular inverse of <span class="math-inline">\(a\)</span>.
+In our example above: <span class="math-inline">\(3 \times 26 - 11 \times 7 = 1\)</span>.
+Taking modulo 26: <span class="math-inline">\((-11 \times 7) \equiv 1 \pmod{26}\)</span>.
+Thus, the inverse of <span class="math-inline">\(7 \pmod{26}\)</span> is <span class="math-inline">\(-11\)</span>. To make it positive, we add 26: **<span class="math-inline">\(-11 + 26 = 15\)</span>**. (Check: <span class="math-inline">\(7 \times 15 = 105 = 4 \times 26 + 1\)</span>).
+</code></pre>
+<h3>Tool 3: Euler’s Totient Function, <span class="math-inline">\(\phi(n)\)</span></h3>
+<p><span class="math-inline">\(\phi(n)\)</span> is the count of integers from <span class="math-inline">\(1\)</span> to <span class="math-inline">\(n\)</span> that are relatively prime to <span class="math-inline">\(n\)</span> (i.e., <span class="math-inline">\(\gcd(k, n) = 1\)</span>).
+*   If <span class="math-inline">\(n\)</span> is prime (<span class="math-inline">\(p\)</span>), then all numbers from <span class="math-inline">\(1\)</span> to <span class="math-inline">\(p-1\)</span> are coprime to it. So, <span class="math-inline">\(\phi(p) = p - 1\)</span>.
+*   If <span class="math-inline">\(n = p \times q\)</span> (where <span class="math-inline">\(p\)</span> and <span class="math-inline">\(q\)</span> are distinct primes), we use the formula:</p>
+<div class="math-display">\[\phi(n) = \phi(p) \times \phi(q) = (p - 1)(q - 1)\]</div>
+<h3>Tool 4: Fermat’s Little Theorem &amp; Euler’s Theorem</h3>
+<p>These theorems are the reason RSA decryption actually works.
+*   <strong>Fermat’s Little Theorem:</strong> If <span class="math-inline">\(p\)</span> is prime and <span class="math-inline">\(\gcd(a, p) = 1\)</span>, then:</p>
+<div class="math-display">\[a^{p-1} \equiv 1 \pmod p\]</div>
+<ul>
+<li><strong>Euler’s Theorem (Generalization):</strong> If <span class="math-inline">\(\gcd(a, n) = 1\)</span>, then:</li>
+</ul>
+<div class="math-display">\[a^{\phi(n)} \equiv 1 \pmod n\]</div>
+<hr />
+<h2>3. Fast Modular Exponentiation (How to do <span class="math-inline">\(a^b \bmod n\)</span>)</h2>
+<p>In RSA, you will have to calculate things like <span class="math-inline">\(1819^{13} \bmod 2537\)</span>. You cannot calculate <span class="math-inline">\(1819^{13}\)</span> directly; it is too large for a calculator.
+<em>Exam Rule:</em> You must break the exponent into powers of 2.</p>
+<p><strong>Example:</strong> Calculate <span class="math-inline">\(2^{13} \bmod 11\)</span>.
+*   Write <span class="math-inline">\(13\)</span> in binary: <span class="math-inline">\(13 = 8 + 4 + 1\)</span>.
+*   So, <span class="math-inline">\(2^{13} = 2^8 \cdot 2^4 \cdot 2^1\)</span>.
+*   Calculate powers of 2 modulo 11:
+    <span class="math-inline">\(2^1 \equiv 2\)</span>
+    <span class="math-inline">\(2^2 = 4\)</span>
+    <span class="math-inline">\(2^4 = 4^2 = 16 \equiv 5 \pmod{11}\)</span>
+    <span class="math-inline">\(2^8 = 5^2 = 25 \equiv 3 \pmod{11}\)</span>
+*   Multiply them: <span class="math-inline">\(3 \times 5 \times 2 = 30 \equiv 8 \pmod{11}\)</span>.
+So, <span class="math-inline">\(2^{13} \equiv 8 \pmod{11}\)</span>.</p>
+<hr />
+<h2>📝 Exam-Style Questions (Solved in Detail)</h2>
+<p><strong>Q1. (MCQ - 1 Mark)</strong>
+If <span class="math-inline">\(n = 77\)</span>, what is <span class="math-inline">\(\phi(n)\)</span>?
+A) 76  B) 60  C) 70  D) 66
+<em>Solution:</em> <span class="math-inline">\(77 = 7 \times 11\)</span>. <span class="math-inline">\(\phi(77) = (7-1)(11-1) = 6 \times 10 = 60\)</span>.
+<strong>Answer: B</strong></p>
+<p><strong>Q2. (Solving - 5 Marks)</strong>
+Find the modular inverse of <span class="math-inline">\(13 \pmod{42}\)</span> using the Extended Euclidean Algorithm.
+<em>Solution:</em> We want <span class="math-inline">\(13x \equiv 1 \pmod{42}\)</span>.
+Step 1: Apply Euclidean Algorithm to 42 and 13.
+<span class="math-inline">\(42 = 3 \times 13 + 3\)</span>
+<span class="math-inline">\(13 = 4 \times 3 + 1\)</span>
+<span class="math-inline">\(3 = 3 \times 1 + 0\)</span> (GCD is 1, so inverse exists).</p>
+<p>Step 2: Work backwards.
+<span class="math-inline">\(1 = 13 - 4 \times 3\)</span>
+Substitute <span class="math-inline">\(3 = 42 - 3 \times 13\)</span>:
+<span class="math-inline">\(1 = 13 - 4 \times (42 - 3 \times 13)\)</span>
+<span class="math-inline">\(1 = 13 - 4 \times 42 + 12 \times 13\)</span>
+<span class="math-inline">\(1 = 13 \times 13 - 4 \times 42\)</span></p>
+<p>Step 3: Read the coefficient of 13.
+<span class="math-inline">\(13 \times 13 \equiv 1 \pmod{42}\)</span>.
+<strong>Answer: The inverse is 13.</strong> (Check: <span class="math-inline">\(13 \times 13 = 169 = 4 \times 42 + 1\)</span>. Correct.)</p>
+<p><strong>Q3. (Solving - 4 Marks)</strong>
+Calculate <span class="math-inline">\(3^{17} \bmod 5\)</span> using Fermat's Little Theorem and modular exponentiation.
+<em>Solution:</em>
+Method 1 (Fermat): Since 5 is prime, <span class="math-inline">\(3^4 \equiv 1 \pmod 5\)</span>. 
+<span class="math-inline">\(17 = 4 \times 4 + 1\)</span>. 
+So, <span class="math-inline">\(3^{17} = (3^4)^4 \times 3^1 \equiv 1^4 \times 3 \equiv 3 \pmod 5\)</span>.</p>
+<p>Method 2 (Binary): <span class="math-inline">\(17 = 16 + 1\)</span>.
+<span class="math-inline">\(3^1 = 3\)</span>
+<span class="math-inline">\(3^2 = 9 \equiv 4\)</span>
+<span class="math-inline">\(3^4 = 4^2 = 16 \equiv 1\)</span>
+<span class="math-inline">\(3^8 = 1^2 = 1\)</span>
+<span class="math-inline">\(3^{16} = 1^2 = 1\)</span>
+<span class="math-inline">\(3^{17} = 3^{16} \cdot 3^1 = 1 \cdot 3 = 3\)</span>.
+<strong>Answer: 3</strong></p>
+<hr />
+<h3>🎯 Module 1 Checklist (What you must know for the exam):</h3>
+<ol>
+<li><strong>Explain the difference</strong> between private and public key cryptography.</li>
+<li><strong>Calculate <span class="math-inline">\(\phi(n)\)</span></strong> quickly for any product of two primes.</li>
+<li><strong>Find modular inverses</strong> using the Extended Euclidean Algorithm (This is a guaranteed question in RSA).</li>
+<li><strong>Reduce large exponents</strong> using Fermat's Little Theorem or binary exponentiation.</li>
+</ol>
+<p>Take your time to practice the Extended Euclidean Algorithm; if you master it here, RSA will be a breeze.</p>
+<p>When you are ready to learn the Diffie-Hellman Key Exchange, just say <strong>"next"</strong>!</p>
+
+    <div class="quiz-section-wrap" id="moduleQuizContainer_26">
+        <div class="quiz-card-container">
+            <div class="quiz-header">
+                <div>
+                    <div class="quiz-badge">🧠 Interactive Knowledge Check &bull; Module 26</div>
+                    <h3 class="quiz-title">Self-Grading Multiple Choice Examination</h3>
+                    <p class="quiz-subtitle">Attempt all 8 questions to test your mathematical comprehension and exam readiness. Solutions and step-by-step logic unlock instantly.</p>
+                </div>
+                <div class="quiz-score-badge" id="quizScoreBadge_26" style="display: none;">
+                    <span id="quizScoreVal_26">0</span>/8 &bull; <span id="quizScorePct_26">0%</span>
+                </div>
+            </div>
+
+            <div class="quiz-body">
+                
+        <div class="q-block" id="q_block_26_1" data-corr="1">
+            <div class="q-title"><span class="q-num">1.</span> <span>What mathematical construct forms the foundational requirement for public key cryptography?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_26_1_opt_0">
+                <input type="radio" name="math_q_26_1" value="0">
+                <span><strong>A.</strong> Symmetric permutation tables</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_26_1_opt_1">
+                <input type="radio" name="math_q_26_1" value="1">
+                <span><strong>B.</strong> Trapdoor one-way functions</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_26_1_opt_2">
+                <input type="radio" name="math_q_26_1" value="2">
+                <span><strong>C.</strong> Linear congruential generators</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_26_1_opt_3">
+                <input type="radio" name="math_q_26_1" value="3">
+                <span><strong>D.</strong> Direct substitution tables</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_26_1">
+                <strong>Mathematical Explanation:</strong> Public key cryptography is founded upon one-way trapdoor functions that are computationally easy to evaluate forward but infeasible to invert without the secret trapdoor.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_26_2" data-corr="1">
+            <div class="q-title"><span class="q-num">2.</span> <span>What is the time complexity of naive modular exponentiation a^b mod n compared to repeated squaring?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_26_2_opt_0">
+                <input type="radio" name="math_q_26_2" value="0">
+                <span><strong>A.</strong> O(log b) vs O(b)</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_26_2_opt_1">
+                <input type="radio" name="math_q_26_2" value="1">
+                <span><strong>B.</strong> O(b) vs O(log b)</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_26_2_opt_2">
+                <input type="radio" name="math_q_26_2" value="2">
+                <span><strong>C.</strong> O(n) vs O(log n)</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_26_2_opt_3">
+                <input type="radio" name="math_q_26_2" value="3">
+                <span><strong>D.</strong> O(b²) vs O(b)</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_26_2">
+                <strong>Mathematical Explanation:</strong> Fast modular exponentiation (repeated squaring) evaluates a^b mod n in O(log b) multiplications, whereas naive multiplication requires O(b).
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_26_3" data-corr="0">
+            <div class="q-title"><span class="q-num">3.</span> <span>For any prime integer p, what is Euler's totient function φ(p)?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_26_3_opt_0">
+                <input type="radio" name="math_q_26_3" value="0">
+                <span><strong>A.</strong> p − 1</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_26_3_opt_1">
+                <input type="radio" name="math_q_26_3" value="1">
+                <span><strong>B.</strong> p + 1</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_26_3_opt_2">
+                <input type="radio" name="math_q_26_3" value="2">
+                <span><strong>C.</strong> p / 2</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_26_3_opt_3">
+                <input type="radio" name="math_q_26_3" value="3">
+                <span><strong>D.</strong> 2^p − 1</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_26_3">
+                <strong>Mathematical Explanation:</strong> For any prime p, Euler's totient function is φ(p) = p - 1.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_26_4" data-corr="2">
+            <div class="q-title"><span class="q-num">4.</span> <span>If p = 5 and q = 11 are distinct primes, what is φ(pq)?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_26_4_opt_0">
+                <input type="radio" name="math_q_26_4" value="0">
+                <span><strong>A.</strong> 55</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_26_4_opt_1">
+                <input type="radio" name="math_q_26_4" value="1">
+                <span><strong>B.</strong> 50</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_26_4_opt_2">
+                <input type="radio" name="math_q_26_4" value="2">
+                <span><strong>C.</strong> 40</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_26_4_opt_3">
+                <input type="radio" name="math_q_26_4" value="3">
+                <span><strong>D.</strong> 44</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_26_4">
+                <strong>Mathematical Explanation:</strong> Since 5 and 11 are prime, φ(55) = (5 - 1)(11 - 1) = 4 × 10 = 40.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_26_5" data-corr="0">
+            <div class="q-title"><span class="q-num">5.</span> <span>Under what condition does an integer a possess a modular multiplicative inverse modulo m?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_26_5_opt_0">
+                <input type="radio" name="math_q_26_5" value="0">
+                <span><strong>A.</strong> gcd(a, m) = 1</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_26_5_opt_1">
+                <input type="radio" name="math_q_26_5" value="1">
+                <span><strong>B.</strong> a is prime</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_26_5_opt_2">
+                <input type="radio" name="math_q_26_5" value="2">
+                <span><strong>C.</strong> m divides a</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_26_5_opt_3">
+                <input type="radio" name="math_q_26_5" value="3">
+                <span><strong>D.</strong> a > m</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_26_5">
+                <strong>Mathematical Explanation:</strong> A modular multiplicative inverse of a modulo m exists if and only if gcd(a, m) = 1.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_26_6" data-corr="2">
+            <div class="q-title"><span class="q-num">6.</span> <span>What is the modular multiplicative inverse of 3 modulo 11?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_26_6_opt_0">
+                <input type="radio" name="math_q_26_6" value="0">
+                <span><strong>A.</strong> 3</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_26_6_opt_1">
+                <input type="radio" name="math_q_26_6" value="1">
+                <span><strong>B.</strong> 7</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_26_6_opt_2">
+                <input type="radio" name="math_q_26_6" value="2">
+                <span><strong>C.</strong> 4</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_26_6_opt_3">
+                <input type="radio" name="math_q_26_6" value="3">
+                <span><strong>D.</strong> 9</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_26_6">
+                <strong>Mathematical Explanation:</strong> 3 × 4 = 12 ≡ 1 (mod 11), so the modular inverse of 3 modulo 11 is 4.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_26_7" data-corr="2">
+            <div class="q-title"><span class="q-num">7.</span> <span>Compute 3¹⁷ mod 5 using Fermat's Little Theorem.</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_26_7_opt_0">
+                <input type="radio" name="math_q_26_7" value="0">
+                <span><strong>A.</strong> 1</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_26_7_opt_1">
+                <input type="radio" name="math_q_26_7" value="1">
+                <span><strong>B.</strong> 2</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_26_7_opt_2">
+                <input type="radio" name="math_q_26_7" value="2">
+                <span><strong>C.</strong> 3</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_26_7_opt_3">
+                <input type="radio" name="math_q_26_7" value="3">
+                <span><strong>D.</strong> 4</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_26_7">
+                <strong>Mathematical Explanation:</strong> By Fermat's Little Theorem, 3⁴ ≡ 1 (mod 5). 3¹⁷ = (3⁴)⁴ · 3¹ ≡ 1⁴ · 3 ≡ 3 (mod 5).
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_26_8" data-corr="1">
+            <div class="q-title"><span class="q-num">8.</span> <span>How many pairwise secret keys are required for n users in symmetric private-key cryptography?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_26_8_opt_0">
+                <input type="radio" name="math_q_26_8" value="0">
+                <span><strong>A.</strong> n</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_26_8_opt_1">
+                <input type="radio" name="math_q_26_8" value="1">
+                <span><strong>B.</strong> n(n − 1) / 2</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_26_8_opt_2">
+                <input type="radio" name="math_q_26_8" value="2">
+                <span><strong>C.</strong> 2^n</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_26_8_opt_3">
+                <input type="radio" name="math_q_26_8" value="3">
+                <span><strong>D.</strong> n!</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_26_8">
+                <strong>Mathematical Explanation:</strong> For n users to communicate in symmetric pairs, n(n - 1)/2 shared keys are needed, creating an O(n²) key distribution bottleneck.
+            </div>
+        </div>
+        
+            </div>
+
+            <div class="quiz-actions">
+                <button type="button" class="btn-quiz-check" onclick="checkMathQuiz(26, 8)">✓ Check Answers &amp; View Solutions</button>
+                <button type="button" class="btn-quiz-reset" onclick="resetMathQuiz(26, 8)">↺ Reset Quiz</button>
+            </div>
+        </div>
+    </div>
+    
+
+        <div style="margin-top: 35px; padding: 20px 24px; background: rgba(124, 58, 237, 0.05); border: 1.5px solid rgba(124, 58, 237, 0.25); border-radius: 12px;">
+            <h4 style="margin: 0 0 6px 0; color: #7c3aed; font-size: 16px;">🚀 Ready for the Next Step?</h4>
+            <p style="margin: 0; font-size: 14px; color: var(--text-body);">
+                You have completed <strong>Module 26: Foundations of Public Key Cryptography & Fast Modular Exponentiation</strong>. Test your knowledge with the interactive quiz above, review key theorems, and proceed to <a href="maths-module-27.html" style="color: #7c3aed; font-weight: 700;">Module 27: Diffie-Hellman Key Exchange & Discrete Logarithm Problem &rarr;</a>
+            </p>
+        </div>
+        
+    </div>
+
+    <!-- Prev / Next Footer Navigation -->
+    <div class="prev-next">
+        <a class="pn-btn" href="maths-module-25.html">&larr; Module 25</a>
+        <a class="pn-hub" href="maths.html">📋 Mathematics Hub (29 Modules)</a>
+        <a class="pn-btn" href="maths-module-27.html">Module 27 &rarr;</a>
+    </div>
+
+</div>
+
+<script src="shared.js"></script>
+<script>
+function toggleNavPanel() {
+    var panel = document.getElementById('navPanel');
+    if (panel) panel.classList.toggle('open');
+}
+
+function checkMathQuiz(modNum, total) {
+    let score = 0;
+    for (let i = 1; i <= total; i++) {
+        let block = document.getElementById("q_block_" + modNum + "_" + i);
+        if (!block) continue;
+        let corr = parseInt(block.getAttribute("data-corr"));
+        let radios = document.getElementsByName("math_q_" + modNum + "_" + i);
+        let selected = -1;
+        for (let r of radios) {
+            if (r.checked) {
+                selected = parseInt(r.value);
+                break;
+            }
+        }
+
+        for (let j = 0; j < 4; j++) {
+            let optEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + j);
+            if (optEl) {
+                optEl.classList.remove("correct-choice", "wrong-choice");
+            }
+        }
+
+        if (selected === corr) {
+            score++;
+            let correctEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + corr);
+            if (correctEl) correctEl.classList.add("correct-choice");
+        } else {
+            if (selected !== -1) {
+                let wrongEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + selected);
+                if (wrongEl) wrongEl.classList.add("wrong-choice");
+            }
+            let correctEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + corr);
+            if (correctEl) correctEl.classList.add("correct-choice");
+        }
+
+        let expl = document.getElementById("q_expl_" + modNum + "_" + i);
+        if (expl) expl.style.display = "block";
+    }
+
+    let badge = document.getElementById("quizScoreBadge_" + modNum);
+    let val = document.getElementById("quizScoreVal_" + modNum);
+    let pct = document.getElementById("quizScorePct_" + modNum);
+    if (badge && val && pct) {
+        val.innerText = score;
+        pct.innerText = Math.round((score / total) * 100) + "%";
+        badge.style.display = "inline-flex";
+        badge.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+}
+
+function resetMathQuiz(modNum, total) {
+    for (let i = 1; i <= total; i++) {
+        let radios = document.getElementsByName("math_q_" + modNum + "_" + i);
+        for (let r of radios) r.checked = false;
+
+        for (let j = 0; j < 4; j++) {
+            let optEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + j);
+            if (optEl) optEl.classList.remove("correct-choice", "wrong-choice");
+        }
+
+        let expl = document.getElementById("q_expl_" + modNum + "_" + i);
+        if (expl) expl.style.display = "none";
+    }
+
+    let badge = document.getElementById("quizScoreBadge_" + modNum);
+    if (badge) badge.style.display = "none";
+}
+</script>
+</body>
+</html>

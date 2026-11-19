@@ -1,0 +1,815 @@
+# **Unit IV — Module 5: Vigenère Cipher**
+
+Primary reference: Rosen, *Number Theory and Cryptography*, Section 4.6, pages 297–298 and Exercises 18–22, page 305.
+
+The Vigenère cipher is an important extension of the shift cipher. Instead of using one fixed shift for every letter, it uses a **keyword containing multiple shifts**.
+
+This makes it a polyalphabetic substitution method: the same plaintext letter can be encrypted into different ciphertext letters depending on its position and the corresponding key letter.
+
+We'll follow Rosen's method, including its numerical example using the keyword RED and plaintext ORANGE.&#x20;
+
+U456 (Textbook content) MTH381.pdf
+
+
+
+## **5.1 What is the Vigenère cipher?**
+
+The Vigenère cipher is a block cipher that uses a key string of letters.
+
+Suppose the key is:
+
+\\[ \text{RED} \\]
+
+Convert the key letters into numbers:
+
+\\[ R=17,\quad E=4,\quad D=3. \\]
+
+The key therefore represents the sequence:
+
+\\[ \boxed{17,\ 4,\ 3} \\]
+
+Each plaintext letter is shifted by the corresponding key number.
+
+- First letter: shift by 17.
+- Second letter: shift by 4.
+- Third letter: shift by 3.
+- Fourth letter: shift by 17 again.
+- Fifth letter: shift by 4 again.
+- Sixth letter: shift by 3 again.
+
+The key repeats until the entire plaintext is encrypted.
+
+This repetition is the central feature of the Vigenère cipher.
+
+## **5.2 Alphabet-to-number conversion**
+
+As in the previous cipher modules, Rosen uses:
+
+\\[ \mathbb Z\_{26}=\\{0,1,2,\ldots,25\\}. \\]
+
+| Letter | Value | Letter | Value |
+| ------ | ----- | ------ | ----- |
+| A      | 0     | N      | 13    |
+| B      | 1     | O      | 14    |
+| C      | 2     | P      | 15    |
+| D      | 3     | Q      | 16    |
+| E      | 4     | R      | 17    |
+| F      | 5     | S      | 18    |
+| G      | 6     | T      | 19    |
+| H      | 7     | U      | 20    |
+| I      | 8     | V      | 21    |
+| J      | 9     | W      | 22    |
+| K      | 10    | X      | 23    |
+| L      | 11    | Y      | 24    |
+| M      | 12    | Z      | 25    |
+
+**Remember:** A = 0, not 1.
+
+## **5.3 Vigenère encryption formula**
+
+Suppose:
+
+- The plaintext block has numerical values \\(p_1,p_2,\ldots,p_m\\).
+- The key has numerical values \\(k_1,k_2,\ldots,k_m\\).
+- The ciphertext block has numerical values \\(c_1,c_2,\ldots,c_m\\).
+
+Rosen defines the ciphertext block as:
+
+\\[ \boxed{c_i=(p_i+k_i)\bmod26} \\]
+
+for each position \\(i=1,2,\ldots,m\\).
+
+In expanded form:
+
+\\[ \boxed{ \begin{aligned} c_1&=(p_1+k_1)\bmod26\\\ c_2&=(p_2+k_2)\bmod26\\\ c_3&=(p_3+k_3)\bmod26\\\ &\ \vdots\\\ c_m&=(p_m+k_m)\bmod26 \end{aligned} } \\]
+
+Each position uses its corresponding key value.
+
+### **How is this different from a shift cipher?**
+
+In a shift cipher:
+
+\\[ c_i=(p_i+k)\bmod26 \\]
+
+The same \\(k\\) is used at every position.
+
+In the Vigenère cipher:
+
+\\[ c_i=(p_i+k_i)\bmod26 \\]
+
+The key value can change from one position to another.
+
+## **5.4 Key repetition**
+
+Suppose the keyword is RED and the plaintext is ORANGE.
+
+The plaintext contains six letters, but the key contains only three.
+
+Therefore, repeat the key:
+
+## **Key alignment**
+
+**O**
+
+**R**
+
+**A**
+
+**N**
+
+**G**
+
+**E**
+
+**R**
+
+**E**
+
+**D**
+
+**R**
+
+**E**
+
+**D**
+
+Plaintext
+
+Blue row
+
+Repeated key
+
+Green row
+
+The repeated key is:
+
+\\[ \boxed{\text{REDRED}} \\]
+
+The numerical key sequence is:
+
+\\[ \boxed{17,\ 4,\ 3,\ 17,\ 4,\ 3} \\]
+
+**Important:** The key repeats from the beginning after its final letter. It does not restart after each word; spaces are normally preserved and do not consume key positions.
+
+## **5.5 Rosen's complete worked example: Encrypt ORANGE using RED**
+
+This is the textbook's worked example.
+
+**Given:**
+
+Plaintext:
+
+\\[ \text{ORANGE} \\]
+
+Keyword:
+
+\\[ \text{RED} \\]
+
+### **Step 1: Convert plaintext into numbers**
+
+\\[ \begin{aligned} O&=14\\\ R&=17\\\ A&=0\\\ N&=13\\\ G&=6\\\ E&=4 \end{aligned} \\]
+
+Therefore:
+
+\\[ P=14,\ 17,\ 00,\ 13,\ 06,\ 04 \\]
+
+### **Step 2: Convert the keyword into numbers**
+
+\\[ R=17,\quad E=4,\quad D=3 \\]
+
+Repeat the key:
+
+\\[ K=17,\ 04,\ 03,\ 17,\ 04,\ 03 \\]
+
+### **Step 3: Apply the encryption formula**
+
+\\[ c_i=(p_i+k_i)\bmod26 \\]
+
+Calculate each position:
+
+**First letter:**
+
+\\[ c_1=(14+17)\bmod26 \\]
+
+\\[ =31\bmod26=5 \\]
+
+**Second letter:**
+
+\\[ c_2=(17+4)\bmod26=21 \\]
+
+**Third letter:**
+
+\\[ c_3=(0+3)\bmod26=3 \\]
+
+**Fourth letter:**
+
+\\[ c_4=(13+17)\bmod26=30\bmod26=4 \\]
+
+**Fifth letter:**
+
+\\[ c_5=(6+4)\bmod26=10 \\]
+
+**Sixth letter:**
+
+\\[ c_6=(4+3)\bmod26=7 \\]
+
+### **Step 4: Write the numerical ciphertext**
+
+\\[ C=5,\ 21,\ 03,\ 04,\ 10,\ 07 \\]
+
+### **Step 5: Convert the numbers back into letters**
+
+| Plaintext        | O  | R  | A | N  | G  | E |
+| ---------------- | -- | -- | - | -- | -- | - |
+| Plaintext number | 14 | 17 | 0 | 13 | 6  | 4 |
+| Key              | R  | E  | D | R  | E  | D |
+| Key number       | 17 | 4  | 3 | 17 | 4  | 3 |
+| Cipher number    | 5  | 21 | 3 | 4  | 10 | 7 |
+| Ciphertext       | F  | V  | D | E  | K  | H |
+
+FINAL CIPHERTEXT
+
+# **FVDEKH**
+
+Plaintext ORANGE encrypted using keyword RED.
+
+This matches Rosen's result.&#x20;
+
+U456 (Textbook content) MTH381.pdf
+
+
+
+## **5.6 Vigenère decryption formula**
+
+Encryption adds the key value:
+
+\\[ c_i=(p_i+k_i)\bmod26. \\]
+
+To recover the plaintext, subtract the corresponding key value:
+
+\\[ \boxed{p_i=(c_i-k_i)\bmod26} \\]
+
+This is the decryption formula.
+
+### **Why does subtraction work?**
+
+Starting from:
+
+\\[ c_i\equiv p_i+k_i\pmod{26} \\]
+
+Subtract \\(k_i\\):
+
+\\[ c_i-k_i\equiv p_i\pmod{26}. \\]
+
+Therefore:
+
+\\[ \boxed{p_i=(c_i-k_i)\bmod26}. \\]
+
+Unlike the affine cipher, the Vigenère cipher does not require finding a multiplicative inverse. It uses modular addition and subtraction.
+
+## **5.7 Complete decryption example: Decrypt FVDEKH using RED**
+
+Given:
+
+\\[ C=\text{FVDEKH} \\]
+
+\\[ K=\text{RED} \\]
+
+Repeat the key:
+
+\\[ \text{REDRED} \\]
+
+### **Step 1: Convert ciphertext into numbers**
+
+\\[ F=5,\ V=21,\ D=3,\ E=4,\ K=10,\ H=7. \\]
+
+So:
+
+\\[ C=5,\ 21,\ 3,\ 4,\ 10,\ 7. \\]
+
+### **Step 2: Convert the key into numbers**
+
+\\[ K=17,\ 4,\ 3,\ 17,\ 4,\ 3. \\]
+
+### **Step 3: Apply decryption**
+
+\\[ p_i=(c_i-k_i)\bmod26. \\]
+
+For the first letter:
+
+\\[ p_1=(5-17)\bmod26 \\]
+
+\\[ =-12\bmod26=14. \\]
+
+14 represents O.
+
+For the second letter:
+
+\\[ p_2=(21-4)\bmod26=17. \\]
+
+17 represents R.
+
+For the third letter:
+
+\\[ p_3=(3-3)\bmod26=0. \\]
+
+0 represents A.
+
+For the fourth letter:
+
+\\[ p_4=(4-17)\bmod26 =-13\bmod26=13. \\]
+
+13 represents N.
+
+For the fifth letter:
+
+\\[ p_5=(10-4)\bmod26=6. \\]
+
+6 represents G.
+
+For the sixth letter:
+
+\\[ p_6=(7-3)\bmod26=4. \\]
+
+4 represents E.
+
+RECOVERED PLAINTEXT
+
+# **ORANGE**
+
+Therefore:
+
+\\[ \boxed{D_K(E_K(P))=P} \\]
+
+The original message is recovered.
+
+## **5.8 Vigenère tableau**
+
+The Vigenère tableau is a tabular method of performing the same modular addition.
+
+Each row represents a shift, and each column represents a plaintext letter.
+
+For example:
+
+- Row A represents shift 0.
+- Row B represents shift 1.
+- Row C represents shift 2.
+- Row R represents shift 17.
+
+To encrypt a letter, locate the row corresponding to the key letter and the column corresponding to the plaintext letter. The intersection gives the ciphertext letter.
+
+### **Example: Encrypt O using key R**
+
+- Plaintext O corresponds to column O.
+- Key R corresponds to row R.
+- The intersection is F.
+
+Therefore:
+
+\\[ O+R\rightarrow F. \\]
+
+**First few rows of the Vigenère tableau**
+
+Columns are plaintext letters; rows are key letters.
+
+| Key \ Plaintext | A | B | C | D | E | F |
+| --------------- | - | - | - | - | - | - |
+| A               | A | B | C | D | E | F |
+| B               | B | C | D | E | F | G |
+| C               | C | D | E | F | G | H |
+| D               | D | E | F | G | H | I |
+| E               | E | F | G | H | I | J |
+| F               | F | G | H | I | J | K |
+
+The full tableau has 26 rows and 26 columns. It is simply a visual representation of addition modulo 26.
+
+## **5.9 Why is Vigenère stronger than a shift cipher?**
+
+In a shift cipher, the same plaintext letter always becomes the same ciphertext letter.
+
+For example, with key 3:
+
+\\[ A\rightarrow D \\]
+
+Every occurrence of A becomes D.
+
+In the Vigenère cipher, the shift depends on the corresponding key letter.
+
+For example, plaintext A can become:
+
+- R if the key letter is R.
+- E if the key letter is E.
+- D if the key letter is D.
+
+Thus, the same plaintext letter can produce different ciphertext letters.
+
+**The important consequence:** The ordinary single-letter frequency pattern of the plaintext is obscured because one plaintext letter may be encrypted differently at different positions.
+
+Rosen notes that frequency information is obscured, but not all information about plaintext structure disappears.&#x20;
+
+Cryptography-and-network-security-principles-and-practice.pdf
+
+
+
+## **5.10 Cryptanalysis of the Vigenère cipher**
+
+Cryptanalysis means recovering the original plaintext without knowing the encryption key.
+
+Breaking the Vigenère cipher is more difficult than breaking a simple shift cipher because the key changes the shift from one position to another.
+
+Rosen describes two main stages:
+
+1. Determine the length of the key string.
+2. Determine each character of the key string by identifying its corresponding shift.
+
+U456 (Textbook content) MTH381.pdf
+
+### **Stage 1: Determine the key length**
+
+Suppose the same sequence of letters appears several times in a long ciphertext.
+
+This repetition can provide clues about the length of the repeating keyword.
+
+Why?
+
+Because the same plaintext sequence encrypted under the same sequence of key letters produces the same ciphertext sequence.
+
+If the repeated ciphertext sequence occurs at positions separated by a multiple of the key length, the distance between those positions may reveal information about the key length.
+
+**Illustrative example:**
+
+Suppose a repeated ciphertext sequence starts at positions 10 and 28.
+
+The distance is:
+
+\\[ 28-10=18. \\]
+
+The key length may be a divisor of 18:
+
+\\[ 1,\ 2,\ 3,\ 6,\ 9,\ 18. \\]
+
+Other repeated sequences and their distances can help narrow down the likely key length.
+
+**Important:** One repeated sequence does not prove the key length. The distances provide clues, and several repetitions should be examined.
+
+### **Stage 2: Determine each key character**
+
+Suppose we have established that the keyword has length 3.
+
+Then the ciphertext can be separated into three groups:
+
+- Group 1: ciphertext letters encrypted with key position 1.
+- Group 2: ciphertext letters encrypted with key position 2.
+- Group 3: ciphertext letters encrypted with key position 3.
+
+Each group was encrypted using one fixed shift.
+
+Therefore, we can apply frequency analysis separately to each group.
+
+For example, if the first group appears to have been shifted by 5, the first key letter is F because:
+
+\\[ F=5. \\]
+
+Repeat the analysis for the other two groups to recover the remaining key letters.
+
+Rosen emphasizes that this method assumes the plaintext is sufficiently long for its letter frequencies to be reasonably close to typical English frequencies.&#x20;
+
+U456 (Textbook content) MTH381.pdf
+
+
+
+### **Why can frequency analysis work after finding the key length?**
+
+The Vigenère cipher initially uses different shifts across the message.
+
+But after separating the ciphertext by key position, each group uses one fixed shift.
+
+This converts the problem into several ordinary shift-cipher cryptanalysis problems.
+
+**Vigenère cryptanalysis — overall process**
+
+**Intercepted ciphertext**
+
+**Find repeated sequences and their positions**
+
+**Estimate the key length**
+
+**Separate ciphertext into groups by key position**
+
+**Apply frequency analysis to each group**
+
+**Recover key characters and decrypt**
+
+## **5.11 Vigenère cipher versus shift and affine ciphers**
+
+| Feature                  | Shift            | Affine                      | Vigenère                            |
+| ------------------------ | ---------------- | --------------------------- | ----------------------------------- |
+| Main operation           | Addition         | Multiplication and addition | Repeated modular addition           |
+| Key                      | One integer      | Two integers                | String of letters                   |
+| Key changes by position? | No               | No                          | Yes                                 |
+| Encryption               | \\(p+k\\)        | \\(ap+b\\)                  | \\(p_i+k_i\\)                       |
+| Modulus                  | 26               | 26                          | 26                                  |
+| Modular inverse needed?  | No               | Yes, for \\(a\\)            | No                                  |
+| Cipher type              | Character cipher | Character cipher            | Block cipher in Rosen's terminology |
+| Frequency pattern        | Preserved        | Preserved                   | Obscured                            |
+
+All three use modular arithmetic, but they apply it differently.
+
+## **5.12 Important formulas and examination points**
+
+**Vigenère encryption**
+
+\\[ \boxed{c_i=(p_i+k_i)\bmod26} \\]
+
+**Vigenère decryption**
+
+\\[ \boxed{p_i=(c_i-k_i)\bmod26} \\]
+
+**Key conversion**
+
+\\[ A=0,\ B=1,\ldots,Z=25 \\]
+
+**Key repetition**
+
+If the keyword has length \\(m\\), repeat its numerical sequence until the entire plaintext is covered.
+
+**Cryptanalysis**
+
+1. Estimate key length from repeated ciphertext sequences.
+2. Determine each key character by frequency analysis of the corresponding group.
+
+### **Common MCQ traps**
+
+1. Vigenère uses a string of letters as its key.
+2. The key is repeated to cover the plaintext.
+3. Encryption uses addition modulo 26.
+4. Decryption uses subtraction modulo 26.
+5. The key values are aligned position by position.
+6. Spaces normally do not consume key positions.
+7. A Vigenère cipher can encrypt the same plaintext letter differently.
+8. It obscures ordinary single-letter frequency information.
+9. It is called a block cipher in Rosen's terminology.
+10. The Vigenère tableau implements modular addition.
+11. Finding the key length is the first stage of the cryptanalysis described by Rosen.
+12. Once the key length is known, each key position can be analyzed as a shift cipher.
+
+## **5.13 Additional textbook-style numerical problem**
+
+Rosen includes the exercise: encrypt `SNOWFALL` using the Vigenère cipher with key `BLUE`.&#x20;
+
+U456 (Textbook content) MTH381.pdf
+
+
+
+Let's solve it.
+
+**Given:**
+
+Plaintext:
+
+\\[ \text{SNOWFALL} \\]
+
+Key:
+
+\\[ \text{BLUE} \\]
+
+Repeat the key:
+
+\\[ \text{BLUEBLUE} \\]
+
+Convert into numbers:
+
+| Plaintext        | S  | N  | O  | W  | F | A  | L  | L  |
+| ---------------- | -- | -- | -- | -- | - | -- | -- | -- |
+| Plaintext number | 18 | 13 | 14 | 22 | 5 | 0  | 11 | 11 |
+| Key              | B  | L  | U  | E  | B | L  | U  | E  |
+| Key number       | 1  | 11 | 20 | 4  | 1 | 11 | 20 | 4  |
+
+Apply:
+
+\\[ c_i=(p_i+k_i)\bmod26. \\]
+
+\\[ \begin{aligned} c_1&=19\\\ c_2&=24\\\ c_3&=8\\\ c_4&=0\\\ c_5&=6\\\ c_6&=11\\\ c_7&=5\\\ c_8&=15 \end{aligned} \\]
+
+Convert back to letters:
+
+\\[ \boxed{\text{TYIAGLFP}} \\]
+
+This is a good example of a full-length keyword alignment and encryption question.
+
+## **5.14 Module 5 MCQ test**
+
+**Module 5 test**
+
+0/14 answered
+
+Select one answer for each question. Your score and explanations appear after submission.
+
+**1. What type of key is used in the Vigenère cipher?**
+
+A. One integer
+
+B. A string of letters
+
+C. A prime number
+
+D. A matrix only
+
+
+
+**2. What happens when the keyword is shorter than the plaintext?**
+
+A. The plaintext is shortened
+
+B. The key is repeated
+
+C. The key is reversed
+
+D. The message cannot be encrypted
+
+
+
+**3. What is the encryption formula?**
+
+A. cᵢ = (pᵢ − kᵢ) mod 26
+
+B. cᵢ = (pᵢ + kᵢ) mod 26
+
+C. cᵢ = pᵢkᵢ mod 26
+
+D. cᵢ = (pᵢ + k) mod 2
+
+
+
+**4. What is the decryption formula?**
+
+A. pᵢ = (cᵢ − kᵢ) mod 26
+
+B. pᵢ = (cᵢ + kᵢ) mod 26
+
+C. pᵢ = cᵢkᵢ mod 26
+
+D. pᵢ = (cᵢ − 26) mod kᵢ
+
+
+
+**5. What is the numerical value of the key RED?**
+
+A. 16, 4, 3
+
+B. 17, 4, 3
+
+C. 17, 5, 3
+
+D. 18, 4, 2
+
+
+
+**6. Encrypt O using the first letter R of key RED.**
+
+A. E
+
+B. F
+
+C. G
+
+D. H
+
+
+
+**7. What is the ciphertext when ORANGE is encrypted using RED?**
+
+A. FVDEKH
+
+B. FVDKHE
+
+C. EVDEKH
+
+D. FVCEKH
+
+
+
+**8. What is the plaintext when FVDEKH is decrypted using RED?**
+
+A. ORANGE
+
+B. ORCHID
+
+C. ORIGIN
+
+D. ORATOR
+
+
+
+**9. Which statement correctly distinguishes Vigenère from a shift cipher?**
+
+A. Vigenère uses no modular arithmetic
+
+B. Vigenère can use different shifts at different positions
+
+C. Vigenère only encrypts numbers
+
+D. Vigenère uses one fixed shift throughout
+
+
+
+**10. In Rosen's terminology, the Vigenère cipher is a:**
+
+A. Character cipher
+
+B. Block cipher
+
+C. Public-key cipher
+
+D. Transposition cipher
+
+
+
+**11. What is the first stage of the Vigenère cryptanalysis described by Rosen?**
+
+A. Find the plaintext alphabet
+
+B. Find the length of the key string
+
+C. Find the modular inverse of 26
+
+D. Change the modulus
+
+
+
+**12. Once the key length is known, how can each key character be estimated?**
+
+A. By prime factorization
+
+B. By frequency analysis of the corresponding ciphertext group
+
+C. By using RSA
+
+D. By reversing the entire message
+
+
+
+**13. Encrypt S using key letter B.**
+
+A. R
+
+B. S
+
+C. T
+
+D. U
+
+
+
+**14. Decrypt ciphertext A using key letter E.**
+
+A. V
+
+B. W
+
+C. X
+
+D. Y
+
+
+
+Submit answers
+
+## **Module 5 — Final revision sheet**
+
+**Encryption**
+
+\\[ \boxed{c_i=(p_i+k_i)\bmod26} \\]
+
+**Decryption**
+
+\\[ \boxed{p_i=(c_i-k_i)\bmod26} \\]
+
+**Rosen's example**
+
+\\[ \text{ORANGE}+\text{REDRED} \\]
+
+\\[ \boxed{\text{FVDEKH}} \\]
+
+**Another textbook exercise**
+
+\\[ \text{SNOWFALL}+\text{BLUEBLUE} \\]
+
+\\[ \boxed{\text{TYIAGLFP}} \\]
+
+**Cryptanalysis**
+
+1. Find the key length.
+2. Determine each key character using frequency analysis.
+
+**Remember:** Vigenère is a block cipher in Rosen's terminology.
+
+Quiz correction: Question 14's correct answer is B (W), because \\((0-4)\bmod26=22\\). The displayed answer key mistakenly marks C.
+
+Module 5 complete
+
+**Next: Module 6 — Hill Cipher.**
+
+We'll cover matrix-based encryption, matrix multiplication modulo 26, determinant conditions, modular matrix inverses and complete numerical encryption/decryption examples.
+
+Say **next** when ready.

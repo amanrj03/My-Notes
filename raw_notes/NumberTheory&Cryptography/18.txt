@@ -1,0 +1,581 @@
+# **Unit IV — Module 1: Introduction to Cryptography**
+
+Reference: Rosen, *Number Theory and Cryptography*, Section 4.6 — Cryptography, pages 294 onwards.
+
+This module establishes the mathematical foundation of cryptography. Before studying individual ciphers, you need to understand what cryptography is, why it developed, how encryption and decryption work, and how classical and public-key cryptography differ.
+
+## **1.1 What is cryptography?**
+
+**Cryptography** is the subject of transforming information so that it cannot be easily recovered without special knowledge.
+
+In simple terms, cryptography allows two parties to communicate while preventing unauthorized people from understanding their messages.
+
+Consider this example:
+
+- Alice wants to send a confidential message to Bob.
+- She transforms the original message into an encrypted form.
+- Bob receives the encrypted message.
+- Bob uses the appropriate secret information to recover the original message.
+- An unauthorized person who intercepts the message should not be able to recover its meaning easily.
+
+## **Basic cryptographic communication**
+
+**Alice — Sender**
+
+Original message
+
+## **HELLO BOB**
+
+Encryption
+
+Apply an encryption rule and key
+
+**Encrypted message**
+
+# **&#x20;KHOOR ERE**
+
+Ciphertext
+
+Transmission through a communication channel
+
+Decryption
+
+Apply the appropriate decryption rule
+
+**Bob — Receiver**
+
+## **HELLO BOB**
+
+Recovered original message
+
+Illustration using a Caesar shift of 3. The message is a teaching example, not a modern secure encryption method.
+
+The central objective is to make the message understandable to the intended receiver but difficult for an unauthorized person to recover.
+
+Rosen explains that number theory plays a major role in cryptography, both in classical ciphers and in modern public-key systems.&#x20;
+
+U456 (Textbook content) MTH381.pdf
+
+
+
+## **1.2 History and evolution of cryptography**
+
+Cryptography has existed for thousands of years. Initially, it was mainly used to protect military and diplomatic communications.
+
+### **Important historical developments**
+
+1. **Ancient period — Early secret communication**
+
+   Early methods included rearranging letters or replacing symbols to conceal messages. The purpose was to prevent enemies from understanding intercepted communications.
+2. **Julius Caesar — Caesar cipher**
+
+   One of the earliest well-known substitution methods is associated with Julius Caesar. He shifted each letter three positions forward in the alphabet.
+
+   For example:
+
+   \\[ A\rightarrow D,\quad B\rightarrow E,\quad X\rightarrow A. \\]
+
+   This is the historical starting point for our study of shift ciphers.
+3. **Classical cryptography — Substitution and transposition**
+
+   More sophisticated methods developed, including substitution of individual letters and rearrangement of blocks of letters. Such classical methods were used extensively until the 20th century.
+4. **1970s — Public-key cryptography**
+
+   Public-key cryptography introduced a fundamentally different approach: the encryption key could be publicly known while the decryption key remained secret.
+5. **1976 — RSA development**
+
+   Rivest, Shamir and Adleman introduced the RSA public-key cryptosystem, named after its inventors. Rosen discusses RSA as an important application of number theory.
+
+Historical framing follows Rosen's Section 4.6. The book specifically identifies classical ciphers as thousands of years old and public-key cryptography as an invention of the 1970s.&#x20;
+
+U456 (Textbook content) MTH381.pdf
+
+U456 (Textbook content) MTH381.pdf
+
+
+
+## **1.3 Important terminology in cryptography**
+
+These definitions are extremely important for MCQs. Learn the differences carefully.
+
+| Term          | Meaning                                                                                               |
+| ------------- | ----------------------------------------------------------------------------------------------------- |
+| Plaintext     | Original readable message                                                                             |
+| Ciphertext    | Encrypted or transformed message                                                                      |
+| Encryption    | Process of converting plaintext into ciphertext                                                       |
+| Decryption    | Process of recovering plaintext from ciphertext                                                       |
+| Cipher        | Mathematical method used for encryption and decryption                                                |
+| Key           | Information controlling the encryption or decryption process                                          |
+| Cryptography  | Study of transforming information to protect it                                                       |
+| Cryptanalysis | Study of recovering encrypted information without access to the secret information used to encrypt it |
+| Cryptology    | Broad field encompassing cryptography and cryptanalysis                                               |
+
+### **Important distinction: Cryptography vs cryptanalysis**
+
+**Cryptography** focuses on creating methods to protect information.
+
+**Cryptanalysis** focuses on breaking or analyzing those methods to recover the original information.
+
+For example:
+
+- Alice encrypts a message using a shift cipher: cryptography.
+- Eve intercepts the ciphertext and tries to determine the original message without knowing the key: cryptanalysis.
+
+Rosen explicitly discusses cryptanalysis as the attempt to recover encrypted information without access to the secret information used for encryption.&#x20;
+
+U456 (Textbook content) MTH381.pdf
+
+
+
+## **1.4 Encryption and decryption — Mathematical representation**
+
+Cryptography can be represented using mathematical functions.
+
+Let:
+
+- \\(P\\) = plaintext
+- \\(C\\) = ciphertext
+- \\(E_k\\) = encryption function using key \\(k\\)
+- \\(D_k\\) = decryption function using key \\(k\\)
+
+Encryption is represented by:
+
+\\[ \boxed{C=E_k(P)} \\]
+
+Decryption is represented by:
+
+\\[ \boxed{P=D_k(C)} \\]
+
+The fundamental correctness condition is:
+
+\\[ \boxed{D_k(E_k(P))=P} \\]
+
+This means that applying encryption and then the corresponding decryption must recover the original plaintext.
+
+### **Numerical illustration: Caesar cipher**
+
+Use the alphabet-to-number mapping:
+
+\\[ A=0,\ B=1,\ C=2,\ldots,Z=25. \\]
+
+Suppose the encryption rule shifts every letter by 3.
+
+The encryption function is:
+
+\\[ E_3(p)=(p+3)\bmod26. \\]
+
+Consider the letter B:
+
+\\[ B=1. \\]
+
+Encrypt it:
+
+\\[ E_3(1)=(1+3)\bmod26=4. \\]
+
+Number 4 represents E.
+
+Therefore,
+
+\\[ \boxed{B\rightarrow E} \\]
+
+To decrypt, subtract 3:
+
+\\[ D_3(c)=(c-3)\bmod26. \\]
+
+For E:
+
+\\[ D_3(4)=(4-3)\bmod26=1. \\]
+
+Number 1 represents B, so the original letter is recovered.
+
+**Important:** The modulo operation makes the alphabet wrap around. For example, shifting X (23) by 3 gives
+
+\\[ (23+3)\bmod26=0, \\]
+
+which represents A.
+
+## **1.5 Classical cryptography**
+
+Rosen explains that classical ciphers generally encrypt by changing individual letters or blocks of letters into other letters or blocks.&#x20;
+
+U456 (Textbook content) MTH381.pdf
+
+
+
+Two important approaches are:
+
+### **A. Substitution cipher**
+
+A substitution cipher replaces a plaintext letter or symbol with another letter or symbol.
+
+Example:
+
+\\[ A\rightarrow D,\quad B\rightarrow E,\quad C\rightarrow F. \\]
+
+The symbols are replaced, while their original positions remain unchanged.
+
+Examples in our syllabus:
+
+- Shift cipher
+- Affine cipher
+- General substitution cipher
+- Vigenère cipher
+- Hill cipher
+
+### **B. Transposition / permutation cipher**
+
+A transposition cipher rearranges the positions of plaintext letters.
+
+For example:
+
+\\[ \text{ABCDE}\rightarrow\text{CADBE}. \\]
+
+The letters themselves are not replaced; their positions change.
+
+Rosen describes a transposition cipher as a block cipher based on a permutation of the positions in a block.&#x20;
+
+U456 (Textbook content) MTH381.pdf
+
+
+
+### **Substitution vs transposition**
+
+| Feature           | Substitution                                         | Transposition        |
+| ----------------- | ---------------------------------------------------- | -------------------- |
+| Main operation    | Replaces symbols                                     | Rearranges positions |
+| Letters           | Changed                                              | Preserved            |
+| Order             | Generally preserved in simple character substitution | Changed              |
+| Example           | A becomes D                                          | ABC becomes CAB      |
+| Syllabus examples | Shift, affine, Vigenère, Hill                        | Permutation cipher   |
+
+**MCQ trap:** Substitution changes the symbols; transposition changes their positions.
+
+## **1.6 Private-key and public-key cryptography**
+
+This is one of the most important conceptual differences in your Unit IV and Unit V syllabus.
+
+### **A. Private-key cryptography**
+
+Also called symmetric-key cryptography.
+
+In this approach, the communicating parties share secret key information. Knowing the encryption key makes it possible to find or use the corresponding decryption key.
+
+For a shift cipher:
+
+\\[ C=(P+k)\bmod26 \\]
+
+\\[ P=(C-k)\bmod26. \\]
+
+If the encryption shift is \\(k=3\\), the decryption shift is \\(-3\\).
+
+Rosen identifies classical shift and affine ciphers as private-key cryptosystems.&#x20;
+
+U456 (Textbook content) MTH381.pdf
+
+
+
+### **B. Public-key cryptography**
+
+Also called asymmetric cryptography.
+
+It uses two related keys:
+
+- **Public key:** Can be made available to everyone.
+- **Private key:** Kept secret by its owner.
+
+The public key is used for encryption, while the corresponding private key is used for decryption in a public-key encryption system.
+
+## **Public-key encryption model**
+
+**Bob publishes his public key**
+
+Public key
+
+**Alice encrypts her message**
+
+Uses Bob's public key
+
+Encrypted ciphertext is sent
+
+**Bob decrypts the message**
+
+Private key
+
+Only Bob should possess this key
+
+Rosen explains that public-key cryptography was introduced to avoid requiring every communicating pair to share a secret encryption key in advance.&#x20;
+
+U456 (Textbook content) MTH381.pdf
+
+
+
+### **Comparison**
+
+| Feature           | Private-key                        | Public-key                           |
+| ----------------- | ---------------------------------- | ------------------------------------ |
+| Keys              | Shared secret key                  | Public and private key pair          |
+| Encryption key    | Secret                             | Publicly available                   |
+| Decryption key    | Same or easily related             | Private                              |
+| Key distribution  | Secret key must be shared securely | Public key can be distributed openly |
+| Syllabus examples | Classical ciphers                  | RSA                                  |
+
+**Important distinction:** Diffie–Hellman is primarily a key-exchange protocol. It allows two parties to establish a shared secret; it is not itself a message-encryption cipher.
+
+## **1.7 What is cryptanalysis?**
+
+Cryptanalysis is the analysis of ciphertext to recover the original message or discover information about the key.
+
+Consider a shift cipher with
+
+\\[ C=(P+k)\bmod26. \\]
+
+If an attacker knows that the message uses a shift cipher, they can test possible values of \\(k\\).
+
+There are only 26 possible shifts:
+
+\\[ k\in\\{0,1,2,\ldots,25\\}. \\]
+
+An attacker can try all 26 possibilities and examine which resulting message is meaningful.
+
+This is called a **brute-force attack**.
+
+### **Frequency analysis**
+
+Another method is frequency analysis.
+
+In English text, certain letters occur more frequently than others. For example, E is generally among the most common letters.
+
+An attacker can:
+
+1. Count the occurrences of each ciphertext letter.
+2. Identify the most frequent letters.
+3. Make hypotheses about which plaintext letters they represent.
+4. Test the corresponding decryption.
+5. Check whether the recovered text is meaningful.
+
+Rosen illustrates this method with an intercepted shift-cipher message. The most frequent ciphertext letter is K; hypothesizing that it represents E gives a shift of 6, which decrypts the message to:
+
+**THE EARLY BIRD GETS THE WORM.**&#x20;
+
+U456 (Textbook content) MTH381.pdf
+
+
+
+**MCQ point:** Frequency analysis is particularly useful against simple monoalphabetic substitution methods because they preserve the frequency pattern of individual letters, although the actual letter identities change.
+
+## **1.8 Overview of the cryptographic systems in your syllabus**
+
+| System              | Main mathematical idea                         | Category                |
+| ------------------- | ---------------------------------------------- | ----------------------- |
+| Shift cipher        | Addition modulo 26                             | Classical, private key  |
+| Affine cipher       | Linear function modulo 26                      | Classical, private key  |
+| Substitution cipher | Symbol replacement                             | Classical               |
+| Vigenère cipher     | Multiple alphabet shifts                       | Classical               |
+| Hill cipher         | Matrix multiplication modulo 26                | Classical               |
+| Permutation cipher  | Rearrangement using permutations               | Classical               |
+| Diffie–Hellman      | Modular exponentiation                         | Public-key key exchange |
+| RSA                 | Modular exponentiation and prime factorization | Public-key encryption   |
+| ElGamal             | Modular exponentiation and discrete logarithms | Public-key encryption   |
+
+This table is your roadmap for the remaining modules.
+
+## **1.9 Important MCQ facts and common traps**
+
+1. Cryptography transforms information to protect it from unauthorized recovery.
+2. Plaintext is the original message; ciphertext is the encrypted message.
+3. Encryption converts plaintext into ciphertext.
+4. Decryption recovers plaintext from ciphertext.
+5. Cryptanalysis attempts to recover encrypted information without the secret encryption information.
+6. Julius Caesar is associated with a shift of three positions.
+7. Classical cryptography includes substitution and transposition methods.
+8. Substitution replaces symbols; transposition rearranges their positions.
+9. Shift and affine ciphers are private-key cryptosystems.
+10. Public-key cryptography was introduced in the 1970s.
+11. RSA was introduced by Rivest, Shamir and Adleman.
+12. Diffie–Hellman is a key-exchange method, not an ordinary message-encryption cipher.
+13. A cryptographic protocol is an exchange of messages to achieve a security goal.
+
+## **1.10 Module 1 MCQ test**
+
+**Module 1 test**
+
+0/12 answered
+
+**1. What is cryptography?**
+
+A. The process of deleting messages
+
+B. The study of transforming information so it cannot easily be recovered without special knowledge
+
+C. The study of computer hardware
+
+D. The process of compressing files
+
+
+
+**2. What is the original readable message called?**
+
+A. Ciphertext
+
+B. Keyspace
+
+C. Plaintext
+
+D. Cipher
+
+
+
+**3. What is the process of recovering plaintext from ciphertext?**
+
+A. Encryption
+
+B. Decryption
+
+C. Cryptanalysis
+
+D. Transposition
+
+
+
+**4. Which person is associated with the Caesar cipher?**
+
+A. Rivest
+
+B. Diffie
+
+C. Julius Caesar
+
+D. Adleman
+
+
+
+**5. In a substitution cipher, what happens?**
+
+A. Letters are replaced by other symbols or letters
+
+B. Only letter positions are rearranged
+
+C. The message is deleted
+
+D. The message is compressed
+
+
+
+**6. Which technique rearranges the positions of letters?**
+
+A. Shift cipher
+
+B. Affine cipher
+
+C. Transposition cipher
+
+D. Caesar cipher
+
+
+
+**7. What does cryptanalysis study?**
+
+A. Creating larger alphabets
+
+B. Recovering encrypted information without the secret encryption information
+
+C. Increasing message length
+
+D. Generating random plaintext
+
+
+
+**8. Which of these is a private-key cryptosystem in Rosen's discussion?**
+
+A. RSA
+
+B. Shift cipher
+
+C. Diffie–Hellman
+
+D. ElGamal
+
+
+
+**9. In public-key encryption, which key is kept secret by the recipient?**
+
+A. Public key
+
+B. Private key
+
+C. Alphabet key
+
+D. Ciphertext key
+
+
+
+**10. What is the primary purpose of Diffie–Hellman?**
+
+A. Rearranging letters
+
+B. Exchanging a shared secret key
+
+C. Replacing every letter with another
+
+D. Finding prime factors of every message
+
+
+
+**11. If a Caesar cipher shifts letters three positions forward, what does X become?**
+
+A. A
+
+B. B
+
+C. C
+
+D. Z
+
+
+
+**12. Which group introduced the RSA cryptosystem?**
+
+A. Diffie, Hellman and Merkle
+
+B. Rivest, Shamir and Adleman
+
+C. Caesar, Hill and Vigenère
+
+D. Euler, Fermat and Gauss
+
+
+
+Submit answers
+
+## **Module 1 — Final revision sheet**
+
+**Core equations**
+
+\\[ C=E_k(P) \\]
+
+\\[ P=D_k(C) \\]
+
+\\[ D_k(E_k(P))=P \\]
+
+**Caesar cipher example**
+
+\\[ E_3(p)=(p+3)\bmod26 \\]
+
+\\[ D_3(c)=(c-3)\bmod26 \\]
+
+**Remember**
+
+- Plaintext = original message.
+- Ciphertext = encrypted message.
+- Cryptography = protecting information.
+- Cryptanalysis = attempting to break encryption.
+- Substitution = replacement.
+- Transposition = rearrangement.
+- Private key = shared secret.
+- Public key = openly distributed encryption key; private key = secret decryption key.
+
+Module 1 complete
+
+**Next module:** Classical Cryptography and Substitution Ciphers. We'll study monoalphabetic substitution in mathematical detail, including its structure, examples, frequency analysis and weaknesses.
+
+Say **next** when you're ready.

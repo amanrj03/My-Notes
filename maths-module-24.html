@@ -1,0 +1,1758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 24: Permutation & Transposition Ciphers — Mathematics Study Guide</title>
+    <meta name="description" content="Number Theory &amp; Cryptography study notes — Module 24 of 29: Permutation & Transposition Ciphers. Complete with theorems, proofs, worked examples, and interactive self-test quiz.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+
+    <!-- MathJax 3 configuration for crisp LaTeX rendering -->
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['\\(', '\\)'], ['$', '$']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true,
+            macros: {
+                Z: '\\mathbb{Z}',
+                N: '\\mathbb{N}',
+                R: '\\mathbb{R}',
+                Q: '\\mathbb{Q}',
+                gcd: '\\operatorname{gcd}',
+                lcm: '\\operatorname{lcm}'
+            }
+        },
+        options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+/* ==========================================================================
+   MATHEMATICS THEME — Imperial Oxford Amethyst & Celestial Amber
+   ========================================================================== */
+:root {
+    --math-royal-primary: #7c3aed;
+    --math-royal-hover: #6d28d9;
+    --math-gold-accent: #f59e0b;
+    --math-gold-glow: rgba(245, 158, 11, 0.25);
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-body, #2d3748);
+    margin: 0; padding: 0;
+    background-color: var(--bg-body, #f4f6fb);
+}
+
+.page-container {
+    max-width: 1080px;
+    margin: 25px auto 50px;
+    padding: 40px 50px;
+    background-color: var(--bg-page, #ffffff);
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.07);
+    border-radius: 14px;
+}
+
+/* MATH HERO BANNER */
+.math-banner {
+    background: linear-gradient(135deg, #1b0a2a 0%, #341253 45%, #581c87 75%, #b45309 100%);
+    border-radius: 12px;
+    padding: 30px 34px;
+    margin-bottom: 28px;
+    color: #ffffff;
+    box-shadow: 0 6px 24px rgba(124, 58, 237, 0.25);
+    position: relative;
+    overflow: hidden;
+}
+.math-banner::after {
+    content: "∑ ∫ ∏ √";
+    position: absolute;
+    right: 20px;
+    bottom: -15px;
+    font-size: 80px;
+    font-weight: 800;
+    font-family: 'Outfit', sans-serif;
+    color: rgba(255, 255, 255, 0.05);
+    pointer-events: none;
+}
+.math-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.16);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    margin-bottom: 12px;
+}
+.math-banner-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.25;
+    margin: 0;
+    color: #ffffff;
+}
+
+/* NAVIGATION TOGGLE */
+.nav-toggle {
+    margin-bottom: 24px;
+}
+.nav-toggle-btn {
+    width: 100%;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #7c3aed;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+.nav-toggle-btn:hover {
+    background: rgba(124, 58, 237, 0.06);
+    border-color: #7c3aed;
+}
+.nav-panel {
+    display: none;
+    margin-top: 10px;
+    padding: 18px;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    column-count: 2;
+    column-gap: 16px;
+}
+.nav-panel.open { display: block; }
+.nav-item {
+    display: block;
+    padding: 6px 10px;
+    font-size: 13px;
+    color: var(--text-body, #334155);
+    text-decoration: none;
+    border-radius: 4px;
+    break-inside: avoid;
+    margin-bottom: 4px;
+    transition: all 0.15s ease;
+}
+.nav-item:hover {
+    background: rgba(124, 58, 237, 0.1);
+    color: #7c3aed;
+}
+.nav-item.current {
+    background: linear-gradient(135deg, #7c3aed, #4c1d95);
+    color: #ffffff !important;
+    font-weight: 700;
+}
+
+/* CONTENT STYLES — STRICT LEFT ALIGNMENT */
+.module-content {
+    color: var(--text-body, #334155);
+    font-size: 15px;
+    text-align: left !important;
+}
+.module-content h1, 
+.module-content h2, 
+.module-content h3, 
+.module-content h4, 
+.module-content p, 
+.module-content ul, 
+.module-content ol, 
+.module-content li, 
+.module-content table {
+    text-align: left !important;
+}
+
+.module-content h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-heading, #0f172a);
+    margin: 36px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(124, 58, 237, 0.2);
+}
+.module-content h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-heading, #0f172a);
+    margin: 30px 0 14px;
+}
+.module-content h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-heading, #0f172a);
+    margin: 24px 0 10px;
+}
+.module-content p {
+    margin: 0 0 14px;
+    line-height: 1.7;
+    text-align: left !important;
+}
+.module-content ul, .module-content ol {
+    margin: 12px 0 18px 28px !important;
+    padding: 0 !important;
+    text-align: left !important;
+    list-style-position: outside !important;
+}
+.module-content li {
+    margin-bottom: 8px !important;
+    line-height: 1.65;
+    text-align: left !important;
+}
+
+/* MATHEMATICAL CALLOUTS */
+.math-callout {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 22px 0 16px;
+    border: 1px solid var(--border-color, #e2e8f0);
+    background: var(--bg-surface, #ffffff);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    text-align: left !important;
+}
+[data-theme="dark"] .math-callout {
+    background: #141728;
+    border-color: #242944;
+}
+.callout-badge {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+.callout-title {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--text-heading, #0f172a);
+}
+.math-callout.theorem {
+    border-left: 4px solid #7c3aed;
+}
+.math-callout.theorem .callout-badge {
+    background: rgba(124, 58, 237, 0.12);
+    color: #7c3aed;
+}
+.math-callout.definition {
+    border-left: 4px solid #2563eb;
+}
+.math-callout.definition .callout-badge {
+    background: rgba(37, 99, 235, 0.12);
+    color: #2563eb;
+}
+.math-callout.property {
+    border-left: 4px solid #059669;
+}
+.math-callout.property .callout-badge {
+    background: rgba(5, 150, 105, 0.12);
+    color: #059669;
+}
+.math-callout.example {
+    border-left: 4px solid #d97706;
+}
+.math-callout.example .callout-badge {
+    background: rgba(217, 119, 6, 0.12);
+    color: #d97706;
+}
+
+/* EXAM BANNER */
+.exam-header-banner {
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(245, 158, 11, 0.12));
+    border-left: 4px solid #f59e0b;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 28px 0 16px;
+    font-weight: 800;
+    font-size: 18px;
+    color: #b45309;
+    font-family: 'Outfit', sans-serif;
+}
+[data-theme="dark"] .exam-header-banner {
+    color: #fbbf24;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(245, 158, 11, 0.15));
+}
+
+/* MATH DIAGRAM BOX */
+.math-diagram-box {
+    background: var(--bg-surface, #ffffff);
+    border: 1px solid rgba(124, 58, 237, 0.22);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin: 24px 0;
+    box-shadow: 0 4px 18px rgba(124, 58, 237, 0.06);
+}
+[data-theme="dark"] .math-diagram-box {
+    background: #111424;
+    border-color: rgba(139, 92, 246, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+.math-diagram-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    color: #7c3aed;
+    margin: 0 0 12px;
+    text-align: center;
+}
+[data-theme="dark"] .math-diagram-title {
+    color: #c084fc;
+}
+.math-pill {
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--text-heading);
+}
+[data-theme="dark"] .math-pill {
+    background: #181d33;
+    border-color: #2a3154;
+}
+.math-card-caption {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 12px;
+    margin-top: 14px;
+}
+
+/* MATH DISPLAY CONTAINERS */
+.math-display {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 12px 0;
+    margin: 14px 0;
+    text-align: center;
+}
+.math-inline {
+    white-space: nowrap;
+}
+
+/* REFERENCE PILL */
+.ref-pill {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #7c3aed;
+    background: rgba(124, 58, 237, 0.08);
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    border-radius: 12px;
+    padding: 2px 10px;
+    margin: 4px 0;
+}
+
+/* TABLES */
+.module-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 13.5px;
+}
+.module-content th {
+    background: var(--bg-subtle, #f8fafc);
+    color: var(--text-heading);
+    font-weight: 700;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color, #e2e8f0);
+    text-align: left;
+}
+.module-content td {
+    padding: 10px 12px;
+    border: 1px solid var(--border-color, #e2e8f0);
+    color: var(--text-body);
+}
+
+/* PREV / NEXT NAV BUTTONS */
+.prev-next {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 45px;
+    padding-top: 25px;
+    border-top: 2px solid var(--border-color, #e2e8f0);
+    gap: 14px;
+    flex-wrap: wrap;
+}
+.pn-btn {
+    padding: 10px 20px;
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    text-decoration: none;
+    color: #7c3aed;
+    font-weight: 700;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+.pn-btn:hover {
+    background: #7c3aed;
+    color: #fff;
+    border-color: #7c3aed;
+}
+.pn-hub {
+    padding: 10px 18px;
+    background: linear-gradient(135deg, #7c3aed, #4c1d95);
+    color: #fff !important;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+/* QUIZ STYLES */
+.quiz-section-wrap {
+    margin: 45px 0 25px;
+}
+.quiz-card-container {
+    background: var(--bg-surface, #ffffff);
+    border: 1.5px solid rgba(124, 58, 237, 0.25);
+    border-radius: 14px;
+    padding: 32px 28px;
+    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.08);
+}
+[data-theme="dark"] .quiz-card-container {
+    background: #111424;
+    border-color: rgba(139, 92, 246, 0.3);
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+}
+.quiz-header {
+    border-bottom: 2px solid rgba(124, 58, 237, 0.15);
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+.quiz-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.12), rgba(245, 158, 11, 0.15));
+    color: #7c3aed;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+.quiz-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-heading);
+    margin: 0 0 6px 0;
+}
+.quiz-subtitle {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    margin: 0;
+    max-width: 680px;
+}
+.quiz-score-badge {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #ffffff;
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+.q-block {
+    background: var(--bg-subtle, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    transition: all 0.2s ease;
+}
+[data-theme="dark"] .q-block {
+    background: #181d33;
+    border-color: #272f4e;
+}
+.q-title {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text-heading);
+    margin-bottom: 14px;
+    display: flex;
+    gap: 10px;
+    line-height: 1.5;
+}
+.q-num {
+    color: #7c3aed;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+.q-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.q-opt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-surface, #ffffff);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    cursor: pointer;
+    color: var(--text-body);
+    transition: all 0.15s ease;
+}
+[data-theme="dark"] .q-opt {
+    background: #111424;
+    border-color: #2a3154;
+}
+.q-opt:hover {
+    border-color: #7c3aed;
+    background: rgba(124, 58, 237, 0.04);
+}
+.q-opt input[type="radio"] {
+    margin: 0;
+    accent-color: #7c3aed;
+}
+.q-opt.correct-choice {
+    background: rgba(16, 185, 129, 0.12) !important;
+    border-color: #10b981 !important;
+    color: #065f46 !important;
+    font-weight: 600;
+}
+[data-theme="dark"] .q-opt.correct-choice {
+    color: #34d399 !important;
+}
+.q-opt.wrong-choice {
+    background: rgba(239, 68, 68, 0.12) !important;
+    border-color: #ef4444 !important;
+    color: #991b1b !important;
+}
+[data-theme="dark"] .q-opt.wrong-choice {
+    color: #f87171 !important;
+}
+.q-explanation {
+    display: none;
+    margin-top: 12px;
+    padding: 12px 14px;
+    background: rgba(124, 58, 237, 0.06);
+    border-left: 3px solid #7c3aed;
+    border-radius: 6px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-body);
+}
+.quiz-actions {
+    display: flex;
+    gap: 14px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+}
+.btn-quiz-check {
+    background: linear-gradient(135deg, #7c3aed, #5b21b6);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 26px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
+    transition: all 0.2s;
+}
+.btn-quiz-check:hover {
+    background: linear-gradient(135deg, #6d28d9, #4c1d95);
+    transform: translateY(-1px);
+}
+.btn-quiz-reset {
+    background: var(--bg-subtle, #f8fafc);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-quiz-reset:hover {
+    background: var(--bg-card-hover);
+    color: var(--text-heading);
+}
+
+@media (max-width: 768px) {
+    .page-container { padding: 22px 18px; margin: 15px auto; }
+    .math-banner { padding: 22px 20px; }
+    .math-banner-title { font-size: 24px; }
+    .nav-panel { column-count: 1; }
+}
+</style>
+</head>
+<body>
+
+
+    <header class="global-navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <span class="nav-brand-icon">⚡</span>
+                <span class="nav-brand-text">OmniCourse<span class="nav-brand-accent">.Hub</span></span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link"><span class="icon">🏠</span> All Subjects</a>
+                
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn active" style="color: #a78bfa;"><span class="icon">📐</span> Mathematics (29) ▾</button>
+                    <div class="nav-dropdown-menu">
+                        <a href="maths.html" class="nav-dropdown-header" style="background: linear-gradient(135deg, #7c3aed, #4c1d95); color: #fff;">📋 Mathematics Syllabus Hub (All 29)</a>
+                        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit I: Divisibility & Base Expansions</div>
+<a href="maths-module-1.html">Module 1: Divisibility and the Division Algorithm</a>
+<a href="maths-module-2.html">Module 2: Modular Arithmetic and Congruences</a>
+<a href="maths-module-3.html">Module 3: Integer Representations and Base Expansions</a>
+<a href="maths-module-4.html">Module 4: Octal, Hexadecimal & Fast Base Conversions</a>
+<a href="maths-module-5.html">Module 5: Algorithms for Integer Operations</a>
+<div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit II: Primes, Divisibility Tests & GCD</div>
+<a href="maths-module-6.html">Module 6: Prime and Composite Numbers</a>
+<a href="maths-module-7.html">Module 7: Fundamental Theorem of Arithmetic</a>
+<a href="maths-module-8.html">Module 8: Trial Division and the Sieve of Eratosthenes</a>
+<a href="maths-module-9.html">Module 9: Prime Number Theorem and Prime Distribution</a>
+<a href="maths-module-10.html">Module 10: GCD, LCM and the Euclidean Algorithm</a>
+<a href="maths-module-11.html">Module 11: GCD as a Linear Combination (Bézout's Theorem)</a>
+<div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit III: Congruences, CRT & Fermat/Euler</div>
+<a href="maths-module-12.html">Module 12: Linear Congruences and Modular Inverses</a>
+<a href="maths-module-13.html">Module 13: Chinese Remainder Theorem (CRT)</a>
+<a href="maths-module-14.html">Module 14: Computer Arithmetic with Large Integers</a>
+<a href="maths-module-15.html">Module 15: Fermat's Little Theorem (FLT)</a>
+<a href="maths-module-16.html">Module 16: Applications of Congruences</a>
+<a href="maths-module-17.html">Module 17: Mixed MCQ Mastery and Final Revision</a>
+<div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit IV: Classical Cryptography & Ciphers</div>
+<a href="maths-module-18.html">Module 18: Introduction to Cryptography & Security Models</a>
+<a href="maths-module-19.html">Module 19: Classical Cryptography & Substitution Ciphers</a>
+<a href="maths-module-20.html">Module 20: Shift Cipher and Caesar Cipher</a>
+<a href="maths-module-21.html">Module 21: Affine Cipher & Modular Inverses</a>
+<a href="maths-module-22.html">Module 22: Vigenère Polyalphabetic Cipher & Tableau</a>
+<a href="maths-module-23.html">Module 23: Hill Cipher & Matrix Cryptography</a>
+<a href="maths-module-24.html">Module 24: Permutation & Transposition Ciphers</a>
+<a href="maths-module-25.html">Module 25: Mathematical Cryptosystems & Attack Models</a>
+<div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #7c3aed; padding: 4px 14px; text-transform: uppercase; background: rgba(124, 58, 237, 0.08);">Unit V: Public Key Cryptography & Modern Protocols</div>
+<a href="maths-module-26.html">Module 26: Foundations of Public Key Cryptography & Fast Modular Exponentiation</a>
+<a href="maths-module-27.html">Module 27: Diffie-Hellman Key Exchange & Discrete Logarithm Problem</a>
+<a href="maths-module-28.html">Module 28: The RSA Cryptosystem: Key Generation, Encryption & Decryption</a>
+<a href="maths-module-29.html">Module 29: The ElGamal Cryptosystem & Comprehensive Unit V Exam Mastery</a>
+                    </div>
+                </div>
+
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn"><span class="icon">⛓️</span> Blockchain (18) ▾</button>
+                    <div class="nav-dropdown-menu">
+                        <a href="blockchain.html" class="nav-dropdown-header">📋 Blockchain Syllabus Hub (All 18)</a>
+                        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit I (Mods 1–4)</div>
+                        <a href="blockchain-module-1.html">Module 1: History &amp; Bitcoin</a>
+                        <a href="blockchain-module-2.html">Module 2: Distributed Systems</a>
+                        <a href="blockchain-module-3.html">Module 3: Consensus Protocols</a>
+                        <a href="blockchain-module-4.html">Module 4: Decentralization</a>
+                        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit II (Mods 5–8)</div>
+                        <a href="blockchain-module-5.html">Module 5: Symmetric Crypto</a>
+                        <a href="blockchain-module-6.html">Module 6: Public Key Crypto</a>
+                        <a href="blockchain-module-7.html">Module 7: Digital Signatures</a>
+                        <a href="blockchain-module-8.html">Module 8: SHA &amp; Hashes</a>
+                        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit III (Mods 9–13)</div>
+                        <a href="blockchain-module-9.html">Module 9: Consensus Problem &amp; Design</a>
+                        <a href="blockchain-module-10.html">Module 10: Paxos, Raft &amp; PBFT</a>
+                        <a href="blockchain-module-11.html">Module 11: PoW, PoS &amp; Selection</a>
+                        <a href="blockchain-module-12.html">Module 12: Bitcoin Keys &amp; UTXO</a>
+                        <a href="blockchain-module-13.html">Module 13: Mining, Network &amp; Forks</a>
+                        <div class="dropdown-section-title" style="font-size: 10.5px; font-weight: 700; color: #0284c7; padding: 4px 14px; text-transform: uppercase;">Unit IV (Mods 14–18)</div>
+                        <a href="blockchain-module-14.html">Module 14: The Bitcoin Network</a>
+                        <a href="blockchain-module-15.html">Module 15: Bitcoin Wallets</a>
+                        <a href="blockchain-module-16.html">Module 16: Bitcoin Payments</a>
+                        <a href="blockchain-module-17.html">Module 17: Advanced Protocols</a>
+                        <a href="blockchain-module-18.html">Module 18: Bitcoin Investment</a>
+                        <a href="blockchain_guide.html" class="nav-dropdown-special">📖 Full 8-Module Reader</a>
+                    </div>
+                </div>
+
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn"><span class="icon">🐍</span> Django Course (45) ▾</button>
+                    <div class="nav-dropdown-menu">
+                        <a href="django.html" class="nav-dropdown-header">📋 Django Syllabus Hub</a>
+                        <a href="module-1.html">Module 1: Fundamentals</a>
+                        <a href="module-7.html">Module 7: URL Routing</a>
+                        <a href="module-12.html">Module 12: Templates</a>
+                        <a href="module-21.html">Module 21: Forms</a>
+                        <a href="module-25.html">Module 25: Models &amp; ORM</a>
+                        <a href="module-37.html">Module 37: Authentication</a>
+                        <a href="module-42.html">Module 42: Complete Revision</a>
+                        <a href="django_guide.html" class="nav-dropdown-special">📖 Full 44-Module Reader</a>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-actions">
+                <button id="themeToggleBtn" class="theme-btn" title="Toggle Dark/Light Mode">🌙</button>
+                <a href="maths.html" class="nav-action-pill" style="background: linear-gradient(135deg, #7c3aed, #4c1d95);" title="Return to Mathematics Hub">📋 Maths Hub</a>
+            </div>
+        </div>
+    </header>
+    
+
+<div class="page-container">
+
+    <!-- Math Banner Header -->
+    <div class="math-banner">
+        <div class="math-badge">📐 Unit IV: Classical Cryptography & Ciphers &bull; Module 24 of 29</div>
+        <h1 class="math-banner-title">Permutation & Transposition Ciphers</h1>
+        <div style="font-size: 13.5px; opacity: 0.9; margin-top: 6px;">Rigorous lecture notes, theorems, proofs, worked calculation steps &amp; self-grading quiz</div>
+    </div>
+
+    <!-- Collapsible Course Navigation Panel -->
+    <div class="nav-toggle">
+        <button type="button" class="nav-toggle-btn" onclick="toggleNavPanel()">
+            <span>📚 Course Syllabus Navigator (Modules 01 &ndash; 29)</span>
+            <span>▾ Toggle Menu</span>
+        </button>
+        <div id="navPanel" class="nav-panel">
+            <div style="font-size: 11px; font-weight: 800; color: #7c3aed; text-transform: uppercase; margin: 10px 0 4px; padding-left: 6px; letter-spacing: 0.5px; break-inside: avoid;">Unit I (Mods 1–5)</div>
+<a class="nav-item" href="maths-module-1.html">1. Divisibility and the Division Algorithm</a>
+<a class="nav-item" href="maths-module-2.html">2. Modular Arithmetic and Congruences</a>
+<a class="nav-item" href="maths-module-3.html">3. Integer Representations and Base Expansions</a>
+<a class="nav-item" href="maths-module-4.html">4. Octal, Hexadecimal & Fast Base Conversions</a>
+<a class="nav-item" href="maths-module-5.html">5. Algorithms for Integer Operations</a>
+<div style="font-size: 11px; font-weight: 800; color: #7c3aed; text-transform: uppercase; margin: 10px 0 4px; padding-left: 6px; letter-spacing: 0.5px; break-inside: avoid;">Unit II (Mods 6–11)</div>
+<a class="nav-item" href="maths-module-6.html">6. Prime and Composite Numbers</a>
+<a class="nav-item" href="maths-module-7.html">7. Fundamental Theorem of Arithmetic</a>
+<a class="nav-item" href="maths-module-8.html">8. Trial Division and the Sieve of Eratosthenes</a>
+<a class="nav-item" href="maths-module-9.html">9. Prime Number Theorem and Prime Distribution</a>
+<a class="nav-item" href="maths-module-10.html">10. GCD, LCM and the Euclidean Algorithm</a>
+<a class="nav-item" href="maths-module-11.html">11. GCD as a Linear Combination (Bézout's Theorem)</a>
+<div style="font-size: 11px; font-weight: 800; color: #7c3aed; text-transform: uppercase; margin: 10px 0 4px; padding-left: 6px; letter-spacing: 0.5px; break-inside: avoid;">Unit III (Mods 12–17)</div>
+<a class="nav-item" href="maths-module-12.html">12. Linear Congruences and Modular Inverses</a>
+<a class="nav-item" href="maths-module-13.html">13. Chinese Remainder Theorem (CRT)</a>
+<a class="nav-item" href="maths-module-14.html">14. Computer Arithmetic with Large Integers</a>
+<a class="nav-item" href="maths-module-15.html">15. Fermat's Little Theorem (FLT)</a>
+<a class="nav-item" href="maths-module-16.html">16. Applications of Congruences</a>
+<a class="nav-item" href="maths-module-17.html">17. Mixed MCQ Mastery and Final Revision</a>
+<div style="font-size: 11px; font-weight: 800; color: #7c3aed; text-transform: uppercase; margin: 10px 0 4px; padding-left: 6px; letter-spacing: 0.5px; break-inside: avoid;">Unit IV (Mods 18–25)</div>
+<a class="nav-item" href="maths-module-18.html">18. Introduction to Cryptography & Security Models</a>
+<a class="nav-item" href="maths-module-19.html">19. Classical Cryptography & Substitution Ciphers</a>
+<a class="nav-item" href="maths-module-20.html">20. Shift Cipher and Caesar Cipher</a>
+<a class="nav-item" href="maths-module-21.html">21. Affine Cipher & Modular Inverses</a>
+<a class="nav-item" href="maths-module-22.html">22. Vigenère Polyalphabetic Cipher & Tableau</a>
+<a class="nav-item" href="maths-module-23.html">23. Hill Cipher & Matrix Cryptography</a>
+<span class="nav-item current">24. Permutation & Transposition Ciphers</span>
+<a class="nav-item" href="maths-module-25.html">25. Mathematical Cryptosystems & Attack Models</a>
+<div style="font-size: 11px; font-weight: 800; color: #7c3aed; text-transform: uppercase; margin: 10px 0 4px; padding-left: 6px; letter-spacing: 0.5px; break-inside: avoid;">Unit V (Mods 26–29)</div>
+<a class="nav-item" href="maths-module-26.html">26. Foundations of Public Key Cryptography & Fast Modular Exponentiation</a>
+<a class="nav-item" href="maths-module-27.html">27. Diffie-Hellman Key Exchange & Discrete Logarithm Problem</a>
+<a class="nav-item" href="maths-module-28.html">28. The RSA Cryptosystem: Key Generation, Encryption & Decryption</a>
+<a class="nav-item" href="maths-module-29.html">29. The ElGamal Cryptosystem & Comprehensive Unit V Exam Mastery</a>
+        </div>
+    </div>
+
+    <!-- Core Module Academic Content -->
+    <div class="module-content">
+<h1><strong>Unit IV — Module 7: Permutation (Transposition) Cipher</strong></h1>
+<p>Primary reference: Rosen, <em>Number Theory and Cryptography</em>, Section 4.6, page 297, Example 6 and Exercises 14–15.</p>
+<p>This module covers the <strong>transposition cipher</strong>, also called the permutation cipher in your syllabus.</p>
+<p>Unlike shift, affine and Vigenère ciphers, a transposition cipher does not replace letters with different letters. It rearranges the positions of letters within fixed-size blocks.</p>
+<p>Rosen introduces it as a type of block cipher.</p>
+<p>U456 (Textbook content) <span class="ref-pill">📚 Reference: MTH381.pdf</span></p>
+<h2><strong>7.1 What is a transposition cipher?</strong></h2>
+<p>A transposition cipher encrypts a message by changing the positions of its letters according to a fixed permutation.</p>
+<p>For example, consider the block:</p>
+<div class="math-display">\[\text{ABCD}\]</div>
+<p>Suppose the permutation rearranges the positions as:</p>
+<div class="math-display">\[3,\ 1,\ 4,\ 2.\]</div>
+<p>Then:</p>
+<ul>
+<li>The third letter goes to the first position.</li>
+<li>The first letter goes to the second position.</li>
+<li>The fourth letter goes to the third position.</li>
+<li>The second letter goes to the fourth position.</li>
+</ul>
+<p>The result is:</p>
+<div class="math-display">\[\boxed{\text{ABCD}\rightarrow\text{CADB}}\]</div>
+<p>Notice that all original letters remain present. Only their positions change.</p>
+<p><strong>Key distinction:</strong></p>
+<ul>
+<li>Substitution cipher: changes the letters.</li>
+<li>Transposition cipher: changes the positions of the letters.</li>
+</ul>
+<h2><strong>7.2 Mathematical definition of a permutation</strong></h2>
+
+    <div class="math-diagram-box">
+        <h4 class="math-diagram-title">Permutation / Transposition Cipher: Block Rearrangement</h4>
+        <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 14px; align-items: center; margin: 16px 0;">
+            <div style="padding: 12px; background: rgba(124, 58, 237, 0.06); border-radius: 8px; border: 1px solid rgba(124, 58, 237, 0.2); text-align: center;">
+                <div style="font-weight: 700; color: #7c3aed; margin-bottom: 6px;">Permutation Function \(\sigma\)</div>
+                <div style="font-size: 13px;">
+                    \(\sigma = \begin{pmatrix} 1 & 2 & 3 & 4 \\ 3 & 1 & 4 & 2 \end{pmatrix}\)<br>
+                    Position 1 moves to 3<br>
+                    Position 2 moves to 1<br>
+                    Position 3 moves to 4<br>
+                    Position 4 moves to 2
+                </div>
+            </div>
+            <div style="font-size: 20px; font-weight: bold; color: #a78bfa;">&harr;</div>
+            <div style="padding: 12px; background: rgba(16, 185, 129, 0.06); border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.2); text-align: center;">
+                <div style="font-weight: 700; color: #10b981; margin-bottom: 6px;">Inverse Permutation \(\sigma^{-1}\)</div>
+                <div style="font-size: 13px;">
+                    \(\sigma^{-1} = \begin{pmatrix} 1 & 2 & 3 & 4 \\ 2 & 4 & 1 & 3 \end{pmatrix}\)<br>
+                    Position 1 restored from 2<br>
+                    Position 2 restored from 4<br>
+                    Position 3 restored from 1<br>
+                    Position 4 restored from 3
+                </div>
+            </div>
+        </div>
+        <div class="math-card-caption">
+            <strong>Key Property:</strong> Transposition ciphers do NOT change letter identities (letter frequencies are 100% unchanged); they only shuffle their positional order.
+        </div>
+    </div>
+    
+<p>Rosen uses a permutation of the set</p>
+<div class="math-display">\[\{1,2,\ldots,m\}\]</div>
+<p>as the encryption key.</p>
+<p>A permutation <span class="math-inline">\(\sigma\)</span> is a one-to-one function from this set to itself.</p>
+<p>For example, for <span class="math-inline">\(m=4\)</span>:</p>
+<div class="math-display">\[\sigma(1)=3,\quad \sigma(2)=1,\quad \sigma(3)=4,\quad \sigma(4)=2.\]</div>
+<p>This means the permutation is:</p>
+<div class="math-display">\[\boxed{\sigma=(3,1,4,2)}\]</div>
+<p>Every position from 1 to 4 must appear exactly once in the permutation.</p>
+<h3><strong>Important properties</strong></h3>
+<p>A valid permutation must satisfy:</p>
+<ol>
+<li>Every position is mapped to a position in the same set.</li>
+<li>No two positions have the same image.</li>
+<li>Every position appears exactly once as an image.</li>
+<li>The permutation has an inverse permutation.</li>
+</ol>
+<p>For example:</p>
+<div class="math-display">\[(3,1,4,2)\]</div>
+<p>is valid because it contains 1, 2, 3 and 4 exactly once.</p>
+<p>But</p>
+<div class="math-display">\[(3,1,3,2)\]</div>
+<p>is not valid because 3 appears twice and 4 is missing.</p>
+<h2><strong>7.3 Encryption formula</strong></h2>
+<p>Suppose the plaintext block contains <span class="math-inline">\(m\)</span> letters:</p>
+<div class="math-display">\[p_1p_2\cdots p_m.\]</div>
+<p>Let <span class="math-inline">\(\sigma\)</span> be the encryption permutation.</p>
+<p>Rosen defines the encrypted block as:</p>
+<div class="math-display">\[\boxed{ c_1c_2\cdots c_m = p_{\sigma(1)}p_{\sigma(2)}\cdots p_{\sigma(m)} }\]</div>
+<p>In simple terms, the ciphertext positions are filled using the plaintext positions specified by the permutation.</p>
+<h3><strong>Example</strong></h3>
+<p>Suppose:</p>
+<div class="math-display">\[P=\text{WXYZ}\]</div>
+<p>and</p>
+<div class="math-display">\[\sigma=(3,1,4,2).\]</div>
+<p>Then:</p>
+<div class="math-display">\[\begin{aligned} c_1&=p_3=Y\\\ c_2&=p_1=W\\\ c_3&=p_4=Z\\\ c_4&=p_2=X. \end{aligned}\]</div>
+<p>Therefore:</p>
+<div class="math-display">\[\boxed{\text{WXYZ}\rightarrow\text{YWZX}}\]</div>
+<p><strong>Remember:</strong> The permutation <span class="math-inline">\((3,1,4,2)\)</span> tells us the source position of each ciphertext letter.</p>
+<h2><strong>7.4 Dividing the plaintext into blocks</strong></h2>
+<p>Rosen's method divides the message into blocks of size <span class="math-inline">\(m\)</span>, where <span class="math-inline">\(m\)</span> is the number of positions in the permutation.</p>
+<p>Suppose:</p>
+<ul>
+<li>Plaintext: <code>MATHEMATICS</code></li>
+<li>Block size: 4</li>
+</ul>
+<p>Divide it into:</p>
+<div class="math-display">\[\text{MATH}\quad\text{EMAT}\quad\text{ICS}\]</div>
+<p>The final block has only three letters.</p>
+<p>Rosen's method is to add random letters at the end to complete the final block.</p>
+<p>For example, adding X gives:</p>
+<div class="math-display">\[\boxed{\text{MATH}\quad\text{EMAT}\quad\text{ICSX}}\]</div>
+<p>Each block is then encrypted independently using the same permutation.</p>
+<p>The added letters are padding and are not part of the original plaintext.</p>
+<h2><strong>7.5 Rosen's Example 6 — Complete encryption</strong></h2>
+<p>This is the textbook's worked example.</p>
+<p>Given the permutation of the set <span class="math-inline">\(\{1,2,3,4\}\)</span>:</p>
+<div class="math-display">\[\begin{aligned} \sigma(1)&=3\\\ \sigma(2)&=1\\\ \sigma(3)&=4\\\ \sigma(4)&=2 \end{aligned}\]</div>
+<p>Encrypt the plaintext:</p>
+<div class="math-display">\[\text{PIRATE ATTACK}\]</div>
+<h3><strong>Step 1: Remove spaces and divide into blocks of four</strong></h3>
+<div class="math-display">\[\text{PIRATEATTACK}\]</div>
+<p>Divide into blocks:</p>
+<div class="math-display">\[\boxed{\text{PIRA}\quad\text{TEAT}\quad\text{TACK}}\]</div>
+<h3><strong>Step 2: Understand the permutation</strong></h3>
+<p>The permutation is:</p>
+<div class="math-display">\[\sigma=(3,1,4,2).\]</div>
+<p>For every block:</p>
+<table>
+<thead>
+<tr>
+<th>Ciphertext position</th>
+<th>Plaintext position</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>4</td>
+</tr>
+<tr>
+<td>4</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<h3><strong>Step 3: Encrypt the first block PIRA</strong></h3>
+<p>Original:</p>
+<div class="math-display">\[P\quad I\quad R\quad A\]</div>
+<p>Rearrange according to the permutation:</p>
+<div class="math-display">\[p_3,\ p_1,\ p_4,\ p_2\]</div>
+<div class="math-display">\[R,\ P,\ A,\ I\]</div>
+<p>Therefore:</p>
+<div class="math-display">\[\text{PIRA}\rightarrow\text{RPAI}\]</div>
+<h3><strong>Step 4: Encrypt the second block TEAT</strong></h3>
+<p>Original:</p>
+<div class="math-display">\[T\quad E\quad A\quad T\]</div>
+<p>Rearrange:</p>
+<div class="math-display">\[p_3,\ p_1,\ p_4,\ p_2\]</div>
+<div class="math-display">\[A,\ T,\ T,\ E\]</div>
+<p>Therefore:</p>
+<div class="math-display">\[\text{TEAT}\rightarrow\text{ATTE}\]</div>
+<h3><strong>Step 5: Encrypt the third block TACK</strong></h3>
+<p>Original:</p>
+<div class="math-display">\[T\quad A\quad C\quad K\]</div>
+<p>Rearrange:</p>
+<div class="math-display">\[p_3,\ p_1,\ p_4,\ p_2\]</div>
+<div class="math-display">\[C,\ T,\ K,\ A\]</div>
+<p>Therefore:</p>
+<div class="math-display">\[\text{TACK}\rightarrow\text{CTKA}\]</div>
+<h3><strong>Final ciphertext</strong></h3>
+<p>ROSEN EXAMPLE 6 — ENCRYPTION</p>
+<h1><strong>RPAI ATTE CTKA</strong></h1>
+<p>Plaintext: PIRATE ATTACK</p>
+<p>Key permutation: (3, 1, 4, 2)</p>
+<p>The key idea is that the same permutation is applied independently to every block.</p>
+<p>U456 (Textbook content) <span class="ref-pill">📚 Reference: MTH381.pdf</span></p>
+<p><strong>Important notation clarification:</strong> Rosen's worked example defines the permutation by where each original letter is sent. Thus, <span class="math-inline">\(\sigma(1)=3\)</span> means the first plaintext letter moves to the third ciphertext position. It does <strong>not</strong> mean that the third plaintext letter becomes the first ciphertext letter. We must follow this position-movement convention in the worked example below.</p>
+<p>For the permutation</p>
+<div class="math-display">\[\sigma=(3,1,4,2),\]</div>
+<p>the correct rearrangement is:</p>
+<div class="math-display">\[\boxed{p_1p_2p_3p_4\rightarrow p_2p_4p_1p_3}\]</div>
+<p>This convention gives Rosen's result <code>PIRA → IAPR</code>, not <code>RPAI</code>.</p>
+<h2><strong>7.6 Encryption using the destination-position convention</strong></h2>
+<p>For Rosen's permutation:</p>
+<div class="math-display">\[\sigma(1)=3,\quad \sigma(2)=1,\quad \sigma(3)=4,\quad \sigma(4)=2,\]</div>
+<p>the original letters move as follows:</p>
+<table>
+<thead>
+<tr>
+<th>Original position</th>
+<th>Letter</th>
+<th>Destination position</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><span class="math-inline">\(p_1\)</span></td>
+<td>3</td>
+</tr>
+<tr>
+<td>2</td>
+<td><span class="math-inline">\(p_2\)</span></td>
+<td>1</td>
+</tr>
+<tr>
+<td>3</td>
+<td><span class="math-inline">\(p_3\)</span></td>
+<td>4</td>
+</tr>
+<tr>
+<td>4</td>
+<td><span class="math-inline">\(p_4\)</span></td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p>Therefore, the ciphertext positions are filled in this order:</p>
+<div class="math-display">\[\begin{aligned} c_1&=p_2\\\ c_2&=p_4\\\ c_3&=p_1\\\ c_4&=p_3. \end{aligned}\]</div>
+<p>So the correct encryption rule under this convention is:</p>
+<div class="math-display">\[\boxed{c_1c_2c_3c_4=p_2p_4p_1p_3}\]</div>
+<p>Applying it to the three blocks:</p>
+<table>
+<thead>
+<tr>
+<th>Plaintext block</th>
+<th>Rearranged ciphertext</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PIRA</td>
+<td>IAPR</td>
+</tr>
+<tr>
+<td>TEAT</td>
+<td>ETTA</td>
+</tr>
+<tr>
+<td>TACK</td>
+<td>AKTC</td>
+</tr>
+</tbody>
+</table>
+<p>Hence Rosen's exact result is:</p>
+<div class="math-display">\[\boxed{\text{PIRATE ATTACK}\rightarrow \text{IAPR ETTA AKTC}}\]</div>
+<p>U456 (Textbook content) <span class="ref-pill">📚 Reference: MTH381.pdf</span></p>
+<h2><strong>7.7 Inverse permutation and decryption</strong></h2>
+<p>To decrypt a transposition cipher, Rosen uses the inverse permutation:</p>
+<div class="math-display">\[\boxed{\sigma^{-1}}\]</div>
+<p>The inverse permutation reverses the movement made during encryption.</p>
+<p>For our example:</p>
+<div class="math-display">\[\begin{aligned} \sigma(1)&=3\\\ \sigma(2)&=1\\\ \sigma(3)&=4\\\ \sigma(4)&=2 \end{aligned}\]</div>
+<p>The inverse is:</p>
+<div class="math-display">\[\boxed{ \begin{aligned} \sigma^{-1}(1)&=2\\\ \sigma^{-1}(2)&=4\\\ \sigma^{-1}(3)&=1\\\ \sigma^{-1}(4)&=3 \end{aligned} }\]</div>
+<p>In sequence form:</p>
+<div class="math-display">\[\boxed{\sigma^{-1}=(2,4,1,3)}\]</div>
+<h3><strong>How to calculate the inverse permutation</strong></h3>
+<p>Use the original mappings:</p>
+<ul>
+<li>Since <span class="math-inline">\(1\rightarrow3\)</span>, the inverse sends <span class="math-inline">\(3\rightarrow1\)</span>.</li>
+<li>Since <span class="math-inline">\(2\rightarrow1\)</span>, the inverse sends <span class="math-inline">\(1\rightarrow2\)</span>.</li>
+<li>Since <span class="math-inline">\(3\rightarrow4\)</span>, the inverse sends <span class="math-inline">\(4\rightarrow3\)</span>.</li>
+<li>Since <span class="math-inline">\(4\rightarrow2\)</span>, the inverse sends <span class="math-inline">\(2\rightarrow4\)</span>.</li>
+</ul>
+<p>Rearranging by the input position of the inverse gives:</p>
+<div class="math-display">\[1\rightarrow2,\quad 2\rightarrow4,\quad 3\rightarrow1,\quad 4\rightarrow3.\]</div>
+<h3><strong>Important property</strong></h3>
+<div class="math-display">\[\boxed{\sigma^{-1}(\sigma(i))=i}\]</div>
+<p>and</p>
+<div class="math-display">\[\boxed{\sigma(\sigma^{-1}(i))=i}.\]</div>
+<p>Applying a permutation and then its inverse restores every original position.</p>
+<h2><strong>7.8 Rosen's Example 6 — Complete decryption</strong></h2>
+<p>Rosen asks us to decrypt:</p>
+<div class="math-display">\[\text{SWUE TRAE OEHS}\]</div>
+<p>using blocks of four letters and the same permutation:</p>
+<div class="math-display">\[\sigma=(3,1,4,2).\]</div>
+<p><strong>Step 1: Divide the ciphertext into blocks.</strong></p>
+<div class="math-display">\[\text{SWUE}\quad\text{TRAE}\quad\text{OEHS}\]</div>
+<p><strong>Step 2: Find the inverse permutation.</strong></p>
+<div class="math-display">\[\sigma^{-1}=(2,4,1,3).\]</div>
+<p>This means the original letters are recovered from the ciphertext positions as:</p>
+<div class="math-display">\[\begin{aligned} p_1&=c_3\\\ p_2&=c_1\\\ p_3&=c_4\\\ p_4&=c_2. \end{aligned}\]</div>
+<p><strong>Step 3: Decrypt each block.</strong></p>
+<p>For <code>SWUE</code>:</p>
+<div class="math-display">\[\begin{aligned} p_1&=c_3=U\\\ p_2&=c_1=S\\\ p_3&=c_4=E\\\ p_4&=c_2=W \end{aligned}\]</div>
+<p>Therefore:</p>
+<div class="math-display">\[\text{SWUE}\rightarrow\text{USEW}.\]</div>
+<p>For <code>TRAE</code>:</p>
+<div class="math-display">\[\text{TRAE}\rightarrow\text{ATER}.\]</div>
+<p>For <code>OEHS</code>:</p>
+<div class="math-display">\[\text{OEHS}\rightarrow\text{HOSE}.\]</div>
+<p>The recovered sequence is:</p>
+<div class="math-display">\[\boxed{\text{USEW ATER HOSE}}\]</div>
+<p>Regrouping the letters into meaningful words gives:</p>
+<p>ROSEN EXAMPLE 6 — DECRYPTION</p>
+<h1><strong>USE WATER HOSE</strong></h1>
+<p>The spaces were not part of the encrypted blocks; the meaningful plaintext is reconstructed by regrouping the letters.</p>
+<p>U456 (Textbook content) <span class="ref-pill">📚 Reference: MTH381.pdf</span></p>
+<h2><strong>7.9 Properties of a transposition cipher</strong></h2>
+<p><strong>1. It preserves the original letters.</strong></p>
+<p>No letter is replaced by another letter. Only its position changes.</p>
+<p><strong>2. It preserves letter frequencies.</strong></p>
+<p>For example, if a plaintext contains four A's, its ciphertext will also contain four A's.</p>
+<p>This is different from substitution ciphers, where letters are replaced.</p>
+<p><strong>3. It operates on fixed-size blocks.</strong></p>
+<p>The block size is determined by the number of elements in the permutation.</p>
+<p><strong>4. It uses an inverse permutation for decryption.</strong></p>
+<p>The inverse permutation restores the original arrangement.</p>
+<p><strong>5. It is a block cipher.</strong></p>
+<p>Rosen introduces transposition as a block cipher because it transforms groups of letters rather than individual letters.</p>
+<p>U456 (Textbook content) <span class="ref-pill">📚 Reference: MTH381.pdf</span></p>
+<h2><strong>7.10 Number of possible permutations and keys</strong></h2>
+<p>For a block size of <span class="math-inline">\(m\)</span>, the key is a permutation of <span class="math-inline">\(m\)</span> positions.</p>
+<p>The number of possible permutations is:</p>
+<div class="math-display">\[\boxed{m!}\]</div>
+<p>For example:</p>
+<table>
+<thead>
+<tr>
+<th>Block size <span class="math-inline">\(m\)</span></th>
+<th>Number of possible keys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td><span class="math-inline">\(2!=2\)</span></td>
+</tr>
+<tr>
+<td>3</td>
+<td><span class="math-inline">\(3!=6\)</span></td>
+</tr>
+<tr>
+<td>4</td>
+<td><span class="math-inline">\(4!=24\)</span></td>
+</tr>
+<tr>
+<td>5</td>
+<td><span class="math-inline">\(5!=120\)</span></td>
+</tr>
+<tr>
+<td>6</td>
+<td><span class="math-inline">\(6!=720\)</span></td>
+</tr>
+<tr>
+<td>7</td>
+<td><span class="math-inline">\(7!=5040\)</span></td>
+</tr>
+<tr>
+<td>8</td>
+<td><span class="math-inline">\(8!=40320\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>For a block size of 4, there are only 24 possible permutations.</p>
+<p><strong>MCQ example:</strong> How many possible transposition keys exist for a block size of 5?</p>
+<div class="math-display">\[5!=5\times4\times3\times2\times1\]</div>
+<div class="math-display">\[\boxed{120}\]</div>
+<h2><strong>7.11 Cryptanalysis and limitations</strong></h2>
+<p>A transposition cipher rearranges letters but preserves the frequency of every letter.</p>
+<p>For example, if a ciphertext contains:</p>
+<ul>
+<li>5 occurrences of A,</li>
+<li>3 occurrences of E,</li>
+<li>2 occurrences of T,</li>
+</ul>
+<p>the plaintext has exactly the same counts.</p>
+<p>This is useful to an attacker because the usual letter-frequency information is not destroyed.</p>
+<p>However, the original order of the letters is hidden, so recovering the message requires determining the permutation or using other structural clues.</p>
+<p>The important distinction from Rosen's earlier shift and affine ciphers is:</p>
+<ul>
+<li>Shift and affine ciphers replace individual letters and preserve monoalphabetic substitution patterns.</li>
+<li>Transposition ciphers rearrange blocks and preserve the original letter frequencies.</li>
+</ul>
+<h2><strong>7.12 Important examination traps</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Correct answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>What does a transposition cipher change?</td>
+<td>Positions of letters</td>
+</tr>
+<tr>
+<td>Does it replace letters?</td>
+<td>No</td>
+</tr>
+<tr>
+<td>What is its key?</td>
+<td>A permutation</td>
+</tr>
+<tr>
+<td>What is the key's domain?</td>
+<td><span class="math-inline">\(\{1,2,\ldots,m\}\)</span></td>
+</tr>
+<tr>
+<td>What is the block size?</td>
+<td><span class="math-inline">\(m\)</span></td>
+</tr>
+<tr>
+<td>How many keys for block size <span class="math-inline">\(m\)</span>?</td>
+<td><span class="math-inline">\(m!\)</span></td>
+</tr>
+<tr>
+<td>How is decryption performed?</td>
+<td>Using <span class="math-inline">\(\sigma^{-1}\)</span></td>
+</tr>
+<tr>
+<td>What happens if the final block is incomplete?</td>
+<td>Add random letters to fill it</td>
+</tr>
+<tr>
+<td>Does it preserve letter frequencies?</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>What kind of cipher is it in Rosen?</td>
+<td>Block cipher</td>
+</tr>
+</tbody>
+</table>
+
+    <div class="quiz-section-wrap" id="moduleQuizContainer_24">
+        <div class="quiz-card-container">
+            <div class="quiz-header">
+                <div>
+                    <div class="quiz-badge">🧠 Interactive Knowledge Check &bull; Module 24</div>
+                    <h3 class="quiz-title">Self-Grading Multiple Choice Examination</h3>
+                    <p class="quiz-subtitle">Attempt all 12 questions to test your mathematical comprehension and exam readiness. Solutions and step-by-step logic unlock instantly.</p>
+                </div>
+                <div class="quiz-score-badge" id="quizScoreBadge_24" style="display: none;">
+                    <span id="quizScoreVal_24">0</span>/12 &bull; <span id="quizScorePct_24">0%</span>
+                </div>
+            </div>
+
+            <div class="quiz-body">
+                
+        <div class="q-block" id="q_block_24_1" data-corr="1">
+            <div class="q-title"><span class="q-num">1.</span> <span>What does a transposition cipher change?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_24_1_opt_0">
+                <input type="radio" name="math_q_24_1" value="0">
+                <span><strong>A.</strong> The identity of each letter</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_1_opt_1">
+                <input type="radio" name="math_q_24_1" value="1">
+                <span><strong>B.</strong> The positions of letters</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_1_opt_2">
+                <input type="radio" name="math_q_24_1" value="2">
+                <span><strong>C.</strong> The numerical value of every letter</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_1_opt_3">
+                <input type="radio" name="math_q_24_1" value="3">
+                <span><strong>D.</strong> The alphabet size</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_24_1">
+                <strong>Mathematical Explanation:</strong> A transposition cipher changes the positions of letters within a block without changing their identities.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_24_2" data-corr="1">
+            <div class="q-title"><span class="q-num">2.</span> <span>What is the key in Rosen's transposition cipher?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_24_2_opt_0">
+                <input type="radio" name="math_q_24_2" value="0">
+                <span><strong>A.</strong> A prime number</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_2_opt_1">
+                <input type="radio" name="math_q_24_2" value="1">
+                <span><strong>B.</strong> A permutation of {1,2,...,m}</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_2_opt_2">
+                <input type="radio" name="math_q_24_2" value="2">
+                <span><strong>C.</strong> A modular inverse</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_2_opt_3">
+                <input type="radio" name="math_q_24_2" value="3">
+                <span><strong>D.</strong> A keyword</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_24_2">
+                <strong>Mathematical Explanation:</strong> The key in a transposition cipher is a permutation σ of the set {1, 2, ..., m}.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_24_3" data-corr="1">
+            <div class="q-title"><span class="q-num">3.</span> <span>Which sequence is a valid permutation of {1,2,3,4}?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_24_3_opt_0">
+                <input type="radio" name="math_q_24_3" value="0">
+                <span><strong>A.</strong> (1,2,2,4)</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_3_opt_1">
+                <input type="radio" name="math_q_24_3" value="1">
+                <span><strong>B.</strong> (3,1,4,2)</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_3_opt_2">
+                <input type="radio" name="math_q_24_3" value="2">
+                <span><strong>C.</strong> (4,3,2,2)</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_3_opt_3">
+                <input type="radio" name="math_q_24_3" value="3">
+                <span><strong>D.</strong> (1,3,5,2)</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_24_3">
+                <strong>Mathematical Explanation:</strong> (3, 1, 4, 2) is a valid permutation of {1, 2, 3, 4} because each integer appears exactly once.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_24_4" data-corr="2">
+            <div class="q-title"><span class="q-num">4.</span> <span>If the block size is 5, how many possible permutation keys exist?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_24_4_opt_0">
+                <input type="radio" name="math_q_24_4" value="0">
+                <span><strong>A.</strong> 25</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_4_opt_1">
+                <input type="radio" name="math_q_24_4" value="1">
+                <span><strong>B.</strong> 25!</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_4_opt_2">
+                <input type="radio" name="math_q_24_4" value="2">
+                <span><strong>C.</strong> 120</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_4_opt_3">
+                <input type="radio" name="math_q_24_4" value="3">
+                <span><strong>D.</strong> 60</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_24_4">
+                <strong>Mathematical Explanation:</strong> For block size m = 5, there are 5! = 120 possible permutations.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_24_5" data-corr="2">
+            <div class="q-title"><span class="q-num">5.</span> <span>For σ=(3,1,4,2), where does the first plaintext letter move?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_24_5_opt_0">
+                <input type="radio" name="math_q_24_5" value="0">
+                <span><strong>A.</strong> Position 1</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_5_opt_1">
+                <input type="radio" name="math_q_24_5" value="1">
+                <span><strong>B.</strong> Position 2</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_5_opt_2">
+                <input type="radio" name="math_q_24_5" value="2">
+                <span><strong>C.</strong> Position 3</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_5_opt_3">
+                <input type="radio" name="math_q_24_5" value="3">
+                <span><strong>D.</strong> Position 4</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_24_5">
+                <strong>Mathematical Explanation:</strong> Under σ = (3, 1, 4, 2), the 1st letter moves to position 3.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_24_6" data-corr="0">
+            <div class="q-title"><span class="q-num">6.</span> <span>Using σ=(3,1,4,2), what is the encryption of PIRA under Rosen's convention?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_24_6_opt_0">
+                <input type="radio" name="math_q_24_6" value="0">
+                <span><strong>A.</strong> RPAI</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_6_opt_1">
+                <input type="radio" name="math_q_24_6" value="1">
+                <span><strong>B.</strong> IAPR</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_6_opt_2">
+                <input type="radio" name="math_q_24_6" value="2">
+                <span><strong>C.</strong> PAIR</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_6_opt_3">
+                <input type="radio" name="math_q_24_6" value="3">
+                <span><strong>D.</strong> IRAP</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_24_6">
+                <strong>Mathematical Explanation:</strong> Applying the permutation rearranges letters into RPAI.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_24_7" data-corr="1">
+            <div class="q-title"><span class="q-num">7.</span> <span>What is the inverse of σ=(3,1,4,2)?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_24_7_opt_0">
+                <input type="radio" name="math_q_24_7" value="0">
+                <span><strong>A.</strong> (3,1,4,2)</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_7_opt_1">
+                <input type="radio" name="math_q_24_7" value="1">
+                <span><strong>B.</strong> (2,4,1,3)</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_7_opt_2">
+                <input type="radio" name="math_q_24_7" value="2">
+                <span><strong>C.</strong> (4,2,3,1)</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_7_opt_3">
+                <input type="radio" name="math_q_24_7" value="3">
+                <span><strong>D.</strong> (1,3,2,4)</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_24_7">
+                <strong>Mathematical Explanation:</strong> The inverse of σ = (3, 1, 4, 2) is σ⁻¹ = (2, 4, 1, 3).
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_24_8" data-corr="1">
+            <div class="q-title"><span class="q-num">8.</span> <span>Which permutation is used for decryption?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_24_8_opt_0">
+                <input type="radio" name="math_q_24_8" value="0">
+                <span><strong>A.</strong> σ²</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_8_opt_1">
+                <input type="radio" name="math_q_24_8" value="1">
+                <span><strong>B.</strong> σ⁻¹</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_8_opt_2">
+                <input type="radio" name="math_q_24_8" value="2">
+                <span><strong>C.</strong> 2σ</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_8_opt_3">
+                <input type="radio" name="math_q_24_8" value="3">
+                <span><strong>D.</strong> The identity only</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_24_8">
+                <strong>Mathematical Explanation:</strong> Decryption requires applying the inverse permutation σ⁻¹ to each ciphertext block.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_24_9" data-corr="1">
+            <div class="q-title"><span class="q-num">9.</span> <span>Using Rosen's permutation, decrypt the block SWUE.</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_24_9_opt_0">
+                <input type="radio" name="math_q_24_9" value="0">
+                <span><strong>A.</strong> WUSE</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_9_opt_1">
+                <input type="radio" name="math_q_24_9" value="1">
+                <span><strong>B.</strong> USEW</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_9_opt_2">
+                <input type="radio" name="math_q_24_9" value="2">
+                <span><strong>C.</strong> SEUW</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_9_opt_3">
+                <input type="radio" name="math_q_24_9" value="3">
+                <span><strong>D.</strong> EWSU</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_24_9">
+                <strong>Mathematical Explanation:</strong> Applying the inverse permutation to SWUE restores the original block WUSE.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_24_10" data-corr="1">
+            <div class="q-title"><span class="q-num">10.</span> <span>What happens to letter frequencies after transposition?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_24_10_opt_0">
+                <input type="radio" name="math_q_24_10" value="0">
+                <span><strong>A.</strong> They are reversed</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_10_opt_1">
+                <input type="radio" name="math_q_24_10" value="1">
+                <span><strong>B.</strong> They remain unchanged</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_10_opt_2">
+                <input type="radio" name="math_q_24_10" value="2">
+                <span><strong>C.</strong> They become uniform</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_10_opt_3">
+                <input type="radio" name="math_q_24_10" value="3">
+                <span><strong>D.</strong> They are doubled</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_24_10">
+                <strong>Mathematical Explanation:</strong> Letter frequencies are perfectly preserved under transposition because no letters are substituted.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_24_11" data-corr="1">
+            <div class="q-title"><span class="q-num">11.</span> <span>What does Rosen recommend if the message length is not divisible by the block size?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_24_11_opt_0">
+                <input type="radio" name="math_q_24_11" value="0">
+                <span><strong>A.</strong> Delete the remaining letters</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_11_opt_1">
+                <input type="radio" name="math_q_24_11" value="1">
+                <span><strong>B.</strong> Add random letters to complete the final block</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_11_opt_2">
+                <input type="radio" name="math_q_24_11" value="2">
+                <span><strong>C.</strong> Change the modulus</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_11_opt_3">
+                <input type="radio" name="math_q_24_11" value="3">
+                <span><strong>D.</strong> Repeat the first block</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_24_11">
+                <strong>Mathematical Explanation:</strong> If the text length is not a multiple of block size m, pad the final block with dummy characters.
+            </div>
+        </div>
+        
+
+        <div class="q-block" id="q_block_24_12" data-corr="1">
+            <div class="q-title"><span class="q-num">12.</span> <span>What type of cipher is the transposition cipher in Rosen's terminology?</span></div>
+            <div class="q-options">
+                
+            <label class="q-opt" id="q_24_12_opt_0">
+                <input type="radio" name="math_q_24_12" value="0">
+                <span><strong>A.</strong> Character cipher</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_12_opt_1">
+                <input type="radio" name="math_q_24_12" value="1">
+                <span><strong>B.</strong> Block cipher</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_12_opt_2">
+                <input type="radio" name="math_q_24_12" value="2">
+                <span><strong>C.</strong> Public-key cipher</span>
+            </label>
+            
+
+            <label class="q-opt" id="q_24_12_opt_3">
+                <input type="radio" name="math_q_24_12" value="3">
+                <span><strong>D.</strong> Affine cipher</span>
+            </label>
+            
+            </div>
+            <div class="q-explanation" id="q_expl_24_12">
+                <strong>Mathematical Explanation:</strong> The permutation cipher operates on blocks of m symbols, making it a block cipher.
+            </div>
+        </div>
+        
+            </div>
+
+            <div class="quiz-actions">
+                <button type="button" class="btn-quiz-check" onclick="checkMathQuiz(24, 12)">✓ Check Answers &amp; View Solutions</button>
+                <button type="button" class="btn-quiz-reset" onclick="resetMathQuiz(24, 12)">↺ Reset Quiz</button>
+            </div>
+        </div>
+    </div>
+    
+<h1><strong>Module 7 — Final revision sheet</strong></h1>
+<p><strong>Key:</strong> A permutation of <span class="math-inline">\(\{1,2,\ldots,m\}\)</span>.</p>
+<p><strong>Block encryption:</strong> Rearrange letters according to their destination positions.</p>
+<p><strong>Decryption:</strong> Use the inverse permutation.</p>
+<div class="math-display">\[\boxed{\sigma^{-1}(\sigma(i))=i}\]</div>
+<p><strong>Number of possible keys:</strong></p>
+<div class="math-display">\[\boxed{m!}\]</div>
+<p><strong>Rosen's example:</strong></p>
+<div class="math-display">\[\sigma=(3,1,4,2)\]</div>
+<div class="math-display">\[\text{PIRATE ATTACK} \rightarrow \boxed{\text{IAPR ETTA AKTC}}\]</div>
+<p><strong>Decryption example:</strong></p>
+<div class="math-display">\[\text{SWUE TRAE OEHS} \rightarrow \boxed{\text{USE WATER HOSE}}\]</div>
+<p><strong>Key property:</strong> Letter frequencies remain unchanged.</p>
+<p>Module 7 complete</p>
+<p><strong>Next: Module 8 — Cryptosystems: Definition, Components and Mathematical Structure.</strong></p>
+<p>We'll cover Rosen's five-tuple definition, plaintext space, ciphertext space, keyspace, encryption functions, decryption functions and the correctness condition.</p>
+<p>Say <strong>next</strong> when ready.</p>
+
+        <div style="margin-top: 35px; padding: 20px 24px; background: rgba(124, 58, 237, 0.05); border: 1.5px solid rgba(124, 58, 237, 0.25); border-radius: 12px;">
+            <h4 style="margin: 0 0 6px 0; color: #7c3aed; font-size: 16px;">🚀 Ready for the Next Step?</h4>
+            <p style="margin: 0; font-size: 14px; color: var(--text-body);">
+                You have completed <strong>Module 24: Permutation & Transposition Ciphers</strong>. Test your knowledge with the interactive quiz above, review key theorems, and proceed to <a href="maths-module-25.html" style="color: #7c3aed; font-weight: 700;">Module 25: Mathematical Cryptosystems & Attack Models &rarr;</a>
+            </p>
+        </div>
+        
+    </div>
+
+    <!-- Prev / Next Footer Navigation -->
+    <div class="prev-next">
+        <a class="pn-btn" href="maths-module-23.html">&larr; Module 23</a>
+        <a class="pn-hub" href="maths.html">📋 Mathematics Hub (29 Modules)</a>
+        <a class="pn-btn" href="maths-module-25.html">Module 25 &rarr;</a>
+    </div>
+
+</div>
+
+<script src="shared.js"></script>
+<script>
+function toggleNavPanel() {
+    var panel = document.getElementById('navPanel');
+    if (panel) panel.classList.toggle('open');
+}
+
+function checkMathQuiz(modNum, total) {
+    let score = 0;
+    for (let i = 1; i <= total; i++) {
+        let block = document.getElementById("q_block_" + modNum + "_" + i);
+        if (!block) continue;
+        let corr = parseInt(block.getAttribute("data-corr"));
+        let radios = document.getElementsByName("math_q_" + modNum + "_" + i);
+        let selected = -1;
+        for (let r of radios) {
+            if (r.checked) {
+                selected = parseInt(r.value);
+                break;
+            }
+        }
+
+        for (let j = 0; j < 4; j++) {
+            let optEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + j);
+            if (optEl) {
+                optEl.classList.remove("correct-choice", "wrong-choice");
+            }
+        }
+
+        if (selected === corr) {
+            score++;
+            let correctEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + corr);
+            if (correctEl) correctEl.classList.add("correct-choice");
+        } else {
+            if (selected !== -1) {
+                let wrongEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + selected);
+                if (wrongEl) wrongEl.classList.add("wrong-choice");
+            }
+            let correctEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + corr);
+            if (correctEl) correctEl.classList.add("correct-choice");
+        }
+
+        let expl = document.getElementById("q_expl_" + modNum + "_" + i);
+        if (expl) expl.style.display = "block";
+    }
+
+    let badge = document.getElementById("quizScoreBadge_" + modNum);
+    let val = document.getElementById("quizScoreVal_" + modNum);
+    let pct = document.getElementById("quizScorePct_" + modNum);
+    if (badge && val && pct) {
+        val.innerText = score;
+        pct.innerText = Math.round((score / total) * 100) + "%";
+        badge.style.display = "inline-flex";
+        badge.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+}
+
+function resetMathQuiz(modNum, total) {
+    for (let i = 1; i <= total; i++) {
+        let radios = document.getElementsByName("math_q_" + modNum + "_" + i);
+        for (let r of radios) r.checked = false;
+
+        for (let j = 0; j < 4; j++) {
+            let optEl = document.getElementById("q_" + modNum + "_" + i + "_opt_" + j);
+            if (optEl) optEl.classList.remove("correct-choice", "wrong-choice");
+        }
+
+        let expl = document.getElementById("q_expl_" + modNum + "_" + i);
+        if (expl) expl.style.display = "none";
+    }
+
+    let badge = document.getElementById("quizScoreBadge_" + modNum);
+    if (badge) badge.style.display = "none";
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,777 @@
+# **Unit IV — Module 3: Shift Cipher and Caesar Cipher**
+
+Primary reference: Rosen, *Number Theory and Cryptography*, Section 4.6, pages 294–297.
+
+This is one of the most important numerical topics in Unit IV. You should be able to encrypt and decrypt messages, calculate the key, apply modular arithmetic, and solve ciphertext problems.
+
+We'll follow Rosen's mathematical approach and work through the examples step by step.
+
+## **3.1 What is a shift cipher?**
+
+A **shift cipher** is a substitution cipher in which every plaintext letter is shifted by a fixed number of positions in the alphabet.
+
+For example, if the shift is 3:
+
+\\[ A\rightarrow D,\quad B\rightarrow E,\quad C\rightarrow F. \\]
+
+The alphabet wraps around at the end:
+
+\\[ X\rightarrow A,\quad Y\rightarrow B,\quad Z\rightarrow C. \\]
+
+The fixed number of positions is called the **key**.
+
+The Caesar cipher is a special case of the shift cipher in which the key is 3. Rosen introduces Caesar's method as one of the earliest known uses of cryptography.&#x20;
+
+U456 (Textbook content) MTH381.pdf
+
+
+
+## **3.2 Convert letters into numbers**
+
+Before applying the mathematical formula, convert each letter into an integer.
+
+Rosen uses the set
+
+\\[ \mathbb Z\_{26}=\\{0,1,2,\ldots,25\\}. \\]
+
+The mapping is:
+
+| Letter | Number | Letter | Number |
+| ------ | ------ | ------ | ------ |
+| A      | 0      | N      | 13     |
+| B      | 1      | O      | 14     |
+| C      | 2      | P      | 15     |
+| D      | 3      | Q      | 16     |
+| E      | 4      | R      | 17     |
+| F      | 5      | S      | 18     |
+| G      | 6      | T      | 19     |
+| H      | 7      | U      | 20     |
+| I      | 8      | V      | 21     |
+| J      | 9      | W      | 22     |
+| K      | 10     | X      | 23     |
+| L      | 11     | Y      | 24     |
+| M      | 12     | Z      | 25     |
+
+**Important:** A represents 0, not 1. This is a very common MCQ trap.
+
+## **3.3 Encryption formula**
+
+Let:
+
+- \\(p\\) = numerical value of plaintext letter.
+- \\(c\\) = numerical value of ciphertext letter.
+- \\(k\\) = encryption key.
+
+The encryption function is
+
+\\[ \boxed{c=(p+k)\bmod26} \\]
+
+This means:
+
+1. Convert the plaintext letter into a number.
+2. Add the key \\(k\\).
+3. Divide the result by 26 and take the remainder.
+4. Convert the remainder back into a letter.
+
+### **Why do we use modulo 26?**
+
+Because the English alphabet contains 26 letters.
+
+For example, encrypt X using key 5.
+
+\\[ X=23 \\]
+
+\\[ c=(23+5)\bmod26 \\]
+
+\\[ c=28\bmod26=2. \\]
+
+Number 2 represents C.
+
+Therefore,
+
+\\[ \boxed{X\rightarrow C} \\]
+
+The modulo operation handles the wraparound from Z back to A.
+
+## **3.4 Decryption formula**
+
+Decryption reverses the shift.
+
+The decryption function is
+
+\\[ \boxed{p=(c-k)\bmod26} \\]
+
+For example, decrypt C using key 5.
+
+\\[ C=2 \\]
+
+\\[ p=(2-5)\bmod26 \\]
+
+\\[ p=-3\bmod26=23. \\]
+
+Number 23 represents X.
+
+Therefore,
+
+\\[ \boxed{C\rightarrow X} \\]
+
+**Important:** In modular arithmetic,
+
+\\[ -3\bmod26=23, \\]
+
+because
+
+\\[ -3=26(-1)+23. \\]
+
+The remainder must be between 0 and 25.
+
+### **Encryption and decryption together**
+
+## **Shift cipher with key k**
+
+**Plaintext number**
+
+\\(p\\)
+
+Encryption
+
+\\(c=(p+k)\bmod26\\)
+
+**Ciphertext number**
+
+\\(c\\)
+
+Decryption
+
+\\(p=(c-k)\bmod26\\)
+
+**Original plaintext number**
+
+\\(p\\)
+
+The mathematical correctness condition is
+
+\\[ \begin{aligned} D_k(E_k(p)) &=((p+k)-k)\bmod26\\\ &=p\bmod26\\\ &=p. \end{aligned} \\]
+
+Thus, encryption followed by decryption recovers the original letter.
+
+## **3.5 Caesar cipher — Key = 3**
+
+The Caesar cipher uses
+
+\\[ \boxed{c=(p+3)\bmod26} \\]
+
+and decryption uses
+
+\\[ \boxed{p=(c-3)\bmod26}. \\]
+
+Its letter transformations are:
+
+## **Caesar cipher substitution**
+
+Plaintext alphabet
+
+## **ABCDEFGHIJKLMNOPQRSTUVWXYZ**
+
+Ciphertext alphabet
+
+## **DEFGHIJKLMNOPQRSTUVWXYZABC**
+
+Each letter moves three places forward, wrapping around after Z.
+
+### **Rosen's Example 1: Encrypt "MEET YOU IN THE PARK"**
+
+We need to encrypt:
+
+Key = 3
+
+**Step 1: Convert letters into numbers.**
+
+| Plaintext | M  | E | E | T  | Y  | O  | U  |
+| --------- | -- | - | - | -- | -- | -- | -- |
+| Number    | 12 | 4 | 4 | 19 | 24 | 14 | 20 |
+
+Continue with the remaining words:
+
+| Plaintext | I | N  | T  | H | E | P  | A | R  | K  |
+| --------- | - | -- | -- | - | - | -- | - | -- | -- |
+| Number    | 8 | 13 | 19 | 7 | 4 | 15 | 0 | 17 | 10 |
+
+**Step 2: Apply the encryption formula.**
+
+\\[ c=(p+3)\bmod26 \\]
+
+For M:
+
+\\[ c=(12+3)\bmod26=15. \\]
+
+Number 15 represents P.
+
+For E:
+
+\\[ c=(4+3)\bmod26=7. \\]
+
+Number 7 represents H.
+
+For T:
+
+\\[ c=(19+3)\bmod26=22. \\]
+
+Number 22 represents W.
+
+Apply the same process to every letter.
+
+**Step 3: Convert the resulting numbers back into letters.**
+
+| Plaintext  | M | E | E | T |
+| ---------- | - | - | - | - |
+| Ciphertext | P | H | H | W |
+
+| Plaintext  | Y | O | U |
+| ---------- | - | - | - |
+| Ciphertext | B | R | X |
+
+| Plaintext  | I | N |
+| ---------- | - | - |
+| Ciphertext | L | Q |
+
+| Plaintext  | T | H | E |
+| ---------- | - | - | - |
+| Ciphertext | W | K | H |
+
+| Plaintext  | P | A | R | K |
+| ---------- | - | - | - | - |
+| Ciphertext | S | D | U | N |
+
+FINAL ENCRYPTED MESSAGE
+
+# **PHHW BRX LQ WKH SDUN**
+
+This is Rosen's worked Caesar cipher example.&#x20;
+
+U456 (Textbook content) MTH381.pdf
+
+
+
+## **3.6 General shift cipher — Key can be any shift**
+
+The Caesar cipher is only one particular shift cipher.
+
+For a general shift cipher, the key is \\(k\\), and
+
+\\[ \boxed{E_k(p)=(p+k)\bmod26} \\]
+
+\\[ \boxed{D_k(c)=(c-k)\bmod26} \\]
+
+For the standard 26-letter alphabet, there are 26 possible shifts:
+
+\\[ k\in\\{0,1,2,\ldots,25\\}. \\]
+
+- \\(k=0\\): No change to the message.
+- \\(k=1\\): Every letter moves one position forward.
+- \\(k=3\\): Caesar cipher.
+- \\(k=13\\): ROT13.
+- \\(k=25\\): Every letter moves one position backward.
+
+Usually, the 25 nonzero shifts are treated as the meaningful encryption keys. The zero shift is the identity transformation.
+
+### **Rosen's Example 2: Encrypt "STOP GLOBAL WARMING" with key 11**
+
+Given:
+
+\\[ k=11 \\]
+
+Plaintext:
+
+\\[ \text{STOP GLOBAL WARMING} \\]
+
+**Step 1: Convert the letters into numbers.**
+
+\\[ 18,\ 19,\ 14,\ 15 \\]
+
+\\[ 6,\ 11,\ 14,\ 1,\ 0,\ 11 \\]
+
+\\[ 22,\ 0,\ 17,\ 12,\ 8,\ 13,\ 6 \\]
+
+**Step 2: Apply the encryption formula.**
+
+\\[ c=(p+11)\bmod26 \\]
+
+For S:
+
+\\[ (18+11)\bmod26=29\bmod26=3. \\]
+
+Number 3 represents D.
+
+For T:
+
+\\[ (19+11)\bmod26=30\bmod26=4. \\]
+
+Number 4 represents E.
+
+For O:
+
+\\[ (14+11)\bmod26=25. \\]
+
+Number 25 represents Z.
+
+For P:
+
+\\[ (15+11)\bmod26=0. \\]
+
+Number 0 represents A.
+
+Therefore,
+
+\\[ \text{STOP}\rightarrow\text{DEZA}. \\]
+
+Apply the same procedure to the remaining words.
+
+FINAL CIPHERTEXT
+
+# **DEZA RZWLM HLCXTYR**
+
+Encryption using shift key 11.
+
+## **3.7 Decryption — Complete worked example**
+
+Suppose you receive the ciphertext
+
+\\[ \text{PHHW BRX LQ WKH SDUN} \\]
+
+and know that it was encrypted using a Caesar cipher.
+
+Find the original plaintext.
+
+**Step 1: Identify the key.**
+
+Caesar cipher means
+
+\\[ k=3. \\]
+
+**Step 2: Apply the decryption formula.**
+
+\\[ p=(c-3)\bmod26. \\]
+
+**Step 3: Decrypt each letter.**
+
+For P:
+
+\\[ P=15 \\]
+
+\\[ p=(15-3)\bmod26=12. \\]
+
+Number 12 represents M.
+
+For H:
+
+\\[ H=7 \\]
+
+\\[ p=(7-3)\bmod26=4. \\]
+
+Number 4 represents E.
+
+For W:
+
+\\[ W=22 \\]
+
+\\[ p=(22-3)\bmod26=19. \\]
+
+Number 19 represents T.
+
+Repeat for all letters.
+
+RECOVERED PLAINTEXT
+
+# **MEET YOU IN THE PARK**
+
+## **3.8 Finding the key when plaintext and ciphertext are known**
+
+Sometimes a question provides a plaintext letter and its corresponding ciphertext letter and asks you to find the key.
+
+From the encryption formula,
+
+\\[ c=(p+k)\bmod26. \\]
+
+Rearranging,
+
+\\[ \boxed{k=(c-p)\bmod26}. \\]
+
+### **Example**
+
+Suppose plaintext D is encrypted as ciphertext J.
+
+Find the key.
+
+Convert letters into numbers:
+
+\\[ D=3,\qquad J=9. \\]
+
+Apply:
+
+\\[ k=(9-3)\bmod26. \\]
+
+\\[ \boxed{k=6}. \\]
+
+Check:
+
+\\[ (3+6)\bmod26=9. \\]
+
+Therefore, the key is 6.
+
+### **Another example: Find the key using a word**
+
+Suppose the plaintext begins with `HELLO` and the ciphertext begins with `KHOOR`.
+
+Use the first corresponding letters:
+
+\\[ H=7,\qquad K=10. \\]
+
+\\[ k=(10-7)\bmod26=3. \\]
+
+The key is 3.
+
+Check the second letters:
+
+\\[ E=4,\qquad H=7. \\]
+
+\\[ k=(7-4)\bmod26=3. \\]
+
+The same key is confirmed.
+
+**MCQ trap:** The key is ciphertext number minus plaintext number, modulo 26—not the other way around.
+
+## **3.9 Cryptanalysis of the shift cipher**
+
+**Cryptanalysis** is the process of recovering plaintext from ciphertext without knowing the secret key.
+
+Rosen discusses two ways to break a shift cipher.
+
+### **Method 1: Brute-force attack**
+
+A shift cipher has only 26 possible shifts, including the zero shift.
+
+An attacker can decrypt the ciphertext with every possible key:
+
+\\[ k=0,1,2,\ldots,25. \\]
+
+One of these produces the original plaintext.
+
+For example, consider:
+
+\\[ \text{KHOOR} \\]
+
+Try different decryption keys:
+
+| Decryption key | Result |
+| -------------- | ------ |
+| 0              | KHOOR  |
+| 1              | JGNNQ  |
+| 2              | IFMMP  |
+| 3              | HELLO  |
+| 4              | GDKKN  |
+
+The correct key is 3, because it produces the meaningful message `HELLO`.
+
+The table illustrates selected trials, not all 26 possibilities.
+
+**Important:** A brute-force attack works against the shift cipher because its keyspace is extremely small.
+
+### **Method 2: Frequency analysis**
+
+Rosen also uses the frequency of English letters to attack shift ciphers.
+
+The approximate frequencies of the most common English letters are:
+
+| Letter | Frequency |
+| ------ | --------- |
+| E      | 13%       |
+| T      | 9%        |
+| A      | 8%        |
+| O      | 8%        |
+| I      | 7%        |
+| N      | 7%        |
+| S      | 7%        |
+| H      | 6%        |
+| R      | 6%        |
+
+The attack proceeds as follows:
+
+1. Calculate the frequency of each ciphertext letter.
+2. Arrange ciphertext letters from most frequent to least frequent.
+3. Hypothesize that the most frequent ciphertext letter represents E.
+4. Calculate the corresponding key.
+5. Decrypt the message.
+6. If the result is not meaningful, try the next likely plaintext letter, such as T.
+
+### **Rosen's cryptanalysis example**
+
+Ciphertext:
+
+\\[ \text{ZNK KGXRE HOXJ MKZY ZNK CUXS} \\]
+
+Rosen finds that K is the most frequent ciphertext letter.
+
+Assume K represents E.
+
+\\[ K=10,\qquad E=4. \\]
+
+The key is:
+
+\\[ k=(10-4)\bmod26=6. \\]
+
+Decrypt by shifting backward six positions:
+
+\\[ \boxed{\text{THE EARLY BIRD GETS THE WORM}} \\]
+
+This is the original plaintext.&#x20;
+
+U456 (Textbook content) MTH381.pdf
+
+
+
+## **3.10 Mathematical properties of the shift cipher**
+
+These are useful for conceptual and theorem-based MCQs.
+
+**Property 1: Every key defines a reversible function.**
+
+\\[ E_k(p)=(p+k)\bmod26 \\]
+
+The inverse is
+
+\\[ D_k(c)=(c-k)\bmod26. \\]
+
+No modular inverse is required to decrypt a shift cipher.
+
+**Property 2: The encryption function is a permutation.**
+
+Every plaintext number maps to exactly one ciphertext number, and every ciphertext number has exactly one corresponding plaintext number.
+
+**Property 3: Two successive shifts combine into one shift.**
+
+Suppose a message is encrypted first with key \\(k_1\\), then with key \\(k_2\\).
+
+\\[ \begin{aligned} E\_{k_2}(E\_{k_1}(p)) &=(p+k_1+k_2)\bmod26\\\ &=E\_{(k_1+k_2)\bmod26}(p). \end{aligned} \\]
+
+For example, shifting by 5 and then by 7 is equivalent to shifting by 12.
+
+**Property 4: A shift followed by its reverse gives the original message.**
+
+\\[ E\_{-k}(E_k(p))=p. \\]
+
+**Property 5: Shift ciphers are vulnerable to cryptanalysis.**
+
+Their small keyspace allows brute-force attacks, and their character-frequency pattern enables statistical attacks.
+
+## **3.11 Important exam traps**
+
+| Common mistake                                   | Correct approach                                      |
+| ------------------------------------------------ | ----------------------------------------------------- |
+| Using A = 1                                      | Rosen uses A = 0                                      |
+| Using encryption formula for decryption          | Encryption adds \\(k\\); decryption subtracts \\(k\\) |
+| Forgetting modulo 26                             | Always take the remainder from 0 to 25                |
+| Treating a negative remainder as final           | Convert it to its nonnegative residue                 |
+| Confusing Caesar with every shift cipher         | Caesar is specifically shift 3                        |
+| Assuming a large keyspace                        | A shift cipher has only 26 possible shifts            |
+| Using plaintext minus ciphertext to find the key | Use \\(k=(c-p)\bmod26\\)                              |
+
+**Correction to the key-11 worked example above:** The correct encryption of `STOP GLOBAL WARMING` is:
+
+\\[ \boxed{\text{DEZA RWZMLW HLCXTYR}} \\]
+
+The earlier displayed middle word had a transcription error. The letter-by-letter calculation gives `GLOBAL` → `RWZMLW`.
+
+## **3.12 Module 3 MCQ test**
+
+**Module 3 test**
+
+0/12 answered
+
+Attempt all questions before submitting.
+
+**1. In Rosen's alphabet-number mapping, what is the numerical value of Z?**
+
+A. 0
+
+B. 24
+
+C. 25
+
+D. 26
+
+
+
+**2. Which is the encryption formula for a shift cipher?**
+
+A. c = (p − k) mod 26
+
+B. c = (p + k) mod 26
+
+C. c = pk mod 26
+
+D. c = (p + 26) mod k
+
+
+
+**3. Which is the decryption formula?**
+
+A. p = (c + k) mod 26
+
+B. p = (c − k) mod 26
+
+C. p = ck mod 26
+
+D. p = (c + 26) mod k
+
+
+
+**4. Encrypt X using shift key 5.**
+
+A. A
+
+B. B
+
+C. C
+
+D. D
+
+
+
+**5. Decrypt ciphertext C using key 5.**
+
+A. U
+
+B. V
+
+C. W
+
+D. X
+
+
+
+**6. If plaintext D becomes ciphertext J, what is the key?**
+
+A. 3
+
+B. 5
+
+C. 6
+
+D. 7
+
+
+
+**7. Which key gives the Caesar cipher?**
+
+A. 0
+
+B. 1
+
+C. 3
+
+D. 13
+
+
+
+**8. How many possible shift values are there when including the zero shift?**
+
+A. 25
+
+B. 26
+
+C. 27
+
+D. 52
+
+
+
+**9. What is the result of decrypting KHOOR with key 3?**
+
+A. HELLO
+
+B. WORLD
+
+C. HOUSE
+
+D. APPLE
+
+
+
+**10. In Rosen's frequency-analysis example, the most frequent ciphertext letter K is hypothesized to represent E. What is the key?**
+
+A. 3
+
+B. 5
+
+C. 6
+
+D. 10
+
+
+
+**11. If a message is encrypted first with key 5 and then with key 7, what single shift is equivalent?**
+
+A. 2
+
+B. 10
+
+C. 12
+
+D. 35
+
+
+
+**12. Which attack tries all possible shift keys?**
+
+A. Frequency analysis only
+
+B. Brute-force attack
+
+C. Matrix inversion
+
+D. Prime factorization
+
+
+
+Submit answers
+
+## **Module 3 — Final revision sheet**
+
+**Alphabet mapping**
+
+\\[ A=0,\ B=1,\ldots,Z=25 \\]
+
+**Encryption**
+
+\\[ \boxed{c=(p+k)\bmod26} \\]
+
+**Decryption**
+
+\\[ \boxed{p=(c-k)\bmod26} \\]
+
+**Find the key**
+
+\\[ \boxed{k=(c-p)\bmod26} \\]
+
+**Caesar cipher**
+
+\\[ k=3 \\]
+
+**Keyspace**
+
+\\[ 26\text{ possible shifts, including }0 \\]
+
+**Cryptanalysis**
+
+- Brute force: try all possible shifts.
+- Frequency analysis: use the frequency distribution of English letters.
+- Rosen's example: K represents E, giving key 6.
+
+Module 3 complete
+
+**Next: Module 4 — Affine Cipher.**
+
+This is particularly important mathematically because it introduces modular multiplicative inverses into encryption and decryption. We'll cover the valid-key condition, derive the decryption formula, and solve numerical problems step by step.
+
+Say **next** when ready.
