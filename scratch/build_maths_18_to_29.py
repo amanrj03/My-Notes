@@ -181,6 +181,43 @@ def inject_diagram_tokens_for_maths(text, mod_num):
         # Affine inverses table
         text = re.sub(r'(##\s+\*\*4\.7 Modular multiplicative inverse table.*?\n|4\.7 Modular multiplicative inverse table\n)', r'\1\n\nTOKEN_MATH_DIAG_21_INV\n\n', text, count=1)
     elif mod_num == 22:
+        # Fix flattened Key alignment artifact in 5.4
+        raw_alignment_pattern = r'##\s+\*\*Key alignment\*\*.*?(?=The repeated key is:)'
+        alignment_card = """
+    <div class="math-diagram-box">
+        <h4 class="math-diagram-title">Vigenère Key Repetition &amp; Character Alignment</h4>
+        <p style="font-size: 13.5px; color: var(--text-secondary); text-align: center; margin: 0 0 16px;">
+            Aligning the keyword <code>RED</code> (repeated) character-by-character directly under the plaintext <code>ORANGE</code>:
+        </p>
+        <div style="overflow-x: auto;">
+            <table class="theorems-table" style="max-width: 620px; margin: 0 auto; text-align: center; border-collapse: separate; border-spacing: 4px;">
+                <thead>
+                    <tr style="background: rgba(37, 99, 235, 0.1);">
+                        <th style="color: #2563eb; font-weight: 700; width: 180px; text-align: left; padding: 10px 14px; border-radius: 6px;">Plaintext (Blue row)</th>
+                        <th style="text-align: center; font-size: 16px; font-weight: 800; color: #2563eb; padding: 10px; border-radius: 6px;">O</th>
+                        <th style="text-align: center; font-size: 16px; font-weight: 800; color: #2563eb; padding: 10px; border-radius: 6px;">R</th>
+                        <th style="text-align: center; font-size: 16px; font-weight: 800; color: #2563eb; padding: 10px; border-radius: 6px;">A</th>
+                        <th style="text-align: center; font-size: 16px; font-weight: 800; color: #2563eb; padding: 10px; border-radius: 6px;">N</th>
+                        <th style="text-align: center; font-size: 16px; font-weight: 800; color: #2563eb; padding: 10px; border-radius: 6px;">G</th>
+                        <th style="text-align: center; font-size: 16px; font-weight: 800; color: #2563eb; padding: 10px; border-radius: 6px;">E</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="background: rgba(16, 185, 129, 0.1);">
+                        <td style="color: #059669; font-weight: 700; text-align: left; padding: 10px 14px; border-radius: 6px;">Repeated Key (Green row)</td>
+                        <td style="text-align: center; font-size: 16px; font-weight: 800; color: #059669; padding: 10px; border-radius: 6px;">R</td>
+                        <td style="text-align: center; font-size: 16px; font-weight: 800; color: #059669; padding: 10px; border-radius: 6px;">E</td>
+                        <td style="text-align: center; font-size: 16px; font-weight: 800; color: #059669; padding: 10px; border-radius: 6px;">D</td>
+                        <td style="text-align: center; font-size: 16px; font-weight: 800; color: #059669; padding: 10px; border-radius: 6px;">R</td>
+                        <td style="text-align: center; font-size: 16px; font-weight: 800; color: #059669; padding: 10px; border-radius: 6px;">E</td>
+                        <td style="text-align: center; font-size: 16px; font-weight: 800; color: #059669; padding: 10px; border-radius: 6px;">D</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+"""
+        text = re.sub(raw_alignment_pattern, alignment_card + "\n\n", text, flags=re.DOTALL)
         # Vigenere alignment
         text = re.sub(r'(\*\*5\.5 Rosen\'s complete worked example: Encrypt ORANGE using RED\*\*.*?\n)', r'\1\n\nTOKEN_MATH_DIAG_22_ALIGN\n\n', text, count=1)
     elif mod_num == 23:

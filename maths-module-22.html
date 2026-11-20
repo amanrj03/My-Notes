@@ -919,23 +919,38 @@ body {
 <p>Suppose the keyword is RED and the plaintext is ORANGE.</p>
 <p>The plaintext contains six letters, but the key contains only three.</p>
 <p>Therefore, repeat the key:</p>
-<h2><strong>Key alignment</strong></h2>
-<p><strong>O</strong></p>
-<p><strong>R</strong></p>
-<p><strong>A</strong></p>
-<p><strong>N</strong></p>
-<p><strong>G</strong></p>
-<p><strong>E</strong></p>
-<p><strong>R</strong></p>
-<p><strong>E</strong></p>
-<p><strong>D</strong></p>
-<p><strong>R</strong></p>
-<p><strong>E</strong></p>
-<p><strong>D</strong></p>
-<p>Plaintext</p>
-<p>Blue row</p>
-<p>Repeated key</p>
-<p>Green row</p>
+    <div class="math-diagram-box">
+        <h4 class="math-diagram-title">Vigenère Key Repetition &amp; Character Alignment</h4>
+        <p style="font-size: 13.5px; color: var(--text-secondary); text-align: center; margin: 0 0 16px;">
+            Aligning the keyword <code>RED</code> (repeated) character-by-character directly under the plaintext <code>ORANGE</code>:
+        </p>
+        <div style="overflow-x: auto;">
+            <table class="theorems-table" style="max-width: 620px; margin: 0 auto; text-align: center; border-collapse: separate; border-spacing: 4px;">
+                <thead>
+                    <tr style="background: rgba(37, 99, 235, 0.1);">
+                        <th style="color: #2563eb; font-weight: 700; width: 180px; text-align: left; padding: 10px 14px; border-radius: 6px;">Plaintext (Blue row)</th>
+                        <th style="text-align: center; font-size: 16px; font-weight: 800; color: #2563eb; padding: 10px; border-radius: 6px;">O</th>
+                        <th style="text-align: center; font-size: 16px; font-weight: 800; color: #2563eb; padding: 10px; border-radius: 6px;">R</th>
+                        <th style="text-align: center; font-size: 16px; font-weight: 800; color: #2563eb; padding: 10px; border-radius: 6px;">A</th>
+                        <th style="text-align: center; font-size: 16px; font-weight: 800; color: #2563eb; padding: 10px; border-radius: 6px;">N</th>
+                        <th style="text-align: center; font-size: 16px; font-weight: 800; color: #2563eb; padding: 10px; border-radius: 6px;">G</th>
+                        <th style="text-align: center; font-size: 16px; font-weight: 800; color: #2563eb; padding: 10px; border-radius: 6px;">E</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="background: rgba(16, 185, 129, 0.1);">
+                        <td style="color: #059669; font-weight: 700; text-align: left; padding: 10px 14px; border-radius: 6px;">Repeated Key (Green row)</td>
+                        <td style="text-align: center; font-size: 16px; font-weight: 800; color: #059669; padding: 10px; border-radius: 6px;">R</td>
+                        <td style="text-align: center; font-size: 16px; font-weight: 800; color: #059669; padding: 10px; border-radius: 6px;">E</td>
+                        <td style="text-align: center; font-size: 16px; font-weight: 800; color: #059669; padding: 10px; border-radius: 6px;">D</td>
+                        <td style="text-align: center; font-size: 16px; font-weight: 800; color: #059669; padding: 10px; border-radius: 6px;">R</td>
+                        <td style="text-align: center; font-size: 16px; font-weight: 800; color: #059669; padding: 10px; border-radius: 6px;">E</td>
+                        <td style="text-align: center; font-size: 16px; font-weight: 800; color: #059669; padding: 10px; border-radius: 6px;">D</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 <p>The repeated key is:</p>
 <div class="math-display">\[\boxed{\text{REDRED}}\]</div>
 <p>The numerical key sequence is:</p>
