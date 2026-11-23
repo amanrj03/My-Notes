@@ -782,9 +782,11 @@ body {
 <hr />
 <h3>1. The Mathematics Behind Diffie-Hellman</h3>
 <p>Diffie-Hellman relies on a mathematical trapdoor called the <strong>Discrete Logarithm Problem (DLP)</strong>. </p>
-<p>Here is the core idea:
-*   <strong>Easy:</strong> Calculating <span class="math-inline">\(g^a \pmod p\)</span> is computationally easy (using fast modular exponentiation, which we learned in Module 1).
-*   <strong>Hard:</strong> If I give you <span class="math-inline">\(g\)</span>, <span class="math-inline">\(p\)</span>, and the result <span class="math-inline">\(Y = g^a \pmod p\)</span>, it is practically impossible to find the exponent <span class="math-inline">\(a\)</span> (especially when <span class="math-inline">\(p\)</span> is a very large prime). This is because logarithms in modular arithmetic have no easy formula; you essentially have to guess and check.</p>
+<p>Here is the core idea:</p>
+<ul>
+<li><strong>Easy:</strong> Calculating <span class="math-inline">\(g^a \pmod p\)</span> is computationally easy (using fast modular exponentiation, which we learned in Module 1).</li>
+<li><strong>Hard:</strong> If I give you <span class="math-inline">\(g\)</span>, <span class="math-inline">\(p\)</span>, and the result <span class="math-inline">\(Y = g^a \pmod p\)</span>, it is practically impossible to find the exponent <span class="math-inline">\(a\)</span> (especially when <span class="math-inline">\(p\)</span> is a very large prime). This is because logarithms in modular arithmetic have no easy formula; you essentially have to guess and check.</li>
+</ul>
 <h3>2. The Protocol (Step-by-Step for Exams)</h3>
 
     <div class="math-diagram-box">
@@ -833,14 +835,18 @@ body {
         </div>
     </div>
     
-<p>Before the exchange begins, Alice and Bob agree on two public numbers (they can shout these across the room):
-1.  <strong><span class="math-inline">\(p\)</span></strong>: A large prime number.
-2.  <strong><span class="math-inline">\(g\)</span></strong>: A primitive root modulo <span class="math-inline">\(p\)</span> (a generator). For exam purposes, <span class="math-inline">\(g\)</span> is just a small integer less than <span class="math-inline">\(p\)</span> (like 2, 3, or 5).</p>
-<p><strong>The Exchange:</strong>
-1.  <strong>Alice</strong> chooses a secret private number <span class="math-inline">\(a\)</span> (she keeps this in her head).
-2.  <strong>Bob</strong> chooses a secret private number <span class="math-inline">\(b\)</span> (he keeps this in his head).
-3.  <strong>Alice computes</strong> her public value: <span class="math-inline">\(A = g^a \pmod p\)</span>. She sends <span class="math-inline">\(A\)</span> to Bob.
-4.  <strong>Bob computes</strong> his public value: <span class="math-inline">\(B = g^b \pmod p\)</span>. He sends <span class="math-inline">\(B\)</span> to Alice.</p>
+<p>Before the exchange begins, Alice and Bob agree on two public numbers (they can shout these across the room):</p>
+<ol>
+<li><strong><span class="math-inline">\(p\)</span></strong>: A large prime number.</li>
+<li><strong><span class="math-inline">\(g\)</span></strong>: A primitive root modulo <span class="math-inline">\(p\)</span> (a generator). For exam purposes, <span class="math-inline">\(g\)</span> is just a small integer less than <span class="math-inline">\(p\)</span> (like 2, 3, or 5).</li>
+</ol>
+<p><strong>The Exchange:</strong></p>
+<ol>
+<li><strong>Alice</strong> chooses a secret private number <span class="math-inline">\(a\)</span> (she keeps this in her head).</li>
+<li><strong>Bob</strong> chooses a secret private number <span class="math-inline">\(b\)</span> (he keeps this in his head).</li>
+<li><strong>Alice computes</strong> her public value: <span class="math-inline">\(A = g^a \pmod p\)</span>. She sends <span class="math-inline">\(A\)</span> to Bob.</li>
+<li><strong>Bob computes</strong> his public value: <span class="math-inline">\(B = g^b \pmod p\)</span>. He sends <span class="math-inline">\(B\)</span> to Alice.</li>
+</ol>
 <p><em>(Note: Even if a hacker intercepts <span class="math-inline">\(A\)</span> and <span class="math-inline">\(B\)</span>, they cannot find <span class="math-inline">\(a\)</span> or <span class="math-inline">\(b\)</span> because of the Discrete Logarithm Problem).</em></p>
 <ol>
 <li><strong>Alice computes the Shared Secret Key (<span class="math-inline">\(K\)</span>):</strong> She takes Bob's public value (<span class="math-inline">\(B\)</span>) and raises it to her private number (<span class="math-inline">\(a\)</span>):</li>
@@ -859,46 +865,97 @@ Both get <span class="math-inline">\(g^{ab} \pmod p\)</span>. They now share the
 <h3>3. Solved Exam Questions</h3>
 <p>Let's look at how this is tested.</p>
 <p><strong>Question 1 (MCQ - 1 Mark):</strong>
-In the Diffie-Hellman protocol, if Alice's private key is <span class="math-inline">\(a\)</span>, Bob's private key is <span class="math-inline">\(b\)</span>, and the public base is <span class="math-inline">\(g\)</span> modulo prime <span class="math-inline">\(p\)</span>, what is the shared secret key?
-*   A) <span class="math-inline">\(g^a + g^b \pmod p\)</span>
-*   B) <span class="math-inline">\(g^{a+b} \pmod p\)</span>
-*   C) <span class="math-inline">\(g^{ab} \pmod p\)</span>
-*   D) <span class="math-inline">\(a \cdot b \pmod p\)</span>
-<strong>Answer: C</strong></p>
-<p><strong>Question 2 (Numerical - 5 Marks):</strong>
-Alice and Bob use the Diffie-Hellman key exchange with prime <span class="math-inline">\(p = 23\)</span> and base <span class="math-inline">\(g = 5\)</span>.
-*   Alice chooses private key <span class="math-inline">\(a = 6\)</span>.
-*   Bob chooses private key <span class="math-inline">\(b = 15\)</span>.
-Find the public keys exchanged and the shared secret key.
-<strong>Solution:</strong>
-1.  <strong>Alice's Public Key (A):</strong>
-    <span class="math-inline">\(A = g^a \pmod p = 5^6 \pmod{23}\)</span>
-    <span class="math-inline">\(5^2 = 25 \equiv 2 \pmod{23}\)</span>
-    <span class="math-inline">\(5^4 = 2^2 = 4 \pmod{23}\)</span>
-    <span class="math-inline">\(5^6 = 5^4 \cdot 5^2 = 4 \cdot 2 = 8 \pmod{23}\)</span>. So, <span class="math-inline">\(A = 8\)</span>.
-2.  <strong>Bob's Public Key (B):</strong>
-    <span class="math-inline">\(B = g^b \pmod p = 5^{15} \pmod{23}\)</span>
-    Binary for 15: <span class="math-inline">\(8 + 4 + 2 + 1\)</span>
-    <span class="math-inline">\(5^1 = 5\)</span>
-    <span class="math-inline">\(5^2 = 2\)</span>
-    <span class="math-inline">\(5^4 = 4\)</span>
-    <span class="math-inline">\(5^8 = 4^2 = 16\)</span>
-    <span class="math-inline">\(5^{15} = 16 \cdot 4 \cdot 2 \cdot 5 = 640 \pmod{23}\)</span>.
-    Let's divide: <span class="math-inline">\(23 \times 27 = 621\)</span>. <span class="math-inline">\(640 - 621 = 19\)</span>. So, <span class="math-inline">\(B = 19\)</span>.
-3.  <strong>Shared Secret Key (Alice computes):</strong>
-    <span class="math-inline">\(K = B^a \pmod p = 19^6 \pmod{23}\)</span>
-    <span class="math-inline">\(19 \equiv -4 \pmod{23}\)</span>.
-    <span class="math-inline">\((-4)^6 = 4^6 = (4^3)^2 = 64^2\)</span>.
-    <span class="math-inline">\(64 \equiv 18 \pmod{23}\)</span> (since <span class="math-inline">\(23 \times 2 = 46\)</span>, <span class="math-inline">\(64-46=18\)</span>).
-    <span class="math-inline">\(18^2 = 324\)</span>.
-    <span class="math-inline">\(23 \times 14 = 322\)</span>. <span class="math-inline">\(324 - 322 = 2\)</span>.
-    So, <strong><span class="math-inline">\(K = 2\)</span></strong>.
-4.  <strong>Check (Bob computes):</strong>
-    <span class="math-inline">\(K = A^b \pmod p = 8^{15} \pmod{23}\)</span>.
-    Since <span class="math-inline">\(8 \equiv 2^3\)</span>, <span class="math-inline">\(8^{15} = (2^3)^{15} = 2^{45} \pmod{23}\)</span>.
-    By Fermat's Little Theorem (from Module 1), <span class="math-inline">\(2^{22} \equiv 1 \pmod{23}\)</span>.
-    <span class="math-inline">\(2^{45} = 2^{44} \cdot 2^1 = (2^{22})^2 \cdot 2 \equiv 1^2 \cdot 2 = 2 \pmod{23}\)</span>.
-    <strong><span class="math-inline">\(K = 2\)</span></strong>. Matches perfectly!</p>
+In the Diffie-Hellman protocol, if Alice's private key is <span class="math-inline">\(a\)</span>, Bob's private key is <span class="math-inline">\(b\)</span>, and the public base is <span class="math-inline">\(g\)</span> modulo prime <span class="math-inline">\(p\)</span>, what is the shared secret key?</p>
+<ul>
+<li>A) <span class="math-inline">\(g^a + g^b \pmod p\)</span></li>
+<li>B) <span class="math-inline">\(g^{a+b} \pmod p\)</span></li>
+<li>C) <span class="math-inline">\(g^{ab} \pmod p\)</span></li>
+<li>D) <span class="math-inline">\(a \cdot b \pmod p\)</span>
+<strong>Answer: C</strong></li>
+</ul>
+
+    <div class="math-diagram-box">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <h4 class="math-diagram-title" style="margin: 0;">Question 2 (Numerical &mdash; 5 Marks): Diffie-Hellman Calculation Walkthrough</h4>
+            <span class="callout-badge" style="background: rgba(37, 99, 235, 0.12); color: #2563eb; font-weight: 700; padding: 4px 10px; border-radius: 6px; font-size: 11px;">5-MARK SOLVED EXAM QUESTION</span>
+        </div>
+        <p style="font-size: 13.5px; color: var(--text-secondary); margin: 0 0 16px;">
+            Alice and Bob execute Diffie-Hellman with public prime \(p = 23\) and base generator \(g = 5\). Alice chooses private key \(a = 6\); Bob chooses private key \(b = 15\). Find the public keys exchanged and the derived shared secret key.
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+            <!-- Step 1: Alice Public Key -->
+            <div style="background: rgba(124, 58, 237, 0.05); border: 1.5px solid rgba(124, 58, 237, 0.25); border-radius: 8px; padding: 14px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <span style="background: #7c3aed; color: #fff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px;">1</span>
+                    <strong style="color: #7c3aed; font-size: 14px;">Alice's Public Key (\(A\))</strong>
+                </div>
+                <div style="font-size: 12.5px; line-height: 1.7; color: var(--text-body);">
+                    Formula: \(A = g^a \pmod p = 5^6 \pmod{23}\)<br>
+                    &bull; \(5^2 = 25 \equiv 2 \pmod{23}\)<br>
+                    &bull; \(5^4 = 2^2 = 4 \pmod{23}\)<br>
+                    &bull; \(5^6 = 5^4 \cdot 5^2 = 4 \cdot 2 = \mathbf{8} \pmod{23}\)
+                </div>
+                <div style="margin-top: 10px; padding: 6px 10px; background: rgba(124, 58, 237, 0.12); border-radius: 6px; font-weight: 800; color: #7c3aed; text-align: center;">
+                    Alice Public Key: \(A = 8\)
+                </div>
+            </div>
+
+            <!-- Step 2: Bob Public Key -->
+            <div style="background: rgba(16, 185, 129, 0.05); border: 1.5px solid rgba(16, 185, 129, 0.25); border-radius: 8px; padding: 14px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <span style="background: #059669; color: #fff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px;">2</span>
+                    <strong style="color: #059669; font-size: 14px;">Bob's Public Key (\(B\))</strong>
+                </div>
+                <div style="font-size: 12.5px; line-height: 1.7; color: var(--text-body);">
+                    Formula: \(B = g^b \pmod p = 5^{15} \pmod{23}\)<br>
+                    &bull; Binary: \(15 = 8 + 4 + 2 + 1\)<br>
+                    &bull; Powers: \(5^1 = 5, \; 5^2 = 2, \; 5^4 = 4, \; 5^8 = 4^2 = 16\)<br>
+                    &bull; \(5^{15} = 16 \cdot 4 \cdot 2 \cdot 5 = 640 \pmod{23}\)<br>
+                    &bull; Division: \(23 	imes 27 = 621 \implies 640 - 621 = \mathbf{19}\)
+                </div>
+                <div style="margin-top: 10px; padding: 6px 10px; background: rgba(16, 185, 129, 0.12); border-radius: 6px; font-weight: 800; color: #059669; text-align: center;">
+                    Bob Public Key: \(B = 19\)
+                </div>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <!-- Step 3: Alice Computes Key -->
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <span style="background: #7c3aed; color: #fff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px;">3</span>
+                    <strong style="color: var(--text-heading); font-size: 13.5px;">Shared Secret (Alice Computes)</strong>
+                </div>
+                <div style="font-size: 12.5px; line-height: 1.6; color: var(--text-body);">
+                    \(K = B^a \pmod p = 19^6 \pmod{23}\)<br>
+                    Negative Congruence: \(19 \equiv -4 \pmod{23}\)<br>
+                    \((-4)^6 = 4^6 = (4^3)^2 = 64^2\)<br>
+                    \(64 \equiv 18 \pmod{23}\) (since \(23 	imes 2 = 46\))<br>
+                    \(18^2 = 324 = 23 	imes 14 + 2 \equiv \mathbf{2} \pmod{23}\)
+                </div>
+            </div>
+
+            <!-- Step 4: Bob Computes Key -->
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <span style="background: #059669; color: #fff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px;">4</span>
+                    <strong style="color: var(--text-heading); font-size: 13.5px;">Shared Secret (Bob Computes &amp; Check)</strong>
+                </div>
+                <div style="font-size: 12.5px; line-height: 1.6; color: var(--text-body);">
+                    \(K = A^b \pmod p = 8^{15} \pmod{23}\)<br>
+                    Notice \(8 = 2^3 \implies 8^{15} = (2^3)^{15} = 2^{45} \pmod{23}\)<br>
+                    By FLT: \(2^{22} \equiv 1 \pmod{23}\)<br>
+                    \(2^{45} = (2^{22})^2 \cdot 2^1 \equiv 1^2 \cdot 2 = \mathbf{2} \pmod{23}\)
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 14px; padding: 10px 16px; background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; border-radius: 8px; text-align: center; font-size: 13.5px; font-weight: 800; color: #059669;">
+            &check; Mutual Verification Complete: \(K_{Alice} = K_{Bob} = 2\). Shared Secret Key established successfully!
+        </div>
+    </div>
+    
 <hr />
 <h3>4. Security Analysis (For Theoretical Marks)</h3>
 <p><strong>Why is it secure?</strong>

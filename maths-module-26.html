@@ -781,17 +781,23 @@ body {
 <hr />
 <h1>📘 MODULE 1 (Detailed): Foundations of Public Key Cryptography</h1>
 <h2>1. The Problem with Classical Cryptography (Why Public Key?)</h2>
-<p>In Unit IV, you studied <strong>Private Key Cryptography</strong> (like the Shift or Affine cipher).
-*   <strong>The Rule:</strong> The encryption key and decryption key are mathematically linked. If you know <span class="math-inline">\(k\)</span>, you can easily find <span class="math-inline">\(k^{-1}\)</span>.
-*   <strong>The Flaw:</strong> If Alice wants to send a secret to Bob, she needs the key. But to get the key to Bob securely, she must send it over a channel. If a hacker intercepts the key, the entire system is broken.</p>
+<p>In Unit IV, you studied <strong>Private Key Cryptography</strong> (like the Shift or Affine cipher).</p>
+<ul>
+<li><strong>The Rule:</strong> The encryption key and decryption key are mathematically linked. If you know <span class="math-inline">\(k\)</span>, you can easily find <span class="math-inline">\(k^{-1}\)</span>.</li>
+<li><strong>The Flaw:</strong> If Alice wants to send a secret to Bob, she needs the key. But to get the key to Bob securely, she must send it over a channel. If a hacker intercepts the key, the entire system is broken.</li>
+</ul>
 <p><strong>The Public Key Solution (Diffie &amp; Hellman, 1976):</strong>
-What if the encryption key and decryption key are <strong>different</strong>? 
-*   Everyone has a <strong>Public Key (<span class="math-inline">\(E\)</span>)</strong>. You can shout it to the world.
-*   Everyone has a <strong>Private Key (<span class="math-inline">\(D\)</span>)</strong>. You keep it locked in a safe.
-*   Anyone can use your Public Key to encrypt a message, but <strong>only you</strong> can use your Private Key to decrypt it.</p>
-<p>Mathematically, this requires a <strong>Trapdoor One-Way Function</strong>:
-*   <span class="math-inline">\(f(x) = y\)</span> is easy to compute.
-*   <span class="math-inline">\(f^{-1}(y) = x\)</span> is practically impossible to compute... <strong>UNLESS</strong> you have a secret piece of information (the trapdoor).</p>
+What if the encryption key and decryption key are <strong>different</strong>? </p>
+<ul>
+<li>Everyone has a <strong>Public Key (<span class="math-inline">\(E\)</span>)</strong>. You can shout it to the world.</li>
+<li>Everyone has a <strong>Private Key (<span class="math-inline">\(D\)</span>)</strong>. You keep it locked in a safe.</li>
+<li>Anyone can use your Public Key to encrypt a message, but <strong>only you</strong> can use your Private Key to decrypt it.</li>
+</ul>
+<p>Mathematically, this requires a <strong>Trapdoor One-Way Function</strong>:</p>
+<ul>
+<li><span class="math-inline">\(f(x) = y\)</span> is easy to compute.</li>
+<li><span class="math-inline">\(f^{-1}(y) = x\)</span> is practically impossible to compute... <strong>UNLESS</strong> you have a secret piece of information (the trapdoor).</li>
+</ul>
 <hr />
 <h2>2. The Number Theory Tools (The Engine of Unit V)</h2>
 
@@ -819,61 +825,227 @@ What if the encryption key and decryption key are <strong>different</strong>?
     </div>
     
 <p>To understand RSA and ElGamal (Modules 3 and 4), you must be a master of these four mathematical tools.</p>
-<h3>Tool 1: Greatest Common Divisor (GCD) &amp; Bezout’s Identity</h3>
-<p>The GCD of two numbers <span class="math-inline">\(a\)</span> and <span class="math-inline">\(b\)</span> (denoted <span class="math-inline">\(\gcd(a,b)\)</span>) is the largest number that divides both.
-*   <strong>Bezout’s Identity:</strong> For any integers <span class="math-inline">\(a\)</span> and <span class="math-inline">\(b\)</span>, there exist integers <span class="math-inline">\(x\)</span> and <span class="math-inline">\(y\)</span> (which can be negative) such that:</p>
-<div class="math-display">\[a x + b y = \gcd(a, b)\]</div>
-<pre><code>*Exam Example:* Find <span class="math-inline">\(\gcd(26, 7)\)</span> and express it as <span class="math-inline">\(26x + 7y\)</span>.
-We use the **Euclidean Algorithm**:
-<span class="math-inline">\(26 = 3 \times 7 + 5\)</span>
-<span class="math-inline">\(7 = 1 \times 5 + 2\)</span>
-<span class="math-inline">\(5 = 2 \times 2 + 1\)</span>
-<span class="math-inline">\(2 = 2 \times 1 + 0\)</span>  <span class="math-inline">\(\rightarrow\)</span> <span class="math-inline">\(\gcd = 1\)</span>.
 
-Now, substitute backwards to find <span class="math-inline">\(x\)</span> and <span class="math-inline">\(y\)</span>:
-<span class="math-inline">\(1 = 5 - 2 \times 2\)</span>
-<span class="math-inline">\(1 = 5 - 2 \times (7 - 1 \times 5) = 3 \times 5 - 2 \times 7\)</span>
-<span class="math-inline">\(1 = 3 \times (26 - 3 \times 7) - 2 \times 7 = 3 \times 26 - 11 \times 7\)</span>
-So, <span class="math-inline">\(x = 3\)</span>, <span class="math-inline">\(y = -11\)</span>.
-</code></pre>
-<h3>Tool 2: Modular Arithmetic &amp; Congruence</h3>
-<p>We say <span class="math-inline">\(a \equiv b \pmod m\)</span> if <span class="math-inline">\(m\)</span> divides <span class="math-inline">\((a-b)\)</span>. 
-*   <strong>Modular Inverse:</strong> The inverse of <span class="math-inline">\(a \pmod m\)</span> is a number <span class="math-inline">\(a^{-1}\)</span> such that:</p>
-<div class="math-display">\[a \cdot a^{-1} \equiv 1 \pmod m\]</div>
-<pre><code>*Crucial Rule for Exams:* <span class="math-inline">\(a\)</span> has an inverse modulo <span class="math-inline">\(m\)</span> **if and only if** <span class="math-inline">\(\gcd(a, m) = 1\)</span>.
-*Using Bezout:* If <span class="math-inline">\(ax + my = 1\)</span>, then <span class="math-inline">\(ax = 1 - my\)</span>. Therefore, <span class="math-inline">\(ax \equiv 1 \pmod m\)</span>. So, <span class="math-inline">\(x\)</span> is the modular inverse of <span class="math-inline">\(a\)</span>.
-In our example above: <span class="math-inline">\(3 \times 26 - 11 \times 7 = 1\)</span>.
-Taking modulo 26: <span class="math-inline">\((-11 \times 7) \equiv 1 \pmod{26}\)</span>.
-Thus, the inverse of <span class="math-inline">\(7 \pmod{26}\)</span> is <span class="math-inline">\(-11\)</span>. To make it positive, we add 26: **<span class="math-inline">\(-11 + 26 = 15\)</span>**. (Check: <span class="math-inline">\(7 \times 15 = 105 = 4 \times 26 + 1\)</span>).
-</code></pre>
+    <div class="math-diagram-box">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <h4 class="math-diagram-title" style="margin: 0;">Tool 1 &amp; 2: Extended Euclidean Algorithm &amp; Modular Inverse Engine</h4>
+            <span class="callout-badge" style="background: rgba(124, 58, 237, 0.12); color: #7c3aed; font-weight: 700; padding: 4px 10px; border-radius: 6px; font-size: 11px;">GUARANTEED EXAM TOPIC</span>
+        </div>
+        <p style="font-size: 13.5px; color: var(--text-secondary); margin: 0 0 16px;">
+            The mathematical heart of RSA key derivation: Computing \(\gcd(a, b)\), expressing it as a linear combination \(ax + by = \gcd(a, b)\) (B&eacute;zout's Identity), and deriving the modular multiplicative inverse \(a^{-1} \pmod m\).
+        </p>
+
+        <!-- Tool 1: Euclidean & Bezout -->
+        <div style="background: rgba(124, 58, 237, 0.04); border: 1.5px solid rgba(124, 58, 237, 0.25); border-radius: 10px; padding: 18px; margin-bottom: 20px;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                <span style="background: #7c3aed; color: #fff; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px;">1</span>
+                <strong style="color: #7c3aed; font-size: 15px;">Worked Exam Example: Find \(\gcd(26, 7)\) and Express as \(26x + 7y\)</strong>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1.15fr; gap: 18px; margin-top: 14px;">
+                <!-- Forward Division Table -->
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
+                    <div style="font-weight: 700; color: var(--text-heading); font-size: 13.5px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+                        <span>&darr;</span> Step 1: Forward Euclidean Divisions
+                    </div>
+                    <table style="width: 100%; border-collapse: collapse; font-size: 12.5px; text-align: left;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-secondary);">
+                                <th style="padding: 6px 8px;">Step</th>
+                                <th style="padding: 6px 8px;">Division Equation</th>
+                                <th style="padding: 6px 8px;">Remainder</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid rgba(124,58,237,0.08);">
+                                <td style="padding: 8px;"><strong>Div 1</strong></td>
+                                <td style="padding: 8px;">\(26 = 3 	imes 7 + 5\)</td>
+                                <td style="padding: 8px; color: #7c3aed; font-weight: 700;">\(r_1 = 5\)</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(124,58,237,0.08);">
+                                <td style="padding: 8px;"><strong>Div 2</strong></td>
+                                <td style="padding: 8px;">\(7 = 1 	imes 5 + 2\)</td>
+                                <td style="padding: 8px; color: #7c3aed; font-weight: 700;">\(r_2 = 2\)</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(124,58,237,0.08);">
+                                <td style="padding: 8px;"><strong>Div 3</strong></td>
+                                <td style="padding: 8px;">\(5 = 2 	imes 2 + 1\)</td>
+                                <td style="padding: 8px; color: #059669; font-weight: 800;">\(r_3 = 1\) (GCD)</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px;"><strong>Div 4</strong></td>
+                                <td style="padding: 8px;">\(2 = 2 	imes 1 + 0\)</td>
+                                <td style="padding: 8px; color: var(--text-secondary);">\(r_4 = 0\) (Stop)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div style="margin-top: 10px; padding: 6px 10px; background: rgba(16, 185, 129, 0.1); border-radius: 6px; font-size: 12px; color: #059669; font-weight: 700;">
+                        &check; Last non-zero remainder is 1 &rarr; \(\gcd(26, 7) = 1\) (Coprime).
+                    </div>
+                </div>
+
+                <!-- Backward Substitution Card -->
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
+                    <div style="font-weight: 700; color: var(--text-heading); font-size: 13.5px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+                        <span>&uarr;</span> Step 2: Backward Substitution (B&eacute;zout Form)
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12.5px;">
+                        <div style="padding: 7px 10px; background: rgba(124, 58, 237, 0.05); border-left: 3px solid #7c3aed; border-radius: 4px;">
+                            <strong>Isolate GCD (1) from Div 3:</strong><br>
+                            \(1 = 5 - 2 	imes 2\)
+                        </div>
+                        <div style="padding: 7px 10px; background: rgba(124, 58, 237, 0.05); border-left: 3px solid #7c3aed; border-radius: 4px;">
+                            <strong>Substitute \(2 = 7 - 1 	imes 5\) from Div 2:</strong><br>
+                            \(1 = 5 - 2 	imes (7 - 1 	imes 5) = 3 	imes 5 - 2 	imes 7\)
+                        </div>
+                        <div style="padding: 7px 10px; background: rgba(124, 58, 237, 0.05); border-left: 3px solid #7c3aed; border-radius: 4px;">
+                            <strong>Substitute \(5 = 26 - 3 	imes 7\) from Div 1:</strong><br>
+                            \(1 = 3 	imes (26 - 3 	imes 7) - 2 	imes 7 = 3 	imes 26 - 11 	imes 7\)
+                        </div>
+                    </div>
+                    <div style="margin-top: 10px; padding: 8px 12px; background: rgba(124, 58, 237, 0.1); border-radius: 6px; font-size: 13px; color: #7c3aed; font-weight: 800; text-align: center;">
+                        B&eacute;zout Form: \(26(3) + 7(-11) = 1\) &bull; \(x = 3, \; y = -11\)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tool 2: Modular Inverse Engine -->
+        <div style="background: rgba(16, 185, 129, 0.04); border: 1.5px solid rgba(16, 185, 129, 0.25); border-radius: 10px; padding: 18px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="background: #059669; color: #fff; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px;">2</span>
+                    <strong style="color: #059669; font-size: 15px;">Tool 2: Deriving the Modular Multiplicative Inverse</strong>
+                </div>
+                <span style="font-size: 12px; font-weight: 700; color: #059669; background: rgba(16, 185, 129, 0.12); padding: 3px 8px; border-radius: 4px;">
+                    Rule: Inverse exists &hArr; \(\gcd(a, m) = 1\)
+                </span>
+            </div>
+
+            <p style="font-size: 13px; line-height: 1.6; margin: 0 0 12px; color: var(--text-body);">
+                The inverse of \(a \pmod m\) is an integer \(a^{-1}\) satisfying <strong>\(a \cdot a^{-1} \equiv 1 \pmod m\)</strong>. From B&eacute;zout's identity \(ax + my = 1\), reducing modulo \(m\) gives:
+                <br>
+                <span style="display: block; text-align: center; margin: 6px 0; font-weight: 700; color: #059669; font-size: 14px;">\(ax + my \equiv 1 \pmod m \implies ax + 0 \equiv 1 \pmod m \implies a \cdot x \equiv 1 \pmod m\)</span>
+                Therefore, <strong>the B&eacute;zout coefficient \(x\) is the modular multiplicative inverse of \(a \pmod m\)</strong>.
+            </p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 14px; font-size: 12.5px;">
+                    <strong style="color: var(--text-heading);">Step 1: Extract Coefficient</strong><br>
+                    From our example: \(3 	imes 26 - 11 	imes 7 = 1\).<br>
+                    Modulo 26: \((-11 	imes 7) \equiv 1 \pmod{26}\).<br>
+                    Raw modular inverse of \(7 \pmod{26}\) is \(-11\).
+                </div>
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 14px; font-size: 12.5px;">
+                    <strong style="color: var(--text-heading);">Step 2: Convert to Positive Standard Range</strong><br>
+                    Add modulus \(26\) to make it positive in range \(\{0, 1, \dots, 25\}\):<br>
+                    <span style="display: inline-block; margin-top: 4px; font-weight: 800; color: #059669; font-size: 13.5px;">\(-11 + 26 = 15 \pmod{26}\)</span><br>
+                    <span style="color: var(--text-secondary); font-size: 11.5px;">Check: \(7 	imes 15 = 105 = 4 	imes 26 + 1 \equiv 1 \pmod{26}\). Correct!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 <h3>Tool 3: Euler’s Totient Function, <span class="math-inline">\(\phi(n)\)</span></h3>
-<p><span class="math-inline">\(\phi(n)\)</span> is the count of integers from <span class="math-inline">\(1\)</span> to <span class="math-inline">\(n\)</span> that are relatively prime to <span class="math-inline">\(n\)</span> (i.e., <span class="math-inline">\(\gcd(k, n) = 1\)</span>).
-*   If <span class="math-inline">\(n\)</span> is prime (<span class="math-inline">\(p\)</span>), then all numbers from <span class="math-inline">\(1\)</span> to <span class="math-inline">\(p-1\)</span> are coprime to it. So, <span class="math-inline">\(\phi(p) = p - 1\)</span>.
-*   If <span class="math-inline">\(n = p \times q\)</span> (where <span class="math-inline">\(p\)</span> and <span class="math-inline">\(q\)</span> are distinct primes), we use the formula:</p>
+<p><span class="math-inline">\(\phi(n)\)</span> is the count of integers from <span class="math-inline">\(1\)</span> to <span class="math-inline">\(n\)</span> that are relatively prime to <span class="math-inline">\(n\)</span> (i.e., <span class="math-inline">\(\gcd(k, n) = 1\)</span>).</p>
+<ul>
+<li>If <span class="math-inline">\(n\)</span> is prime (<span class="math-inline">\(p\)</span>), then all numbers from <span class="math-inline">\(1\)</span> to <span class="math-inline">\(p-1\)</span> are coprime to it. So, <span class="math-inline">\(\phi(p) = p - 1\)</span>.</li>
+<li>If <span class="math-inline">\(n = p \times q\)</span> (where <span class="math-inline">\(p\)</span> and <span class="math-inline">\(q\)</span> are distinct primes), we use the formula:</li>
+</ul>
 <div class="math-display">\[\phi(n) = \phi(p) \times \phi(q) = (p - 1)(q - 1)\]</div>
 <h3>Tool 4: Fermat’s Little Theorem &amp; Euler’s Theorem</h3>
-<p>These theorems are the reason RSA decryption actually works.
-*   <strong>Fermat’s Little Theorem:</strong> If <span class="math-inline">\(p\)</span> is prime and <span class="math-inline">\(\gcd(a, p) = 1\)</span>, then:</p>
+<p>These theorems are the reason RSA decryption actually works.</p>
+<ul>
+<li><strong>Fermat’s Little Theorem:</strong> If <span class="math-inline">\(p\)</span> is prime and <span class="math-inline">\(\gcd(a, p) = 1\)</span>, then:</li>
+</ul>
 <div class="math-display">\[a^{p-1} \equiv 1 \pmod p\]</div>
 <ul>
 <li><strong>Euler’s Theorem (Generalization):</strong> If <span class="math-inline">\(\gcd(a, n) = 1\)</span>, then:</li>
 </ul>
 <div class="math-display">\[a^{\phi(n)} \equiv 1 \pmod n\]</div>
 <hr />
-<h2>3. Fast Modular Exponentiation (How to do <span class="math-inline">\(a^b \bmod n\)</span>)</h2>
-<p>In RSA, you will have to calculate things like <span class="math-inline">\(1819^{13} \bmod 2537\)</span>. You cannot calculate <span class="math-inline">\(1819^{13}\)</span> directly; it is too large for a calculator.
-<em>Exam Rule:</em> You must break the exponent into powers of 2.</p>
-<p><strong>Example:</strong> Calculate <span class="math-inline">\(2^{13} \bmod 11\)</span>.
-*   Write <span class="math-inline">\(13\)</span> in binary: <span class="math-inline">\(13 = 8 + 4 + 1\)</span>.
-*   So, <span class="math-inline">\(2^{13} = 2^8 \cdot 2^4 \cdot 2^1\)</span>.
-*   Calculate powers of 2 modulo 11:
-    <span class="math-inline">\(2^1 \equiv 2\)</span>
-    <span class="math-inline">\(2^2 = 4\)</span>
-    <span class="math-inline">\(2^4 = 4^2 = 16 \equiv 5 \pmod{11}\)</span>
-    <span class="math-inline">\(2^8 = 5^2 = 25 \equiv 3 \pmod{11}\)</span>
-*   Multiply them: <span class="math-inline">\(3 \times 5 \times 2 = 30 \equiv 8 \pmod{11}\)</span>.
-So, <span class="math-inline">\(2^{13} \equiv 8 \pmod{11}\)</span>.</p>
-<hr />
+
+    <div class="math-diagram-box">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <h4 class="math-diagram-title" style="margin: 0;">Fast Modular Exponentiation: Step-by-Step Repeated Squaring Walkthrough</h4>
+            <span class="callout-badge" style="background: rgba(217, 119, 6, 0.12); color: #d97706; font-weight: 700; padding: 4px 10px; border-radius: 6px; font-size: 11px;">CRUCIAL EXAM TECHNIQUE</span>
+        </div>
+        <p style="font-size: 13.5px; color: var(--text-secondary); margin: 0 0 16px;">
+            Calculating large powers like \(a^b mod n\) by hand without a calculator: Decompose the exponent into binary powers of 2 and square modulo \(n\) successively.
+        </p>
+
+        <div style="background: rgba(245, 158, 11, 0.05); border: 1.5px solid rgba(245, 158, 11, 0.25); border-radius: 10px; padding: 18px;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                <span style="background: #d97706; color: #fff; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px;">&bull;</span>
+                <strong style="color: #d97706; font-size: 15px;">Worked Example: Calculate \(2^{13} mod 11\)</strong>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1.25fr; gap: 16px;">
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
+                    <div style="font-weight: 700; color: var(--text-heading); font-size: 13px; margin-bottom: 8px;">1. Binary Exponent Decomposition</div>
+                    <div style="font-size: 13px; line-height: 1.7; color: var(--text-body);">
+                        Write exponent \(13\) as sum of powers of 2:<br>
+                        <span style="display: block; padding: 6px 10px; background: rgba(245, 158, 11, 0.1); border-radius: 6px; font-weight: 700; color: #d97706; text-align: center; margin: 6px 0;">
+                            \(13 = 8 + 4 + 1 = (1101)_2\)
+                        </span>
+                        Therefore, by exponent addition laws:<br>
+                        \(2^{13} = 2^8 \cdot 2^4 \cdot 2^1 \pmod{11}\)
+                    </div>
+                </div>
+
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
+                    <div style="font-weight: 700; color: var(--text-heading); font-size: 13px; margin-bottom: 8px;">2. Successive Squaring Table (mod 11)</div>
+                    <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-secondary); text-align: left;">
+                                <th style="padding: 4px 6px;">Power</th>
+                                <th style="padding: 4px 6px;">Calculation</th>
+                                <th style="padding: 4px 6px;">Result (mod 11)</th>
+                                <th style="padding: 4px 6px;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid rgba(245,158,11,0.1);">
+                                <td style="padding: 6px;">\(2^1\)</td>
+                                <td style="padding: 6px;">Base value</td>
+                                <td style="padding: 6px; font-weight: 700; color: #d97706;">\(2\)</td>
+                                <td style="padding: 6px;"><span style="background: rgba(16,185,129,0.12); color:#059669; padding:2px 6px; border-radius:4px; font-weight:700;">Included (bit=1)</span></td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(245,158,11,0.1);">
+                                <td style="padding: 6px;">\(2^2\)</td>
+                                <td style="padding: 6px;">\(2^2 = 4\)</td>
+                                <td style="padding: 6px; font-weight: 700; color: var(--text-secondary);">\(4\)</td>
+                                <td style="padding: 6px;"><span style="color: var(--text-secondary); font-size:11px;">Skipped (bit=0)</span></td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(245,158,11,0.1);">
+                                <td style="padding: 6px;">\(2^4\)</td>
+                                <td style="padding: 6px;">\(4^2 = 16 = 11 + 5\)</td>
+                                <td style="padding: 6px; font-weight: 700; color: #d97706;">\(5\)</td>
+                                <td style="padding: 6px;"><span style="background: rgba(16,185,129,0.12); color:#059669; padding:2px 6px; border-radius:4px; font-weight:700;">Included (bit=1)</span></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 6px;">\(2^8\)</td>
+                                <td style="padding: 6px;">\(5^2 = 25 = 2(11) + 3\)</td>
+                                <td style="padding: 6px; font-weight: 700; color: #d97706;">\(3\)</td>
+                                <td style="padding: 6px;"><span style="background: rgba(16,185,129,0.12); color:#059669; padding:2px 6px; border-radius:4px; font-weight:700;">Included (bit=1)</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Final Product Assembly -->
+            <div style="margin-top: 14px; padding: 12px 16px; background: rgba(16, 185, 129, 0.08); border: 1px solid #10b981; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                <div style="font-size: 13.5px; color: var(--text-heading);">
+                    <strong>3. Multiply Included Powers:</strong> \(2^{13} = 2^8 \cdot 2^4 \cdot 2^1 \equiv 3 	imes 5 	imes 2 = 30 \equiv 8 \pmod{11}\)
+                </div>
+                <div style="background: #10b981; color: #fff; padding: 4px 14px; border-radius: 6px; font-weight: 800; font-size: 14px;">
+                    Answer: \(2^{13} \equiv 8 \pmod{11}\) &check;
+                </div>
+            </div>
+        </div>
+    </div>
+    
 <h2>📝 Exam-Style Questions (Solved in Detail)</h2>
 <p><strong>Q1. (MCQ - 1 Mark)</strong>
 If <span class="math-inline">\(n = 77\)</span>, what is <span class="math-inline">\(\phi(n)\)</span>?

@@ -232,15 +232,27 @@ def inject_diagram_tokens_for_maths(text, mod_num):
     elif mod_num == 26:
         # Trapdoor & repeated squaring
         text = re.sub(r'(##\s+2\.\s+The Number Theory Tools.*?\n)', r'\1\n\nTOKEN_MATH_DIAG_26_TRAP\n\n', text, count=1)
+        # Tool 1 & 2: Extended Euclidean, Bezout and Modular Inverse
+        text = re.sub(r'### Tool 1: Greatest Common Divisor.*?(?=### Tool 3:)', 'TOKEN_MATH_DIAG_26_EUCLID_INV\n\n', text, flags=re.DOTALL)
+        # Fast Modular Exponentiation
+        text = re.sub(r'## 3\. Fast Modular Exponentiation.*?(?=## 📝 Exam-Style Questions|\Z)', 'TOKEN_MATH_DIAG_26_FAST_EXP\n\n', text, flags=re.DOTALL)
     elif mod_num == 27:
         # Diffie-Hellman protocol
         text = re.sub(r'(###?\s+2\.\s+The Protocol \(Step-by-Step for Exams\).*?\n|2\.\s+The Protocol \(Step-by-Step for Exams\)\n)', r'\1\n\nTOKEN_MATH_DIAG_27_DH\n\n', text, count=1)
+        # Numerical Question 2
+        text = re.sub(r'\*\*Question 2 \(Numerical - 5 Marks\):\*\*.*?(?=---\n|### 4\. Security Analysis)', 'TOKEN_MATH_DIAG_27_NUMERICAL\n\n', text, flags=re.DOTALL)
     elif mod_num == 28:
         # RSA architecture
         text = re.sub(r'(###?\s+2\.\s+RSA Key Generation \(Step-by-Step\).*?\n|2\.\s+RSA Key Generation \(Step-by-Step\)\n)', r'\1\n\nTOKEN_MATH_DIAG_28_RSA\n\n', text, count=1)
+        # Numerical Question 2 (STOP encryption & HELP decryption)
+        text = re.sub(r'\*\*Question 2 \(Full RSA Calculation - 10 Marks\):\*\*.*?(?=\*\(Note for Exams:|\*\*Question 3)', 'TOKEN_MATH_DIAG_28_NUMERICAL\n\n', text, flags=re.DOTALL)
     elif mod_num == 29:
         # Cryptosystems comparison
         text = re.sub(r'(###?\s+1\.\s+The Mathematical Foundation.*?\n|1\.\s+The Mathematical Foundation\n)', r'\1\n\nTOKEN_MATH_DIAG_29_COMP\n\n', text, count=1)
+        # ElGamal KeyGen / Encryption / Decryption Pipeline
+        text = re.sub(r'### 2\. ElGamal Key Generation \(Step-by-Step\).*?(?=# 🎓 UNIT V: Final Exam Preparation|### 📝 Solved Exam Questions for ElGamal)', 'TOKEN_MATH_DIAG_29_ELGAMAL_FLOW\n\n', text, flags=re.DOTALL)
+        # Solved Numerical Questions in Part B
+        text = re.sub(r'### Part B: 10-Mark Solving Questions.*?(?=---\n\n### 🎯 Final Unit V Revision Checklist:|\Z)', 'TOKEN_MATH_DIAG_29_MOCK_NUMERICAL\n\n', text, flags=re.DOTALL)
     return text
 
 def replace_diagram_tokens_for_maths(html, mod_num):
@@ -273,15 +285,21 @@ def replace_diagram_tokens_for_maths(html, mod_num):
         },
         26: {
             "TOKEN_MATH_DIAG_26_TRAP": diag.card_mod26_trapdoor_squaring(),
+            "TOKEN_MATH_DIAG_26_EUCLID_INV": diag.card_mod26_euclidean_and_inverse(),
+            "TOKEN_MATH_DIAG_26_FAST_EXP": diag.card_mod26_fast_modular_exponentiation(),
         },
         27: {
             "TOKEN_MATH_DIAG_27_DH": diag.card_mod27_diffie_hellman_protocol(),
+            "TOKEN_MATH_DIAG_27_NUMERICAL": diag.card_mod27_numerical_worked_example(),
         },
         28: {
             "TOKEN_MATH_DIAG_28_RSA": diag.card_mod28_rsa_architecture(),
+            "TOKEN_MATH_DIAG_28_NUMERICAL": diag.card_mod28_numerical_rsa_stop_help(),
         },
         29: {
             "TOKEN_MATH_DIAG_29_COMP": diag.card_mod29_cryptosystems_comparison(),
+            "TOKEN_MATH_DIAG_29_ELGAMAL_FLOW": diag.card_mod29_elgamal_full_workflow(),
+            "TOKEN_MATH_DIAG_29_MOCK_NUMERICAL": diag.card_mod29_mock_exam_numerical(),
         }
     }
     tokens = diag_map.get(mod_num, {})
@@ -387,7 +405,12 @@ def convert_txt_to_html_body_unit4_5(raw_text, mod_num):
                 rev_part = text[h_idx:]
                 text = text[:idx] + "\n\nMATHQUIZTOKENXYZ\n\n" + rev_part
             else:
-                text = text[:idx] + "\n\nMATHQUIZTOKENXYZ\n\n"
+                part_b_idx = text.find("### Part B: 10-Mark Solving Questions", idx)
+                if part_b_idx != -1:
+                    post_part = text[part_b_idx:]
+                    text = text[:idx] + "\n\nMATHQUIZTOKENXYZ\n\n" + post_part
+                else:
+                    text = text[:idx] + "\n\nMATHQUIZTOKENXYZ\n\n"
             has_cut = True
             break
     if not has_cut:
@@ -475,8 +498,48 @@ def convert_txt_to_html_body_unit4_5(raw_text, mod_num):
                 f_lines.append(l)
         text = "\n".join(f_lines)
 
+    # De-indent accidental 4-space prose/math lines and ensure blank lines before lists
+    def clean_markdown_indentation_and_lists(md_text):
+        lines = md_text.splitlines()
+        new_lines = []
+        in_fenced_code = False
+        for i, line in enumerate(lines):
+            if line.strip().startswith('```'):
+                in_fenced_code = not in_fenced_code
+                new_lines.append(line)
+                continue
+            if in_fenced_code:
+                new_lines.append(line)
+                continue
+            
+            stripped = line.strip()
+            is_list = re.match(r'^(?:\*|-|\d+\.)\s+', stripped)
+            if is_list and i > 0 and new_lines and new_lines[-1].strip() != '':
+                prev_is_list = re.match(r'^(?:\*|-|\d+\.)\s+', new_lines[-1].strip())
+                prev_is_heading = new_lines[-1].strip().startswith('#')
+                if not prev_is_list and not prev_is_heading:
+                    new_lines.append('')
+            
+            if line.startswith('    '):
+                line = line[4:]
+            elif line.startswith('\t'):
+                line = line[1:]
+            new_lines.append(line)
+        return '\n'.join(new_lines)
+
+    text = clean_markdown_indentation_and_lists(text)
+
     # Markdown conversion
     html = markdown.markdown(text, extensions=['tables', 'fenced_code'])
+
+    # Double safety: unpack any accidentally created code block containing math
+    def unpack_math_code_blocks(match):
+        inner = match.group(1)
+        if 'MATHINLTOKEN' in inner or 'MATHDISPTOKEN' in inner or '\\(' in inner or '\\[' in inner:
+            return f'<div class="math-card-unpacked" style="margin: 14px 0; padding: 14px 18px; background: rgba(124, 58, 237, 0.04); border-radius: 8px; border: 1px solid rgba(124, 58, 237, 0.15);">{inner}</div>'
+        return match.group(0)
+
+    html = re.sub(r'<pre><code>(.*?)</code></pre>', unpack_math_code_blocks, html, flags=re.DOTALL)
 
     # Restore diagram tokens to real visual HTML
     html = replace_diagram_tokens_for_maths(html, mod_num)

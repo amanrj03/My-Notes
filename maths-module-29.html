@@ -827,43 +827,90 @@ body {
         </div>
     </div>
     
-<p>The ElGamal cryptosystem (invented by Taher ElGamal in 1985) is based on the <strong>Discrete Logarithm Problem</strong> (just like Diffie-Hellman). 
-*   <strong>Easy:</strong> Given <span class="math-inline">\(g\)</span>, <span class="math-inline">\(p\)</span>, and <span class="math-inline">\(x\)</span>, calculating <span class="math-inline">\(y = g^x \bmod p\)</span> is easy.
-*   <strong>Hard:</strong> Given <span class="math-inline">\(g\)</span>, <span class="math-inline">\(p\)</span>, and <span class="math-inline">\(y\)</span>, finding <span class="math-inline">\(x\)</span> is practically impossible.</p>
+<p>The ElGamal cryptosystem (invented by Taher ElGamal in 1985) is based on the <strong>Discrete Logarithm Problem</strong> (just like Diffie-Hellman). </p>
+<ul>
+<li><strong>Easy:</strong> Given <span class="math-inline">\(g\)</span>, <span class="math-inline">\(p\)</span>, and <span class="math-inline">\(x\)</span>, calculating <span class="math-inline">\(y = g^x \bmod p\)</span> is easy.</li>
+<li><strong>Hard:</strong> Given <span class="math-inline">\(g\)</span>, <span class="math-inline">\(p\)</span>, and <span class="math-inline">\(y\)</span>, finding <span class="math-inline">\(x\)</span> is practically impossible.</li>
+</ul>
 <p>Unlike RSA, where a single message can be encrypted to a single ciphertext block, ElGamal is <strong>probabilistic</strong>. This means that encrypting the same message twice will result in two completely different ciphertexts. This provides extra security but makes the ciphertext twice as large as the plaintext.</p>
 <hr />
-<h3>2. ElGamal Key Generation (Step-by-Step)</h3>
-<ol>
-<li><strong>Choose a large prime <span class="math-inline">\(p\)</span></strong> and a <strong>generator <span class="math-inline">\(g\)</span></strong> (a primitive root modulo <span class="math-inline">\(p\)</span>).</li>
-<li><strong>Choose a private key <span class="math-inline">\(x\)</span></strong> such that <span class="math-inline">\(1 \lt  x \lt  p-1\)</span>.</li>
-<li><strong>Compute the public key <span class="math-inline">\(y\)</span>:</strong></li>
-</ol>
-<div class="math-display">\[y = g^x \bmod p\]</div>
-<pre><code>*   **Public Key:** <span class="math-inline">\((p, g, y)\)</span>
-*   **Private Key:** <span class="math-inline">\(x\)</span>
-</code></pre>
-<hr />
-<h3>3. ElGamal Encryption</h3>
-<p>To encrypt a message <span class="math-inline">\(M\)</span> (where <span class="math-inline">\(M\)</span> is an integer <span class="math-inline">\(0 \le M \lt  p\)</span>):
-1.  The sender chooses a <strong>random secret number <span class="math-inline">\(k\)</span></strong> such that <span class="math-inline">\(1 \lt  k \lt  p-1\)</span>.
-2.  The sender computes <strong>two</strong> values (the ciphertext is a pair <span class="math-inline">\((C_1, C_2)\)</span>):</p>
-<div class="math-display">\[C_1 = g^k \bmod p\]</div>
-<div class="math-display">\[C_2 = (M \cdot y^k) \bmod p\]</div>
-<ol>
-<li>The sender sends the pair <span class="math-inline">\((C_1, C_2)\)</span> to the receiver.</li>
-</ol>
-<hr />
-<h3>4. ElGamal Decryption</h3>
-<p>The receiver uses their private key <span class="math-inline">\(x\)</span> to recover the message:
-1.  Compute the shared secret: <span class="math-inline">\(S = C_1^x \bmod p\)</span>.
-2.  Compute the modular inverse of <span class="math-inline">\(S\)</span>: <span class="math-inline">\(S^{-1} \bmod p\)</span>.
-3.  Recover the message:</p>
-<div class="math-display">\[M = (C_2 \cdot S^{-1}) \bmod p\]</div>
-<p><strong>Mathematical Proof of Decryption (Why it works):</strong>
-<span class="math-inline">\(S = C_1^x = (g^k)^x = g^{kx} \bmod p\)</span>.
-<span class="math-inline">\(C_2 = M \cdot y^k = M \cdot (g^x)^k = M \cdot g^{xk} \bmod p\)</span>.
-Therefore, <span class="math-inline">\(C_2 \cdot S^{-1} = (M \cdot g^{xk}) \cdot (g^{xk})^{-1} = M \bmod p\)</span>. </p>
-<hr />
+
+    <div class="math-diagram-box">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <h4 class="math-diagram-title" style="margin: 0;">The ElGamal Cryptosystem: 4-Stage Complete Protocol Pipeline</h4>
+            <span class="callout-badge" style="background: rgba(124, 58, 237, 0.12); color: #7c3aed; font-weight: 700; padding: 4px 10px; border-radius: 6px; font-size: 11px;">PROBABILISTIC ENCRYPTION</span>
+        </div>
+        <p style="font-size: 13.5px; color: var(--text-secondary); margin: 0 0 16px;">
+            Based on the Discrete Logarithm Problem (DLP). Every encryption incorporates an ephemeral random value \(k\), meaning encrypting the identical message twice yields different ciphertexts!
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;">
+            <!-- Key Generation -->
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <span style="background: #7c3aed; color: #fff; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 11px;">1</span>
+                    <strong style="color: #7c3aed; font-size: 13px;">Key Generation</strong>
+                </div>
+                <div style="font-size: 12px; line-height: 1.6; color: var(--text-body);">
+                    &bull; Prime \(p\), primitive root \(g\)<br>
+                    &bull; Private key: \(x \in (1, p-1)\)<br>
+                    &bull; Compute: \(y = g^x mod p\)<br>
+                    <div style="margin-top: 6px; padding: 4px 8px; background: rgba(124,58,237,0.08); border-radius: 4px; font-weight: 700;">
+                        Public: \((p, g, y)\)<br>Private: \(x\)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Encryption -->
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <span style="background: #2563eb; color: #fff; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 11px;">2</span>
+                    <strong style="color: #2563eb; font-size: 13px;">Encryption</strong>
+                </div>
+                <div style="font-size: 12px; line-height: 1.6; color: var(--text-body);">
+                    &bull; Random secret \(k \in (1, p-1)\)<br>
+                    &bull; \(C_1 = g^k mod p\)<br>
+                    &bull; \(C_2 = (M \cdot y^k) mod p\)<br>
+                    <div style="margin-top: 6px; padding: 4px 8px; background: rgba(37,99,235,0.08); border-radius: 4px; font-weight: 700;">
+                        Ciphertext Pair: \((C_1, C_2)\)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Decryption -->
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <span style="background: #059669; color: #fff; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 11px;">3</span>
+                    <strong style="color: #059669; font-size: 13px;">Decryption</strong>
+                </div>
+                <div style="font-size: 12px; line-height: 1.6; color: var(--text-body);">
+                    &bull; Shared secret: \(S = C_1^x mod p\)<br>
+                    &bull; Modular inverse: \(S^{-1} mod p\)<br>
+                    &bull; Recover: \(M = (C_2 \cdot S^{-1}) mod p\)<br>
+                    <div style="margin-top: 6px; padding: 4px 8px; background: rgba(16,185,129,0.08); border-radius: 4px; font-weight: 700;">
+                        Decrypted: \(M\) &check;
+                    </div>
+                </div>
+            </div>
+
+            <!-- Proof of Correctness -->
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <span style="background: #d97706; color: #fff; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 11px;">4</span>
+                    <strong style="color: #d97706; font-size: 13px;">Proof of Correctness</strong>
+                </div>
+                <div style="font-size: 12px; line-height: 1.6; color: var(--text-body);">
+                    \(S = (g^k)^x = g^{kx}\)<br>
+                    \(C_2 = M \cdot (g^x)^k = M \cdot g^{xk}\)<br>
+                    \(C_2 \cdot S^{-1} = (M \cdot g^{xk}) \cdot (g^{xk})^{-1} = M \pmod p\)<br>
+                    <div style="margin-top: 6px; padding: 4px 8px; background: rgba(245,158,11,0.08); border-radius: 4px; font-weight: 700; text-align: center;">
+                        Q.E.D.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 <h3>📝 Solved Exam Questions for ElGamal</h3>
 <p><strong>Question 1 (Numerical - 5 Marks):</strong>
 Let <span class="math-inline">\(p = 23\)</span>, <span class="math-inline">\(g = 5\)</span>. Bob chooses private key <span class="math-inline">\(x = 6\)</span>. 
@@ -1092,6 +1139,191 @@ So, <strong><span class="math-inline">\(S = 6\)</span></strong>.</p>
         </div>
     </div>
     
+
+    <div class="math-diagram-box">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <h4 class="math-diagram-title" style="margin: 0;">Unit V Solved Numerical Examination Problems (10-Mark Full Walkthroughs)</h4>
+            <span class="callout-badge" style="background: rgba(124, 58, 237, 0.12); color: #7c3aed; font-weight: 700; padding: 4px 10px; border-radius: 6px; font-size: 11px;">MOCK EXAM MASTERY</span>
+        </div>
+        <p style="font-size: 13.5px; color: var(--text-secondary); margin: 0 0 16px;">
+            Full step-by-step numerical solutions for the highest-yield 5-mark and 10-mark examination problems covering RSA and ElGamal.
+        </p>
+
+        <!-- Question 1: ElGamal 5-Mark -->
+        <div style="background: rgba(37, 99, 235, 0.04); border: 1.5px solid rgba(37, 99, 235, 0.25); border-radius: 10px; padding: 18px; margin-bottom: 20px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+                <strong style="color: #2563eb; font-size: 15px;">Problem 1: ElGamal Key Gen, Encryption &amp; Decryption (5 Marks)</strong>
+                <span style="font-size: 11px; background: rgba(37, 99, 235, 0.12); color: #2563eb; padding: 3px 8px; border-radius: 4px; font-weight: 700;">Given: \(p = 23, g = 5, x = 6, M = 10, k = 3\)</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; font-size: 12.5px;">
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 14px;">
+                    <strong style="color: #2563eb;">(a) Bob's Public Key \(y\)</strong><br>
+                    \(y = g^x mod p = 5^6 mod 23\)<br>
+                    \(5^2 \equiv 2, \; 5^4 \equiv 4\)<br>
+                    \(5^6 = 4 	imes 2 = \mathbf{8}\)<br>
+                    <span style="display: inline-block; margin-top: 4px; font-weight: 700; color: #2563eb;">Public Key: \((23, 5, 8)\)</span>
+                </div>
+
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 14px;">
+                    <strong style="color: #2563eb;">(b) Alice Encrypts \(M = 10\) (\(k = 3\))</strong><br>
+                    \(C_1 = 5^3 mod 23 = 125 mod 23 = \mathbf{10}\)<br>
+                    \(C_2 = (10 \cdot 8^3) mod 23\)<br>
+                    \(8^3 = 512 = 23(22) + 6 \equiv 6\)<br>
+                    \(C_2 = (10 \cdot 6) = 60 \equiv \mathbf{14} \pmod{23}\)<br>
+                    <span style="display: inline-block; margin-top: 4px; font-weight: 700; color: #2563eb;">Ciphertext: \((C_1, C_2) = (10, 14)\)</span>
+                </div>
+
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 14px;">
+                    <strong style="color: #2563eb;">(c) Bob Decrypts with \(x = 6\)</strong><br>
+                    \(S = C_1^x = 10^6 mod 23\)<br>
+                    \(10^2 \equiv 8, \; 10^4 \equiv 18, \; 10^6 = 18 \cdot 8 = 144 \equiv \mathbf{6}\)<br>
+                    Inverse \(S^{-1} \pmod{23}\): \(6 	imes 4 = 24 \equiv 1 \implies S^{-1} = \mathbf{4}\)<br>
+                    \(M = (C_2 \cdot S^{-1}) = 14 \cdot 4 = 56 \equiv \mathbf{10} \pmod{23}\)<br>
+                    <span style="display: inline-block; margin-top: 4px; font-weight: 700; color: #059669;">Recovered: \(M = 10\) &check;</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 2: RSA Full Cycle 10-Mark -->
+        <div style="background: rgba(124, 58, 237, 0.04); border: 1.5px solid rgba(124, 58, 237, 0.25); border-radius: 10px; padding: 18px; margin-bottom: 20px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+                <strong style="color: #7c3aed; font-size: 15px;">Problem 2: RSA Complete Execution Cycle (10 Marks)</strong>
+                <span style="font-size: 11px; background: rgba(124, 58, 237, 0.12); color: #7c3aed; padding: 3px 8px; border-radius: 4px; font-weight: 700;">Given: \(p = 5, q = 11, e = 3, M = 7\)</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; font-size: 12.5px; margin-bottom: 14px;">
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 14px;">
+                    <strong style="color: #7c3aed;">(a) Key Generation (3 Marks)</strong><br>
+                    &bull; Modulus: \(n = p 	imes q = 5 	imes 11 = \mathbf{55}\)<br>
+                    &bull; Totient: \(\phi(n) = (4)(10) = \mathbf{40}\)<br>
+                    &bull; Check \(\gcd(3, 40) = 1\) (Valid)<br>
+                    &bull; Private Key \(d\): Solve \(3d \equiv 1 \pmod{40}\)<br>
+                    \(3(27) = 81 = 2(40) + 1 \implies \mathbf{d = 27}\)<br>
+                    <span style="display: inline-block; margin-top: 4px; font-weight: 700; color: #7c3aed;">Public: \((55, 3)\) &bull; Private: \(d = 27\)</span>
+                </div>
+
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 14px;">
+                    <strong style="color: #7c3aed;">(b) Message Encryption (3 Marks)</strong><br>
+                    Formula: \(C = M^e mod n = 7^3 mod 55\)<br>
+                    \(7^3 = 343\)<br>
+                    Division: \(55 	imes 6 = 330\)<br>
+                    \(343 - 330 = \mathbf{13}\)<br>
+                    <span style="display: inline-block; margin-top: 10px; padding: 4px 10px; background: rgba(124,58,237,0.12); border-radius: 4px; font-weight: 800; color: #7c3aed;">
+                        Ciphertext: \(C = 13\)
+                    </span>
+                </div>
+            </div>
+
+            <!-- Decryption Repeated Squaring Table -->
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; font-size: 12.5px;">
+                <strong style="color: #7c3aed;">(c) Decryption via Fast Exponentiation (4 Marks): \(M = 13^{27} mod 55\)</strong>
+                <p style="margin: 4px 0 8px; color: var(--text-secondary); font-size: 12px;">
+                    Binary of 27: \(27 = 16 + 8 + 2 + 1 = (11011)_2\). Calculate successive squares modulo 55:
+                </p>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: left;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-secondary);">
+                                <th style="padding: 4px 8px;">Power</th>
+                                <th style="padding: 4px 8px;">Squaring Computation</th>
+                                <th style="padding: 4px 8px;">Modulo 55 Result</th>
+                                <th style="padding: 4px 8px;">Active Term?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid rgba(124,58,237,0.06);">
+                                <td style="padding: 5px 8px;">\(13^1\)</td>
+                                <td style="padding: 5px 8px;">Base value</td>
+                                <td style="padding: 5px 8px; font-weight: 700; color: #7c3aed;">13</td>
+                                <td style="padding: 5px 8px; color: #059669; font-weight: 700;">Yes (\(2^0\))</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(124,58,237,0.06);">
+                                <td style="padding: 5px 8px;">\(13^2\)</td>
+                                <td style="padding: 5px 8px;">\(169 = 3(55) + 4\)</td>
+                                <td style="padding: 5px 8px; font-weight: 700; color: #7c3aed;">4</td>
+                                <td style="padding: 5px 8px; color: #059669; font-weight: 700;">Yes (\(2^1\))</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(124,58,237,0.06);">
+                                <td style="padding: 5px 8px;">\(13^4\)</td>
+                                <td style="padding: 5px 8px;">\(4^2 = 16\)</td>
+                                <td style="padding: 5px 8px; font-weight: 700; color: var(--text-secondary);">16</td>
+                                <td style="padding: 5px 8px; color: var(--text-secondary);">No (\(2^2\))</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(124,58,237,0.06);">
+                                <td style="padding: 5px 8px;">\(13^8\)</td>
+                                <td style="padding: 5px 8px;">\(16^2 = 256 = 4(55) + 36\)</td>
+                                <td style="padding: 5px 8px; font-weight: 700; color: #7c3aed;">36</td>
+                                <td style="padding: 5px 8px; color: #059669; font-weight: 700;">Yes (\(2^3\))</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px 8px;">\(13^{16}\)</td>
+                                <td style="padding: 5px 8px;">\(36^2 = 1296 = 23(55) + 31\)</td>
+                                <td style="padding: 5px 8px; font-weight: 700; color: #7c3aed;">31</td>
+                                <td style="padding: 5px 8px; color: #059669; font-weight: 700;">Yes (\(2^4\))</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="margin-top: 10px; padding: 8px 12px; background: rgba(16, 185, 129, 0.1); border-radius: 6px; font-weight: 700; color: #059669; font-size: 13px; text-align: center;">
+                    \(M = 31 \cdot 36 \cdot 4 \cdot 13 \equiv 16 \cdot 4 \cdot 13 = 64 \cdot 13 \equiv 9 \cdot 13 = 117 \equiv \mathbf{7} \pmod{55}\) &bull; Verified! &check;
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 3: ElGamal 10-Mark -->
+        <div style="background: rgba(16, 185, 129, 0.04); border: 1.5px solid rgba(16, 185, 129, 0.25); border-radius: 10px; padding: 18px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+                <strong style="color: #059669; font-size: 15px;">Problem 3: ElGamal Numerical Full Lifecycle (10 Marks)</strong>
+                <span style="font-size: 11px; background: rgba(16, 185, 129, 0.12); color: #059669; padding: 3px 8px; border-radius: 4px; font-weight: 700;">Given: \(p = 19, g = 2, x = 5, M = 8, k = 3\)</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; font-size: 12.5px;">
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 14px;">
+                    <strong style="color: #059669;">(a) Public Key Derivation (2 Marks)</strong><br>
+                    \(y = g^x mod p = 2^5 mod 19\)<br>
+                    \(2^5 = 32 = 19 + 13\)<br>
+                    <span style="display: inline-block; margin-top: 6px; font-weight: 700; color: #059669;">
+                        Public Key: \((p=19, g=2, y=13)\)
+                    </span>
+                </div>
+
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 14px;">
+                    <strong style="color: #059669;">(b) Encryption of \(M = 8\) (4 Marks)</strong><br>
+                    \(C_1 = 2^3 mod 19 = \mathbf{8}\)<br>
+                    \(C_2 = (8 \cdot 13^3) mod 19\)<br>
+                    \(13^2 = 169 \equiv 17 \equiv -2\)<br>
+                    \(13^3 = -2 \cdot 13 = -26 \equiv 12\)<br>
+                    \(C_2 = 8 \cdot 12 = 96 = 5(19) + 1 = \mathbf{1}\)<br>
+                    <span style="display: inline-block; margin-top: 6px; font-weight: 700; color: #059669;">
+                        Ciphertext: \((C_1, C_2) = (8, 1)\)
+                    </span>
+                </div>
+
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 14px;">
+                    <strong style="color: #059669;">(c) Decryption Execution (4 Marks)</strong><br>
+                    \(S = C_1^x = 8^5 mod 19\)<br>
+                    \(8^2 = 64 \equiv 7, \; 8^4 = 49 \equiv 11\)<br>
+                    \(8^5 = 11 \cdot 8 = 88 \equiv \mathbf{12}\)<br>
+                    Inverse \(12^{-1} \pmod{19}\): \(12 	imes 8 = 96 \equiv 1 \implies S^{-1} = \mathbf{8}\)<br>
+                    \(M = (C_2 \cdot S^{-1}) = 1 \cdot 8 = \mathbf{8}\)<br>
+                    <span style="display: inline-block; margin-top: 6px; font-weight: 700; color: #059669;">
+                        Decrypted: \(M = 8\) &check;
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<hr />
+<h3>🎯 Final Unit V Revision Checklist:</h3>
+<ol>
+<li><strong>Formulas:</strong> Know the RSA encryption <span class="math-inline">\(C = M^e \bmod n\)</span> and decryption <span class="math-inline">\(M = C^d \bmod n\)</span>.</li>
+<li><strong>ElGamal Pairs:</strong> Remember that ElGamal ciphertext is always a pair <span class="math-inline">\((C_1, C_2)\)</span>.</li>
+<li><strong>Math Proofs:</strong> Be able to write the short proof for why RSA decryption works (using Fermat's Little Theorem).</li>
+<li><strong>Key Generation:</strong> Know how to find <span class="math-inline">\(d\)</span> using the Extended Euclidean Algorithm.</li>
+</ol>
+<p>You now have the complete mathematical blueprint for Unit V. If you can solve the 10-mark questions in this module without looking at the answers, you are fully prepared for your exam. Good luck!</p>
 
         <div style="margin-top: 35px; padding: 24px 28px; background: rgba(16, 185, 129, 0.06); border: 1.5px solid rgba(16, 185, 129, 0.35); border-radius: 12px;">
             <h4 style="margin: 0 0 8px 0; color: #059669; font-size: 18px;">🎓 All 29 Mathematics Modules Completed!</h4>
