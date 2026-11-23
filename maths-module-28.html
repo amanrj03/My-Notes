@@ -865,21 +865,40 @@ The encryption formula is:</p>
 <div class="math-display">\[M = C^d \bmod n\]</div>
 <p><em>(Again, use Fast Modular Exponentiation).</em></p>
 <hr />
-<h3>📝 Solved Exam Questions</h3>
-<p>Here is how RSA is tested in exams.</p>
-<p><strong>Question 1 (Key Generation - 5 Marks):</strong>
-Let <span class="math-inline">\(p = 3\)</span> and <span class="math-inline">\(q = 11\)</span>. Choose <span class="math-inline">\(e = 7\)</span>. Find the public key, private key, and <span class="math-inline">\(\phi(n)\)</span>.
-<strong>Solution:</strong></p>
-<ol>
-<li><span class="math-inline">\(n = p \times q = 3 \times 11 = 33\)</span>.</li>
-<li><span class="math-inline">\(\phi(n) = (3-1)(11-1) = 2 \times 10 = 20\)</span>.</li>
-<li>Check <span class="math-inline">\(\gcd(7, 20) = 1\)</span>. (Yes, 7 and 20 share no factors).</li>
-<li><strong>Public Key:</strong> <span class="math-inline">\((n, e) = (33, 7)\)</span>.</li>
-<li>Find <span class="math-inline">\(d\)</span> such that <span class="math-inline">\(7d \equiv 1 \pmod{20}\)</span>.
-Test values: <span class="math-inline">\(7(3) = 21 \equiv 1 \pmod{20}\)</span>. So, <span class="math-inline">\(d = 3\)</span>.
-<strong>Private Key:</strong> <span class="math-inline">\(d = 3\)</span>.</li>
-</ol>
 
+    <div class="math-diagram-box">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <h4 class="math-diagram-title" style="margin: 0;">📝 Solved Exam Questions (Step-by-Step &amp; Line-by-Line)</h4>
+            <span class="callout-badge" style="background: rgba(124, 58, 237, 0.12); color: #7c3aed; font-weight: 700; padding: 4px 10px; border-radius: 6px; font-size: 11px;">RSA MASTER EXAM QUESTIONS</span>
+        </div>
+        <p style="font-size: 13.5px; color: var(--text-secondary); margin: 0 0 16px;">
+            Step-by-step mathematical solutions for key generation, numerical encryption/decryption, and the theoretical proof of correctness:
+        </p>
+
+        <!-- Question 1: Key Generation 5 Marks -->
+        <div style="background: rgba(37, 99, 235, 0.04); border: 1.5px solid rgba(37, 99, 235, 0.25); border-radius: 10px; padding: 18px; margin-bottom: 20px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;">
+                <strong style="color: #2563eb; font-size: 15px;">Question 1 (Key Generation &mdash; 5 Marks)</strong>
+                <span style="font-size: 11px; background: rgba(37, 99, 235, 0.12); color: #2563eb; padding: 3px 8px; border-radius: 4px; font-weight: 700;">Setup &amp; Derivation</span>
+            </div>
+            <p style="font-size: 13.5px; font-weight: 600; color: var(--text-heading); margin: 0 0 12px;">
+                Let \(p = 3\) and \(q = 11\). Choose public exponent \(e = 7\). Find the public key, private key, and \(\phi(n)\).
+            </p>
+            <div style="font-size: 13px; line-height: 1.8; color: var(--text-body);">
+                &bull; <strong>Line 1 (Compute Modulus):</strong> \(n = p 	imes q = 3 	imes 11 = \mathbf{33}\)<br>
+                &bull; <strong>Line 2 (Compute Totient):</strong> \(\phi(n) = (p-1)(q-1) = (3-1)(11-1) = 2 	imes 10 = \mathbf{20}\)<br>
+                &bull; <strong>Line 3 (Check Coprimality):</strong> \(\gcd(e, \phi(n)) = \gcd(7, 20) = 1\) &bull; Valid public exponent.<br>
+                &bull; <strong>Line 4 (State Public Key):</strong> \((n, e) = \mathbf{(33, 7)}\)<br>
+                &bull; <strong>Line 5 (Solve for Private Exponent \(d\)):</strong> We require \(e \cdot d \equiv 1 \pmod{\phi(n)}\), meaning \(7d \equiv 1 \pmod{20}\).<br>
+                &bull; <strong>Line 6 (Test Multiples):</strong> \(7(3) = 21 = 20 + 1 \equiv 1 \pmod{20} \implies \mathbf{d = 3}\)<br>
+                <div style="margin-top: 10px; padding: 8px 12px; background: rgba(16, 185, 129, 0.08); border-radius: 6px; font-weight: 800; color: #059669;">
+                    &rArr; Public Key = \((33, 7)\) &bull; Private Key = \(d = 3\) (or \((33, 3)\)) &bull; \(\phi(n) = 20\)
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 2: STOP / HELP 10 Marks -->
+        
     <div class="math-diagram-box">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
             <h4 class="math-diagram-title" style="margin: 0;">Question 2 (Full RSA Calculation &mdash; 10 Marks): "STOP" Encryption &amp; "HELP" Decryption</h4>
@@ -954,19 +973,32 @@ Test values: <span class="math-inline">\(7(3) = 21 \equiv 1 \pmod{20}\)</span>. 
         </div>
     </div>
     
-<p><em>(Note for Exams: In a 10-mark question, you will not be expected to do <span class="math-inline">\(981^{937}\)</span> by hand. The question will either give you the answer, or the numbers will be small enough to use tricks. The crucial part they grade is your <strong>setup</strong> and your <strong>decryption formula</strong>.)</em></p>
-<p><strong>Question 3 (Theoretical/Proof - 5 Marks):</strong>
-Why does RSA Decryption work? Prove that <span class="math-inline">\((M^e)^d \equiv M \pmod n\)</span>.
-<strong>Solution:</strong>
-By definition, <span class="math-inline">\(e \cdot d \equiv 1 \pmod{\phi(n)}\)</span>. 
-This means there exists an integer <span class="math-inline">\(k\)</span> such that <span class="math-inline">\(ed = 1 + k(p-1)(q-1)\)</span>.
-Therefore:
-<span class="math-inline">\(C^d \equiv (M^e)^d = M^{ed} = M^{1 + k(p-1)(q-1)} = M \cdot (M^{p-1})^{k(q-1)} \pmod n\)</span>.
-By Fermat's Little Theorem (since <span class="math-inline">\(p\)</span> is prime), <span class="math-inline">\(M^{p-1} \equiv 1 \pmod p\)</span>.
-So, modulo <span class="math-inline">\(p\)</span>, <span class="math-inline">\(C^d \equiv M \cdot 1 = M \pmod p\)</span>.
-Similarly, modulo <span class="math-inline">\(q\)</span>, <span class="math-inline">\(C^d \equiv M \pmod q\)</span>.
-By the <strong>Chinese Remainder Theorem</strong>, since <span class="math-inline">\(C^d \equiv M \pmod p\)</span> and <span class="math-inline">\(C^d \equiv M \pmod q\)</span>, it must be true that <span class="math-inline">\(C^d \equiv M \pmod{pq}\)</span>, which is <span class="math-inline">\(n\)</span>.
-Thus, <span class="math-inline">\(M = C^d \bmod n\)</span>. <strong>Q.E.D.</strong></p>
+
+        <!-- Question 3: Theoretical Proof 5 Marks -->
+        <div style="background: rgba(245, 158, 11, 0.04); border: 1.5px solid rgba(245, 158, 11, 0.25); border-radius: 10px; padding: 18px; margin-top: 20px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;">
+                <strong style="color: #d97706; font-size: 15px;">Question 3 (Theoretical/Proof &mdash; 5 Marks)</strong>
+                <span style="font-size: 11px; background: rgba(245, 158, 11, 0.12); color: #d97706; padding: 3px 8px; border-radius: 4px; font-weight: 700;">Mathematical Proof</span>
+            </div>
+            <p style="font-size: 13.5px; font-weight: 600; color: var(--text-heading); margin: 0 0 12px;">
+                Why does RSA Decryption work? Prove that \((M^e)^d \equiv M \pmod n\).
+            </p>
+            <div style="font-size: 13px; line-height: 1.8; color: var(--text-body);">
+                &bull; <strong>Step 1 (Inverse Definition):</strong> By definition of private key, \(e \cdot d \equiv 1 \pmod{\phi(n)}\). Therefore, there exists an integer \(k\) such that:<br>
+                <span style="display: block; text-align: center; margin: 4px 0; font-weight: 700;">\(ed = 1 + k(p-1)(q-1)\)</span>
+                &bull; <strong>Step 2 (Power Expansion):</strong> Applying this to ciphertext decryption:<br>
+                <span style="display: block; text-align: center; margin: 4px 0; font-weight: 700;">\(C^d \equiv (M^e)^d = M^{ed} = M^{1 + k(p-1)(q-1)} = M \cdot \left(M^{p-1}ight)^{k(q-1)} \pmod n\)</span>
+                &bull; <strong>Step 3 (Modulo \(p\) via Fermat's Little Theorem):</strong> Since \(p\) is prime, \(M^{p-1} \equiv 1 \pmod p\). Thus:<br>
+                <span style="display: block; text-align: center; margin: 4px 0; font-weight: 700; color: #7c3aed;">\(C^d \equiv M \cdot (1)^{k(q-1)} \equiv M \pmod p\)</span>
+                &bull; <strong>Step 4 (Modulo \(q\) via Fermat's Little Theorem):</strong> Similarly, since \(q\) is prime, \(M^{q-1} \equiv 1 \pmod q\). Thus:<br>
+                <span style="display: block; text-align: center; margin: 4px 0; font-weight: 700; color: #7c3aed;">\(C^d \equiv M \cdot (1)^{k(p-1)} \equiv M \pmod q\)</span>
+                &bull; <strong>Step 5 (Chinese Remainder Theorem):</strong> Since \(p\) and \(q\) are distinct primes (coprime), if an equation holds modulo \(p\) and modulo \(q\), it holds modulo \(p 	imes q = n\):<br>
+                <span style="display: block; text-align: center; margin: 6px 0; font-weight: 800; color: #059669; font-size: 14px;">\(C^d \equiv M \pmod n \implies M = C^d mod n\)</span>
+                <div style="text-align: right; font-weight: 800; color: #059669; margin-top: 4px;">Q.E.D. &check;</div>
+            </div>
+        </div>
+    </div>
+    
 <hr />
 <h3>5. Why is RSA Secure? (For MCQs)</h3>
 <p>An attacker knows the public key <span class="math-inline">\((n, e)\)</span>. To find the private key <span class="math-inline">\(d\)</span>, the attacker needs <span class="math-inline">\(\phi(n)\)</span>. To find <span class="math-inline">\(\phi(n)\)</span>, the attacker must know <span class="math-inline">\(p\)</span> and <span class="math-inline">\(q\)</span>. To find <span class="math-inline">\(p\)</span> and <span class="math-inline">\(q\)</span>, the attacker must <strong>factor <span class="math-inline">\(n\)</span></strong>. 

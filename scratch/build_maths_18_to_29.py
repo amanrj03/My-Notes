@@ -236,21 +236,25 @@ def inject_diagram_tokens_for_maths(text, mod_num):
         text = re.sub(r'### Tool 1: Greatest Common Divisor.*?(?=### Tool 3:)', 'TOKEN_MATH_DIAG_26_EUCLID_INV\n\n', text, flags=re.DOTALL)
         # Fast Modular Exponentiation
         text = re.sub(r'## 3\. Fast Modular Exponentiation.*?(?=## 📝 Exam-Style Questions|\Z)', 'TOKEN_MATH_DIAG_26_FAST_EXP\n\n', text, flags=re.DOTALL)
+        # Solved Exam Questions
+        text = re.sub(r'## 📝 Exam-Style Questions.*?(?=---\n|### 🎯 Module 1 Checklist|\Z)', 'TOKEN_MATH_DIAG_26_EXAM_QUESTIONS\n\n', text, flags=re.DOTALL)
     elif mod_num == 27:
         # Diffie-Hellman protocol
         text = re.sub(r'(###?\s+2\.\s+The Protocol \(Step-by-Step for Exams\).*?\n|2\.\s+The Protocol \(Step-by-Step for Exams\)\n)', r'\1\n\nTOKEN_MATH_DIAG_27_DH\n\n', text, count=1)
-        # Numerical Question 2
-        text = re.sub(r'\*\*Question 2 \(Numerical - 5 Marks\):\*\*.*?(?=---\n|### 4\. Security Analysis)', 'TOKEN_MATH_DIAG_27_NUMERICAL\n\n', text, flags=re.DOTALL)
+        # Solved Exam Questions (Section 3: MCQ + Numerical)
+        text = re.sub(r'###?\s*3\.\s*Solved Exam Questions.*?(?=---\n|###?\s*4\.\s*Security Analysis|\Z)', 'TOKEN_MATH_DIAG_27_EXAM_QUESTIONS\n\n', text, flags=re.DOTALL)
     elif mod_num == 28:
         # RSA architecture
         text = re.sub(r'(###?\s+2\.\s+RSA Key Generation \(Step-by-Step\).*?\n|2\.\s+RSA Key Generation \(Step-by-Step\)\n)', r'\1\n\nTOKEN_MATH_DIAG_28_RSA\n\n', text, count=1)
-        # Numerical Question 2 (STOP encryption & HELP decryption)
-        text = re.sub(r'\*\*Question 2 \(Full RSA Calculation - 10 Marks\):\*\*.*?(?=\*\(Note for Exams:|\*\*Question 3)', 'TOKEN_MATH_DIAG_28_NUMERICAL\n\n', text, flags=re.DOTALL)
+        # Solved Exam Questions (KeyGen, STOP/HELP, and Proof)
+        text = re.sub(r'### 📝 Solved Exam Questions.*?(?=---\n|### 5\. Why is RSA Secure\?|\Z)', 'TOKEN_MATH_DIAG_28_EXAM_QUESTIONS\n\n', text, flags=re.DOTALL)
     elif mod_num == 29:
         # Cryptosystems comparison
         text = re.sub(r'(###?\s+1\.\s+The Mathematical Foundation.*?\n|1\.\s+The Mathematical Foundation\n)', r'\1\n\nTOKEN_MATH_DIAG_29_COMP\n\n', text, count=1)
         # ElGamal KeyGen / Encryption / Decryption Pipeline
         text = re.sub(r'### 2\. ElGamal Key Generation \(Step-by-Step\).*?(?=# 🎓 UNIT V: Final Exam Preparation|### 📝 Solved Exam Questions for ElGamal)', 'TOKEN_MATH_DIAG_29_ELGAMAL_FLOW\n\n', text, flags=re.DOTALL)
+        # Solved Exam Questions for ElGamal
+        text = re.sub(r'### 📝 Solved Exam Questions for ElGamal.*?(?=# 🎓 UNIT V: Final Exam Preparation|\Z)', 'TOKEN_MATH_DIAG_29_EXAM_QUESTIONS\n\n', text, flags=re.DOTALL)
         # Solved Numerical Questions in Part B
         text = re.sub(r'### Part B: 10-Mark Solving Questions.*?(?=---\n\n### 🎯 Final Unit V Revision Checklist:|\Z)', 'TOKEN_MATH_DIAG_29_MOCK_NUMERICAL\n\n', text, flags=re.DOTALL)
     return text
@@ -287,18 +291,22 @@ def replace_diagram_tokens_for_maths(html, mod_num):
             "TOKEN_MATH_DIAG_26_TRAP": diag.card_mod26_trapdoor_squaring(),
             "TOKEN_MATH_DIAG_26_EUCLID_INV": diag.card_mod26_euclidean_and_inverse(),
             "TOKEN_MATH_DIAG_26_FAST_EXP": diag.card_mod26_fast_modular_exponentiation(),
+            "TOKEN_MATH_DIAG_26_EXAM_QUESTIONS": diag.card_mod26_exam_questions(),
         },
         27: {
             "TOKEN_MATH_DIAG_27_DH": diag.card_mod27_diffie_hellman_protocol(),
             "TOKEN_MATH_DIAG_27_NUMERICAL": diag.card_mod27_numerical_worked_example(),
+            "TOKEN_MATH_DIAG_27_EXAM_QUESTIONS": diag.card_mod27_exam_questions(),
         },
         28: {
             "TOKEN_MATH_DIAG_28_RSA": diag.card_mod28_rsa_architecture(),
             "TOKEN_MATH_DIAG_28_NUMERICAL": diag.card_mod28_numerical_rsa_stop_help(),
+            "TOKEN_MATH_DIAG_28_EXAM_QUESTIONS": diag.card_mod28_exam_questions(),
         },
         29: {
             "TOKEN_MATH_DIAG_29_COMP": diag.card_mod29_cryptosystems_comparison(),
             "TOKEN_MATH_DIAG_29_ELGAMAL_FLOW": diag.card_mod29_elgamal_full_workflow(),
+            "TOKEN_MATH_DIAG_29_EXAM_QUESTIONS": diag.card_mod29_exam_questions(),
             "TOKEN_MATH_DIAG_29_MOCK_NUMERICAL": diag.card_mod29_mock_exam_numerical(),
         }
     }

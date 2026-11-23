@@ -1046,42 +1046,117 @@ What if the encryption key and decryption key are <strong>different</strong>? </
         </div>
     </div>
     
-<h2>📝 Exam-Style Questions (Solved in Detail)</h2>
-<p><strong>Q1. (MCQ - 1 Mark)</strong>
-If <span class="math-inline">\(n = 77\)</span>, what is <span class="math-inline">\(\phi(n)\)</span>?
-A) 76  B) 60  C) 70  D) 66
-<em>Solution:</em> <span class="math-inline">\(77 = 7 \times 11\)</span>. <span class="math-inline">\(\phi(77) = (7-1)(11-1) = 6 \times 10 = 60\)</span>.
-<strong>Answer: B</strong></p>
-<p><strong>Q2. (Solving - 5 Marks)</strong>
-Find the modular inverse of <span class="math-inline">\(13 \pmod{42}\)</span> using the Extended Euclidean Algorithm.
-<em>Solution:</em> We want <span class="math-inline">\(13x \equiv 1 \pmod{42}\)</span>.
-Step 1: Apply Euclidean Algorithm to 42 and 13.
-<span class="math-inline">\(42 = 3 \times 13 + 3\)</span>
-<span class="math-inline">\(13 = 4 \times 3 + 1\)</span>
-<span class="math-inline">\(3 = 3 \times 1 + 0\)</span> (GCD is 1, so inverse exists).</p>
-<p>Step 2: Work backwards.
-<span class="math-inline">\(1 = 13 - 4 \times 3\)</span>
-Substitute <span class="math-inline">\(3 = 42 - 3 \times 13\)</span>:
-<span class="math-inline">\(1 = 13 - 4 \times (42 - 3 \times 13)\)</span>
-<span class="math-inline">\(1 = 13 - 4 \times 42 + 12 \times 13\)</span>
-<span class="math-inline">\(1 = 13 \times 13 - 4 \times 42\)</span></p>
-<p>Step 3: Read the coefficient of 13.
-<span class="math-inline">\(13 \times 13 \equiv 1 \pmod{42}\)</span>.
-<strong>Answer: The inverse is 13.</strong> (Check: <span class="math-inline">\(13 \times 13 = 169 = 4 \times 42 + 1\)</span>. Correct.)</p>
-<p><strong>Q3. (Solving - 4 Marks)</strong>
-Calculate <span class="math-inline">\(3^{17} \bmod 5\)</span> using Fermat's Little Theorem and modular exponentiation.
-<em>Solution:</em>
-Method 1 (Fermat): Since 5 is prime, <span class="math-inline">\(3^4 \equiv 1 \pmod 5\)</span>. 
-<span class="math-inline">\(17 = 4 \times 4 + 1\)</span>. 
-So, <span class="math-inline">\(3^{17} = (3^4)^4 \times 3^1 \equiv 1^4 \times 3 \equiv 3 \pmod 5\)</span>.</p>
-<p>Method 2 (Binary): <span class="math-inline">\(17 = 16 + 1\)</span>.
-<span class="math-inline">\(3^1 = 3\)</span>
-<span class="math-inline">\(3^2 = 9 \equiv 4\)</span>
-<span class="math-inline">\(3^4 = 4^2 = 16 \equiv 1\)</span>
-<span class="math-inline">\(3^8 = 1^2 = 1\)</span>
-<span class="math-inline">\(3^{16} = 1^2 = 1\)</span>
-<span class="math-inline">\(3^{17} = 3^{16} \cdot 3^1 = 1 \cdot 3 = 3\)</span>.
-<strong>Answer: 3</strong></p>
+
+    <div class="math-diagram-box">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <h4 class="math-diagram-title" style="margin: 0;">Exam-Style Questions (Step-by-Step &amp; Line-by-Line Solutions)</h4>
+            <span class="callout-badge" style="background: rgba(124, 58, 237, 0.12); color: #7c3aed; font-weight: 700; padding: 4px 10px; border-radius: 6px; font-size: 11px;">SOLVED IN DETAIL</span>
+        </div>
+        <p style="font-size: 13.5px; color: var(--text-secondary); margin: 0 0 16px;">
+            Every single step and mathematical equation is formatted line-by-line for effortless reading, maximum clarity, and instant exam recall.
+        </p>
+
+        <!-- Q1: MCQ 1 Mark -->
+        <div style="background: rgba(37, 99, 235, 0.04); border: 1.5px solid rgba(37, 99, 235, 0.25); border-radius: 10px; padding: 18px; margin-bottom: 18px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;">
+                <strong style="color: #2563eb; font-size: 15px;">Q1. (MCQ &mdash; 1 Mark)</strong>
+                <span style="font-size: 11px; background: rgba(37, 99, 235, 0.12); color: #2563eb; padding: 3px 8px; border-radius: 4px; font-weight: 700;">Totient Calculation</span>
+            </div>
+            <p style="font-size: 13.5px; font-weight: 600; color: var(--text-heading); margin: 0 0 10px;">
+                If \(n = 77\), what is \(\phi(n)\)?
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px;">
+                <div style="padding: 7px 12px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 6px; font-size: 13px;">
+                    <strong>A)</strong> 76
+                </div>
+                <div style="padding: 7px 12px; background: rgba(16, 185, 129, 0.08); border: 1.5px solid #10b981; border-radius: 6px; font-size: 13px; font-weight: 700; color: #059669;">
+                    <strong>B)</strong> 60 &check; (Correct Option)
+                </div>
+                <div style="padding: 7px 12px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 6px; font-size: 13px;">
+                    <strong>C)</strong> 70
+                </div>
+                <div style="padding: 7px 12px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 6px; font-size: 13px;">
+                    <strong>D)</strong> 66
+                </div>
+            </div>
+            <div style="padding: 10px 14px; background: rgba(16, 185, 129, 0.08); border-radius: 6px; font-size: 12.5px; line-height: 1.7; color: var(--text-body);">
+                <strong>Step-by-Step Derivation:</strong><br>
+                &bull; Step 1: Factor \(77\) into prime factors: \(77 = 7 	imes 11\)<br>
+                &bull; Step 2: Apply Euler's product formula for distinct primes: \(\phi(n) = (p-1)(q-1)\)<br>
+                &bull; Step 3: Compute: \(\phi(77) = (7-1)(11-1) = 6 	imes 10 = \mathbf{60}\)<br>
+                <span style="font-weight: 800; color: #059669;">&rArr; Answer: B</span>
+            </div>
+        </div>
+
+        <!-- Q2: Solving 5 Marks -->
+        <div style="background: rgba(124, 58, 237, 0.04); border: 1.5px solid rgba(124, 58, 237, 0.25); border-radius: 10px; padding: 18px; margin-bottom: 18px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;">
+                <strong style="color: #7c3aed; font-size: 15px;">Q2. (Solving &mdash; 5 Marks)</strong>
+                <span style="font-size: 11px; background: rgba(124, 58, 237, 0.12); color: #7c3aed; padding: 3px 8px; border-radius: 4px; font-weight: 700;">Extended Euclidean Algorithm</span>
+            </div>
+            <p style="font-size: 13.5px; font-weight: 600; color: var(--text-heading); margin: 0 0 12px;">
+                Find the modular inverse of \(13 \pmod{42}\) using the Extended Euclidean Algorithm.
+            </p>
+            <div style="font-size: 13px; line-height: 1.7; color: var(--text-body);">
+                <div style="margin-bottom: 10px; padding: 10px 14px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 6px;">
+                    <strong style="color: #7c3aed;">Step 1: Forward Euclidean Divisions on 42 and 13:</strong><br>
+                    1. \(42 = 3 	imes 13 + 3\) &nbsp; &bull; &nbsp; (Remainder = 3)<br>
+                    2. \(13 = 4 	imes 3 + 1\) &nbsp; &bull; &nbsp; (Remainder = 1)<br>
+                    3. \(3 = 3 	imes 1 + 0\) &nbsp; &bull; &nbsp; (Remainder = 0 &rarr; \(\gcd(42, 13) = 1\), so inverse exists)
+                </div>
+                <div style="margin-bottom: 10px; padding: 10px 14px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 6px;">
+                    <strong style="color: #7c3aed;">Step 2: Backward Substitution (Isolate Remainder 1):</strong><br>
+                    &bull; From division 2: \(1 = 13 - 4 	imes 3\)<br>
+                    &bull; Substitute \(3 = 42 - 3 	imes 13\) from division 1:<br>
+                    &nbsp;&nbsp; \(1 = 13 - 4 	imes (42 - 3 	imes 13)\)<br>
+                    &nbsp;&nbsp; \(1 = 13 - 4 	imes 42 + 12 	imes 13\)<br>
+                    &nbsp;&nbsp; \(1 = 13 	imes 13 - 4 	imes 42\)
+                </div>
+                <div style="padding: 10px 14px; background: rgba(16, 185, 129, 0.08); border: 1px solid #10b981; border-radius: 6px;">
+                    <strong style="color: #059669;">Step 3: Read Coefficient Modulo 42:</strong><br>
+                    Reducing modulo 42 eliminates the multiple of 42:<br>
+                    \(13 	imes 13 \equiv 1 \pmod{42}\)<br>
+                    <span style="font-weight: 800; color: #059669; font-size: 13.5px;">&rArr; The modular inverse of \(13 \pmod{42}\) is \(\mathbf{13}\).</span><br>
+                    <span style="font-size: 12px; color: var(--text-secondary);">Check: \(13 	imes 13 = 169 = 4 	imes 42 + 1 \equiv 1 \pmod{42}\). (Exact match!)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Q3: Solving 4 Marks -->
+        <div style="background: rgba(245, 158, 11, 0.04); border: 1.5px solid rgba(245, 158, 11, 0.25); border-radius: 10px; padding: 18px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;">
+                <strong style="color: #d97706; font-size: 15px;">Q3. (Solving &mdash; 4 Marks)</strong>
+                <span style="font-size: 11px; background: rgba(245, 158, 11, 0.12); color: #d97706; padding: 3px 8px; border-radius: 4px; font-weight: 700;">FLT &amp; Exponentiation</span>
+            </div>
+            <p style="font-size: 13.5px; font-weight: 600; color: var(--text-heading); margin: 0 0 12px;">
+                Calculate \(3^{17} mod 5\) using Fermat's Little Theorem and modular exponentiation.
+            </p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; font-size: 12.5px;">
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 14px; line-height: 1.7;">
+                    <strong style="color: #d97706;">Method 1: Fermat's Little Theorem (Fastest)</strong><br>
+                    &bull; Since \(p = 5\) is prime and \(\gcd(3, 5) = 1\):<br>
+                    &nbsp;&nbsp; \(3^{5-1} = 3^4 \equiv 1 \pmod 5\)<br>
+                    &bull; Decompose exponent \(17\): \(17 = 4 	imes 4 + 1\)<br>
+                    &bull; Substitute:<br>
+                    &nbsp;&nbsp; \(3^{17} = (3^4)^4 	imes 3^1 \equiv 1^4 	imes 3 \equiv \mathbf{3} \pmod 5\)
+                </div>
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 14px; line-height: 1.7;">
+                    <strong style="color: #d97706;">Method 2: Binary Exponentiation (Step-by-Step)</strong><br>
+                    &bull; Binary for 17: \(17 = 16 + 1\)<br>
+                    &bull; \(3^1 = 3\)<br>
+                    &bull; \(3^2 = 9 \equiv 4 \equiv -1 \pmod 5\)<br>
+                    &bull; \(3^4 = (-1)^2 = 1\)<br>
+                    &bull; \(3^8 = 1^2 = 1\)<br>
+                    &bull; \(3^{16} = 1^2 = 1\)<br>
+                    &bull; Product: \(3^{17} = 3^{16} \cdot 3^1 = 1 \cdot 3 = \mathbf{3} \pmod 5\)
+                </div>
+            </div>
+            <div style="margin-top: 12px; padding: 8px 12px; background: rgba(16, 185, 129, 0.1); border-radius: 6px; font-weight: 800; color: #059669; text-align: center; font-size: 13.5px;">
+                &rArr; Final Answer: \(3^{17} \equiv 3 \pmod 5\) &check;
+            </div>
+        </div>
+    </div>
+    
 <hr />
 <h3>🎯 Module 1 Checklist (What you must know for the exam):</h3>
 <ol>

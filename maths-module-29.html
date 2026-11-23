@@ -911,37 +911,82 @@ body {
         </div>
     </div>
     
-<h3>📝 Solved Exam Questions for ElGamal</h3>
-<p><strong>Question 1 (Numerical - 5 Marks):</strong>
-Let <span class="math-inline">\(p = 23\)</span>, <span class="math-inline">\(g = 5\)</span>. Bob chooses private key <span class="math-inline">\(x = 6\)</span>. 
-(a) Find Bob's public key <span class="math-inline">\(y\)</span>.
-(b) Alice wants to send the message <span class="math-inline">\(M = 10\)</span>. She chooses random <span class="math-inline">\(k = 3\)</span>. Find the ciphertext <span class="math-inline">\((C_1, C_2)\)</span>.
-(c) Show how Bob decrypts it.
-<strong>Solution:</strong>
-(a) <span class="math-inline">\(y = g^x \bmod p = 5^6 \bmod 23\)</span>.
-From Module 2, we know <span class="math-inline">\(5^2 \equiv 2\)</span>, <span class="math-inline">\(5^4 \equiv 4\)</span>. So <span class="math-inline">\(5^6 = 4 \times 2 = 8\)</span>. 
-<strong>Public Key:</strong> <span class="math-inline">\((p=23, g=5, y=8)\)</span>.</p>
-<p>(b) Alice encrypts <span class="math-inline">\(M = 10\)</span> with <span class="math-inline">\(k = 3\)</span>:
-<span class="math-inline">\(C_1 = g^k \bmod p = 5^3 \bmod 23 = 125 \bmod 23\)</span>. (<span class="math-inline">\(23 \times 5 = 115\)</span>, so <span class="math-inline">\(125 - 115 = 10\)</span>).
-<strong><span class="math-inline">\(C_1 = 10\)</span></strong>.
-<span class="math-inline">\(C_2 = (M \cdot y^k) \bmod p = (10 \cdot 8^3) \bmod 23\)</span>.
-<span class="math-inline">\(8^3 = 512\)</span>. <span class="math-inline">\(512 \bmod 23\)</span>: <span class="math-inline">\(23 \times 22 = 506\)</span>. <span class="math-inline">\(512 - 506 = 6\)</span>.
-<span class="math-inline">\(C_2 = (10 \cdot 6) \bmod 23 = 60 \bmod 23\)</span>. (<span class="math-inline">\(23 \times 2 = 46\)</span>, <span class="math-inline">\(60 - 46 = 14\)</span>).
-<strong><span class="math-inline">\(C_2 = 14\)</span></strong>.
-<strong>Ciphertext:</strong> <span class="math-inline">\((10, 14)\)</span>.</p>
-<p>(c) Bob decrypts <span class="math-inline">\((10, 14)\)</span> with private key <span class="math-inline">\(x = 6\)</span>:
-<span class="math-inline">\(S = C_1^x \bmod p = 10^6 \bmod 23\)</span>.
-<span class="math-inline">\(10^2 = 100 \equiv 8 \pmod{23}\)</span>.
-<span class="math-inline">\(10^4 = 8^2 = 64 \equiv 18 \pmod{23}\)</span>.
-<span class="math-inline">\(10^6 = 10^4 \cdot 10^2 = 18 \cdot 8 = 144 \pmod{23}\)</span>.
-<span class="math-inline">\(23 \times 6 = 138\)</span>. <span class="math-inline">\(144 - 138 = 6\)</span>.
-So, <strong><span class="math-inline">\(S = 6\)</span></strong>.</p>
-<p>Now we need the inverse of <span class="math-inline">\(6 \pmod{23}\)</span>. We need <span class="math-inline">\(6z \equiv 1 \pmod{23}\)</span>.
-<span class="math-inline">\(6 \times 4 = 24 \equiv 1 \pmod{23}\)</span>. So, <span class="math-inline">\(S^{-1} = 4\)</span>.</p>
-<p><span class="math-inline">\(M = (C_2 \cdot S^{-1}) \bmod p = (14 \cdot 4) \bmod 23 = 56 \bmod 23\)</span>.
-<span class="math-inline">\(23 \times 2 = 46\)</span>. <span class="math-inline">\(56 - 46 = 10\)</span>.
-<strong>Decrypted Message:</strong> <span class="math-inline">\(M = 10\)</span>. (Matches!)</p>
-<hr />
+
+    <div class="math-diagram-box">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <h4 class="math-diagram-title" style="margin: 0;">📝 Solved Exam Questions for ElGamal (Step-by-Step &amp; Line-by-Line)</h4>
+            <span class="callout-badge" style="background: rgba(37, 99, 235, 0.12); color: #2563eb; font-weight: 700; padding: 4px 10px; border-radius: 6px; font-size: 11px;">5-MARK SOLVED EXAM QUESTION</span>
+        </div>
+        <p style="font-size: 13.5px; color: var(--text-secondary); margin: 0 0 16px;">
+            Complete line-by-line solution for ElGamal parameter setup, encryption, and decryption:
+        </p>
+
+        <!-- Question 1: Numerical 5 Marks -->
+        <div style="background: rgba(37, 99, 235, 0.04); border: 1.5px solid rgba(37, 99, 235, 0.25); border-radius: 10px; padding: 18px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;">
+                <strong style="color: #2563eb; font-size: 15px;">Question 1 (Numerical &mdash; 5 Marks)</strong>
+                <span style="font-size: 11px; background: rgba(37, 99, 235, 0.12); color: #2563eb; padding: 3px 8px; border-radius: 4px; font-weight: 700;">Parameters: \(p = 23, g = 5, x = 6\)</span>
+            </div>
+            <p style="font-size: 13.5px; color: var(--text-body); margin: 0 0 14px;">
+                Given prime \(p = 23\) and generator \(g = 5\). Bob chooses private key \(x = 6\).<br>
+                (a) Find Bob's public key \(y\).<br>
+                (b) Alice encrypts message \(M = 10\) using random key \(k = 3\). Find ciphertext \((C_1, C_2)\).<br>
+                (c) Show how Bob decrypts it.
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+                <!-- Part (a) -->
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
+                    <div style="font-weight: 700; color: #2563eb; font-size: 14px; margin-bottom: 6px;">
+                        (a) Bob's Public Key (\(y\))
+                    </div>
+                    <div style="font-size: 13px; line-height: 1.8; color: var(--text-body);">
+                        &bull; Formula: \(y = g^x mod p = 5^6 mod 23\)<br>
+                        &bull; Line 1: \(5^2 = 25 \equiv 2 \pmod{23}\)<br>
+                        &bull; Line 2: \(5^4 = 2^2 = 4 \pmod{23}\)<br>
+                        &bull; Line 3: \(5^6 = 5^4 \cdot 5^2 = 4 \cdot 2 = \mathbf{8} \pmod{23}\)<br>
+                        <span style="font-weight: 800; color: #2563eb;">&rArr; Bob's Public Key: \((p=23, g=5, y=8)\)</span>
+                    </div>
+                </div>
+
+                <!-- Part (b) -->
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
+                    <div style="font-weight: 700; color: #2563eb; font-size: 14px; margin-bottom: 6px;">
+                        (b) Alice Encrypts \(M = 10\) with \(k = 3\)
+                    </div>
+                    <div style="font-size: 13px; line-height: 1.8; color: var(--text-body);">
+                        &bull; Compute \(C_1\): \(C_1 = g^k mod p = 5^3 mod 23 = 125 mod 23\)<br>
+                        &nbsp;&nbsp; Division: \(23 	imes 5 = 115 \implies 125 - 115 = \mathbf{10} \implies C_1 = 10\)<br>
+                        &bull; Compute \(C_2\): \(C_2 = (M \cdot y^k) mod p = (10 \cdot 8^3) mod 23\)<br>
+                        &nbsp;&nbsp; Line 1: \(8^3 = 512\)<br>
+                        &nbsp;&nbsp; Line 2: \(23 	imes 22 = 506 \implies 512 - 506 = 6 \implies 8^3 \equiv 6 \pmod{23}\)<br>
+                        &nbsp;&nbsp; Line 3: \(C_2 = (10 \cdot 6) = 60 mod 23\)<br>
+                        &nbsp;&nbsp; Line 4: \(23 	imes 2 = 46 \implies 60 - 46 = \mathbf{14} \implies C_2 = 14\)<br>
+                        <span style="font-weight: 800; color: #2563eb;">&rArr; Transmitted Ciphertext Pair: \((C_1, C_2) = (10, 14)\)</span>
+                    </div>
+                </div>
+
+                <!-- Part (c) -->
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
+                    <div style="font-weight: 700; color: #059669; font-size: 14px; margin-bottom: 6px;">
+                        (c) Bob Decrypts with Private Key \(x = 6\)
+                    </div>
+                    <div style="font-size: 13px; line-height: 1.8; color: var(--text-body);">
+                        &bull; Line 1 (Compute Shared Secret): \(S = C_1^x mod p = 10^6 mod 23\)<br>
+                        &nbsp;&nbsp; \(10^2 = 100 \equiv 8 \pmod{23}\)<br>
+                        &nbsp;&nbsp; \(10^4 = 8^2 = 64 \equiv 18 \pmod{23}\)<br>
+                        &nbsp;&nbsp; \(10^6 = 18 \cdot 8 = 144 = 23(6) + 6 \equiv \mathbf{6} \implies S = 6\)<br>
+                        &bull; Line 2 (Find Modular Inverse \(S^{-1}\)): We solve \(6z \equiv 1 \pmod{23}\)<br>
+                        &nbsp;&nbsp; \(6 	imes 4 = 24 = 23 + 1 \equiv 1 \pmod{23} \implies \mathbf{S^{-1} = 4}\)<br>
+                        &bull; Line 3 (Recover Message): \(M = (C_2 \cdot S^{-1}) mod p = (14 \cdot 4) mod 23 = 56 mod 23\)<br>
+                        &nbsp;&nbsp; \(23 	imes 2 = 46 \implies 56 - 46 = \mathbf{10}\)<br>
+                        <span style="font-weight: 800; color: #059669;">&rArr; Decrypted Message: \(M = 10\) &check; (Perfect Match!)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 <h1>🎓 UNIT V: Final Exam Preparation</h1>
 <p>Here is a mix of MCQs and 10-mark questions covering Modules 1-4. Treat this as your mock exam.</p>
 <h3></h3>
